@@ -1,0 +1,23 @@
+databaseChangeLog:
+  # 一次数据库版本变化都是一个变更集
+  - changeSet:
+      # 命名规则：框架（系统名）-服务-版本号-功能（或者目的）
+      id: uno-demo-V1-Person
+      author: jiangwei
+      comment: 创建Person表
+      runInTransaction: true
+      changes:
+        # 创建表结构
+        - sqlFile:
+            path: classpath:db/migrations/postgres/sql/V1__Person.sql
+            encoding: utf8
+        # 创建表数据
+        - sqlFile:
+            path: classpath:db/migrations/postgres/sql/V1__Person_Data.sql
+            encoding: utf8
+  - changeSet:
+      id: uno-demo-V1-Person-task
+      author: jiangwei
+      changes:
+        # 创建自定义数据变更类
+        - customChange: { "class": "cc.allio.uno.uno.demo.liquibase.task.PersonChangeTask" }

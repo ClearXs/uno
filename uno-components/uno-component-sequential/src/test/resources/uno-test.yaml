@@ -1,0 +1,5 @@
+allio:
+  uno:
+    bus:
+      sequential:
+        - TEST

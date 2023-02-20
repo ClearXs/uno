@@ -1,0 +1,81 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "Api Documentation",
+    "version": "1.0",
+    "title": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    }
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "tags": [
+    {
+      "name": "用户接口",
+      "description": "User Controller"
+    }
+  ],
+  "paths": {
+    "/user/get": {
+      "get": {
+        "tags": [
+          "用户接口"
+        ],
+        "summary": "根据用户id获取用户信息",
+        "operationId": "getUsingGET",
+        "produces": [
+          "*/*"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id",
+            "required": false,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "originalRef": "用户实体",
+              "$ref": "#/definitions/用户实体"
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "用户实体": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "id"
+        },
+        "name": {
+          "type": "string",
+          "description": "名称"
+        }
+      },
+      "title": "用户实体"
+    }
+  }
+}

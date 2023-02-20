@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>uno</artifactId>
+        <groupId>cc.allio.uno</groupId>
+        <version>1.1.4.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>uno-gis</artifactId>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.allio.uno</groupId>
+            <artifactId>uno-core</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.allio.uno</groupId>
+            <artifactId>uno-auto</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.allio.uno</groupId>
+            <artifactId>uno-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.mybatis.spring.boot</groupId>
+            <artifactId>mybatis-spring-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-geojson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-extension</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.geotools</groupId>
+            <artifactId>gt-epsg-wkt</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>net.postgis</groupId>
+            <artifactId>postgis-jdbc</artifactId>
+        </dependency>
+    </dependencies>
+
+    <repositories>
+        <repository>
+            <id>nexus-aliyun</id>
+            <name>aliyun repository</name>
+            <url>http://maven.aliyun.com/nexus/content/groups/public</url>
+        </repository>
+        <repository>
+            <id>maven2-repository.dev.java.net</id>
+            <name>Java.net repository</name>
+            <url>http://download.java.net/maven/2</url>
+        </repository>
+        <repository>
+            <id>osgeo</id>
+            <name>Open Source Geospatial Foundation Repository</name>
+            <url>https://repo.osgeo.org/repository/geotools-releases/</url>
+        </repository>
+        <repository>
+            <id>geo-solutions-cache</id>
+            <name>geo-solutions-cache</name>
+            <url>https://repo.osgeo.org/repository/geo-solutions-cache/</url>
+        </repository>
+        <repository>
+            <id>osgeo2</id>
+            <name>OSGeo Release Repository</name>
+            <url>https://repo.osgeo.org/repository/release/</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <releases>
+                <enabled>true</enabled>
+            </releases>
+        </repository>
+        <repository>
+            <id>osgeo-snapshot</id>
+            <name>OSGeo Snapshot Repository</name>
+            <url>https://repo.osgeo.org/repository/snapshot/</url>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+            <releases>
+                <enabled>false</enabled>
+            </releases>
+        </repository>
+    </repositories>
+</project>

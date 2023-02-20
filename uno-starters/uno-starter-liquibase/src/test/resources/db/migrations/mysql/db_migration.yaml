@@ -1,0 +1,17 @@
+databaseChangeLog:
+  # 一次数据库版本变化都是一个变更集
+  - changeSet:
+      # 命名规则：框架（系统名）-服务-版本号-功能（或者目的）
+      id: jw-test-V1-Person
+      author: jiangwei
+      comment: 创建Person表
+      runInTransaction: true
+      changes:
+        # 创建表结构
+        - sqlFile:
+            path: classpath:db/migrations/mysql/sql/V1__Person.sql
+            encoding: utf8
+        # 创建表数据
+        - sqlFile:
+            path: classpath:db/migrations/mysql/sql/V1__Person_Data.sql
+            encoding: utf8

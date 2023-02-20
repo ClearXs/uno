@@ -1,0 +1,4 @@
+spring:
+  liquibase:
+    enabled: true
+    changelog: classpath:db/migrations/mysql/db_migration.yaml

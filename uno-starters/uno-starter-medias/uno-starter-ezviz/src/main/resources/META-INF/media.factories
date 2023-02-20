@@ -1,0 +1,8 @@
+cc.allio.uno.uno.component.media.command.MediaCommand=\
+cc.allio.uno.uno.stater.ezviz.command.EzvizMediaCommand
+
+cc.allio.uno.uno.component.media.command.MediaListCommand=\
+cc.allio.uno.uno.stater.ezviz.command.EzvizMediaListCommand
+
+cc.allio.uno.uno.component.media.command.MediaControlCommand=\
+cc.allio.uno.uno.stater.ezviz.command.EzvizMediaControlCommand

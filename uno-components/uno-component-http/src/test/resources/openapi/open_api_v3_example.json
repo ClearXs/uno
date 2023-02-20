@@ -1,0 +1,237 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Api Documentation",
+    "description": "Api Documentation",
+    "termsOfService": "urn:tos",
+    "contact": {},
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0"
+    },
+    "version": "1.0"
+  },
+  "tags": [
+    {
+      "name": "java-type-controller",
+      "description": "Java Type Controller"
+    },
+    {
+      "name": "timeout-controller",
+      "description": "Timeout Controller"
+    },
+    {
+      "name": "用户接口",
+      "description": "User Controller"
+    }
+  ],
+  "paths": {
+    "/test": {
+      "get": {
+        "tags": [
+          "timeout-controller"
+        ],
+        "summary": "timeout",
+        "operationId": "timeoutUsingGET",
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/get": {
+      "get": {
+        "tags": [
+          "用户接口"
+        ],
+        "summary": "根据用户id获取用户信息",
+        "operationId": "getUsingGET_1",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id",
+            "required": false,
+            "style": "form",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/用户实体"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/{id}/{name}": {
+      "get": {
+        "tags": [
+          "用户接口"
+        ],
+        "summary": "get",
+        "operationId": "getUsingGET",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/用户实体"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "用户接口"
+        ],
+        "summary": "add",
+        "operationId": "addUsingPOST",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "id",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "integer",
+              "format": "int64"
+            }
+          },
+          {
+            "name": "name",
+            "in": "path",
+            "description": "name",
+            "required": true,
+            "style": "simple",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "*/*": {
+                "schema": {
+                  "$ref": "#/components/schemas/用户实体"
+                }
+              }
+            }
+          },
+          "201": {
+            "description": "Created"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "403": {
+            "description": "Forbidden"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "用户实体": {
+        "title": "用户实体",
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "id",
+            "format": "int64"
+          },
+          "name": {
+            "type": "string",
+            "description": "名称"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "Token": {
+        "type": "http",
+        "description": "认证token",
+        "name": "X-Access-Token",
+        "in": "header"
+      }
+    }
+  }
+}

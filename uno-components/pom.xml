@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>uno</artifactId>
+        <groupId>cc.allio.uno</groupId>
+        <version>1.1.4.RELEASE</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>uno-components</artifactId>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>uno-component-http</module>
+        <module>uno-component-flink</module>
+        <module>uno-component-media</module>
+        <module>uno-component-websocket</module>
+        <module>uno-component-sequential</module>
+        <module>uno-component-kafka</module>
+        <module>uno-component-netty</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>cc.allio.uno</groupId>
+            <artifactId>uno-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+</project>

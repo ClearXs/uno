@@ -1,0 +1,14 @@
+cc.allio.uno.uno.component.media.command.PlayCommand=\
+cc.allio.uno.uno.stater.srs.command.SrsPlayCommand
+
+cc.allio.uno.uno.component.media.command.MediaCommand=\
+cc.allio.uno.uno.stater.srs.command.SrsMediaCommand
+
+cc.allio.uno.uno.component.media.command.MediaListCommand=\
+cc.allio.uno.uno.stater.srs.command.SrsMediaListCommand
+
+cc.allio.uno.uno.component.media.command.StopPlayCommand=\
+cc.allio.uno.uno.stater.srs.command.SrsStopPlayCommand
+
+cc.allio.uno.uno.component.media.command.MediaControlCommand=\
+cc.allio.uno.uno.stater.srs.command.SrsMediaControlCommand
