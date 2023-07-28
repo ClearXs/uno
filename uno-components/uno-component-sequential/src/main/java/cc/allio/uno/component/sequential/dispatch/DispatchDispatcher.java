@@ -2,7 +2,7 @@ package cc.allio.uno.component.sequential.dispatch;
 
 import cc.allio.uno.component.sequential.BaseCompositeSequential;
 import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 
@@ -23,7 +23,7 @@ public class DispatchDispatcher implements Dispatcher {
     private final List<Dispatcher> dispatchers;
 
     public DispatchDispatcher(Dispatcher... dispatcher) {
-        dispatchers = Collections.newArrayList(dispatcher);
+        dispatchers = CollectionUtils.newArrayList(dispatcher);
     }
 
     @Override

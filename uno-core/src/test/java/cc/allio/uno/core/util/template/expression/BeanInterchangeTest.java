@@ -11,8 +11,16 @@ public class BeanInterchangeTest extends BaseTestCase {
         User user = new User();
         user.setName("name");
         BeanInterchange beanInterchange = new BeanInterchange();
-        Object name = beanInterchange.change("name", user);
+        Object name = beanInterchange.change("name", user, false);
         assertEquals("name", name);
     }
 
+    @Test
+    void testLangValue() throws Throwable {
+        User user = new User();
+        user.setName("name");
+        BeanInterchange beanInterchange = new BeanInterchange();
+        Object name = beanInterchange.change("name", user, true);
+        assertEquals("\"name\"", name);
+    }
 }

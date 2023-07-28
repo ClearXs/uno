@@ -1,6 +1,6 @@
 package cc.allio.uno.test.feign;
 
-import cc.allio.uno.test.BaseCoreTest;
+import cc.allio.uno.test.CoreTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
 @RunFeignTest(clients = {FeinRunnerTest.TestClient.class, FeinRunnerTest.ReactiveTestClient.class})
-class FeinRunnerTest extends BaseCoreTest {
+class FeinRunnerTest extends CoreTest {
 
     @Test
     void testClientNotnull() {

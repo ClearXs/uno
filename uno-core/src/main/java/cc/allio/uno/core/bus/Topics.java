@@ -1,6 +1,5 @@
 package cc.allio.uno.core.bus;
 
-import java.util.Optional;
 import java.util.concurrent.ConcurrentSkipListMap;
 import java.util.stream.Collectors;
 
@@ -8,7 +7,6 @@ import cc.allio.uno.core.path.Forest;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.core.scheduler.Schedulers;
 
 /**
  * 消息主题
@@ -28,26 +26,24 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
      * @return Topic实例
      * @throws NullPointerException path为空时抛出
      */
-    public synchronized Mono<Topic<C>> link(Subscription subscription) {
-        Topic<C> maybeTopic = computeIfAbsent(
-                subscription.getPath(),
-                key -> {
-                    log.info("Thread: {} link topic path: {}", Thread.currentThread().getName(), subscription.getPath());
-                    return new NoticeTopic<>(subscription);
-                });
-        return Mono.justOrEmpty(Optional.of(maybeTopic))
-                .publishOn(Schedulers.boundedElastic())
-                .doOnSuccess(topic -> {
-                            forest.append(topic.getPath()).subscribe(topic);
-                            Flux.create(topic::generate)
-                                    .doOnNext(topic::exchange)
-                                    .subscribe();
-                        }
-                );
+    public Mono<Topic<C>> link(Subscription subscription) {
+        synchronized (this) {
+            Topic<C> topic = computeIfAbsent(
+                    subscription.getPath(),
+                    key -> {
+                        log.debug("Thread: {} link topic path: {}", Thread.currentThread().getName(), subscription.getPath());
+                        return new NoticeTopic<>(subscription.getPath());
+                    });
+            return Mono.defer(() -> {
+                forest.append(topic.getPath()).subscribe(topic);
+                Flux.push(topic::generate).flatMap(topic::exchange).subscribe();
+                return Mono.just(topic);
+            });
+        }
     }
 
     /**
-     * 消息总线解除这个主题
+     * 事件总线解除这个主题
      *
      * @param topic 主题路径
      * @return 是否解除成功
@@ -78,7 +74,7 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
                         // 获取当前结点子树并把其平展为保存的数据
                         f.getAllSubscriber()
                                 .flatMap(af -> Flux.fromIterable(af.getSubscribers()))
-                                // 当前已经处于叶子结点，无字节路径，直接返回当前订阅信息
+                                // 当前已经处于叶子结点，无子节点路径，直接返回当前订阅信息
                                 .switchIfEmpty(Flux.fromIterable(f.getSubscribers()))
                 )
                 // Topic对象去重
@@ -93,4 +89,8 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
         forest.unsubscribeAll();
     }
 
+    @Override
+    public String toString() {
+        return forest.toString();
+    }
 }

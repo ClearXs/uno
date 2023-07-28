@@ -21,6 +21,7 @@ import org.junit.jupiter.api.*;
 public abstract class BaseTestCase extends Assertions implements BenchmarkTest {
 
     private long currentTime;
+
     @Override
     @BeforeEach
     public void setup() {

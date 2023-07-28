@@ -24,7 +24,7 @@ import java.util.concurrent.Callable;
  */
 class ByteBuddyProxyInvocation implements ProxyInvocation {
 
-    private static final String NAME = "Automic";
+    private static final String NAME = "Allio";
 
     private String proxyName;
 

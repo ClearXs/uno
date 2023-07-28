@@ -32,6 +32,13 @@ class PlaceholderExpressionTemplateBaseTest extends BaseTestCase {
     }
 
     @Test
+    void testPlainText() {
+        String plain = "#{id} - #{system.id}";
+        String r = template.parseTemplate(plain, user);
+        assertEquals("1 - 2", r);
+    }
+
+    @Test
     void testFileSuffixError() {
         assertThrows(FilerException.class, () -> {
             template.parseFileTemplate("test.txt", user);

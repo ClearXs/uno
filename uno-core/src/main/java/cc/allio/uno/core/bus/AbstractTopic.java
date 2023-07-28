@@ -5,7 +5,7 @@ import reactor.core.publisher.FluxSink;
 import java.util.Objects;
 
 /**
- * 消息总线中某个消息主题，抽象某些公共的方法
+ * 事件总线中某个消息主题，抽象某些公共的方法
  *
  * @author jw
  * @date 2021/12/17 22:52

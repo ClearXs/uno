@@ -1,6 +1,6 @@
 package cc.allio.uno.data.model;
 
-import cc.allio.uno.data.jpa.model.BaseEntity;
+import cc.allio.uno.data.orm.jpa.model.BaseEntity;
 import lombok.*;
 
 import javax.persistence.*;

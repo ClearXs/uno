@@ -1,8 +1,8 @@
 package cc.allio.uno.core.task.cron;
 
+import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.task.CronExpression;
 import cc.allio.uno.core.task.CronTask;
-import cc.allio.uno.core.BaseTestCase;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 

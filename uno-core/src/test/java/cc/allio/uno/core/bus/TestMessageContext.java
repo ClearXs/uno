@@ -1,13 +1,13 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.OptionContext;
+import cc.allio.uno.core.api.OptionalContext;
 import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Map;
 import java.util.Optional;
 
-public class TestMessageContext implements OptionContext {
+public class TestMessageContext implements OptionalContext {
 
     private final Map<String, Object> cache = Maps.newHashMap();
 
@@ -24,5 +24,10 @@ public class TestMessageContext implements OptionContext {
     @Override
     public Optional<ApplicationContext> getApplicationContext() {
         return Optional.empty();
+    }
+
+    @Override
+    public Map<String, Object> getAll() {
+        return cache;
     }
 }

@@ -1,8 +1,9 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.DateUtil;
-import cc.allio.uno.data.sql.query.OrderCondition;
+import cc.allio.uno.data.orm.sql.SQLException;
+import cc.allio.uno.data.orm.sql.dml.local.OrderCondition;
 
 import java.beans.PropertyDescriptor;
 import java.util.Date;
@@ -54,9 +55,20 @@ public interface TimeStream<T> extends DataStream<T> {
      * @param incrementWrapper 实体装饰器
      * @param timeField        时间字段
      */
-    default void setTimeData(String timeField, ObjectWrapper incrementWrapper, Date date) {
+    default void setTimeData(String timeField, ValueWrapper incrementWrapper, Date date) {
         PropertyDescriptor propertyDescriptor = incrementWrapper.find(timeField);
-        Class<?> timeType = propertyDescriptor.getPropertyType();
+        Class<?> timeType;
+        Class<?> propertyType = propertyDescriptor.getPropertyType();
+        Class<?> propertyEditorClass = propertyDescriptor.getPropertyEditorClass();
+        if (propertyType == null) {
+            timeType = propertyEditorClass;
+        } else {
+            timeType = propertyType;
+        }
+        if (timeType == null) {
+            throw new IllegalArgumentException(
+                    String.format("value instance %s can't expect time type", incrementWrapper.getTarget()));
+        }
         if (timeType.isAssignableFrom(String.class)) {
             incrementWrapper.setForceCoverage(timeField, true, DateUtil.format(date, PATTERN_HOUR));
         } else if (timeType.isAssignableFrom(Date.class)) {
@@ -75,12 +87,17 @@ public interface TimeStream<T> extends DataStream<T> {
      * @return
      */
     default Date dateTime(Object maybeTime) {
-        if (maybeTime.getClass().isAssignableFrom(String.class)) {
-            return DateUtil.parse(maybeTime.toString());
-        } else if (maybeTime.getClass().isAssignableFrom(Date.class)) {
-            return (Date) maybeTime;
+        if (maybeTime == null) {
+            throw new IllegalArgumentException("the maybeTime is empty");
         }
-        throw new RuntimeException("query datetime neither 'String' and not Date");
+        if (String.class.isAssignableFrom(maybeTime.getClass())) {
+            return DateUtil.parse(maybeTime.toString());
+        } else if (Date.class.isAssignableFrom(maybeTime.getClass())) {
+            return (Date) maybeTime;
+        } else if (Long.class.isAssignableFrom(maybeTime.getClass())) {
+            return new Date((Long) maybeTime);
+        }
+        throw new SQLException("query datetime neither 'String' and not 'Date' and not 'Long'");
     }
 
 }

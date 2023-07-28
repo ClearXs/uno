@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dialect;
 
-import cc.allio.uno.data.orm.dialect.type.TypeRegistry;
 import cc.allio.uno.data.orm.dialect.func.FuncRegistry;
+import cc.allio.uno.data.orm.type.TypeRegistry;
 
 /**
  * 定义数据库方言对象

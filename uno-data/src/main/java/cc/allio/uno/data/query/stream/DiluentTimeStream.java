@@ -1,9 +1,9 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.CoreBeanUtil;
-import cc.allio.uno.data.query.QueryFilter;
-import cc.allio.uno.data.query.QueryWrapper;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
 import cc.allio.uno.data.query.param.DataDilute;
 import cc.allio.uno.data.query.param.QuerySetting;
 import reactor.core.publisher.Flux;
@@ -102,7 +102,7 @@ public class DiluentTimeStream<T> extends FunctionalityTimeStream<T> {
 
         @Override
         public boolean add(T o) {
-            ObjectWrapper wrapper = new ObjectWrapper(o);
+            ValueWrapper wrapper = ValueWrapper.get(o);
             if (Boolean.FALSE.equals(wrapper.contains(timeField))) {
                 return false;
             }
@@ -112,7 +112,7 @@ public class DiluentTimeStream<T> extends FunctionalityTimeStream<T> {
                 reloadTimePoint();
                 return true;
             }
-            ObjectWrapper pointWrapper = new ObjectWrapper(timePoint);
+            ValueWrapper pointWrapper = ValueWrapper.get(timePoint);
             Date nextTime = timeStream.dateTime(pointWrapper.getForce(timeField));
             long timeSub = Math.abs(nextTime.getTime() - currentData.getTime());
             if (timeSub >= dataDilute.getWindow().getDuration().get().toMillis()) {
@@ -149,7 +149,7 @@ public class DiluentTimeStream<T> extends FunctionalityTimeStream<T> {
             T last = getLast();
             // 赋值下一个时间点数据
             timePoint = (T) CoreBeanUtil.copy(last, last.getClass());
-            ObjectWrapper pointWrapper = new ObjectWrapper(timePoint);
+            ValueWrapper pointWrapper = ValueWrapper.get(timePoint);
             Date watermark = timeStream.dateTime(pointWrapper.getForce(timeField));
             timeStream.setTimeData(timeField, pointWrapper, watermark);
         }

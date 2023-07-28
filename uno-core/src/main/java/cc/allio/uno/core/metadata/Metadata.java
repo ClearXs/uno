@@ -27,7 +27,7 @@ public interface Metadata {
      *
      * @return map实例，key 无法解析key，value 实例数据
      */
-    Map<String, Object> getUndefinedValues();
+    Map<String, Object> getValues();
 
     /**
      * 放入映射值，以{@link MappingField}作为Key，把数据放入其中。

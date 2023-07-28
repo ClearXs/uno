@@ -4,10 +4,10 @@ import cc.allio.uno.data.orm.dialect.Dialect;
 import cc.allio.uno.data.orm.dialect.H2Dialect;
 import cc.allio.uno.data.orm.dialect.func.FuncDescriptor;
 import cc.allio.uno.data.orm.dialect.func.ReuseFuncFactory;
-import cc.allio.uno.data.orm.dialect.type.JdbcType;
-import cc.allio.uno.data.sql.Alias;
-import cc.allio.uno.data.sql.PlainColumn;
-import cc.allio.uno.data.sql.word.Distinct;
+import cc.allio.uno.data.orm.sql.word.Distinct;
+import cc.allio.uno.data.orm.type.JdbcType;
+import cc.allio.uno.data.orm.sql.Alias;
+import cc.allio.uno.data.orm.sql.PlainColumn;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
 

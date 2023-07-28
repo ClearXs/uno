@@ -1,9 +1,0 @@
-spring:
-    datasource:
-        url: jdbc:postgresql://101.201.220.75:5432/swms_gp_gis?stringtype=unspecified
-        username: postgres
-        password: 5190865@mkZ2022
-
-mybatis-plus:
-  configuration:
-      default-executor-type: simple

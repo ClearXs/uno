@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>uno</artifactId>
-        <groupId>cc.allio.uno</groupId>
+        <groupId>cc.allio</groupId>
         <version>1.1.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -41,7 +41,23 @@
             <groupId>io.projectreactor</groupId>
             <artifactId>reactor-test</artifactId>
         </dependency>
-        <!-- starter类库构建环境类 -->
+        <!-- web相关库 -->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webflux</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- starter类库构建环境库 -->
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
@@ -90,15 +106,9 @@
         </dependency>
         <!-- UNO -->
         <dependency>
-            <groupId>cc.allio.uno</groupId>
+            <groupId>cc.allio</groupId>
             <artifactId>uno-core</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <!-- Oracle -->
-        <dependency>
-            <groupId>com.oracle</groupId>
-            <artifactId>ojdbc7</artifactId>
-            <scope>test</scope>
         </dependency>
         <!-- Postgresql -->
         <dependency>

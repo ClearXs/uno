@@ -70,12 +70,12 @@ public class ConCellDeal extends CollectionCelDeal {
 //        Flux.fromIterable(conList.entrySet())
 //                .flatMap(entry -> {
 //                    String key = entry.getKey();
-//                    return Flux.fromIterable(entry.getValue())
+//                    return Flux.fromIterable(entry.getStringValue())
 //                            .map(valueTime -> {
 //                                Map<String, Object> properties = Maps.newHashMap();
 //                                properties.put("mot", DateUtil.format(valueTime.getTime(), "dd HH:mm"));
 //
-//                                properties.put(key + valueTime.getValue(), valueTime.getValue());
+//                                properties.put(key + valueTime.getStringValue(), valueTime.getStringValue());
 //                                return properties;
 //                            });
 //

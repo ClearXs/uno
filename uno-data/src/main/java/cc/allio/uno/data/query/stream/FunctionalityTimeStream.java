@@ -1,8 +1,8 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.query.QueryFilter;
-import cc.allio.uno.data.query.QueryWrapper;
-import cc.allio.uno.core.util.ObjectUtil;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
+import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
 import reactor.core.publisher.Flux;
 
@@ -73,7 +73,7 @@ public abstract class FunctionalityTimeStream<T> implements CollectionTimeStream
         }
         // check dataFields
         String[] dataFields = queryWrapper.getDataFields();
-        if (ObjectUtil.isEmpty(dataFields)) {
+        if (ObjectUtils.isEmpty(dataFields)) {
             throw new IllegalArgumentException("dataFields must not null, Please check");
         }
     }

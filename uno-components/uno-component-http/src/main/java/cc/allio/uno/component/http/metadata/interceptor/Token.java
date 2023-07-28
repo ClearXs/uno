@@ -1,6 +1,9 @@
 package cc.allio.uno.component.http.metadata.interceptor;
 
+import com.google.common.collect.Maps;
 import lombok.Data;
+
+import java.util.Map;
 
 @Data
 public class Token {
@@ -19,4 +22,9 @@ public class Token {
      * 放行用Token
      */
     private String freeUpToken;
+
+    /**
+     * 存在token有关的其余信息
+     */
+    private Map<String, Object> others = Maps.newHashMap();
 }

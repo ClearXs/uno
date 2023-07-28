@@ -1,10 +1,11 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.MultiPoint;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 /**
  * Created by mihaildoronin on 11/11/15.
@@ -16,7 +17,7 @@ public class MultiPointParser extends BaseParser implements GeometryParser<Multi
 	}
 
 	public MultiPoint multiPointFromJson(JsonNode root) {
-		return geometryFactory.createMultiPoint(PointParser.coordinatesFromJson(root.get(GeoJson.COORDINATES)));
+		return geometryFactory.createMultiPoint(PointParser.coordinatesFromJson(root.get(COORDINATES)));
 	}
 
 	@Override

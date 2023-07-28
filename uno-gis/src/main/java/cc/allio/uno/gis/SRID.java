@@ -15,7 +15,8 @@ import lombok.Getter;
 public enum SRID {
 
     WGS84_4326(4326, "WGS 84", "World", ""),
-    CGCS2000_4548(4548, "CGCS2000 / 3-degree Gauss-Kruger CM 117E", "China - onshore between 115°30'E and 118°30'E", "");
+    CGCS2000_4548(4548, "CGCS2000 / 3-degree Gauss-Kruger CM 117E", "China - onshore between 115°30'E and 118°30'E", ""),
+    CGCS2000_4490(4490, "CGCS2000 / 3-degree Gauss-Kruger CM 117E", "China - onshore between 115°30'E and 118°30'E", "");
 
     /**
      * srid

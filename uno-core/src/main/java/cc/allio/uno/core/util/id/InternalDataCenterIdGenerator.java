@@ -41,7 +41,7 @@ public class InternalDataCenterIdGenerator implements IdGenerator {
     }
 
     @Override
-    public Long getNextId() {
+    public synchronized Long getNextId() {
         int next = expect.getAndIncrement();
         if (next == MAX_DATA_CENTER_ID) {
             next = 0;

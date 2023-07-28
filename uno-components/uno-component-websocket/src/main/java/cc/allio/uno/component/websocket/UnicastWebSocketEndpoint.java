@@ -1,6 +1,6 @@
 package cc.allio.uno.component.websocket;
 
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import lombok.Data;
 
 import javax.websocket.Session;
@@ -20,7 +20,7 @@ public abstract class UnicastWebSocketEndpoint<R> extends BaseWebsocketEndpoint<
         // 向客户度发送唯一标识，当客户端需要时根据这个唯一标识来获取数据
         UnicastMessage unicastMessage = new UnicastMessage();
         unicastMessage.setSessionKey(session.getId());
-        session.getBasicRemote().sendText(JsonUtil.toJson(unicastMessage));
+        session.getBasicRemote().sendText(JsonUtils.toJson(unicastMessage));
     }
 
     /**

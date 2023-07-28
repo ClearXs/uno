@@ -1,11 +1,11 @@
 package cc.allio.uno.gis.jackson;
 
-import com.fasterxml.jackson.core.Version;
-import com.fasterxml.jackson.databind.module.SimpleModule;
-import org.locationtech.jts.geom.*;
 import cc.allio.uno.gis.jackson.parsers.*;
 import cc.allio.uno.gis.jackson.serialization.GeometryDeserializer;
 import cc.allio.uno.gis.jackson.serialization.GeometrySerializer;
+import com.fasterxml.jackson.core.Version;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import org.locationtech.jts.geom.*;
 
 import static cc.allio.uno.gis.GeometryTypes.*;
 
@@ -16,7 +16,7 @@ public class JtsModule extends SimpleModule {
     }
 
     public JtsModule(GeometryFactory geometryFactory) {
-        super("JtsModule", new Version(1, 0, 0, null, "cc.allio.uno.uno.gis", "uno-gis"));
+        super("JtsModule", new Version(1, 0, 0, null, "cc.allio.uno.gis", "uno-gis"));
 
         addSerializer(GEOMETRY, new GeometrySerializer(null));
         GenericGeometryParser genericGeometryParser = new GenericGeometryParser(geometryFactory);

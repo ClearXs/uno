@@ -193,4 +193,17 @@ public interface ExpressionTemplate {
     static ExpressionTemplate createTemplate(Tokenizer tokenizer) {
         return new PlaceholderExpressionTemplate(tokenizer);
     }
+
+    /**
+     * 根据指定的{@link Tokenizer}创建{@link ExpressionTemplate}实例
+     *
+     * @param tokenizer Tokenizer实例对象
+     * @param langsym   语言类型值。如 String 32 = "32"
+     * @return ExpressionTemplate实例
+     * @see PlaceholderExpressionTemplate
+     * @see Tokenizer
+     */
+    static ExpressionTemplate createTemplate(Tokenizer tokenizer, boolean langsym) {
+        return new PlaceholderExpressionTemplate(tokenizer, langsym);
+    }
 }

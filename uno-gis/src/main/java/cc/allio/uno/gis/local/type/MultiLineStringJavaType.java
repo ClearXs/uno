@@ -1,0 +1,19 @@
+package cc.allio.uno.gis.local.type;
+
+import cc.allio.uno.data.orm.type.JavaTypeImpl;
+import cc.allio.uno.gis.GeometryTypes;
+import org.locationtech.jts.geom.MultiLineString;
+
+/**
+ * MultiLineString
+ *
+ * @author jiangwei
+ * @date 2023/4/18 15:59
+ * @since 1.1.4
+ */
+public class MultiLineStringJavaType extends JavaTypeImpl<MultiLineString> {
+    @Override
+    public Class<MultiLineString> getJavaType() {
+        return GeometryTypes.MULTI_LINE_STRING;
+    }
+}

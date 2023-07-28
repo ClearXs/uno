@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cc.allio.uno</groupId>
+    <groupId>cc.allio</groupId>
     <artifactId>uno</artifactId>
     <packaging>pom</packaging>
     <version>1.1.4.RELEASE</version>
@@ -12,7 +12,7 @@
 
     <developers>
         <developer>
-            <name>xiashou</name>
+            <name>jiangwei</name>
             <email>jiangw1027@gmail.com</email>
         </developer>
     </developers>
@@ -29,6 +29,7 @@
         <module>uno-web</module>
         <module>uno-data</module>
         <module>uno-gis</module>
+        <module>uno-rule</module>
     </modules>
 
     <properties>
@@ -42,6 +43,7 @@
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <test-containers.version>1.14.2</test-containers.version>
+        <drools.version>7.63.0.Final</drools.version>
     </properties>
 
     <dependencies>
@@ -70,7 +72,7 @@
                 <scope>import</scope>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-bom</artifactId>
                 <version>${project.version}</version>
                 <type>pom</type>
@@ -101,6 +103,13 @@
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>
                 <version>${spring.cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.drools</groupId>
+                <artifactId>drools-bom</artifactId>
+                <version>${drools.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -192,13 +201,13 @@
     <distributionManagement>
         <repository>
             <id>rdc-releases</id>
-            <name>Nexus Release Repository</name>
+            <name>User Project Release</name>
             <url>https://packages.aliyun.com/maven/repository/2300285-release-cAc7WJ/</url>
         </repository>
         <snapshotRepository>
-            <id>snapshots</id>
-            <name>Nexus Snapshot Repository</name>
-            <url>>https://packages.aliyun.com/maven/repository/2300285-snapshot-JAW5GT/</url>
+            <id>rdc-snapshots</id>
+            <name>User ProjectSNAPSHOTS</name>
+            <url>https://packages.aliyun.com/maven/repository/2300285-snapshot-JAW5GT/</url>
         </snapshotRepository>
     </distributionManagement>
 </project>

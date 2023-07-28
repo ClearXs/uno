@@ -1,6 +1,6 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.TestSpringEnvironment;
+import cc.allio.uno.test.env.Environment;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
  * @see org.springframework.boot.context.config.ConfigFileApplicationListener
  * @since 1.0
  */
-public class ConfigDataLoaderTest extends BaseCoreTest {
+public class ConfigDataLoaderTest extends CoreTest {
     @Override
     protected void onEnvBuild() {
 
@@ -20,11 +20,11 @@ public class ConfigDataLoaderTest extends BaseCoreTest {
 
     @Test
     void testLoad() {
-        assertEquals("test", getProperty("automic.uno"));
+        assertEquals("test", getProperty("allio.uno"));
     }
 
     @Override
-    public TestSpringEnvironment supportEnv() {
+    public Environment supportEnv() {
         return null;
     }
 

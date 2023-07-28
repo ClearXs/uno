@@ -1,9 +1,8 @@
 package cc.allio.uno.core.bean;
 
 
-import cc.allio.uno.core.util.ClassUtil;
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.CoreBeanUtil;
-import cc.allio.uno.core.util.ReflectUtil;
 import cc.allio.uno.core.util.StringUtils;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Label;
@@ -11,7 +10,6 @@ import org.springframework.asm.Opcodes;
 import org.springframework.asm.Type;
 import org.springframework.cglib.core.*;
 import org.springframework.lang.Nullable;
-import org.springframework.util.ClassUtils;
 
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Method;
@@ -39,7 +37,7 @@ public abstract class BeanCopier {
     private static final Signature COPY = new Signature("copy", Type.VOID_TYPE, new Type[]{Constants.TYPE_OBJECT, Constants.TYPE_OBJECT, CONVERTER});
     private static final Signature CONVERT = TypeUtils.parseSignature("Object convert(Object, Class, Object)");
     private static final Signature BEAN_MAP_GET = TypeUtils.parseSignature("Object get(Object)");
-    private static final Type CLASS_UTILS = TypeUtils.parseType(ClassUtils.class.getName());
+    private static final Type CLASS_UTILS = TypeUtils.parseType(org.springframework.util.ClassUtils.class.getName());
     private static final Signature IS_ASSIGNABLE_VALUE = TypeUtils.parseSignature("boolean isAssignableValue(Class, Object)");
     /**
      * The map to store {@link BeanCopier} of source type and class type for copy.
@@ -113,7 +111,7 @@ public abstract class BeanCopier {
 
         @Override
         protected ProtectionDomain getProtectionDomain() {
-            return ReflectUtils.getProtectionDomain(source);
+            return org.springframework.cglib.core.ReflectUtils.getProtectionDomain(source);
         }
 
         @Override
@@ -144,8 +142,8 @@ public abstract class BeanCopier {
 
             // 2018.12.27 by L.cm 支持链式 bean
             // 注意：此处需兼容链式bean 使用了 spring 的方法，比较耗时
-            PropertyDescriptor[] getters = ReflectUtil.getBeanGetters(source);
-            PropertyDescriptor[] setters = ReflectUtil.getBeanSetters(target);
+            PropertyDescriptor[] getters = cc.allio.uno.core.util.ReflectUtils.getBeanGetters(source);
+            PropertyDescriptor[] setters = cc.allio.uno.core.util.ReflectUtils.getBeanSetters(target);
             Map<String, PropertyDescriptor> names = new HashMap<>(16);
             for (PropertyDescriptor getter : getters) {
                 names.put(getter.getName(), getter);
@@ -163,7 +161,7 @@ public abstract class BeanCopier {
             for (PropertyDescriptor setter : setters) {
                 String propName = setter.getName();
 
-                CopyProperty targetIgnoreCopy = ReflectUtil.getAnnotation(target, propName, CopyProperty.class);
+                CopyProperty targetIgnoreCopy = cc.allio.uno.core.util.ReflectUtils.getAnnotation(target, propName, CopyProperty.class);
                 // set 上有忽略的 注解
                 if (targetIgnoreCopy != null) {
                     if (targetIgnoreCopy.ignore()) {
@@ -182,9 +180,9 @@ public abstract class BeanCopier {
                     continue;
                 }
 
-                MethodInfo read = ReflectUtils.getMethodInfo(getter.getReadMethod());
+                MethodInfo read = org.springframework.cglib.core.ReflectUtils.getMethodInfo(getter.getReadMethod());
                 Method writeMethod = setter.getWriteMethod();
-                MethodInfo write = ReflectUtils.getMethodInfo(writeMethod);
+                MethodInfo write = org.springframework.cglib.core.ReflectUtils.getMethodInfo(writeMethod);
                 Type returnType = read.getSignature().getReturnType();
                 Type setterType = write.getSignature().getArgumentTypes()[0];
                 Class<?> getterPropertyType = getter.getPropertyType();
@@ -194,7 +192,7 @@ public abstract class BeanCopier {
                 // nonNull Label
                 Label l0 = e.make_label();
                 // 判断类型是否一致，包括 包装类型
-                if (ClassUtil.isAssignable(setterPropertyType, getterPropertyType)) {
+                if (ClassUtils.isAssignable(setterPropertyType, getterPropertyType)) {
                     // 2018.12.27 by L.cm 支持链式 bean
                     e.load_local(targetLocal);
                     e.load_local(sourceLocal);
@@ -292,7 +290,7 @@ public abstract class BeanCopier {
          */
         public void generateClassFormMap(ClassEmitter ce, CodeEmitter e, Type sourceType, Type targetType) {
             // 2018.12.27 by L.cm 支持链式 bean
-            PropertyDescriptor[] setters = ReflectUtil.getBeanSetters(target);
+            PropertyDescriptor[] setters = cc.allio.uno.core.util.ReflectUtils.getBeanSetters(target);
 
             // 入口变量
             Local targetLocal = e.make_local();
@@ -309,7 +307,7 @@ public abstract class BeanCopier {
                 String propName = setter.getName();
 
                 // set 上有忽略的 注解
-                CopyProperty targetIgnoreCopy = ReflectUtil.getAnnotation(target, propName, CopyProperty.class);
+                CopyProperty targetIgnoreCopy = cc.allio.uno.core.util.ReflectUtils.getAnnotation(target, propName, CopyProperty.class);
                 if (targetIgnoreCopy != null) {
                     if (targetIgnoreCopy.ignore()) {
                         continue;
@@ -322,7 +320,7 @@ public abstract class BeanCopier {
                 }
 
                 Method writeMethod = setter.getWriteMethod();
-                MethodInfo write = ReflectUtils.getMethodInfo(writeMethod);
+                MethodInfo write = org.springframework.cglib.core.ReflectUtils.getMethodInfo(writeMethod);
                 Type setterType = write.getSignature().getArgumentTypes()[0];
 
                 e.load_local(targetLocal);

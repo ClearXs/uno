@@ -1,6 +1,6 @@
 package cc.allio.uno.core.metadata.endpoint.source;
 
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import org.springframework.context.ApplicationContext;
 
 import java.util.Collection;
@@ -22,6 +22,6 @@ public class CollectionSource extends JsonSource {
 
     @Override
     public void register(ApplicationContext context) {
-        sources.forEach(source -> next(JsonUtil.toJson(source)));
+        sources.forEach(source -> next(JsonUtils.toJson(source)));
     }
 }

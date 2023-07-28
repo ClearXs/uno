@@ -1,6 +1,6 @@
 package cc.allio.uno.component.netty.concurrent;
 
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 
 import java.util.List;
 import java.util.concurrent.*;
@@ -174,7 +174,7 @@ public abstract class AbstractInvokeFuture<V> implements InvokeFuture<V> {
     }
 
     private void notifyListeners() throws Exception {
-        if (Collections.isNotEmpty(futureListeners)) {
+        if (CollectionUtils.isNotEmpty(futureListeners)) {
             for (FutureListener<V> listener : futureListeners) {
                 listener.completed(result, throwable);
             }

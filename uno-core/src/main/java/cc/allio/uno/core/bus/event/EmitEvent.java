@@ -7,5 +7,5 @@ package cc.allio.uno.core.bus.event;
  * @date 2021/12/19 21:14
  * @since 1.0
  */
-public interface EmitEvent extends TopicEvent {
+public interface EmitEvent extends BusEvent {
 }

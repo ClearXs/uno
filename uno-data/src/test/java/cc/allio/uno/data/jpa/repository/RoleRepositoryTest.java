@@ -1,7 +1,7 @@
 package cc.allio.uno.data.jpa.repository;
 
-import cc.allio.uno.data.model.Role;
 import cc.allio.uno.data.jpa.JpaConfiguration;
+import cc.allio.uno.data.model.Role;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;

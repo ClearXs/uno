@@ -1,15 +1,11 @@
 package cc.allio.uno.core.util.template.expression;
 
-import cc.allio.uno.core.util.type.Types;
+import cc.allio.uno.core.type.Types;
 
 import java.util.Map;
 
 /**
  * Map替换。
- * <p>required: </p>
- * <ol>
- *     <li>需要包含泛型</li>
- * </ol>
  *
  * @author jiangwei
  * @date 2022/12/3 19:38
@@ -18,9 +14,9 @@ import java.util.Map;
 public class MapInterchange extends BaseInterchange implements KeyInterchange {
 
     @Override
-    protected Object onChange(String text, Object value) {
+    protected Object onChange(String text, Object value, boolean langsym) {
         Map<?, ?> map = (Map<?, ?>) value;
-        return map.get(text);
+        return reValue(map.get(text), langsym);
     }
 
     @Override

@@ -1,0 +1,33 @@
+/*
+ * Copyright 2015 Red Hat, Inc. and/or its affiliates.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed onTrigger an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+*/
+
+package cc.allio.uno.rule.drools;
+
+import java.util.Map;
+import cc.allio.uno.rule.api.Fact;
+import cc.allio.uno.rule.api.Action;
+import cc.allio.uno.rule.api.event.RuleContext;
+
+global cc.allio.uno.rule.api.Action action
+
+rule "rule index1"
+    when
+        $values: Fact()
+        // $result: Map(get("a") > 5 && get("b") > 5 || get("c") > 5)  from $values.ruleValues
+         Map(get("a") > 5 )  from $values.ruleValues
+         and Map(get("b") > 5 ) from $values.ruleValues
+         or Map(get("c") > 5 ) from $values.ruleValues
+    then
+end

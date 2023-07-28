@@ -1,0 +1,29 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface ExpressionTemplate
+class PlaceholderExpressionTemplate
+interface TokenHandler
+interface TokenParser
+interface Tokenizer
+interface Engine
+
+interface Engine {
+    String run(String expression, Object value, boolean langsym)
+}
+
+interface ExpressionTemplate {
+    String parseTemplate(String template, Object target);
+}
+
+class PlaceholderExpressionTemplate {
+     TokenParser tokenParser;
+     Engine engine;
+}
+
+ExpressionTemplate <|-- PlaceholderExpressionTemplate
+Engine *-- PlaceholderExpressionTemplate : use
+TokenParser *-- PlaceholderExpressionTemplate : use
+TokenHandler *-- TokenParser : use
+Tokenizer *-- TokenParser : use
+@enduml

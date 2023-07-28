@@ -1,8 +1,8 @@
 package cc.allio.uno.gis.jackson.serialization;
 
-import cc.allio.uno.gis.jackson.parsers.GeometryParser;
 import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonTransform;
-import cc.allio.uno.gis.transform.*;
+import cc.allio.uno.gis.transform.AnnoTransform;
+import cc.allio.uno.gis.transform.ReadWrite;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.ObjectCodec;
 import com.fasterxml.jackson.databind.DeserializationContext;
@@ -10,6 +10,7 @@ import com.fasterxml.jackson.databind.JsonDeserializer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.jsontype.TypeDeserializer;
 import org.locationtech.jts.geom.Geometry;
+import cc.allio.uno.gis.jackson.parsers.GeometryParser;
 
 import java.io.IOException;
 

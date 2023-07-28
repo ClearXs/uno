@@ -1,6 +1,6 @@
 package cc.allio.uno.data.query.param;
 
-import cc.allio.uno.data.query.QueryWrapper;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
 
 /**
  * 默认抽稀动作，不实现任何动作

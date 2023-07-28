@@ -28,7 +28,7 @@ public class ConvertUtil {
 		if (source == null) {
 			return null;
 		}
-		if (ClassUtil.isAssignableValue(targetType, source)) {
+		if (ClassUtils.isAssignableValue(targetType, source)) {
 			return (T) source;
 		}
 		GenericConversionService conversionService = ConversionService.getInstance();

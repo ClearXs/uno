@@ -1,28 +1,33 @@
 package cc.allio.uno.component.sequential.dispatch;
 
-import cc.allio.uno.component.sequential.TestComposeSequential;
-import cc.allio.uno.component.sequential.bus.SequentialMessageBus;
-import cc.allio.uno.core.bus.SubscriptionProperties;
-import cc.allio.uno.component.sequential.process.SpringProcessor;
-import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.component.sequential.TestSequential;
+import cc.allio.uno.component.sequential.*;
+import cc.allio.uno.component.sequential.bus.SequentialEventBus;
+import cc.allio.uno.component.sequential.process.DefaultProcessor;
 import cc.allio.uno.core.util.CoreBeanUtil;
-import cc.allio.uno.test.BaseCoreTest;
-import cc.allio.uno.test.env.TestSpringEnvironment;
+import cc.allio.uno.test.RunTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import java.util.function.Predicate;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+
+@RunTest(components = {DefaultProcessor.class, SequentialEventBus.class, CoreBeanUtil.class, SubscriptionProperties.class, SubscriptionPropertiesTypeManager.class})
 @Slf4j
-class DispatchDispatcherTest extends BaseCoreTest {
+class DispatchDispatcherTest {
 
-    DispatchDispatcher dispatcher;
+    DispatchDispatcher dispatcher = new DispatchDispatcher(new Dispatcher() {
+        @Override
+        public void dispatch(Sequential sequential) throws Throwable {
+            log.info("dispatch sequential: {}", sequential);
+        }
 
-    @Override
-    protected void onEnvBuild() {
-        registerComponent(SpringProcessor.class, SequentialMessageBus.class, CoreBeanUtil.class, SubscriptionProperties.class);
-    }
+        @Override
+        public Predicate<? extends Sequential> isAssign() {
+            return (Predicate<Sequential>) sequential -> true;
+        }
+    });
+    ;
 
     @Test
     void testDispatch() {
@@ -34,28 +39,5 @@ class DispatchDispatcherTest extends BaseCoreTest {
         assertDoesNotThrow(() -> dispatcher.dispatch(new TestComposeSequential()));
     }
 
-    @Override
-    public TestSpringEnvironment supportEnv() {
-        return null;
-    }
 
-    @Override
-    protected void onRefreshComplete() throws Throwable {
-        dispatcher = new DispatchDispatcher(new Dispatcher() {
-            @Override
-            public void dispatch(Sequential sequential) throws Throwable {
-                log.info("dispatch sequential: {}", sequential);
-            }
-
-            @Override
-            public Predicate<? extends Sequential> isAssign() {
-                return (Predicate<Sequential>) sequential -> true;
-            }
-        });
-    }
-
-    @Override
-    protected void onContextClose() throws Throwable {
-
-    }
 }

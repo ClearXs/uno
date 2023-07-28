@@ -1,15 +1,15 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.TestSpringEnvironmentFacade;
+import cc.allio.uno.test.env.EnvironmentFacade;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.annotation.MapperScan;
 
 @RunMapperTest(mapperScan = RunMapperTestWithTest.TestMapperScan.class)
-class RunMapperTestWithTest extends BaseCoreTest {
+class RunMapperTestWithTest extends CoreTest {
 
     @Test
     void testEnvCount() {
-        TestSpringEnvironmentFacade env = getEnv();
+        EnvironmentFacade env = getEnv();
         assertEquals(2, env.size());
     }
 

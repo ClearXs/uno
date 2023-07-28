@@ -1,10 +1,10 @@
 package cc.allio.uno.core.task;
 
-import cc.allio.uno.core.cache.CacheKey;
-import cc.allio.uno.core.util.CoreBeanUtil;
 import cc.allio.uno.core.cache.Cache;
+import cc.allio.uno.core.cache.CacheKey;
 import cc.allio.uno.core.cache.InitializationCache;
 import cc.allio.uno.core.cache.RedisCache;
+import cc.allio.uno.core.util.CoreBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.context.ApplicationContext;

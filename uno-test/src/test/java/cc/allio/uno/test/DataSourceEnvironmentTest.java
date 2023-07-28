@@ -1,8 +1,8 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.DatasourceTestEnvironment;
-import cc.allio.uno.test.env.TestSpringEnvironment;
-import cc.allio.uno.test.env.TestSpringEnvironmentFacade;
+import cc.allio.uno.test.env.DataSourceEnvironment;
+import cc.allio.uno.test.env.Environment;
+import cc.allio.uno.test.env.EnvironmentFacade;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  * @date 2022/8/29 11:30
  * @since 1.0.9
  */
-public class DataSourceEnvironmentTest extends BaseCoreTest {
+public class DataSourceEnvironmentTest extends CoreTest {
 
 
     @Override
@@ -25,13 +25,13 @@ public class DataSourceEnvironmentTest extends BaseCoreTest {
     }
 
     @Override
-    public TestSpringEnvironment supportEnv() {
+    public Environment supportEnv() {
         DataSourceProperties dataSourceProperties = new DataSourceProperties();
         dataSourceProperties.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSourceProperties.setUrl("jdbc:mysql://192.168.2.29:3306/migration?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true");
         dataSourceProperties.setUsername("root");
         dataSourceProperties.setPassword("123456");
-        return new TestSpringEnvironmentFacade(new DatasourceTestEnvironment(dataSourceProperties));
+        return new EnvironmentFacade(new DataSourceEnvironment());
     }
 
     @Override

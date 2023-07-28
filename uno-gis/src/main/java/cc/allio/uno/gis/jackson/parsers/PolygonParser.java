@@ -1,11 +1,12 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LinearRing;
 import org.locationtech.jts.geom.Polygon;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 /**
  * Created by mihaildoronin on 11/11/15.
@@ -17,7 +18,7 @@ public class PolygonParser extends BaseParser implements GeometryParser<Polygon>
 	}
 
 	public Polygon polygonFromJson(JsonNode node) {
-		JsonNode arrayOfRings = node.get(GeoJson.COORDINATES);
+		JsonNode arrayOfRings = node.get(COORDINATES);
 		return polygonFromJsonArrayOfRings(arrayOfRings);
 	}
 

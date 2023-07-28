@@ -24,7 +24,7 @@ public enum Action {
     DEFAULT("DEFAULT", "默认", new DefaultDiluteAction()),
 
     /**
-     * 数据想家
+     * 数据相加
      */
     ADD("ADD", "相加", new AddDiluteAction());
 

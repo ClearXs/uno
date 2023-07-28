@@ -1,8 +1,8 @@
 package cc.allio.uno.core.metadata.endpoint.source;
 
+import cc.allio.uno.core.serializer.JsonNodeEnhancer;
 import cc.allio.uno.core.metadata.Metadata;
 import cc.allio.uno.core.metadata.convert.Converter;
-import cc.allio.uno.core.serializer.JsonNodeEnhancer;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.context.ApplicationContext;
 
@@ -24,7 +24,9 @@ public interface SourceConverter<T extends Metadata> extends Converter<T> {
      * @throws Throwable 数据处理出错抛出的异常
      * @see JsonNodeEnhancer
      */
-    JsonNode prepare(ApplicationContext context, JsonNode value) throws Throwable;
+    default JsonNode prepare(ApplicationContext context, JsonNode value) throws Throwable {
+        return value;
+    }
 
     /**
      * 数据转换为时序数据真实动作。

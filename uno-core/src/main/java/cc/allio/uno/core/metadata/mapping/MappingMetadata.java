@@ -1,7 +1,7 @@
 package cc.allio.uno.core.metadata.mapping;
 
-import cc.allio.uno.core.metadata.convert.Converter;
 import cc.allio.uno.core.metadata.Metadata;
+import cc.allio.uno.core.metadata.convert.Converter;
 
 import java.util.Map;
 
@@ -46,7 +46,7 @@ public interface MappingMetadata extends Map<MappingField, MappingField> {
     boolean containsKey(String sourceFieldName);
 
     /**
-     * 获取时序数据映射转换器
+     * 获取元数据映射转换器
      *
      * @return 转换器实例
      */

@@ -1,10 +1,10 @@
 package cc.allio.uno.component.http.api;
 
+import cc.allio.uno.component.http.metadata.HttpResponseMetadata;
+import cc.allio.uno.component.http.metadata.HttpSwapper;
 import cc.allio.uno.component.http.openapi.OpenApiConverter;
 import cc.allio.uno.component.http.openapi.OpenApiSpecificationParser;
 import cc.allio.uno.component.http.openapi.OpenApiV3Assembly;
-import cc.allio.uno.component.http.metadata.HttpSwapper;
-import cc.allio.uno.component.http.metadata.HttpResponseMetadata;
 import cc.allio.uno.test.BaseTestCase;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.Test;

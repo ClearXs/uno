@@ -3,13 +3,14 @@ package cc.allio.uno.component.sequential;
 import cc.allio.uno.component.sequential.convert.TestSequentialConvert;
 import cc.allio.uno.core.metadata.mapping.DefaultMappingMetadata;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
+import cc.allio.uno.core.type.Type;
 
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class NullTypeSequential implements Sequential {
     @Override
-    public String getType() {
+    public Type getType() {
         return null;
     }
 
@@ -34,7 +35,7 @@ public class NullTypeSequential implements Sequential {
     }
 
     @Override
-    public Map<String, Object> getUndefinedValues() {
+    public Map<String, Object> getValues() {
         return null;
     }
 }

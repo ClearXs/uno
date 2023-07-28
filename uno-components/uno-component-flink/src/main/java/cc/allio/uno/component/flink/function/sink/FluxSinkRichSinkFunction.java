@@ -1,7 +1,7 @@
 package cc.allio.uno.component.flink.function.sink;
 
-import cc.allio.uno.component.flink.Output;
 import cc.allio.uno.component.flink.function.BaseCountDownRichSinkFunction;
+import cc.allio.uno.component.flink.Output;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.configuration.Configuration;
 import reactor.core.publisher.Flux;

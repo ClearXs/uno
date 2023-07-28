@@ -1,9 +1,9 @@
 package cc.allio.uno.gis.jackson.geojson.parser;
 
-import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
+import cc.allio.uno.gis.jackson.geojson.introspector.IgnoreJsonTypeInfoIntrospector;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import cc.allio.uno.gis.jackson.geojson.introspector.IgnoreJsonTypeInfoIntrospector;
+import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 
 /**
  * 〈功能简述〉<br>

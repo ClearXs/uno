@@ -1,5 +1,6 @@
 package cc.allio.uno.core.path;
 
+import cc.allio.uno.core.StringPool;
 import com.google.common.collect.Maps;
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
@@ -18,7 +19,7 @@ import java.util.function.Predicate;
 import java.util.function.Supplier;
 
 /**
- * 构建一颗森林
+ * 构建一颗主题订阅森林
  *
  * @author jiangwei
  * @date 2022/6/27 10:39
@@ -58,11 +59,11 @@ public final class Forest<T> {
     }
 
     public static <T> Forest<T> createRoot() {
-        return new Forest<>(null, "/");
+        return new Forest<>(null, StringPool.SLASH);
     }
 
     public Forest<T> append(String path) {
-        if (path.equals("/") || path.equals("")) {
+        if (path.equals(StringPool.SLASH) || path.equals(StringPool.EMPTY)) {
             return this;
         }
         return getOrDefault(path, Forest::new);
@@ -70,10 +71,10 @@ public final class Forest<T> {
 
     private Forest(Forest<T> parent, String part) {
 
-        if (StringUtils.isEmpty(part) || part.equals("/")) {
-            this.part = "";
+        if (StringUtils.isEmpty(part) || part.equals(StringPool.SLASH)) {
+            this.part = StringPool.EMPTY;
         } else {
-            if (part.contains("/")) {
+            if (part.contains(StringPool.SLASH)) {
                 this.ofPath(part);
             } else {
                 this.part = part;
@@ -100,9 +101,9 @@ public final class Forest<T> {
             StringBuilder builder = new StringBuilder();
             if (parent != null) {
                 String parentTopic = parent.getTopic();
-                builder.append(parentTopic).append(parentTopic.equals("/") ? "" : "/");
+                builder.append(parentTopic).append(parentTopic.equals(StringPool.SLASH) ? StringPool.EMPTY : StringPool.SLASH);
             } else {
-                builder.append("/");
+                builder.append(StringPool.SLASH);
             }
             return path = builder.append(part).toString();
         }
@@ -170,7 +171,7 @@ public final class Forest<T> {
     }
 
     private void ofPath(String path) {
-        String[] parts = path.split("/", 2);
+        String[] parts = path.split(StringPool.SLASH, 2);
         this.part = parts[0];
         if (parts.length > 1) {
             Forest<T> part = new Forest<>(this, parts[1]);
@@ -179,10 +180,10 @@ public final class Forest<T> {
     }
 
     private Forest<T> getOrDefault(String path, BiFunction<Forest<T>, String, Forest<T>> mapping) {
-        if (path.startsWith("/")) {
+        if (path.startsWith(StringPool.SLASH)) {
             path = path.substring(1);
         }
-        String[] parts = path.split("/");
+        String[] parts = path.split(StringPool.SLASH);
         Forest<T> part = child.computeIfAbsent(parts[0], _path -> mapping.apply(this, _path));
         for (int i = 1; i < parts.length && part != null; i++) {
             Forest<T> parent = part;
@@ -196,16 +197,14 @@ public final class Forest<T> {
     }
 
     public Flux<Forest<T>> findPath(String path) {
-        return Flux.create(sink -> {
-            findPath(path, sink::next, sink::complete);
-        });
+        return Flux.create(sink -> findPath(path, sink::next, sink::complete));
     }
 
     public void findPath(String path,
                          Consumer<Forest<T>> sink,
                          Runnable end) {
-        if (!path.startsWith("/")) {
-            path = "/" + path;
+        if (!path.startsWith(StringPool.SLASH)) {
+            path = StringPool.SLASH + path;
         }
         find(ForestMatcher.split(path), this, sink, end);
     }
@@ -219,7 +218,6 @@ public final class Forest<T> {
         return ForestMatcher.match(getTopics(), pars)
                 || ForestMatcher.match(pars, getTopics());
     }
-
 
     public static <T> void find(String[] topicParts,
                                 Forest<T> forestPart,
@@ -238,7 +236,7 @@ public final class Forest<T> {
                 sink.accept(part);
             }
 
-            //订阅了如 /device/**/event/*
+            // 订阅了如 /test/**/event/*
             if (part.part.equals("**")) {
                 Forest<T> tmp = null;
                 for (int i = part.depth; i < topicParts.length; i++) {

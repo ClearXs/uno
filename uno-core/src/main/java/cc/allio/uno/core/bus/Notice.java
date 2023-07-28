@@ -1,7 +1,6 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.bus.event.*;
-import cc.allio.uno.core.bus.event.EventNode;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Supplier;
@@ -16,14 +15,13 @@ import java.util.function.Supplier;
  */
 public class Notice<C> {
 
-
     /**
      * 关联的单个节点信息
      */
-    private final EventNode<C> node;
+    private final Node<C> node;
 
     public Notice(Subscription subscription) {
-        node = new MessageNode<>(subscription.getSubscribeId(), subscription.getPath());
+        node = new ReactiveEventNode<>(subscription.getSubscribeId(), subscription.getPath());
     }
 
     /**
@@ -38,22 +36,22 @@ public class Notice<C> {
     }
 
     /**
-     * 当发布者向消息总线发布数据，某个Topic订阅该数据时，触发这个事件
+     * 当发布者向事件总线发布数据，某个Topic订阅该数据时，触发这个事件
      *
-     * @param supplier 消息总线传递的数据
+     * @param supplier 事件总线传递的数据
      * @see Topic#exchange(C)
      */
-    public void notify(Supplier<C> supplier) {
-        load(EmitEvent.class, supplier.get());
+    public Mono<C> notify(Supplier<C> supplier) {
+        return load(EmitEvent.class, supplier.get());
     }
 
     /**
-     * 当Topic被消息总线丢弃时触发
+     * 当Topic被事件总线丢弃时触发
      *
      * @see Topic#discard(Long)
      */
-    public void disappear() {
-        load(LiftEvent.class, null);
+    public Mono<C> disappear() {
+        return load(LiftEvent.class, null);
     }
 
     /**
@@ -62,8 +60,8 @@ public class Notice<C> {
      * @param eventType 事件类型
      * @param source    事件源数据
      */
-    public void load(Class<? extends TopicEvent> eventType, C source) {
-        node.update(new EventContext<>(source, eventType, this, node));
+    public Mono<C> load(Class<? extends BusEvent> eventType, C source) {
+        return node.update(new Context<>(source, eventType, this, node));
     }
 
     /**
@@ -71,7 +69,7 @@ public class Notice<C> {
      *
      * @return 单数据源Node数据
      */
-    public Mono<EventNode<C>> getAsyncNode() {
+    public Mono<Node<C>> getAsyncNode() {
         return Mono.just(node);
     }
 
@@ -81,7 +79,7 @@ public class Notice<C> {
      * @return Node数据
      * @throws NullPointerException 找不到时抛出
      */
-    public EventNode<C> getNode() {
+    public Node<C> getNode() {
         return node;
     }
 }

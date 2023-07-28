@@ -39,12 +39,12 @@ public class Requires {
             }
         }
         if (obj instanceof Collection) {
-            if (Collections.isEmpty((Collection<?>) obj)) {
+            if (CollectionUtils.isEmpty((Collection<?>) obj)) {
                 throw new IllegalArgumentException("requires: " + message + " is empty");
             }
         }
         if (obj instanceof Map) {
-            if (Collections.isEmpty((Map<?, ?>) obj)) {
+            if (CollectionUtils.isEmpty((Map<?, ?>) obj)) {
                 throw new IllegalArgumentException("requires: " + message + " is empty");
             }
         }

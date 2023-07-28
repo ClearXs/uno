@@ -1,5 +1,6 @@
 package cc.allio.uno.core.spi;
 
+import cc.allio.uno.core.type.Type;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.Lists;
 import reactor.core.publisher.Flux;
@@ -21,17 +22,16 @@ public abstract class AutoTypeLoader extends Loader {
      * 从SPI中加载实例对象返回Map结构
      *
      * @param typeClass 期望的类型
-     * @param <K>       返回的数据类型
      * @param <T>       返回数据格式的范型
      * @return 以范型<K>为Key，范型<T>为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
-    public static <K, T extends Type<K>> Map<K, List<T>> loadByTypeToMap(Class<T> typeClass) {
+    public static <T extends Type> Map<String, List<T>> loadByTypeToMap(Class<T> typeClass) {
         ServiceLoader<T> loader = load(typeClass);
         Iterator<T> iterator = loader.iterator();
         return Lists.newArrayList(iterator)
                 .stream()
-                .collect(Collectors.groupingBy(Type::getType));
+                .collect(Collectors.groupingBy(Type::getCode));
     }
 
     /**
@@ -52,15 +52,14 @@ public abstract class AutoTypeLoader extends Loader {
      * 从SPI中加载实例对象返回GroupFlux结构
      *
      * @param typeClass 期望的类型
-     * @param <K>       返回的数据类型
      * @param <T>       返回数据格式的范型
      * @return 以范型<K>为Key，范型<T>为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
-    public static <K, T extends Type<K>> Flux<GroupedFlux<K, T>> loadByTypeToGroupFlux(Class<T> typeClass) {
+    public static <T extends Type> Flux<GroupedFlux<String, T>> loadByTypeToGroupFlux(Class<T> typeClass) {
         ServiceLoader<T> loader = load(typeClass);
         return Flux.fromIterable(loader)
-                .groupBy(Type::getType);
+                .groupBy(Type::getCode);
     }
 
     /**

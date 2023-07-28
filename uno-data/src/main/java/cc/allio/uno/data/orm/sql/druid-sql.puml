@@ -1,0 +1,77 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface Operator
+interface SQLOperator
+interface SQLTableOperator
+interface SQLWhereOperator
+interface SQLPrepareOperator
+
+interface SQLDeleteOperator
+interface SQLInsertOperator
+interface SQLQueryOperator
+interface SQLUpdateOperator
+interface SQLAlterTableOperator
+interface SQLCreateTableOperator
+interface SQLDropTableOperator
+interface SQLExistTableOperator
+interface SQLShowColumnsOperator
+
+
+interface Operator<T extends Operator<T>> {
+}
+
+interface SQLOperator<T extends SQLOperator<T>> {
+}
+
+interface SQLPrepareOperator extends SQLOperator {
+}
+
+interface SQLTableOperator<T extends Operator<T>> extends Operator {
+    T from(Table table);
+}
+
+interface SQLWhereOperator<T extends Operator<T>> extends Operator {
+}
+
+interface SQLPrepareOperator<T extends SQLPrepareOperator<T>> extends Operator {
+}
+
+interface SQLDeleteOperator extends SQLPrepareOperator, SQLTableOperator, SQLWhereOperator {
+}
+
+interface SQLInsertOperator extends SQLPrepareOperator, SQLTableOperator {
+}
+
+interface SQLQueryOperator extends SQLPrepareOperator, SQLTableOperator, SQLWhereOperator  {
+}
+
+interface SQLUpdateOperator extends SQLPrepareOperator, SQLTableOperator, SQLWhereOperator {
+}
+
+interface SQLAlterTableOperator extends SQLOperator, SQLTableOperator {
+}
+
+interface SQLCreateTableOperator extends SQLOperator, SQLTableOperator {
+}
+
+interface SQLDropTableOperator extends SQLOperator, SQLTableOperator {
+}
+
+interface SQLExistTableOperator extends SQLPrepareOperator, SQLTableOperator {
+}
+
+interface SQLShowColumnsOperator extends SQLPrepareOperator, SQLTableOperator {
+}
+
+class DruidSQLQueryOperator implements SQLQueryOperator {}
+class DruidSQLUpdateOperator implements SQLUpdateOperator {}
+class DruidSQLInsertOperator implements SQLInsertOperator {}
+class DruidSQLDeleteQueryOperator implements SQLDeleteOperator {}
+class DruidSQLAlterTableOperator implements SQLAlterTableOperator {}
+class DruidSQLCreateOperator implements SQLCreateTableOperator {}
+class DruidSQLDropTableOperator implements SQLDropTableOperator {}
+class DruidSQLExistTableOperator implements SQLExistTableOperator {}
+class DruidSQLShowColumnsOperator implements SQLShowColumnsOperator {}
+
+@enduml

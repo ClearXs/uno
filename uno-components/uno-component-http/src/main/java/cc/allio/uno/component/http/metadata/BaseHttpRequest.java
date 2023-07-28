@@ -76,7 +76,7 @@ public abstract class BaseHttpRequest implements HttpRequestMetadata {
     /**
      * 一次Http请求响应的配置数据
      */
-    private HttpConfigurationMetadata configuration = new DefaultHttpConfigurationMetadata();
+    private final HttpConfigurationMetadata configuration = new DefaultHttpConfigurationMetadata();
 
     /**
      * 当前响应期望返回的类型

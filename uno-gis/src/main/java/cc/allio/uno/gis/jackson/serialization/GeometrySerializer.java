@@ -1,8 +1,8 @@
 package cc.allio.uno.gis.jackson.serialization;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonTransform;
-import cc.allio.uno.gis.transform.*;
+import cc.allio.uno.gis.transform.AnnoTransform;
+import cc.allio.uno.gis.transform.ReadWrite;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -13,6 +13,8 @@ import org.locationtech.jts.geom.*;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Optional;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.*;
 
 public class GeometrySerializer extends JsonSerializer<Geometry> {
 
@@ -71,8 +73,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeGeometryCollection(JsonGenerator jgen, GeometryCollection value) throws
             IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.GEOMETRY_COLLECTION);
-        jgen.writeArrayFieldStart(GeoJson.GEOMETRIES);
+        jgen.writeStringField(TYPE, GEOMETRY_COLLECTION);
+        jgen.writeArrayFieldStart(GEOMETRIES);
 
         for (int i = 0; i != value.getNumGeometries(); ++i) {
             writeGeometry(jgen, value.getGeometryN(i));
@@ -85,8 +87,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeMultiPoint(JsonGenerator jgen, MultiPoint value)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.MULTI_POINT);
-        jgen.writeArrayFieldStart(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, MULTI_POINT);
+        jgen.writeArrayFieldStart(COORDINATES);
 
         for (int i = 0; i != value.getNumGeometries(); ++i) {
             writePointCoords(jgen, (Point) value.getGeometryN(i));
@@ -99,8 +101,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeMultiLineString(JsonGenerator jgen, MultiLineString value)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.MULTI_LINE_STRING);
-        jgen.writeArrayFieldStart(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, MULTI_LINE_STRING);
+        jgen.writeArrayFieldStart(COORDINATES);
 
         for (int i = 0; i != value.getNumGeometries(); ++i) {
             writeLineStringCoords(jgen, (LineString) value.getGeometryN(i));
@@ -118,8 +120,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeMultiPolygon(JsonGenerator jgen, MultiPolygon value)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.MULTI_POLYGON);
-        jgen.writeArrayFieldStart(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, MULTI_POLYGON);
+        jgen.writeArrayFieldStart(COORDINATES);
 
         for (int i = 0; i != value.getNumGeometries(); ++i) {
             writePolygonCoordinates(jgen, (Polygon) value.getGeometryN(i));
@@ -132,8 +134,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writePolygon(JsonGenerator jgen, Polygon value)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.POLYGON);
-        jgen.writeFieldName(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, POLYGON);
+        jgen.writeFieldName(COORDINATES);
         writePolygonCoordinates(jgen, value);
 
         jgen.writeEndObject();
@@ -163,8 +165,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeLineString(JsonGenerator jgen, LineString lineString)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.LINE_STRING);
-        jgen.writeFieldName(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, LINE_STRING);
+        jgen.writeFieldName(COORDINATES);
         writeLineStringCoords(jgen, lineString);
         jgen.writeEndObject();
     }
@@ -172,8 +174,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writeLinearRing(JsonGenerator jgen, LinearRing linearRing)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.LINEAR_RING);
-        jgen.writeFieldName(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, LINEAR_RING);
+        jgen.writeFieldName(COORDINATES);
         writeLineStringCoords(jgen, linearRing);
         jgen.writeEndObject();
     }
@@ -181,8 +183,8 @@ public class GeometrySerializer extends JsonSerializer<Geometry> {
     private void writePoint(JsonGenerator jgen, Point p)
             throws IOException {
         jgen.writeStartObject();
-        jgen.writeStringField(GeoJson.TYPE, GeoJson.POINT);
-        jgen.writeFieldName(GeoJson.COORDINATES);
+        jgen.writeStringField(TYPE, POINT);
+        jgen.writeFieldName(COORDINATES);
         writePointCoords(jgen, p);
         jgen.writeEndObject();
     }

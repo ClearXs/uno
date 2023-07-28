@@ -1,7 +1,8 @@
 package cc.allio.uno.component.sequential.washer;
 
-import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.core.spi.AutoTypeLoader;
+import cc.allio.uno.component.sequential.context.SequentialContext;
+import cc.allio.uno.core.spi.Loader;
+import cc.allio.uno.core.type.TypeManager;
 import com.google.common.collect.Lists;
 
 import java.util.*;
@@ -15,17 +16,18 @@ import java.util.*;
  */
 public class WasherAssembler {
 
+    private final TypeManager typeManager;
     /**
      * 物品清洗装置
      */
     private static final List<Washer> ITEM_WASHERS;
 
     static {
-        ITEM_WASHERS = AutoTypeLoader.loadToList(Washer.class);
+        ITEM_WASHERS = Loader.loadList(Washer.class);
     }
 
-    private WasherAssembler() {
-
+    private WasherAssembler(TypeManager typeManager) {
+        this.typeManager = typeManager;
     }
 
     /**
@@ -33,29 +35,27 @@ public class WasherAssembler {
      *
      * @return 清洗装置主板L
      */
-    public static WasherAssembler motherBoard() {
-        return new WasherAssembler();
+    public static WasherAssembler motherBoard(TypeManager typeManager) {
+        return new WasherAssembler(typeManager);
     }
 
     /**
      * 清洁器组
      */
     private final List<Washer> washers = new ArrayList<>();
-
-
     /**
      * 待清洗的未知物品
      */
-    private Sequential unknownItem;
+    private SequentialContext unknownItem;
 
     /**
      * 放入清洗物品
      *
-     * @param sequential 清洗物品
+     * @param context 清洗物品
      * @return 当前对象
      */
-    public WasherAssembler pushItem(Sequential sequential) {
-        this.unknownItem = sequential;
+    public WasherAssembler pushItem(SequentialContext context) {
+        this.unknownItem = context;
         return this;
     }
 
@@ -76,9 +76,9 @@ public class WasherAssembler {
      */
     public WasherAssembler assembleAssignWasher() {
         if (Objects.nonNull(unknownItem)) {
-            for (Washer itemWasher : ITEM_WASHERS) {
-                if (itemWasher.contains(unknownItem.getType())) {
-                    washers.add(itemWasher);
+            for (Washer washer : ITEM_WASHERS) {
+                if (typeManager.match(washer.getType(), unknownItem.getRealSequential().getType())) {
+                    washers.add(washer);
                 }
             }
         }

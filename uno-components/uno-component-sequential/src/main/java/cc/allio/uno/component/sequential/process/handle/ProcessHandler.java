@@ -1,8 +1,8 @@
 package cc.allio.uno.component.sequential.process.handle;
 
-
-import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.component.sequential.context.SequentialContext;
+import cc.allio.uno.component.sequential.Sequential;
+import cc.allio.uno.core.type.Type;
 
 import java.util.function.Predicate;
 
@@ -12,6 +12,7 @@ import java.util.function.Predicate;
  *
  * @author jw
  * @date 2021/12/13 14:28
+ * @see AbstractProcessHandler
  */
 public interface ProcessHandler {
 
@@ -54,13 +55,16 @@ public interface ProcessHandler {
      * @return 处理类型
      * @throws NullPointerException 当类型为空在执行过程中将会抛出该异常
      */
-    String getType();
+    Type getType();
 
     /**
      * 获取当前处理器需要处理Sequential类型Class对象
      *
      * @return {@link Sequential}的子类
+     * @deprecated 1.1.4删除
      */
-    Class<? extends Sequential> getTypeClass();
+    default Class<? extends Sequential> getTypeClass() {
+        return null;
+    }
 
 }

@@ -1,11 +1,12 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.Point;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 /**
  * Created by mihaildoronin on 11/11/15.
@@ -41,7 +42,7 @@ public class PointParser extends BaseParser implements GeometryParser<Point> {
 
 	public Point pointFromJson(JsonNode node) {
 		return geometryFactory.createPoint(
-			coordinateFromJson(node.get(GeoJson.COORDINATES)));
+			coordinateFromJson(node.get(COORDINATES)));
 	}
 
 	@Override

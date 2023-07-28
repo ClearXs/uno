@@ -1,0 +1,30 @@
+spring:
+  datasource:
+#    url: jdbc:h2:mem:test-db;IGNORECASE=TRUE
+#    driver-class-name: org.h2.Driver
+    # mysql
+    #    url: jdbc:mysql://192.168.2.29:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+    #    username: root
+    #    password: 123456
+    #    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:mysql://43.143.195.208:3306/test?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true
+#    username: root
+#    password: allio@2022
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+#    url: jdbc:postgresql://43.143.195.208:5432/test?stringtype=unspecified
+#    username: postgres
+#    password: allio@2022
+#    driver-class-name: org.postgresql.Driver
+
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+allio:
+  uno:
+    data:
+      orm:
+        executor:
+          type: mybatis
+        sql:
+          operator: druid

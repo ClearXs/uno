@@ -1,20 +1,18 @@
 package cc.allio.uno.core.metadata.convert;
 
-import cc.allio.uno.core.metadata.mapping.MappingMetadata;
 import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.metadata.mapping.MappingMetadata;
+import cc.allio.uno.core.serializer.JsonNodeEnhancer;
+import cc.allio.uno.core.util.JsonUtils;
 import cc.allio.uno.core.metadata.CompositeMetadata;
 import cc.allio.uno.core.metadata.Metadata;
-import cc.allio.uno.core.serializer.JsonNodeEnhancer;
-import cc.allio.uno.core.util.JsonUtil;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Optional;
 
 /**
  * 抽象JSON转换器，提供JSON方式转换
@@ -46,7 +44,7 @@ public abstract class AbstractJsonConverter<T extends Metadata> extends Abstract
 
     @Override
     public T execute(ApplicationContext context, Object value) throws Throwable {
-        JsonNode root = JsonUtil.readTree(value.toString());
+        JsonNode root = JsonUtils.readTree(value.toString());
         return execute(root);
     }
 
@@ -108,10 +106,6 @@ public abstract class AbstractJsonConverter<T extends Metadata> extends Abstract
                     return executeAssignmentAction(name, expected, metadata, wrapper, excludeNotNecessaryFilter);
                 })
                 .onErrorContinue((ex, o) -> log.debug("error {} converter continue", ex.getMessage()))
-                // 设置那些没有映射入值的字段,设置为默认值
-                .thenMany(
-                        Flux.fromStream(Optional.ofNullable(metadata.getUndefinedValues()).orElse(Maps.newHashMap()).entrySet().stream()))
-                .flatMap(entry -> wrapper.set(mappingMetadata.get(entry.getKey()).getName()))
                 // 触发默认赋值动作
                 .then(executeAssignmentDefaultAction(metadata, wrapper))
                 .subscribe();
@@ -120,9 +114,9 @@ public abstract class AbstractJsonConverter<T extends Metadata> extends Abstract
     /**
      * 赋值默认值动作
      *
-     * @param sequential 时序数据实例
-     * @param wrapper    sequential对象包装器
+     * @param metadata 元数据
+     * @param wrapper  sequential对象包装器
      */
-    protected abstract Mono<Void> executeAssignmentDefaultAction(T sequential, ObjectWrapper wrapper);
+    protected abstract Mono<Void> executeAssignmentDefaultAction(T metadata, ObjectWrapper wrapper);
 
 }

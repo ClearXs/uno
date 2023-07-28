@@ -1,8 +1,8 @@
 package cc.allio.uno.component.sequential.process;
 
-import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.component.sequential.context.SequentialContext;
 import cc.allio.uno.component.sequential.process.handle.ProcessHandler;
+import cc.allio.uno.component.sequential.context.SequentialContext;
+import cc.allio.uno.component.sequential.Sequential;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ public interface Processor {
     /**
      * 处理时序数据
      *
-     * @param context 消息总线上下文对象
+     * @param context 事件总线上下文对象
      * @throws IllegalArgumentException 当{@link SequentialContext}、{@link Sequential}以及{@link Sequential#getType()}为空时抛出
      */
     void process(SequentialContext context);

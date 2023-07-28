@@ -1,7 +1,7 @@
 package cc.allio.uno.core.serializer;
 
 import cc.allio.uno.core.exception.SerializationException;
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -91,6 +91,6 @@ public class JacksonSerializer extends AbstractSerializer<ObjectMapper> {
 
     @Override
     public ObjectMapper newWorker() {
-        return JsonUtil.newJsonMapper();
+        return JsonUtils.newJsonMapper();
     }
 }

@@ -1,6 +1,6 @@
 package cc.allio.uno.core.cache;
 
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.util.CollectionUtils;
@@ -71,7 +71,7 @@ public class RedisCache<T> implements Cache<T> {
             synchronized (lock) {
                 Long index = index(cache);
                 if (index < 0) {
-                    redisTemplate.opsForList().rightPush(cacheKey.getKey(), JsonUtil.toJson(cache));
+                    redisTemplate.opsForList().rightPush(cacheKey.getKey(), JsonUtils.toJson(cache));
                 }
             }
         } catch (Exception e) {
@@ -98,7 +98,7 @@ public class RedisCache<T> implements Cache<T> {
                         cacheKey.getKey(),
                         pushCache
                                 .stream()
-                                .map(JsonUtil::toJson)
+                                .map(JsonUtils::toJson)
                                 .collect(Collectors.toList()));
             }
 
@@ -130,7 +130,7 @@ public class RedisCache<T> implements Cache<T> {
         }
         return buffer
                 .stream()
-                .map(cache -> JsonUtil.parse(cache, actualType))
+                .map(cache -> JsonUtils.parse(cache, actualType))
                 .collect(Collectors.toList());
     }
 
@@ -142,7 +142,7 @@ public class RedisCache<T> implements Cache<T> {
         }
         return buffer
                 .stream()
-                .map(cache -> JsonUtil.parse(cache, actualType))
+                .map(cache -> JsonUtils.parse(cache, actualType))
                 .collect(Collectors.toList());
     }
 

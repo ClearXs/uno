@@ -6,12 +6,13 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Supplier;
 
-import cc.allio.uno.core.bus.event.EventNode;
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.core.util.StringUtils;
 import com.google.common.collect.Lists;
-import reactor.core.publisher.FluxSink;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.FluxSink;
 
 /**
  * 消息主题，订阅者与数据源之间的联系，他是一个桥接器
@@ -29,24 +30,32 @@ public interface Topic<C> {
     String getPath();
 
     /**
+     * 添加订阅者
+     *
+     * @param subscription the subscription
+     */
+    Mono<Node<C>> addSubscriber(Subscription subscription);
+
+    /**
      * 当上游向下游发送数据时，触发这个方法<br/>
      *
      * @param supplier 消息主题数据
+     * @return
      */
-    void exchange(Supplier<C> supplier);
+    Flux<C> exchange(Supplier<C> supplier);
 
     /**
      * 当上游向下游发送数据时，触发这个方法<br/>
      * 它通过{@link FluxSink#next(Object)}对下游进行传递。触发{@link reactor.core.publisher.Flux#doOnNext(Consumer)}
      *
-     * @param context 消息总线上下文对象
+     * @param context 事件总线上下文对象
      */
-    default void exchange(C context) {
-        exchange(() -> context);
+    default Flux<C> exchange(C context) {
+        return exchange(() -> context);
     }
 
     /**
-     * 向消息总线中生成该主题，接受数据发射源，由其内部转发这个消息数据至在这个主题下的所有节点信息
+     * 向事件总线中生成该主题，接受数据发射源，由其内部转发这个消息数据至在这个主题下的所有节点信息
      *
      * @param sink 数据流信号
      */
@@ -55,12 +64,12 @@ public interface Topic<C> {
     /**
      * 由调用方生成数据，从sink中向数据下游发送。
      *
-     * @param context 消息总线上下文对象
+     * @param context 事件总线上下文对象
      */
     void emmit(C context);
 
     /**
-     * 当消息总线丢弃当前主题时触发这个事件
+     * 当事件总线丢弃当前主题时触发这个事件
      *
      * @param listenerId 监听id
      */
@@ -76,7 +85,7 @@ public interface Topic<C> {
      *
      * @return Node节点数据
      */
-    Mono<EventNode<C>> findNode();
+    Flux<Node<C>> findNode();
 
     /**
      * 主题路径化
@@ -84,10 +93,12 @@ public interface Topic<C> {
      * @return 路径策略实例
      */
     static String topicPathway(String topic) {
-        return PathwayStrategy.STRATEGIES.stream()
+        return PathwayStrategy.DEFER
+                .get()
+                .stream()
                 .filter(pathwayStrategy -> topic.contains(pathwayStrategy.segment().get()))
                 .findFirst()
-                .orElse(new BlankPathwayStrategy())
+                .orElse(BlankPathwayStrategy.INSTANCE)
                 .transform()
                 .apply(topic);
     }
@@ -98,17 +109,17 @@ public interface Topic<C> {
      *     <li>{@link BlankPathwayStrategy}如果是test -> /test</li>
      *     <li>{@link UnderscorePathwayStrategy}如果是par_chi -> /par/chi</li>
      *     <li>{@link DashPathwayStrategy}如果是par-chi -> /par/chi</li>
+     *     <li>{@link DotPathwayStrategy}如果时par.chi -> /par/chi</li>
      * </ul>
      */
     interface PathwayStrategy {
 
+        Supplier<List<PathwayStrategy>> DEFER = () -> Lists.newArrayList(DashPathwayStrategy.INSTANCE, UnderscorePathwayStrategy.INSTANCE, SlashPathwayStrategy.INSTANCE, DotPathwayStrategy.INSTANCE);
+
         /**
          * 路径策略器
          */
-        List<PathwayStrategy> STRATEGIES = Lists.newArrayList(
-                new DashPathwayStrategy(),
-                new UnderscorePathwayStrategy(),
-                new SlashPathwayStrategy());
+        Flux<PathwayStrategy> STRATEGIES = Flux.defer(() -> Flux.just(DashPathwayStrategy.INSTANCE, UnderscorePathwayStrategy.INSTANCE, SlashPathwayStrategy.INSTANCE, DotPathwayStrategy.INSTANCE));
 
         /**
          * 路径转化抽象方法
@@ -123,12 +134,33 @@ public interface Topic<C> {
          * @return 提供某个切分规则
          */
         Supplier<String> segment();
+
+        /**
+         * 公用转换实现，目标转换
+         *
+         * @param origin 原始路径信息
+         * @return 转换完成
+         */
+        default String staticTransform(String origin) {
+            String split = segment().get();
+            String pathway = origin;
+            // 路径头增加'/'
+            if (!pathway.startsWith(StringPool.SLASH)) {
+                pathway = StringPool.SLASH + pathway;
+            }
+            return String.join(StringPool.SLASH, pathway.split(split));
+        }
     }
 
     /**
      * 不带任何切分的路径转换策略
      */
     class BlankPathwayStrategy implements PathwayStrategy {
+
+        public static final BlankPathwayStrategy INSTANCE = new BlankPathwayStrategy();
+
+        private BlankPathwayStrategy() {
+        }
 
         static final String BLANK = "blank";
 
@@ -158,10 +190,14 @@ public interface Topic<C> {
      * 以'-'为切分规则的路径策略
      */
     class DashPathwayStrategy implements PathwayStrategy {
+        public static final DashPathwayStrategy INSTANCE = new DashPathwayStrategy();
+
+        private DashPathwayStrategy() {
+        }
 
         @Override
         public Function<String, String> transform() {
-            return s -> StringPool.SLASH + String.join(StringPool.SLASH, s.split(StringPool.DASH));
+            return this::staticTransform;
         }
 
         @Override
@@ -174,10 +210,14 @@ public interface Topic<C> {
      * 以'_'为切分规则的路径策略
      */
     class UnderscorePathwayStrategy implements PathwayStrategy {
+        public static final UnderscorePathwayStrategy INSTANCE = new UnderscorePathwayStrategy();
+
+        private UnderscorePathwayStrategy() {
+        }
 
         @Override
         public Function<String, String> transform() {
-            return s -> StringPool.SLASH + String.join(StringPool.UNDERSCORE, s.split(StringPool.UNDERSCORE));
+            return this::staticTransform;
         }
 
         @Override
@@ -190,6 +230,10 @@ public interface Topic<C> {
      * 以'/'为切分规则的路径策略，传递什么就返回什么
      */
     class SlashPathwayStrategy implements PathwayStrategy {
+        public static final SlashPathwayStrategy INSTANCE = new SlashPathwayStrategy();
+
+        private SlashPathwayStrategy() {
+        }
 
         @Override
         public Function<String, String> transform() {
@@ -199,6 +243,26 @@ public interface Topic<C> {
         @Override
         public Supplier<String> segment() {
             return () -> StringPool.SLASH;
+        }
+    }
+
+    /**
+     * 以'.'为切分路径
+     */
+    class DotPathwayStrategy implements PathwayStrategy {
+        public static final DotPathwayStrategy INSTANCE = new DotPathwayStrategy();
+
+        private DotPathwayStrategy() {
+        }
+
+        @Override
+        public Function<String, String> transform() {
+            return this::staticTransform;
+        }
+
+        @Override
+        public Supplier<String> segment() {
+            return () -> StringPool.ORIGIN_DOT;
         }
     }
 }

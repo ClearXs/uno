@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>uno-components</artifactId>
-        <groupId>cc.allio.uno</groupId>
+        <groupId>cc.allio</groupId>
         <version>1.1.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -19,18 +19,44 @@
 
     <dependencies>
         <dependency>
-            <groupId>cc.allio.uno</groupId>
+            <groupId>cc.allio</groupId>
             <artifactId>uno-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio.uno</groupId>
+            <groupId>cc.allio</groupId>
             <artifactId>uno-component-kafka</artifactId>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-data</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-webflux</artifactId>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- 测试  -->
+        <dependency>
+            <groupId>co.elastic.clients</groupId>
+            <artifactId>elasticsearch-java</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-high-level-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch.client</groupId>
+            <artifactId>elasticsearch-rest-client</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.elasticsearch</groupId>
+            <artifactId>elasticsearch</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

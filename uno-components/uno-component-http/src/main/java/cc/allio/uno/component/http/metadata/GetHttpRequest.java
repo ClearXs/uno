@@ -10,7 +10,6 @@ import org.springframework.http.HttpMethod;
  */
 public class GetHttpRequest extends BaseHttpRequest {
 
-
     public GetHttpRequest(String url) {
         super(url);
     }

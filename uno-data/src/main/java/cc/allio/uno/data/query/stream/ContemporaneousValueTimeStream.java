@@ -1,7 +1,7 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.mybatis.mapper.QueryMapper;
-import cc.allio.uno.data.query.QueryFilter;
+import cc.allio.uno.data.query.mybatis.mapper.QueryMapper;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
 import reactor.core.publisher.Flux;
 
 import java.util.Collection;

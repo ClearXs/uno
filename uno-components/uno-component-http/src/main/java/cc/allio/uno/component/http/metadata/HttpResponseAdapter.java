@@ -1,7 +1,7 @@
 package cc.allio.uno.component.http.metadata;
 
 import cc.allio.uno.core.serializer.JsonNodeEnhancer;
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import reactor.core.publisher.Mono;
 
 import java.util.function.Predicate;
@@ -42,7 +42,7 @@ public abstract class HttpResponseAdapter<Callback> {
      * @param fetchCode 接口中用于校验的code，如{'code':200}
      * @param testing   测试返回的数据是否正确，校验返回的数据
      * @return Json对象
-     * @see JsonUtil
+     * @see JsonUtils
      */
     protected abstract Mono<JsonNodeEnhancer> repsInterceptor(Supplier<String> fetchCode, Predicate<Callback> testing);
 }

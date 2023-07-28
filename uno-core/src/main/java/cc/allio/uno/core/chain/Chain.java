@@ -22,7 +22,7 @@ public interface Chain<IN, OUT> {
      * @return 出链数据
      * @throws Throwable 链中发生异常时抛出
      */
-    Mono<OUT> proceed(ChainContext<IN> context) throws Throwable;
+    Mono<OUT> proceed(ChainContext<IN> context);
 
     /**
      * 获取链中结点数据

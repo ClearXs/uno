@@ -5,6 +5,7 @@ import cc.allio.uno.component.netty.config.GlobeConfig;
 import cc.allio.uno.component.netty.exception.RemoteException;
 import cc.allio.uno.component.netty.exception.RemoteSendException;
 import cc.allio.uno.component.netty.exception.RemoteTimeoutException;
+import cc.allio.uno.component.netty.filter.*;
 import cc.allio.uno.component.netty.metadata.RegisterMetadata;
 import cc.allio.uno.component.netty.model.RemotePromisor;
 import cc.allio.uno.component.netty.model.RemoteTransporter;
@@ -14,8 +15,7 @@ import cc.allio.uno.component.netty.transport.body.AcknowledgeBody;
 import cc.allio.uno.component.netty.transport.body.Body;
 import cc.allio.uno.component.netty.transport.body.RegisterBody;
 import cc.allio.uno.component.netty.transport.body.ResponseBody;
-import cc.allio.uno.component.netty.filter.*;
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import io.netty.channel.*;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
@@ -258,7 +258,7 @@ public abstract class AbstractNettyService implements RemoteService {
     }
 
     protected void processRequestAndResponse(ChannelHandlerContext ctx, RemoteTransporter remoteTransporter, List<Filter> filters) {
-        if (Collections.isNotEmpty(filters)) {
+        if (CollectionUtils.isNotEmpty(filters)) {
             FilterChain chain = FilterChainLoader.loadChain(filters.toArray(new Filter[]{}));
             if (chain != null) {
                 try {
@@ -355,10 +355,10 @@ public abstract class AbstractNettyService implements RemoteService {
             if (body instanceof RegisterBody) {
                 RegisterBody registerBody = (RegisterBody) body;
                 List<RegisterMetadata> registerMetadata = registerBody.getRegisterMetadata();
-                if (Collections.isNotEmpty(registerMetadata)) {
+                if (CollectionUtils.isNotEmpty(registerMetadata)) {
                     List<RegisterMetadata> collectRegister = registerMetadata.stream()
                             .filter(o -> providerKey.contains(o.getServiceProviderName())).collect(Collectors.toList());
-                    if (Collections.isNotEmpty(collectRegister)) {
+                    if (CollectionUtils.isNotEmpty(collectRegister)) {
                         handle(collectRegister);
                     }
                 }

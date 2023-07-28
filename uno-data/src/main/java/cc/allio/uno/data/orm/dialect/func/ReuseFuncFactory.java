@@ -2,11 +2,11 @@ package cc.allio.uno.data.orm.dialect.func;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.data.orm.dialect.Dialect;
-import cc.allio.uno.data.sql.word.KeyWords;
-import cc.allio.uno.data.sql.Alias;
-import cc.allio.uno.data.sql.RuntimeColumn;
-import cc.allio.uno.data.sql.word.Distinct;
-import cc.allio.uno.data.sql.word.KeyWord;
+import cc.allio.uno.data.orm.sql.Alias;
+import cc.allio.uno.data.orm.sql.RuntimeColumn;
+import cc.allio.uno.data.orm.sql.word.Distinct;
+import cc.allio.uno.data.orm.sql.word.KeyWord;
+import cc.allio.uno.data.orm.sql.word.KeyWords;
 
 import static cc.allio.uno.data.orm.dialect.func.FuncRendering.getSingleArgument;
 
@@ -33,7 +33,7 @@ public class ReuseFuncFactory {
      */
     public static FuncDescriptor count(Dialect dialect) {
         return dialect.getFuncRegistry()
-                .namedFuncDescriptorBuilder(Func.COUNT_FUNCTION)
+                .namedFuncDescriptorBuilder(Func.COUNT_FUNCTION.getName())
                 .setFuncType(FuncType.AGGREGATE)
                 .setDialect(dialect)
                 .setSignature("COUNT(expr) [over_clause]")
@@ -52,7 +52,7 @@ public class ReuseFuncFactory {
      */
     public static FuncDescriptor min(Dialect dialect) {
         return dialect.getFuncRegistry()
-                .namedFuncDescriptorBuilder(Func.MIN_FUNCTION)
+                .namedFuncDescriptorBuilder(Func.MIN_FUNCTION.getName())
                 .setFuncType(FuncType.AGGREGATE)
                 .setDialect(dialect)
                 .setSignature("MIN([DISTINCT] expr) [over_clause]")
@@ -71,7 +71,7 @@ public class ReuseFuncFactory {
      */
     public static FuncDescriptor max(Dialect dialect) {
         return dialect.getFuncRegistry()
-                .namedFuncDescriptorBuilder(Func.MAX_FUNCTION)
+                .namedFuncDescriptorBuilder(Func.MAX_FUNCTION.getName())
                 .setFuncType(FuncType.AGGREGATE)
                 .setDialect(dialect)
                 .setSignature("MAX([DISTINCT] expr) [over_clause]")
@@ -90,7 +90,7 @@ public class ReuseFuncFactory {
      */
     public static FuncDescriptor avg(Dialect dialect) {
         return dialect.getFuncRegistry()
-                .namedFuncDescriptorBuilder(Func.AVG_FUNCTION)
+                .namedFuncDescriptorBuilder(Func.AVG_FUNCTION.getName())
                 .setFuncType(FuncType.AGGREGATE)
                 .setDialect(dialect)
                 .setSignature("AVG([DISTINCT] expr) [over_clause]")
@@ -109,7 +109,7 @@ public class ReuseFuncFactory {
      */
     public static FuncDescriptor sum(Dialect dialect) {
         return dialect.getFuncRegistry()
-                .namedFuncDescriptorBuilder(Func.SUM_FUNCTION)
+                .namedFuncDescriptorBuilder(Func.SUM_FUNCTION.getName())
                 .setFuncType(FuncType.AGGREGATE)
                 .setDialect(dialect)
                 .setSignature("AVG([DISTINCT] expr) [over_clause]")

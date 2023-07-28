@@ -1,8 +1,7 @@
 package cc.allio.uno.test.runner;
 
-import cc.allio.uno.test.BaseCoreTest;
 import cc.allio.uno.test.RunAfter;
-import com.google.auto.service.AutoService;
+import cc.allio.uno.test.CoreTest;
 import org.springframework.util.ReflectionUtils;
 
 import java.util.Arrays;
@@ -14,12 +13,13 @@ import java.util.Arrays;
  * @date 2022/11/1 18:20
  * @since 1.1.0
  */
-@AutoService(Runner.class)
+@Deprecated
 public class ContextCloseRunner implements CloseRunner {
 
     @Override
-    public void run(BaseCoreTest coreTest) throws Throwable {
-        Arrays.stream(ReflectionUtils.getDeclaredMethods(coreTest.getClass()))
+    public void onClose(CoreTest coreTest) throws Throwable {
+        Class<?> testClass = coreTest.getTestClass();
+        Arrays.stream(ReflectionUtils.getDeclaredMethods(testClass))
                 .filter(method -> method.isAnnotationPresent(RunAfter.class))
                 .forEach(method -> {
                     ReflectionUtils.makeAccessible(method);

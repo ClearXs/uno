@@ -1,8 +1,8 @@
 package cc.allio.uno.data.jpa.repository;
 
+import cc.allio.uno.data.jpa.JpaConfiguration;
 import cc.allio.uno.data.model.Car;
 import cc.allio.uno.data.model.User;
-import cc.allio.uno.data.jpa.JpaConfiguration;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

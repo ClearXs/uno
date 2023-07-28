@@ -46,13 +46,13 @@ public abstract class AbstractProcessHandler implements ProcessHandler {
     }
 
     /**
-     * 是否需要继续执行当前执行链节点的
+     * 是否需要继续执行当前执行链节点的，默认允许
      *
      * @param context 执行链的上下问对象
      * @return 判读是否能够向下返回的结果
      */
     protected boolean doOnNext(SequentialContext context) {
-        return false;
+        return true;
     }
 
     /**

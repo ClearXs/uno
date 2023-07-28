@@ -1,12 +1,12 @@
 package cc.allio.uno.core.util.template.expression;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.util.type.Types;
+import cc.allio.uno.core.type.Types;
 
 import java.util.Optional;
 
 /**
- * 使用指定的'symbol'如（',' '.'）对表达式进行切分，使其进行分层级构建{@link Interchange}对象，并调用其{@link Interchange#change(String, Object)}方法获取当前层级的Value值
+ * 使用指定的'symbol'如（',' '.'）对表达式进行切分，使其进行分层级构建{@link Interchange}对象，并调用其{@link Interchange#change(String, Object, boolean)}方法获取当前层级的Value值
  *
  * @author jiangwei
  * @date 2022/12/3 20:13
@@ -21,7 +21,7 @@ public class SymbolEngine implements Engine {
     }
 
     @Override
-    public String run(String expression, Object value) throws Throwable {
+    public String run(String expression, Object value, boolean langsym) throws Throwable {
         String[] texts = expression.split(symbol);
         Object layerValue = value;
         for (String layer : texts) {
@@ -33,10 +33,10 @@ public class SymbolEngine implements Engine {
                 // 在取赋予之前先确定当前的值是否为Map Or Object，存在lists[0]的情况
                 String mapLists = layer.substring(0, startListableIndex);
                 if (Types.isMap(value.getClass())) {
-                    layerValue = new MapInterchange().onChange(mapLists, layerValue);
+                    layerValue = new MapInterchange().onChange(mapLists, layerValue, langsym);
                 }
                 if (Types.isBean(value.getClass())) {
-                    layerValue = new BeanInterchange().onChange(mapLists, layerValue);
+                    layerValue = new BeanInterchange().onChange(mapLists, layerValue, langsym);
                 }
                 interchange = new ListInterchange();
             }
@@ -50,7 +50,7 @@ public class SymbolEngine implements Engine {
                 }
             }
             if (interchange != null) {
-                layerValue = interchange.change(layer, layerValue);
+                layerValue = interchange.change(layer, layerValue, langsym);
             } else {
                 return Optional.of(layerValue).map(Object::toString).orElse(expression);
             }

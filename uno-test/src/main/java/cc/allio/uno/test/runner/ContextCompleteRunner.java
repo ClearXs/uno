@@ -1,6 +1,6 @@
 package cc.allio.uno.test.runner;
 
-import cc.allio.uno.test.BaseCoreTest;
+import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.RunBefore;
 import org.springframework.util.ReflectionUtils;
 
@@ -16,11 +16,13 @@ import java.util.Arrays;
  * @date 2022/10/29 12:44
  * @since 1.1.0
  */
+@Deprecated
 public class ContextCompleteRunner implements RefreshCompleteRunner {
 
     @Override
-    public void run(BaseCoreTest coreTest) throws Throwable {
-        Arrays.stream(ReflectionUtils.getDeclaredMethods(coreTest.getClass()))
+    public void onRefreshComplete(CoreTest coreTest) throws Throwable {
+        Class<?> testClass = coreTest.getTestClass();
+        Arrays.stream(ReflectionUtils.getDeclaredMethods(testClass))
                 .filter(method -> method.isAnnotationPresent(RunBefore.class))
                 .forEach(method -> {
                     ReflectionUtils.makeAccessible(method);

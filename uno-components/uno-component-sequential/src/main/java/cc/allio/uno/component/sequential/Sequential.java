@@ -1,10 +1,13 @@
 package cc.allio.uno.component.sequential;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.metadata.Metadata;
+import cc.allio.uno.core.type.Type;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.core.proxy.ComposeOrigin;
 import cc.allio.uno.core.proxy.ComposeSharable;
 
+import java.util.Optional;
 import java.util.function.Predicate;
 
 /**
@@ -21,7 +24,7 @@ public interface Sequential extends Metadata {
      * @return 类型的字符串
      */
     @ComposeSharable
-    String getType();
+    Type getType();
 
     /**
      * process-time
@@ -53,7 +56,7 @@ public interface Sequential extends Metadata {
      * @see BaseCompositeSequential
      * @see ComposeOrigin
      */
-    default String getOriginType() {
+    default Type getOriginType() {
         return getOriginType(this);
     }
 
@@ -65,7 +68,7 @@ public interface Sequential extends Metadata {
      * @see BaseCompositeSequential
      * @see ComposeOrigin
      */
-    default String getOriginType(@ComposeOrigin Sequential sequential) {
+    default Type getOriginType(@ComposeOrigin Sequential sequential) {
         return sequential.getType();
     }
 
@@ -84,7 +87,7 @@ public interface Sequential extends Metadata {
      * @return 标识code，默认返回类型
      */
     default String getCode() {
-        return getType();
+        return Optional.ofNullable(getType()).map(Type::getCode).orElse(StringPool.EMPTY);
     }
 
     /**

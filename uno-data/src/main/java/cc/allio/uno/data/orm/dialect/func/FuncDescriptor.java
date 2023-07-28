@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dialect.func;
 import cc.allio.uno.data.orm.dialect.Dialect;
 
 /**
- * 描述某个指定的SQL function
+ * 描述某个指定的SQL aggregate
  *
  * @author jiangwei
  * @date 2023/1/12 15:39

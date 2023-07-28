@@ -13,6 +13,7 @@ import java.time.temporal.TemporalAccessor;
 import java.time.temporal.TemporalAmount;
 import java.time.temporal.TemporalQuery;
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 /**
@@ -676,18 +677,18 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(dayBegin);
         PriorityQueue<Date> dataSets = new PriorityQueue<>(Date::compareTo);
-        dataSets.addAll(
-                Flux.range(0, 24)
-                        .map(hour -> {
-                            cal.set(Calendar.HOUR_OF_DAY, hour);
-                            cal.set(Calendar.MINUTE, 0);
-                            cal.set(Calendar.SECOND, 0);
-                            cal.set(Calendar.MILLISECOND, 0);
-                            return cal.getTime();
-                        })
-                        .collectList()
-                        .block()
-        );
+        AtomicReference<List<Date>> ref = new AtomicReference<>();
+        Flux.range(0, 24)
+                .map(hour -> {
+                    cal.set(Calendar.HOUR_OF_DAY, hour);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    return cal.getTime();
+                })
+                .collectList()
+                .subscribe(ref::set);
+        dataSets.addAll(ref.get());
         return dataSets;
     }
 
@@ -716,20 +717,20 @@ public class DateUtil {
         cal.setTime(now);
         int monthDayCount = cal.getActualMaximum(Calendar.DAY_OF_MONTH);
         PriorityQueue<Date> dataSets = new PriorityQueue<>(Date::compareTo);
-        dataSets.addAll(
-                Flux.range(1, monthDayCount)
-                        .map(day -> {
-                            cal.setTime(now);
-                            cal.set(Calendar.DAY_OF_MONTH, day);
-                            cal.set(Calendar.HOUR, 0);
-                            cal.set(Calendar.MINUTE, 0);
-                            cal.set(Calendar.SECOND, 0);
-                            cal.set(Calendar.MILLISECOND, 0);
-                            return cal.getTime();
-                        })
-                        .collectList()
-                        .block()
-        );
+        AtomicReference<List<Date>> ref = new AtomicReference<>();
+        Flux.range(1, monthDayCount)
+                .map(day -> {
+                    cal.setTime(now);
+                    cal.set(Calendar.DAY_OF_MONTH, day);
+                    cal.set(Calendar.HOUR, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    return cal.getTime();
+                })
+                .collectList()
+                .subscribe(ref::set);
+        dataSets.addAll(ref.get());
         return dataSets;
     }
 
@@ -756,21 +757,21 @@ public class DateUtil {
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
         PriorityQueue<Date> dataSets = new PriorityQueue<>(Date::compareTo);
-        dataSets.addAll(
-                Flux.range(1, 12)
-                        .map(month -> {
-                            cal.setTime(now);
-                            cal.set(Calendar.MONTH, month);
-                            cal.set(Calendar.DAY_OF_MONTH, 0);
-                            cal.set(Calendar.HOUR, 0);
-                            cal.set(Calendar.MINUTE, 0);
-                            cal.set(Calendar.SECOND, 0);
-                            cal.set(Calendar.MILLISECOND, 0);
-                            return cal.getTime();
-                        })
-                        .collectList()
-                        .block()
-        );
+        AtomicReference<List<Date>> ref = new AtomicReference<>();
+        Flux.range(1, 12)
+                .map(month -> {
+                    cal.setTime(now);
+                    cal.set(Calendar.MONTH, month);
+                    cal.set(Calendar.DAY_OF_MONTH, 0);
+                    cal.set(Calendar.HOUR, 0);
+                    cal.set(Calendar.MINUTE, 0);
+                    cal.set(Calendar.SECOND, 0);
+                    cal.set(Calendar.MILLISECOND, 0);
+                    return cal.getTime();
+                })
+                .collectList()
+                .subscribe(ref::set);
+        dataSets.addAll(ref.get());
         return dataSets;
     }
 

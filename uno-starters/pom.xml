@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
         <artifactId>uno</artifactId>
-        <groupId>cc.allio.uno</groupId>
+        <groupId>cc.allio</groupId>
         <version>1.1.4.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -22,7 +22,6 @@
         <module>uno-starter-flink</module>
         <module>uno-starter-kafka</module>
         <module>uno-starter-liquibase</module>
-        <module>uno-starter-medias</module>
         <module>uno-starter-websocket</module>
         <module>uno-starter-sequential</module>
         <module>uno-starter-redis</module>
@@ -34,7 +33,7 @@
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio.uno</groupId>
+            <groupId>cc.allio</groupId>
             <artifactId>uno-auto</artifactId>
             <scope>provided</scope>
         </dependency>

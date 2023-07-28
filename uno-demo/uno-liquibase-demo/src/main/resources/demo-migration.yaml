@@ -20,4 +20,4 @@ databaseChangeLog:
       author: jiangwei
       changes:
         # 创建自定义数据变更类
-        - customChange: { "class": "cc.allio.uno.uno.demo.liquibase.task.PersonChangeTask" }
+        - customChange: { "class": "cc.allio.uno.demo.liquibase.task.PersonChangeTask" }

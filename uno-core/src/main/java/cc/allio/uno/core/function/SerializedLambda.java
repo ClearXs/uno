@@ -1,7 +1,7 @@
 package cc.allio.uno.core.function;
 
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.StringUtils;
-import cc.allio.uno.core.util.ClassUtil;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 
@@ -111,10 +111,10 @@ public class SerializedLambda implements Serializable {
      */
     public static SerializedLambda of(Object lambda) {
         return cache.computeIfAbsent(lambda.getClass(), clazz -> {
-            Method writeReplace = ClassUtil.getMethod(clazz, "writeReplace");
+            Method writeReplace = ClassUtils.getMethod(clazz, "writeReplace");
             SerializedLambda serializedLambda;
             try {
-                ClassUtil.setAccessible(writeReplace);
+                ClassUtils.setAccessible(writeReplace);
                 serializedLambda = new SerializedLambda((java.lang.invoke.SerializedLambda) writeReplace.invoke(lambda));
             } catch (IllegalAccessException | InvocationTargetException e) {
                 throw new UnsupportedOperationException(e);

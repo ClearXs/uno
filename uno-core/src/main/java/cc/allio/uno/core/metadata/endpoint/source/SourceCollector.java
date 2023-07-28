@@ -12,9 +12,9 @@ import cc.allio.uno.core.metadata.Metadata;
 public interface SourceCollector<T extends Metadata> {
 
     /**
-     * 搜集时序数据
+     * 搜集元数据
      *
-     * @param element 时序数据实例
+     * @param element 元数据
      */
     void collect(T element);
 }

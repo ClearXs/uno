@@ -1,11 +1,11 @@
 package cc.allio.uno.gis.jackson;
 
+import cc.allio.uno.gis.jackson.geojson.annotation.*;
 import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import cc.allio.uno.gis.jackson.geojson.serializer.FeatureType;
 import cc.allio.uno.gis.jackson.geojson.serializer.GeoJsonSerializer;
-import cc.allio.uno.gis.transform.FromTo;
 import cc.allio.uno.gis.SRID;
-import cc.allio.uno.uno.gis.jackson.geojson.annotation.*;
+import cc.allio.uno.gis.transform.FromTo;
 import cc.allio.uno.test.BaseTestCase;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -128,7 +128,7 @@ class JacksonTest extends BaseTestCase {
         properties.setName("name");
         properties.setPassword("password");
         properties.setPoint(factory.createPoint(new Coordinate(99.238129, 38.022131)));
-        FeatureMultiProperties featureMultiProperties = objectMapper.readValue("{\"type\":\"Feature\",\"id\":1,\"geometry\":{\"type\":\"Point\",\"coordinates\":[0.0,0.0]},\"properties\":{\"name\":\"name\",\"password\":\"password\"}}", FeatureMultiProperties.class);
+        FeatureMultiProperties featureMultiProperties = objectMapper.readValue("{\"type\":\"Feature\",\"id\":1,\"geometry\":{\"type\":\"Point\",\"coordinates\":[99.238129,0.0]},\"properties\":{\"name\":\"name\",\"password\":\"password\"}}", FeatureMultiProperties.class);
         Assertions.assertEquals(featureMultiProperties, properties);
     }
 

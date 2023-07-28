@@ -1,8 +1,10 @@
 package cc.allio.uno.test.env;
 
-import cc.allio.uno.test.BaseCoreTest;
+import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
+
+import java.lang.annotation.Annotation;
 
 /**
  * Test环境外观类测试
@@ -15,7 +17,7 @@ class TestSpringEnvironmentFacadeTest extends BaseTestCase {
 
     @Test
     void testConcat() {
-        TestSpringEnvironmentFacade facade = new TestSpringEnvironmentFacade();
+        EnvironmentFacade facade = new EnvironmentFacade();
         facade.concat(new ExampleTestEnvironment());
         assertEquals(1, facade.size());
     }
@@ -25,10 +27,10 @@ class TestSpringEnvironmentFacadeTest extends BaseTestCase {
      */
     @Test
     void testComposeSizeIsZero() {
-        TestSpringEnvironmentFacade facade1 = new TestSpringEnvironmentFacade();
-        TestSpringEnvironmentFacade facade2 = new TestSpringEnvironmentFacade();
-        TestSpringEnvironmentFacade facade3 = new TestSpringEnvironmentFacade();
-        TestSpringEnvironmentFacade concat = new TestSpringEnvironmentFacade()
+        EnvironmentFacade facade1 = new EnvironmentFacade();
+        EnvironmentFacade facade2 = new EnvironmentFacade();
+        EnvironmentFacade facade3 = new EnvironmentFacade();
+        EnvironmentFacade concat = new EnvironmentFacade()
                 .concat(facade1)
                 .concat(facade2)
                 .concat(facade3);
@@ -41,7 +43,7 @@ class TestSpringEnvironmentFacadeTest extends BaseTestCase {
     @Test
     void testComposeSizeIsNotZero() {
         ExampleTestEnvironment exampleTestEnvironment = new ExampleTestEnvironment();
-        TestSpringEnvironmentFacade multiLayer  = new TestSpringEnvironmentFacade().concat(new TestSpringEnvironmentFacade().concat(new TestSpringEnvironmentFacade().concat(exampleTestEnvironment)));
+        EnvironmentFacade multiLayer  = new EnvironmentFacade().concat(new EnvironmentFacade().concat(new EnvironmentFacade().concat(exampleTestEnvironment)));
         assertEquals(1, multiLayer.size());
 
     }
@@ -56,11 +58,16 @@ class TestSpringEnvironmentFacadeTest extends BaseTestCase {
 
     }
 
-    static class ExampleTestEnvironment implements TestSpringEnvironment {
+    static class ExampleTestEnvironment implements Environment {
 
         @Override
-        public void support(BaseCoreTest test) {
+        public void support(CoreTest test) {
 
+        }
+
+        @Override
+        public Class<? extends Annotation>[] getPropertiesAnnotation() {
+            return null;
         }
     }
 }

@@ -10,7 +10,7 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <groupId>cc.allio.uno</groupId>
+    <groupId>cc.allio</groupId>
     <artifactId>uno-bom</artifactId>
     <version>1.1.4.RELEASE</version>
     <packaging>pom</packaging>
@@ -29,9 +29,9 @@
         <byte-buddy.version>1.12.2</byte-buddy.version>
         <cglib.version>3.3.0</cglib.version>
         <spring-webflux.version>5.2.15.RELEASE</spring-webflux.version>
-        <lombok.version>1.18.12</lombok.version>
+        <lombok.version>1.18.22</lombok.version>
         <!-- 单元测试框架 -->
-        <junit-jupiter.version>5.8.1</junit-jupiter.version>
+        <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <mockito.version>4.0.0</mockito.version>
         <guava.version>30.1.1-jre</guava.version>
         <!-- swagger -->
@@ -42,7 +42,7 @@
         <mybatis-plus-boot.version>3.4.2</mybatis-plus-boot.version>
         <flink.version>1.14.3</flink.version>
         <flink-minlog.version>1.2</flink-minlog.version>
-        <!-- 国人后台管理框架 -->
+        <!-- 国人reactor后台管理框架 -->
         <hsweb-framework.version>4.0.11</hsweb-framework.version>
         <!-- 数据库 -->
         <druid.version>1.2.5</druid.version>
@@ -62,130 +62,122 @@
         <geotools.version>27.0</geotools.version>
         <postgis-jdbc.version>2.5.1</postgis-jdbc.version>
         <aviator.version>5.3.2</aviator.version>
-        <easypoi-version>4.4.0</easypoi-version>
-        <jsqlparser.version>4.5</jsqlparser.version>
         <easypoi.version>4.4.0</easypoi.version>
         <appache-commons-csv.version>1.8</appache-commons-csv.version>
-
+        <!-- elasticsearch -->
+        <elasticsearch-client.version>7.17.7</elasticsearch-client.version>
         <!-- influxdb -->
         <influxdb-client.version>6.7.0</influxdb-client.version>
+        <shardingsphere.version>5.3.1</shardingsphere.version>
+        <gdal.version>2.4.0</gdal.version>
+        <!-- tdengine -->
+        <tdengine.version>3.2.4</tdengine.version>
+
+        <easy-rules.version>4.1.0</easy-rules.version>
+        <spring-statemachine.version>2.2.0.RELEASE</spring-statemachine.version>
+        <jakarta.json-api.version>2.0.1</jakarta.json-api.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- uno工程依赖 -->
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-core</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-auto</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-test</artifactId>
                 <version>${uno.version}</version>
                 <scope>test</scope>
             </dependency>
             <!-- uno-components -->
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-http</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-flink</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
-                <artifactId>uno-component-media</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-sequential</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-kafka</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- uno-starters -->
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-core</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-flink</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-kafka</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-liquibase</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
-                <artifactId>uno-starter-srs</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio.uno</groupId>
-                <artifactId>uno-starter-automic</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio.uno</groupId>
-                <artifactId>uno-starter-ezviz</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-sequential</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-redis</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- UNO feature -->
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-data</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-web</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio.uno</groupId>
+                <groupId>cc.allio</groupId>
                 <artifactId>uno-gis</artifactId>
+                <version>${uno.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.allio</groupId>
+                <artifactId>uno-rule</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- 基本依赖包 -->
@@ -193,6 +185,11 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.springframework.statemachine</groupId>
+                <artifactId>spring-statemachine-core</artifactId>
+                <version>${spring-statemachine.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework</groupId>
@@ -348,13 +345,6 @@
                 <version>${mysql-connector.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <!-- Oracle -->
-            <dependency>
-                <groupId>com.oracle</groupId>
-                <artifactId>ojdbc7</artifactId>
-                <version>${oracle-connector.version}</version>
-                <scope>provided</scope>
-            </dependency>
             <!-- PostgreSql -->
             <dependency>
                 <groupId>org.postgresql</groupId>
@@ -387,9 +377,19 @@
                 <version>${hsweb-framework.version}</version>
             </dependency>
             <dependency>
+                <groupId>io.opentracing</groupId>
+                <artifactId>opentracing-api</artifactId>
+                <version>${oepntracing.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.opentracing</groupId>
+                <artifactId>opentracing-util</artifactId>
+                <version>${oepntracing.version}</version>
+            </dependency>
+            <dependency>
                 <groupId>cn.easy-es</groupId>
                 <artifactId>easy-es-boot-starter</artifactId>
-                <version>${easy-es.version}</version>
+                <version>2.0.0-beta1</version>
             </dependency>
             <dependency>
                 <groupId>com.playtika.reactivefeign</groupId>
@@ -457,20 +457,89 @@
                 <version>${easypoi-version}</version>
             </dependency>
             <dependency>
-                <groupId>com.github.jsqlparser</groupId>
-                <artifactId>jsqlparser</artifactId>
-                <version>${jsqlparser.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-csv</artifactId>
                 <version>${appache-commons-csv.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>co.elastic.clients</groupId>
+                <artifactId>elasticsearch-java</artifactId>
+                <version>${elasticsearch-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-high-level-client</artifactId>
+                <version>${elasticsearch-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch.client</groupId>
+                <artifactId>elasticsearch-rest-client</artifactId>
+                <version>${elasticsearch-client.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.elasticsearch</groupId>
+                <artifactId>elasticsearch</artifactId>
+                <version>${elasticsearch-client.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.influxdb</groupId>
                 <artifactId>influxdb-client-java</artifactId>
                 <version>${influxdb-client.version}</version>
             </dependency>
+            <dependency>
+                <groupId>org.gdal</groupId>
+                <artifactId>gdal</artifactId>
+                <version>${gdal.version}</version>
+            </dependency>
+            <!-- SQL Parser -->
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-sql-parser-mysql</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-sql-parser-postgresql</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-sql-parser-sqlserver</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.apache.shardingsphere</groupId>
+                <artifactId>shardingsphere-sql-parser-oracle</artifactId>
+                <version>${shardingsphere.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.jeasy</groupId>
+                <artifactId>easy-rules-core</artifactId>
+                <version>${easy-rules.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>jakarta.json</groupId>
+                <artifactId>jakarta.json-api</artifactId>
+                <version>${jakarta.json-api.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.taosdata.jdbc</groupId>
+                <artifactId>taos-jdbcdriver</artifactId>
+                <version>${tdengine.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
+
+    <distributionManagement>
+        <repository>
+            <id>rdc-releases</id>
+            <name>User Project Release</name>
+            <url>https://packages.aliyun.com/maven/repository/2300285-release-cAc7WJ/</url>
+        </repository>
+        <snapshotRepository>
+            <id>rdc-snapshots</id>
+            <name>User ProjectSNAPSHOTS</name>
+            <url>https://packages.aliyun.com/maven/repository/2300285-snapshot-JAW5GT/</url>
+        </snapshotRepository>
+    </distributionManagement>
 </project>

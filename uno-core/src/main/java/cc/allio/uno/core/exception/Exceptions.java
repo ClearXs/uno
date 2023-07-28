@@ -1,5 +1,7 @@
 package cc.allio.uno.core.exception;
 
+import cc.allio.uno.core.util.ClassUtils;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.UndeclaredThrowableException;
 
@@ -31,6 +33,43 @@ public class Exceptions {
             Thread.currentThread().interrupt();
         }
         return Exceptions.runtime(e);
+    }
+
+    /**
+     * 根据指定抛出的异常类型来进行实例化返回
+     *
+     * @param message 异常消息
+     * @param exClass 抛出异常类型
+     * @param <T>     异常类型
+     * @return throwable instance
+     */
+    public static <T extends Throwable> T eee(String message, Class<T> exClass) {
+        return ClassUtils.newInstance(exClass, message);
+    }
+
+    /**
+     * 根据指定抛出的异常类型来进行实例化返回
+     *
+     * @param cause   异常原因
+     * @param exClass 抛出异常类型
+     * @param <T>     异常类型
+     * @return throwable instance
+     */
+    public static <T extends Throwable> T eee(Throwable cause, Class<T> exClass) {
+        return ClassUtils.newInstance(exClass, cause);
+    }
+
+    /**
+     * 根据指定抛出的异常类型来进行实例化返回
+     *
+     * @param message 异常消息
+     * @param cause   异常原因
+     * @param exClass 抛出异常类型
+     * @param <T>     异常类型
+     * @return throwable instance
+     */
+    public static <T extends Throwable> T eee(String message, Throwable cause, Class<T> exClass) {
+        return ClassUtils.newInstance(exClass, message, cause);
     }
 
     /**

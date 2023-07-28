@@ -1,0 +1,9 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+PlaceholderExpressionTemplate -> TokenParser: parse
+TokenParser -> TokenHandler: callback
+TokenHandler -> Engine: run
+@enduml

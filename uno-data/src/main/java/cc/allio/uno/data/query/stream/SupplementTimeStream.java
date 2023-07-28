@@ -1,19 +1,18 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.query.QueryFilter;
-import cc.allio.uno.data.query.QueryWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
+import cc.allio.uno.core.util.CoreBeanUtil;
 import cc.allio.uno.data.query.param.QuerySetting;
 import cc.allio.uno.data.query.param.Window;
-import cc.allio.uno.data.sql.RuntimeColumn;
-import cc.allio.uno.data.sql.query.OrderCondition;
-import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.data.orm.sql.dml.local.OrderCondition;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 在原始数据中，数据会出现'截断'的情况，其原因是这部分数据可能并没有存在。
@@ -25,7 +24,7 @@ import java.util.stream.Collectors;
  *     <li>取抽稀时间如果抽稀没有时间的话则取默认1H</li>
  *     <li>循环判断两个数据之间的差值是否大于默认1H数据，如果大于，则在取在下一个数据自此判断是否大于2H。如果都大于则进行数据增补</li>
  *     <li>增补时首先计算增补点数据量，并对数据增补</li>
- *     <li>增补时间依赖于数据排序规则，在参数{@link QueryFilter#getOrderDelegate()} ()}中没有指定排序规则，则默认按照{@link OrderCondition#DESC}进行</li>
+ *     <li>增补时间依赖于数据排序规则，默认按照{@link OrderCondition#DESC}进行</li>
  * </ol>
  *
  * @author jiangwei
@@ -49,17 +48,12 @@ public class SupplementTimeStream<T> extends FunctionalityTimeStream<T> {
     @Override
     protected Flux<T> doRead(QueryFilter queryFilter, Flux<T> source) {
         QueryWrapper queryWrapper = queryFilter.getQueryWrapper();
-        RuntimeColumn timeColumn = queryFilter.getOrderDelegate()
-                .getColumns()
-                .stream()
-                .collect(Collectors.toMap(RuntimeColumn::getName, order -> order))
-                .get(queryWrapper.getTimeField());
         String timeField = queryWrapper.getTimeField();
         return source.collectList()
                 .flatMapMany(origin -> {
                     // 取时间间距
                     long timeSpacing = timeSpacing(queryWrapper, origin);
-                    SupplementList supplementList = new SupplementList(timeSpacing, timeField, timeColumn, queryWrapper.getDataFields(), this);
+                    SupplementList supplementList = new SupplementList(timeSpacing, timeField, queryWrapper.getDataFields(), this);
                     supplementList.addAll(origin);
                     return Flux.fromIterable(supplementList);
                 });
@@ -79,27 +73,28 @@ public class SupplementTimeStream<T> extends FunctionalityTimeStream<T> {
         Sampling sampling = new Sampling(origin, 2);
         // 取样本数
         int sampleSize = 3;
-        long timeSpacing = Flux.range(0, sampleSize)
-                .flatMap(count ->
-                        Flux.fromIterable(sampling.getNext())
-                                .window(2, 1)
-                                .flatMap(compare ->
-                                        compare.collectList()
-                                                .filter(maybeCoplue -> maybeCoplue.size() > 1)
-                                                .flatMap(couple -> {
-                                                    Object o1 = couple.get(0);
-                                                    Object o2 = couple.get(1);
-                                                    ObjectWrapper o1Wrapper = new ObjectWrapper(o1);
-                                                    ObjectWrapper o2Wrapper = new ObjectWrapper(o2);
-                                                    Date o1Date = dateTime(o1Wrapper.getForce(timeField));
-                                                    Date o2Date = dateTime(o2Wrapper.getForce(timeField));
-                                                    return Mono.just(Math.abs(o1Date.getTime() - o2Date.getTime()));
-                                                }))
-                                .switchIfEmpty(Mono.just(0L)))
+        AtomicLong ref = new AtomicLong();
+        Flux<Long> windowTimeSpacingCompare = Flux.fromIterable(sampling.getNext())
+                .window(2, 1)
+                .flatMap(compare ->
+                        compare.collectList()
+                                .filter(maybeCoplue -> maybeCoplue.size() > 1)
+                                .flatMap(couple -> {
+                                    Object o1 = couple.get(0);
+                                    Object o2 = couple.get(1);
+                                    ValueWrapper o1Wrapper = ValueWrapper.get(o1);
+                                    ValueWrapper o2Wrapper = ValueWrapper.get(o2);
+                                    Date o1Date = dateTime(o1Wrapper.getForce(timeField));
+                                    Date o2Date = dateTime(o2Wrapper.getForce(timeField));
+                                    return Mono.just(Math.abs(o1Date.getTime() - o2Date.getTime()));
+                                }))
+                .switchIfEmpty(Mono.just(0L));
+        Flux.range(0, sampleSize)
+                .flatMap(count -> windowTimeSpacingCompare)
                 .collectList()
                 .flatMap(sample -> Mono.just(sample.stream().min(Long::compare).orElse(0L)))
-                .block();
-
+                .subscribe(ref::set);
+        long timeSpacing = ref.get();
         long paramTimeSpacing;
         if (queryWrapper.getQuerySetting() != null && queryWrapper.getQuerySetting().getDataDilute() != null) {
             paramTimeSpacing = queryWrapper.getQuerySetting().getDataDilute().getWindow().getDuration().get().toMillis();
@@ -126,11 +121,6 @@ public class SupplementTimeStream<T> extends FunctionalityTimeStream<T> {
         private final long timeSpacing;
 
         /**
-         * 排序字段
-         */
-        private final transient RuntimeColumn timeColumn;
-
-        /**
          * 时间字段
          */
         private final transient String timeField;
@@ -150,17 +140,16 @@ public class SupplementTimeStream<T> extends FunctionalityTimeStream<T> {
          */
         private Date watermark;
 
-        public SupplementList(long timeSpacing, String timeField, RuntimeColumn timeColumn, String[] dataFields, TimeStream<T> timeStream) {
+        public SupplementList(long timeSpacing, String timeField, String[] dataFields, TimeStream<T> timeStream) {
             this.timeSpacing = timeSpacing;
             this.timeField = timeField;
-            this.timeColumn = timeColumn;
             this.dataFields = dataFields;
             this.timeStream = timeStream;
         }
 
         @Override
         public boolean add(T o) {
-            ObjectWrapper wrapper = new ObjectWrapper(o);
+            ValueWrapper wrapper = ValueWrapper.get(o);
             if (Boolean.FALSE.equals(wrapper.contains(timeField))) {
                 return false;
             }
@@ -170,9 +159,9 @@ public class SupplementTimeStream<T> extends FunctionalityTimeStream<T> {
                 return super.add(o);
             }
             while (Math.abs(watermark.getTime() - currentData.getTime()) > timeSpacing) {
-                watermark = timeStream.nextStepDate(watermark, timeSpacing, timeColumn == null ? OrderCondition.DESC : (OrderCondition) timeColumn.getCondition());
+                watermark = timeStream.nextStepDate(watermark, timeSpacing, OrderCondition.DESC);
                 T increment = (T) CoreBeanUtil.copy(o, o.getClass());
-                ObjectWrapper incrementWrapper = new ObjectWrapper(increment);
+                ValueWrapper incrementWrapper = ValueWrapper.get(increment);
                 // 设置时间
                 timeStream.setTimeData(timeField, incrementWrapper, watermark);
                 // 设置数据

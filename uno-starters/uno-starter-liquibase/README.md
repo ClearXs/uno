@@ -21,7 +21,7 @@
 
 在大多数项目仍然提供`sql`脚本甚至有时不这样（哪里漏水堵哪里）：
 
-- What state is the database in on this machine?（不知道在这台机器数据库的状态）
+- What state is the database in onTrigger this machine?（不知道在这台机器数据库的状态）
 - Has this script already been applied or not?（这个脚本是否被使用过）
 - Has the quick fix in production been applied in test afterwards?（生产用了，测试是否用了？）
 - How do you set up a new database instance?（怎么从头开始创建一个新的数据库）

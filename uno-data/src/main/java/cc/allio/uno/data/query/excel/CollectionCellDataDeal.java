@@ -1,9 +1,8 @@
 package cc.allio.uno.data.query.excel;
 
 import cn.afterturn.easypoi.excel.entity.params.ExcelExportEntity;
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.DateUtil;
-
 
 import java.util.*;
 
@@ -14,10 +13,7 @@ import java.util.*;
  * @date 2022/12/30 22:49
  * @since 1.1.2
  */
-
-
 public class CollectionCellDataDeal implements CellDataDeal {
-
 
     @Override
     public List<Map<String, Object>> makeExcelData(Map<String, Collection<?>> dataMap, CellHeader cellHeader) {
@@ -27,11 +23,11 @@ public class CollectionCellDataDeal implements CellDataDeal {
         List<Map<String, Object>> list = new ArrayList<>();
         Collection<?> dataList = dataMap.values().stream().findFirst().orElse(new ArrayList<>());
         for (Object dataDatum : dataList) {
-            ObjectWrapper objectWrapper = new ObjectWrapper(dataDatum);
+            ValueWrapper valueWrapper = ValueWrapper.get(dataDatum);
             Map<String, Object> valMap = new HashMap<>();
             for (ExcelExportEntity excelExportEntity : colList) {
                 if (timeField.equals(excelExportEntity.getKey())) {
-                    Object maybeTime = objectWrapper.getForce(timeField);
+                    Object maybeTime = valueWrapper.getForce(timeField);
                     Date dateTime = null;
                     if (maybeTime.getClass().isAssignableFrom(String.class)) {
                         dateTime = DateUtil.parse(maybeTime.toString());
@@ -40,7 +36,7 @@ public class CollectionCellDataDeal implements CellDataDeal {
                     }
                     valMap.put(timeField, DateUtil.format(dateTime, TimeFormatDeal.getTimeFieldFormat(null)));
                 } else {
-                    valMap.put((String) excelExportEntity.getKey(), objectWrapper.getForce((String) excelExportEntity.getKey()));
+                    valMap.put((String) excelExportEntity.getKey(), valueWrapper.getForce((String) excelExportEntity.getKey()));
                 }
             }
             list.add(valMap);

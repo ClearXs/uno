@@ -2,7 +2,7 @@ package cc.allio.uno.starter.redis;
 
 import cc.allio.uno.core.util.DateUtil;
 import cc.allio.uno.starter.redis.config.ReactiveRedisAutoConfiguration;
-import cc.allio.uno.test.BaseCoreTest;
+import cc.allio.uno.test.CoreTest;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.json.JsonReadFeature;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -20,7 +20,7 @@ import java.time.ZoneId;
 import java.util.Locale;
 import java.util.TimeZone;
 
-class ReactiveRedisTemplateTest extends BaseCoreTest {
+class ReactiveRedisTemplateTest extends CoreTest {
     @Override
     protected void onEnvBuild() {
         registerComponent(

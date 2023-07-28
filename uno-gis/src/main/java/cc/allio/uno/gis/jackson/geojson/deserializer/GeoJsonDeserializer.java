@@ -1,10 +1,10 @@
 package cc.allio.uno.gis.jackson.geojson.deserializer;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import cc.allio.uno.gis.jackson.geojson.parser.FeatureCollectionGeoJsonParser;
 import cc.allio.uno.gis.jackson.geojson.parser.FeatureGeoJsonParser;
 import cc.allio.uno.gis.jackson.geojson.parser.GeoJsonBaseParser;
 import cc.allio.uno.gis.jackson.geojson.parser.GeometryCollectionGeoJsonParser;
+import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.deser.ContextualDeserializer;
@@ -39,13 +39,17 @@ public class GeoJsonDeserializer<T> extends JsonDeserializer<T> implements Conte
 		ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
 		ObjectNode nodeObject = mapper.readTree(jsonParser);
 		JsonNode jsonNode = nodeObject.get(GeoJson.TYPE);
-		String typeName = jsonNode.asText();
-		GeoJsonBaseParser<T> parser = parsers.get(typeName);
-		if (parser != null) {
-			jsonParser = mapper.treeAsTokens(nodeObject);
-			return parser.deserialize(jsonParser);
+		if (nodeObject.has(GeoJson.TYPE)) {
+			String typeName = jsonNode.asText();
+			GeoJsonBaseParser<T> parser = parsers.get(typeName);
+			if (parser != null) {
+				jsonParser = mapper.treeAsTokens(nodeObject);
+				return parser.deserialize(jsonParser);
+			} else {
+				throw new JsonMappingException("Invalid Feature type: " + typeName);
+			}
 		} else {
-			throw new JsonMappingException("Invalid Feature type: " + typeName);
+			return null;
 		}
 	}
 

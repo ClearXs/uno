@@ -3,14 +3,16 @@ package cc.allio.uno.component.sequential;
 import cc.allio.uno.component.sequential.convert.TestSequentialConvert;
 import cc.allio.uno.core.metadata.mapping.DefaultMappingMetadata;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
+import cc.allio.uno.core.type.DefaultType;
+import cc.allio.uno.core.type.Type;
 
 import java.util.Map;
 import java.util.function.Predicate;
 
 public class UnknownSequential implements Sequential {
     @Override
-    public String getType() {
-        return "unknown";
+    public Type getType() {
+        return DefaultType.of("unknown");
     }
 
     @Override
@@ -34,7 +36,7 @@ public class UnknownSequential implements Sequential {
     }
 
     @Override
-    public Map<String, Object> getUndefinedValues() {
+    public Map<String, Object> getValues() {
         return null;
     }
 }

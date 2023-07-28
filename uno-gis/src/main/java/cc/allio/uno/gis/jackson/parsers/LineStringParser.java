@@ -1,10 +1,11 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 
 /**
@@ -17,7 +18,7 @@ public class LineStringParser extends BaseParser implements GeometryParser<LineS
 	}
 
 	public LineString lineStringFromJson(JsonNode root) {
-		return geometryFactory.createLineString(PointParser.coordinatesFromJson(root.get(GeoJson.COORDINATES)));
+		return geometryFactory.createLineString(PointParser.coordinatesFromJson(root.get(COORDINATES)));
 	}
 
 	@Override

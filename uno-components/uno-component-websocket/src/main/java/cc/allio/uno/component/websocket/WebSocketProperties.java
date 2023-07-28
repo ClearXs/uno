@@ -4,7 +4,7 @@ import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @Data
-@ConfigurationProperties("automic.uno.websocket")
+@ConfigurationProperties("allio.uno.websocket")
 public class WebSocketProperties {
 
     /**

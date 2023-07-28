@@ -9,9 +9,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
+import cc.allio.uno.component.http.metadata.exception.SwapperException;
 import cc.allio.uno.component.http.metadata.interceptor.DefaultHttpChainContext;
 import cc.allio.uno.component.http.metadata.interceptor.Interceptor;
-import cc.allio.uno.component.http.metadata.exception.SwapperException;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.chain.DefaultChain;
 import cc.allio.uno.core.spi.AutoTypeLoader;
@@ -449,7 +449,7 @@ public class HttpSwapper {
             try {
                 uri = new URI(expandUri);
             } catch (URISyntaxException e) {
-                e.printStackTrace();
+                throw new SwapperException(String.format("request url %s encode has error", expandUri));
             }
             return uri;
         }

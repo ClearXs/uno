@@ -2,7 +2,9 @@ package cc.allio.uno.component.websocket;
 
 import cc.allio.uno.core.task.CronTask;
 import cc.allio.uno.core.task.ProxyBufferTimerSegmentTask;
-import cc.allio.uno.core.util.*;
+import cc.allio.uno.core.util.ClassUtils;
+import cc.allio.uno.core.util.CollectionUtils;
+import cc.allio.uno.core.util.JsonUtils;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
@@ -115,15 +117,15 @@ public abstract class BaseWebsocketEndpoint<R> implements WebSocketEndpoint {
             session.getBasicRemote().sendText(PONG);
         } else {
             try {
-                Class<R> actualGenericType = (Class<R>) ClassUtil.getSingleActualGenericType(this.getClass());
+                Class<R> actualGenericType = (Class<R>) ClassUtils.getSingleActualGenericType(this.getClass());
                 List<R> actualMessages = new ArrayList<>();
                 // 真实消息类型
                 try {
                     // 尝试解析为Object
-                    actualMessages.add(JsonUtil.parse(message.getBytes(), actualGenericType));
+                    actualMessages.add(JsonUtils.parse(message.getBytes(), actualGenericType));
                 } catch (Throwable ex) {
                     // 尝试解析为List
-                    actualMessages.addAll(JsonUtil.readList(message.getBytes(), actualGenericType));
+                    actualMessages.addAll(JsonUtils.readList(message.getBytes(), actualGenericType));
                 }
                 // 通过检测的数据
                 List<R> checked = actualMessages.stream()
@@ -219,7 +221,7 @@ public abstract class BaseWebsocketEndpoint<R> implements WebSocketEndpoint {
         // 收集并发送数据，存储的数据是订阅的主题
         collectTask = new ProxyBufferTimerSegmentTask<>(collectTime, Flux.create(sink -> collectSink = sink));
         collectTask.addComputableTask((buffer, current) -> {
-            if (Collections.isNotEmpty(buffer)) {
+            if (CollectionUtils.isNotEmpty(buffer)) {
                 // 发送websocket数据
                 combine(buffer).ifPresent(result -> {
                     log.info("Send Session Id: {}, data: {}", session.getId(), result);

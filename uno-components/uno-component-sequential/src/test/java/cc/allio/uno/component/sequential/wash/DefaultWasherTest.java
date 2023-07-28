@@ -1,8 +1,10 @@
 package cc.allio.uno.component.sequential.wash;
 
-import cc.allio.uno.component.sequential.TypeSequential;
+import cc.allio.uno.component.sequential.context.DefaultSequentialContext;
 import cc.allio.uno.component.sequential.washer.DefaultWasher;
+import cc.allio.uno.component.sequential.TypeSequential;
 import cc.allio.uno.test.BaseTestCase;
+import com.google.common.collect.Maps;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -19,20 +21,11 @@ class DefaultWasherTest extends BaseTestCase {
         DefaultWasher washer = new DefaultWasher();
         TypeSequential testSequential = new TypeSequential();
         testSequential.setSequentialId(1L);
-        boolean test = washer.cleaning().test(testSequential);
+        boolean test = washer.cleaning().test(new DefaultSequentialContext(testSequential, Maps.newHashMap()));
         assertTrue(test);
         testSequential.setSequentialId(null);
-        test = washer.cleaning().test(testSequential);
+        test = washer.cleaning().test(new DefaultSequentialContext(testSequential, Maps.newHashMap()));
         assertFalse(test);
     }
 
-    @Override
-    protected void onInit() throws Throwable {
-
-    }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

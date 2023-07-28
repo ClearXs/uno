@@ -1,8 +1,9 @@
 package cc.allio.uno.component.netty.model;
 
+
+import cc.allio.uno.component.netty.Protocol;
 import cc.allio.uno.component.netty.transport.body.Body;
 import cc.allio.uno.component.netty.transport.body.FailBody;
-import cc.allio.uno.component.netty.Protocol;
 import cc.allio.uno.core.util.id.IdGenerator;
 
 public class RemoteTransporter extends Byte {

@@ -1,8 +1,8 @@
 package cc.allio.uno.component.websocket;
 
+import cc.allio.uno.core.util.*;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.Tokenizer;
-import cc.allio.uno.core.util.*;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -83,8 +83,8 @@ public interface WebSocketEndpoint {
      * @throws IllegalArgumentException 如果当前对象没有被{@link ServerEndpoint}注解的话抛出
      */
     default EndpointKey getEndpointKey() {
-        ServerEndpoint annotation = ClassUtil.getAnnotation(this.getClass(), ServerEndpoint.class);
-        if (ObjectUtil.isEmpty(annotation)) {
+        ServerEndpoint annotation = ClassUtils.getAnnotation(this.getClass(), ServerEndpoint.class);
+        if (ObjectUtils.isEmpty(annotation)) {
             throw new IllegalArgumentException(String.format("Current Class %s need @ServerEndpoint", this.getClass().getName()));
         }
         // 如果有占位符则进行替换
@@ -100,12 +100,12 @@ public interface WebSocketEndpoint {
      * @return 数组数据
      */
     default <T> Optional<String> combine(List<T> buffer) {
-        return Optional.ofNullable(JsonUtil.getJsonMapper())
+        return Optional.ofNullable(JsonUtils.getJsonMapper())
                 .flatMap(objectMapper -> {
-                    if (Collections.isEmpty(buffer)) {
+                    if (CollectionUtils.isEmpty(buffer)) {
                         return Optional.empty();
                     } else if (buffer.size() == 1) {
-                        return Optional.of(JsonUtil.toJson(buffer.get(0)));
+                        return Optional.of(JsonUtils.toJson(buffer.get(0)));
                     }
                     ArrayNode arrayNode = objectMapper.createArrayNode();
                     buffer.forEach(maybeJson -> {
@@ -113,7 +113,7 @@ public interface WebSocketEndpoint {
                         if (maybeJson instanceof String) {
                             json = (String) maybeJson;
                         } else {
-                            json = JsonUtil.toJson(maybeJson);
+                            json = JsonUtils.toJson(maybeJson);
                         }
                         try {
                             JsonNode jsonNode = objectMapper.readTree(json);

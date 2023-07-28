@@ -1,9 +1,11 @@
 package cc.allio.uno.component.sequential.chain.handler;
 
+import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.component.sequential.context.SequentialContext;
 import cc.allio.uno.component.sequential.process.handle.AbstractProcessHandler;
 import cc.allio.uno.component.sequential.process.handle.ProcessHandler;
-import cc.allio.uno.component.sequential.Sequential;
+import cc.allio.uno.core.type.DefaultType;
+import cc.allio.uno.core.type.Type;
 import com.google.auto.service.AutoService;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,8 +39,8 @@ public class LifeCycleHandler extends AbstractProcessHandler {
     }
 
     @Override
-    public String getType() {
-        return "life cycle";
+    public Type getType() {
+        return DefaultType.of( "life cycle");
     }
 
     @Override

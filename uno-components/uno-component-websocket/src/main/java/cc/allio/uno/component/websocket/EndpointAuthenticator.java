@@ -1,7 +1,7 @@
 package cc.allio.uno.component.websocket;
 
-import cc.allio.uno.core.util.ClassUtil;
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.ClassUtils;
+import cc.allio.uno.core.util.CollectionUtils;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import javax.websocket.Session;
@@ -45,7 +45,7 @@ public class EndpointAuthenticator {
         this.webSocketEndpoint = webSocketEndpoint;
 
         // 构建连接认证器
-        this.connectionAuthenticators = Collections.newArrayList(
+        this.connectionAuthenticators = CollectionUtils.newArrayList(
                         ServiceLoader.load(
                                 ConnectionAuthenticator.class,
                                 Thread.currentThread().getContextClassLoader()))
@@ -55,7 +55,7 @@ public class EndpointAuthenticator {
         AnnotationAwareOrderComparator.sort(connectionAuthenticators);
 
         // 构建消息接收认证器
-        this.receiveAuthenticators = Collections.newArrayList(Collections.newArrayList(
+        this.receiveAuthenticators = CollectionUtils.newArrayList(CollectionUtils.newArrayList(
                         ServiceLoader.load(
                                 MessageReceiveAuthenticator.class,
                                 Thread.currentThread().getContextClassLoader())))
@@ -65,7 +65,7 @@ public class EndpointAuthenticator {
         AnnotationAwareOrderComparator.sort(receiveAuthenticators);
 
         // 构建消息发布认证器
-        this.publishAuthenticators = Collections.newArrayList(Collections.newArrayList(
+        this.publishAuthenticators = CollectionUtils.newArrayList(CollectionUtils.newArrayList(
                         ServiceLoader.load(
                                 MessagePublishAuthenticator.class,
                                 Thread.currentThread().getContextClassLoader())))
@@ -78,12 +78,12 @@ public class EndpointAuthenticator {
     <T> Predicate<? super T> authFilter() {
         return authenticator -> {
             // 判断当前认证器是否是全局认证器
-            Globe globe = ClassUtil.getAnnotation(authenticator.getClass(), Globe.class);
+            Globe globe = ClassUtils.getAnnotation(authenticator.getClass(), Globe.class);
             if (globe != null || authenticator instanceof GlobeAuthenticator) {
                 return true;
             }
             // 如果不是全局认证器则判断是否是属于当前WebSocket的认证器
-            Authentication authentication = ClassUtil.getAnnotation(authenticator.getClass(), Authentication.class);
+            Authentication authentication = ClassUtils.getAnnotation(authenticator.getClass(), Authentication.class);
             return authentication != null &&
                     // 1.验证当前websocketEndpoint实例是否数据@Authentication#endpoint标识的
                     (Arrays.asList(authentication.endpoint()).contains(webSocketEndpoint.getEndpointKey().getKey())

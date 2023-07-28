@@ -1,6 +1,7 @@
 package cc.allio.uno.component.http.metadata;
 
 import cc.allio.uno.core.serializer.SerializerHolder;
+import cc.allio.uno.core.util.JsonUtils;
 import io.netty.buffer.Unpooled;
 
 import java.net.URI;
@@ -85,11 +86,17 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
     @Override
     public <T> Mono<T> toExpect(Class<T> expect) {
         if (getStatus().value() != HttpStatus.OK.value()) {
+            String msg =
+                    String.format("Request url: %s\n Request param: %s\n Request Headers: %s \n Request Body %s",
+                            getUrl(),
+                            supplier.get().getParameters(),
+                            supplier.get().getHttpHeaderMetadata(),
+                            JsonUtils.toJson(supplier.get().getBody()));
             throw WebClientResponseException.create(
                     getStatus().value(),
                     getStatus().name(),
                     response.headers().asHttpHeaders(),
-                    new byte[0],
+                    msg.getBytes(),
                     null,
                     new HttpRequest() {
                         @Override
@@ -100,9 +107,9 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
                         @Override
                         public URI getURI() {
                             try {
-                                return new URI(ClientResponseWrapper.this.getUrl());
-                            } catch (URISyntaxException e) {
-                                e.printStackTrace();
+                                return new URI(getUrl());
+                            } catch (URISyntaxException ex) {
+                                log.error("create error url has err", ex);
                             }
                             return null;
                         }

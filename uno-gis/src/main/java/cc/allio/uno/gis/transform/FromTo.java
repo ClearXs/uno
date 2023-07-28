@@ -1,10 +1,8 @@
 package cc.allio.uno.gis.transform;
 
 import cc.allio.uno.gis.SRID;
-import org.springframework.util.ClassUtils;
 
 import java.lang.annotation.*;
-import java.lang.reflect.Constructor;
 
 /**
  * 坐标系转换关系
@@ -38,26 +36,4 @@ public @interface FromTo {
      * @return
      */
     Class<? extends CrsTransform> transform() default JTSCrsTransform.class;
-
-    interface Builder {
-
-        /**
-         * 创建{@link CrsTransform}对象
-         *
-         * @param fromTo FromTo实体
-         * @return CrsTransform or null
-         */
-        static CrsTransform make(FromTo fromTo) {
-            Class<? extends CrsTransform> clazz = fromTo.transform();
-            Constructor<? extends CrsTransform> constructor = ClassUtils.getConstructorIfAvailable(clazz, fromTo.fromCrs().getClass(), fromTo.toCrs().getClass());
-            if (constructor != null) {
-                try {
-                    return constructor.newInstance(fromTo.fromCrs(), fromTo.toCrs());
-                } catch (Throwable ex) {
-                    // ignore
-                }
-            }
-            return null;
-        }
-    }
 }

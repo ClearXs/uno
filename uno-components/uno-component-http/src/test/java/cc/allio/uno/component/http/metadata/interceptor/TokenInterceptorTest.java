@@ -1,16 +1,15 @@
 package cc.allio.uno.component.http.metadata.interceptor;
 
-import cc.allio.uno.uno.component.http.metadata.*;
+import cc.allio.uno.component.http.metadata.*;
 import cc.allio.uno.core.chain.Chain;
 import cc.allio.uno.core.serializer.JsonNodeEnhancer;
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.http.HttpMethod;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
-
 
 /**
  * 测试{@link TokenInterceptor}
@@ -63,7 +62,7 @@ class TokenInterceptorTest extends HttpTestCase {
         Chain<HttpRequestMetadata, HttpResponseMetadata> mockChain = Mockito.mock(Chain.class);
         HttpResponseMetadata mockResponse = Mockito.mock(HttpResponseMetadata.class);
         Mockito.when(mockChain.proceed(chainContext)).thenReturn(Mono.create(sink -> sink.success(mockResponse)));
-        Mockito.when(mockResponse.expectJson()).thenReturn(Mono.create(sink -> sink.success(new JsonNodeEnhancer(JsonUtil.readTree(body)))));
+        Mockito.when(mockResponse.expectJson()).thenReturn(Mono.create(sink -> sink.success(new JsonNodeEnhancer(JsonUtils.readTree(body)))));
         Mockito.when(mockResponse.expectString()).thenReturn(Mono.just(body));
         tokenInterceptor.execute(mockChain, chainContext)
                 .flatMap(HttpResponseMetadata::expectString)
@@ -100,7 +99,7 @@ class TokenInterceptorTest extends HttpTestCase {
         // 再次进行请求
         HttpResponseMetadata mockResponse = Mockito.mock(HttpResponseMetadata.class);
         Mockito.when(mockChain.proceed(chainContext)).thenReturn(Mono.create(sink -> sink.success(mockResponse)));
-        Mockito.when(mockResponse.expectJson()).thenReturn(Mono.create(sink -> sink.success(new JsonNodeEnhancer(JsonUtil.readTree(dataBody)))));
+        Mockito.when(mockResponse.expectJson()).thenReturn(Mono.create(sink -> sink.success(new JsonNodeEnhancer(JsonUtils.readTree(dataBody)))));
         Mockito.when(mockResponse.expectString()).thenReturn(Mono.just(dataBody));
         tokenInterceptor.execute(mockChain, chainContext)
                 .flatMap(HttpResponseMetadata::expectString)
@@ -108,6 +107,4 @@ class TokenInterceptorTest extends HttpTestCase {
                 .expectNext(dataBody)
                 .verifyComplete();
     }
-
-
 }

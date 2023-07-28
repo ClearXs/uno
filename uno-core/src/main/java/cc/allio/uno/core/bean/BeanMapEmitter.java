@@ -1,6 +1,5 @@
 package cc.allio.uno.core.bean;
 
-import cc.allio.uno.core.util.ReflectUtil;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Label;
 import org.springframework.asm.Type;
@@ -35,8 +34,8 @@ class BeanMapEmitter extends ClassEmitter {
         EmitUtils.factory_method(this, NEW_INSTANCE);
         generateConstructor();
 
-        Map<String, PropertyDescriptor> getters = makePropertyMap(ReflectUtil.getBeanGetters(type));
-        Map<String, PropertyDescriptor> setters = makePropertyMap(ReflectUtil.getBeanSetters(type));
+        Map<String, PropertyDescriptor> getters = makePropertyMap(cc.allio.uno.core.util.ReflectUtils.getBeanGetters(type));
+        Map<String, PropertyDescriptor> setters = makePropertyMap(cc.allio.uno.core.util.ReflectUtils.getBeanSetters(type));
         Map<String, PropertyDescriptor> allProps = new HashMap<>(32);
         allProps.putAll(getters);
         allProps.putAll(setters);
@@ -96,7 +95,7 @@ class BeanMapEmitter extends ClassEmitter {
             @Override
             public void processCase(Object key, Label end) {
                 PropertyDescriptor pd = getters.get(key);
-                MethodInfo method = ReflectUtils.getMethodInfo(pd.getReadMethod());
+                MethodInfo method = org.springframework.cglib.core.ReflectUtils.getMethodInfo(pd.getReadMethod());
                 e.invoke(method);
                 e.box(method.getSignature().getReturnType());
                 e.return_value();
@@ -124,7 +123,7 @@ class BeanMapEmitter extends ClassEmitter {
                 if (pd.getReadMethod() == null) {
                     e.aconst_null();
                 } else {
-                    MethodInfo read = ReflectUtils.getMethodInfo(pd.getReadMethod());
+                    MethodInfo read = org.springframework.cglib.core.ReflectUtils.getMethodInfo(pd.getReadMethod());
                     e.dup();
                     e.invoke(read);
                     e.box(read.getSignature().getReturnType());
@@ -133,7 +132,7 @@ class BeanMapEmitter extends ClassEmitter {
                 e.swap();
                 // new value
                 e.load_arg(2);
-                MethodInfo write = ReflectUtils.getMethodInfo(pd.getWriteMethod());
+                MethodInfo write = org.springframework.cglib.core.ReflectUtils.getMethodInfo(pd.getWriteMethod());
                 e.unbox(write.getSignature().getArgumentTypes()[0]);
                 e.invoke(write);
                 e.return_value();

@@ -1,6 +1,6 @@
 package cc.allio.uno.component.flink.task;
 
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.CoreBeanUtil;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
 import org.apache.flink.api.java.tuple.Tuple3;
@@ -44,7 +44,7 @@ public class CompositionAccumulateEventTimeTask<T, C> extends AbstractFlinkTask<
                                 .process(new ProcessWindowFunction<Tuple3<String, Long, T>, C, String, TimeWindow>() {
                                     @Override
                                     public void process(String s, ProcessWindowFunction<Tuple3<String, Long, T>, C, String, TimeWindow>.Context context, Iterable<Tuple3<String, Long, T>> elements, Collector<C> out) throws Exception {
-                                        C expect = builder.calculator.calculation(Optional.ofNullable(CoreBeanUtil.getContext()), Collections.newArrayList(elements));
+                                        C expect = builder.calculator.calculation(Optional.ofNullable(CoreBeanUtil.getContext()), CollectionUtils.newArrayList(elements));
                                         out.collect(expect);
                                     }
                                 }, builder.outputType))

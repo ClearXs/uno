@@ -2,7 +2,7 @@ package cc.allio.uno.component.flink.task;
 
 import cc.allio.uno.component.flink.UnoFlinkProperties;
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.util.ObjectUtil;
+import cc.allio.uno.core.util.ObjectUtils;
 import org.apache.flink.streaming.api.TimeCharacteristic;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 import org.springframework.util.StringUtils;
@@ -96,7 +96,7 @@ public class FlinkEnvBuilder implements Builder, Serializable {
         if (StringUtils.isEmpty(name)) {
             throw new IllegalArgumentException("name must not null");
         }
-        if (ObjectUtil.isEmpty(flinkProperties)) {
+        if (ObjectUtils.isEmpty(flinkProperties)) {
             throw new IllegalArgumentException("flink properties must not null");
         }
     }

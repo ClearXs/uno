@@ -23,7 +23,6 @@ public interface HttpRequestMetadata extends HttpMetadata {
      */
     Map<String, String> getParameters();
 
-
     /**
      * 获取当前请求的cookie
      *

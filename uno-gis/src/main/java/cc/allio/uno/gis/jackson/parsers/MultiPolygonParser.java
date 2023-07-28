@@ -1,11 +1,12 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.MultiPolygon;
 import org.locationtech.jts.geom.Polygon;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 /**
  * Created by mihaildoronin on 11/11/15.
@@ -20,7 +21,7 @@ public class MultiPolygonParser extends BaseParser implements GeometryParser<Mul
 	}
 
 	public MultiPolygon multiPolygonFromJson(JsonNode root) {
-		JsonNode arrayOfPolygons = root.get(GeoJson.COORDINATES);
+		JsonNode arrayOfPolygons = root.get(COORDINATES);
 		return geometryFactory.createMultiPolygon(polygonsFromJson(arrayOfPolygons));
 	}
 

@@ -1,0 +1,35 @@
+@startuml
+
+interface HigherQuery {}
+
+interface QueryFilter {}
+
+interface DataStream<T> {
+    T read(QueryFilter queryFilter) throws Throwable;
+}
+
+interface TimeStream<T> extends DataStream {}
+
+class AsyncStream<T> implements DataStream {}
+class ReadStream<T> implements DataStream {}
+
+interface CollectionTimeStream<T> extends TimeStream {}
+class ContemporaneousValueTimeStream<T> implements TimeStream {}
+class ValueTimeStream<T> implements TimeStream {}
+class ContemporaneousStream<T> implements TimeStream {}
+
+class SQLCommandExecutorStream implements CollectionTimeStream {}
+class MybatisStream<T> implements CollectionTimeStream {}
+class QueryMethodInterceptorStream<T> implements CollectionTimeStream {}
+class CollectionTimeStreamImpl<T> implements CollectionTimeStream {}
+
+abstract class FunctionalityTimeStream<T> implements TimeStream {}
+class SortStream<T> extends FunctionalityTimeStream {}
+class SupplementTimeStream<T> extends FunctionalityTimeStream {}
+class DiluentTimeStream<T> extends FunctionalityTimeStream {}
+class OutliersIgnoreTimeStream<T> extends FunctionalityTimeStream {}
+
+
+QueryFilter *-- DataStream : use
+DataStream *-- HigherQuery : use
+@enduml

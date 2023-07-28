@@ -1,7 +1,7 @@
 package cc.allio.uno.core.metadata.mapping;
 
-import cc.allio.uno.core.metadata.convert.Converter;
 import cc.allio.uno.core.metadata.Metadata;
+import cc.allio.uno.core.metadata.convert.Converter;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -30,7 +30,9 @@ public class DefaultMappingMetadata extends LinkedHashMap<MappingField, MappingF
 
     @Override
     public void addMapping(MappingField source, MappingField target) {
-        put(source, target);
+        if (!containsKey(source.getName())) {
+            put(source, target);
+        }
     }
 
     @Override

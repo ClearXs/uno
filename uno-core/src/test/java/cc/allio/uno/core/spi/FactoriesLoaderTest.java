@@ -4,6 +4,7 @@ import cc.allio.uno.core.BaseTestCase;
 import org.junit.jupiter.api.Test;
 
 import java.util.Set;
+import java.util.function.Consumer;
 
 /**
  * 单元测试FactoriesLoader
@@ -17,7 +18,8 @@ class FactoriesLoaderTest extends BaseTestCase {
 
     @Override
     protected void onInit() throws Throwable {
-
+        Consumer<Object> c = System.out::println;
+        c.accept(new Object());
     }
 
     /**

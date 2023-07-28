@@ -14,12 +14,12 @@ import java.util.*;
  * 通过类加载器加载各个包下面的xx.factories文件，把他解析{key=interfaceType, [value=impl1, value=impl2]}形式
  * <p>参考自{@link org.springframework.core.io.support.SpringFactoriesLoader}</p>
  * factories文件配置实例：<br/>
- * cc.allio.uno.uno.core.spi.Demo1=\<br/>
- * cc.allio.uno.uno.core.spi.Demo1Impl,\<br/>
- * cc.allio.uno.uno.core.spi.Demo1Impl2<br/>
+ * cc.allio.uno.core.spi.Demo1=\<br/>
+ * cc.allio.uno.core.spi.Demo1Impl,\<br/>
+ * cc.allio.uno.core.spi.Demo1Impl2<br/>
  * <br/>
- * cc.allio.uno.uno.core.spi.Demo2=\<br/>
- * cc.allio.uno.uno.core.spi.Demo2Impl<br/>
+ * cc.allio.uno.core.spi.Demo2=\<br/>
+ * cc.allio.uno.core.spi.Demo2Impl<br/>
  *
  * @author jiangwei
  * @date 2022/3/31 19:32

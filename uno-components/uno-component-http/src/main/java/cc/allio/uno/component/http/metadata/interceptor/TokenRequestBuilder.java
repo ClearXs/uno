@@ -3,7 +3,7 @@ package cc.allio.uno.component.http.metadata.interceptor;
 import cc.allio.uno.component.http.metadata.HttpHeader;
 import cc.allio.uno.component.http.metadata.Parameter;
 import cc.allio.uno.core.serializer.JsonNodeEnhancer;
-import cc.allio.uno.core.util.ObjectUtil;
+import cc.allio.uno.core.util.ObjectUtils;
 import com.google.common.collect.Lists;
 import com.google.common.net.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -162,25 +162,25 @@ public class TokenRequestBuilder {
      */
     public TokenRequest build() {
         // 验证参数
-        if (ObjectUtil.isEmpty(tokenRequest.getTokenUri())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getTokenUri())) {
             throw new IllegalArgumentException("Token Request uri is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getHttpMethod())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getHttpMethod())) {
             throw new IllegalArgumentException("Token Request method is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getSecretKey())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getSecretKey())) {
             throw new IllegalArgumentException("Token Request secret key is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getSecret())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getSecret())) {
             throw new IllegalArgumentException("Token Request secret is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getTokenVerify())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getTokenVerify())) {
             throw new IllegalArgumentException("Token Request token verify is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getTokenBuild())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getTokenBuild())) {
             throw new IllegalArgumentException("Token Request token fetch is empty");
         }
-        if (ObjectUtil.isEmpty(tokenRequest.getAuthHeaderKey())) {
+        if (ObjectUtils.isEmpty(tokenRequest.getAuthHeaderKey())) {
             throw new IllegalArgumentException("Token Request auth header is empty");
         }
         tokenRequest.setTokenExtraParam(parameters.toArray(new Parameter[]{}));

@@ -46,7 +46,7 @@ public class AnnoTransform implements CrsTransform {
                         return Optional.empty();
                     })
                     .map(FromTo.class::cast)
-                    .flatMap(anno -> Optional.ofNullable(FromTo.Builder.make(anno)))
+                    .flatMap(anno -> Optional.ofNullable(CrsTransformBuilder.make(anno).build()))
                     .map(t -> {
                         if (ReadWrite.READ == readWrite) {
                             return t.createReadable();

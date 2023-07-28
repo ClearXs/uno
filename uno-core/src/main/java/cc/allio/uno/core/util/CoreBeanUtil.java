@@ -1,9 +1,11 @@
 package cc.allio.uno.core.util;
 
+import cc.allio.uno.core.util.convert.UnoConverter;
 import cc.allio.uno.core.bean.BeanCopier;
 import cc.allio.uno.core.bean.BeanMap;
 import cc.allio.uno.core.bean.BeanProperty;
-import cc.allio.uno.core.util.convert.UnoConverter;
+import cc.allio.uno.core.type.Types;
+import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.BeanWrapper;
@@ -115,7 +117,7 @@ public class CoreBeanUtil extends BeanUtils implements ApplicationContextAware {
      */
     public static <T> T newInstance(String clazzStr) {
         try {
-            Class<?> clazz = ClassUtil.forName(clazzStr, null);
+            Class<?> clazz = ClassUtils.forName(clazzStr, null);
             return newInstance(clazz);
         } catch (ClassNotFoundException e) {
             throw new RuntimeException(e);
@@ -245,6 +247,9 @@ public class CoreBeanUtil extends BeanUtils implements ApplicationContextAware {
     public static <T> T copy(@Nullable Object source, Class<T> clazz) {
         if (source == null) {
             return null;
+        }
+        if (Types.isMap(clazz)) {
+            return (T) Maps.newHashMap((Map)source);
         }
         return CoreBeanUtil.copy(source, source.getClass(), clazz);
     }

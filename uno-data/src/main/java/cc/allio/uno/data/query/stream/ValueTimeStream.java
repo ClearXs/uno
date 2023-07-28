@@ -1,16 +1,16 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.mybatis.mapper.QueryMapper;
-import cc.allio.uno.data.query.QueryFilter;
-import cc.allio.uno.data.query.QueryWrapper;
-import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.util.DateUtil;
+import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.data.query.mybatis.mapper.QueryMapper;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
 import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
 import java.util.*;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * 指定某一个集合数据流，按照给定的数据字段（{@link QueryWrapper#getDataFields()}）使其转换为{@link ValueTime}的时间数据。
@@ -19,7 +19,7 @@ import java.util.*;
  * @date 2022/11/18 14:33
  * @since 1.1.0
  */
-public class ValueTimeStream implements DataStream<Map<String, Collection<ValueTime>>> {
+public class ValueTimeStream implements TimeStream<Map<String, Collection<ValueTime>>> {
 
     private final CollectionTimeStream<?> stream;
 
@@ -41,17 +41,13 @@ public class ValueTimeStream implements DataStream<Map<String, Collection<ValueT
         QueryWrapper queryWrapper = queryFilter.getQueryWrapper();
         String[] dataFields = queryWrapper.getDataFields();
         String timeField = queryWrapper.getTimeField();
-        return Flux.fromArray(dataFields)
+        AtomicReference<Map<String, Collection<ValueTime>>> ref = new AtomicReference<>();
+        Flux.fromArray(dataFields)
                 .flatMap(dataField ->
                         origin.map(o -> {
-                            ObjectWrapper wrapper = new ObjectWrapper(o);
+                            ValueWrapper wrapper = ValueWrapper.get(o);
                             Object maybeTime = wrapper.getForce(timeField);
-                            Date dateTime = null;
-                            if (maybeTime.getClass().isAssignableFrom(String.class)) {
-                                dateTime = DateUtil.parse(maybeTime.toString());
-                            } else if (maybeTime.getClass().isAssignableFrom(Date.class)) {
-                                dateTime = (Date) maybeTime;
-                            }
+                            Date dateTime = dateTime(maybeTime);
                             Object value = wrapper.getForce(dataField);
                             return Tuples.of(dataField, new ValueTime(dateTime, value));
                         })
@@ -60,11 +56,12 @@ public class ValueTimeStream implements DataStream<Map<String, Collection<ValueT
                 .flatMap(g ->
                         g.map(Tuple2::getT2)
                                 .collectList()
-                                .map(valueTimes -> Tuples.of(g.key(), valueTimes)))
+                                .map(valueTimes -> Tuples.of(Objects.requireNonNull(g.key()), valueTimes)))
                 .reduce(Maps.<String, Collection<ValueTime>>newHashMap(), (m, vt) -> {
                     m.put(vt.getT1(), vt.getT2());
                     return m;
                 })
-                .block();
+                .subscribe(ref::set);
+        return ref.get();
     }
 }

@@ -9,6 +9,7 @@ package cc.allio.uno.core;
  */
 public interface StringPool {
 
+    String ORIGIN_DOT = ".";
     String LEFT_SMALL_BRACKETS = "[";
     String RIGHT_SMALL_BRACKETS = "]";
     String AMPERSAND = "&";

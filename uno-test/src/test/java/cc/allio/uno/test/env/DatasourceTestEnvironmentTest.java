@@ -1,14 +1,14 @@
 package cc.allio.uno.test.env;
 
+import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.RunTest;
-import cc.allio.uno.test.BaseCoreTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
 
 import javax.sql.DataSource;
 
-@RunTest(envs = @RunTest.Environment(env = DatasourceTestEnvironment.class), active = "")
-public class DatasourceTestEnvironmentTest extends BaseCoreTest {
+@RunTest(envs = @RunTest.Environment(env = DataSourceEnvironment.class), active = "")
+public class DatasourceTestEnvironmentTest extends CoreTest {
     @Override
     protected void onRefreshComplete() throws Throwable {
 

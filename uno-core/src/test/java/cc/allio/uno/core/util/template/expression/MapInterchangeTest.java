@@ -11,13 +11,13 @@ public class MapInterchangeTest extends BaseTestCase {
     @Test
     void testCheckFailed() {
         MapInterchange interchange = new MapInterchange();
-        assertThrows(IllegalArgumentException.class, () -> interchange.change("", ""));
+        assertThrows(IllegalArgumentException.class, () -> interchange.change("", "", false));
 
         Map map = Maps.newHashMap();
-        assertThrows(IllegalArgumentException.class, () -> interchange.change("", map));
+        assertThrows(IllegalArgumentException.class, () -> interchange.change("", map, false));
         // 验证 key
         Map<String, String> gMap = Maps.newHashMap();
-        assertThrows(IllegalArgumentException.class, () -> interchange.change("", gMap));
+        assertThrows(IllegalArgumentException.class, () -> interchange.change("", gMap, false));
     }
 
     @Test
@@ -25,7 +25,8 @@ public class MapInterchangeTest extends BaseTestCase {
         MapInterchange interchange = new MapInterchange();
         Map<String, String> gMap = Maps.newHashMap();
         gMap.put("s", "s");
-        Object s = interchange.change("s", gMap);
+        Object s = interchange.change("s", gMap, false);
         assertEquals("s", s);
     }
+
 }

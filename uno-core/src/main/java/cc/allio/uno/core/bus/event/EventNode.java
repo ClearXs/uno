@@ -1,93 +1,118 @@
 package cc.allio.uno.core.bus.event;
 
-import cc.allio.uno.core.bus.Topic;
-
+import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.LongConsumer;
 
+import cc.allio.uno.core.bus.Subscription;
+import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
+
 /**
- * 定义为消息总线上订阅的节点信息
+ * 主题中事件节点
  *
  * @author jw
- * @date 2021/12/16 19:56
+ * @date 2021/12/17 9:40
  */
-public interface EventNode<C> {
+@Slf4j
+public abstract class EventNode<C> extends AbstractEventNode<C> {
 
     /**
-     * 获取当前订阅id
-     *
-     * @return 订阅id
+     * 当前Node唯一订阅id，由{@link Subscription#getSubscribeId()}定义
      */
-    Long getSubscribeId();
+    protected final Long subscriberId;
 
     /**
-     * 获取当前关联{@link Topic}
-     *
-     * @return {@link Topic}唯一字符串
+     * 当前Node订阅的Topic，由{@link Subscription#getPath()}定义
      */
-    String getTopic();
+    protected final String topic;
 
-    /**
-     * 当上游数据发射时产生事件
-     *
-     * @param onNext 处理的Function对象
-     * @return 监听id
-     * @see #reply(Class, Consumer)
-     * @deprecated 使用@{@link #reply(Class, Consumer)}
-     */
-    @Deprecated
-    Long doEmmit(Consumer<C> onNext);
+    protected EventNode(Long subscribeId, String topic) {
+        this.subscriberId = subscribeId;
+        this.topic = topic;
+    }
 
-    /**
-     * 当{@link Topic#discard(Long)}时，node触发这个事件
-     *
-     * @param consumer 解除时触发的回调
-     * @return 监听id
-     * @see #reply(Class, Consumer)
-     * @deprecated 使用@{@link #reply(Class, Consumer)}
-     */
-    @Deprecated
-    Long doLift(LongConsumer consumer);
+    @Override
+    public Long getSubscribeId() {
+        return this.subscriberId;
+    }
 
-    /**
-     * 监听指定目标事件
-     *
-     * @param eventType 事件类型，<b>非空</b>
-     * @param consumer  触发事件回调，<b>非空</b>，当触发异常时，回调参数默认为空
-     * @return 监听回调Id
-     * @see EmitEvent
-     * @see LiftEvent
-     */
-    Long reply(Class<? extends TopicEvent> eventType, Consumer<C> consumer);
+    @Override
+    public String getTopic() {
+        return this.topic;
+    }
 
-    /**
-     * 检索该节点上属于指定事件监听器数量
-     *
-     * @param eventType 事件类型
-     * @return 监听器数组集合
-     */
-    Listener<C>[] retrieval(Class<? extends TopicEvent> eventType);
+    @Override
+    public Long doEmmit(Consumer<C> onNext) {
+        Listener<C> emitLis = new Listener<C>() {
+            @Override
+            public void listen(Node<C> event, C obj) {
+                if (obj != null) {
+                    onNext.accept(obj);
+                }
+            }
 
-    /**
-     * 释放监听
-     *
-     * @param listenerId 监听id{@link #doEmmit(Consumer)}或{@link #doLift(LongConsumer)}返回
-     */
-    void release(Long listenerId);
+            @Override
+            public Class<? extends BusEvent> getEventType() {
+                return EmitEvent.class;
+            }
+        };
+        return registerListen(emitLis);
+    }
 
-    /**
-     * 更新在当前{@link EventNode}上进行监听的状态
-     *
-     * @param listeners    监听者集合
-     * @param eventContext 事件上下文
-     */
-    void update(Listener<C>[] listeners, EventContext<C> eventContext);
+    @Override
+    public Long doLift(LongConsumer consumer) {
+        Listener<C> listLis = new Listener<C>() {
+            @Override
+            public void listen(Node<C> event, C obj) {
+                consumer.accept(getSubscribeId());
+            }
 
-    /**
-     * 更新在当前{@link EventNode}上进行监听的状态
-     *
-     * @param eventContext 事件上下文参数
-     */
-    void update(EventContext<C> eventContext);
+            @Override
+            public Class<? extends BusEvent> getEventType() {
+                return LiftEvent.class;
+            }
+        };
+        return registerListen(listLis);
+    }
 
+    @Override
+    public Long reply(@NonNull Class<? extends BusEvent> eventType, @NonNull Consumer<C> consumer) {
+        Listener<C> triggerListener = new Listener<C>() {
+            @Override
+            public void listen(Node<C> event, C obj) {
+                try {
+                    if (log.isDebugEnabled()) {
+                        log.debug("subscribe id {}, subscribe topic {}, then emit obj is {} ", subscriberId, topic, obj);
+                    }
+                    consumer.accept(obj);
+                } catch (Throwable err) {
+                    log.warn("Trigger event callback error", err);
+                }
+            }
+
+            @Override
+            public Class<? extends BusEvent> getEventType() {
+                return eventType;
+            }
+        };
+        return registerListen(triggerListener);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
+        EventNode<C> that = (EventNode<C>) o;
+        return Objects.equals(subscriberId, that.subscriberId) && Objects.equals(topic, that.topic);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(subscriberId, topic);
+    }
 }

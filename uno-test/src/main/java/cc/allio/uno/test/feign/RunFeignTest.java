@@ -1,8 +1,8 @@
 package cc.allio.uno.test.feign;
 
-import cc.allio.uno.test.RunTest;
+import cc.allio.uno.test.env.FeignEnvironment;
 import cc.allio.uno.test.runner.Running;
-import cc.allio.uno.test.env.FeignTestEnvironment;
+import cc.allio.uno.test.RunTest;
 import org.springframework.cloud.openfeign.EnableFeignClients;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.core.annotation.AliasFor;
@@ -17,12 +17,14 @@ import java.lang.annotation.*;
  * @author jiangwei
  * @date 2022/10/28 16:09
  * @since 1.1.0
+ * @deprecated 在1.1.4版本之后删除
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Running(FeignRunner.class)
-@RunTest(envs = @RunTest.Environment(env = FeignTestEnvironment.class))
+@RunTest(envs = @RunTest.Environment(env = FeignEnvironment.class))
+@Deprecated
 public @interface RunFeignTest {
 
     /**

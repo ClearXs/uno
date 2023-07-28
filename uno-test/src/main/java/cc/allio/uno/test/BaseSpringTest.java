@@ -1,5 +1,10 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.core.env.Envs;
+import cc.allio.uno.core.env.SpringEnv;
+import cc.allio.uno.core.env.SystemEnv;
+import cc.allio.uno.core.util.ObjectUtils;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -7,19 +12,21 @@ import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigRegistry;
 import org.springframework.context.support.AbstractApplicationContext;
-import org.springframework.core.annotation.AnnotatedElementUtils;
+import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.MutablePropertySources;
 import org.springframework.core.env.PropertySource;
+import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.WebApplicationContext;
 
 import java.util.*;
-import java.util.stream.Collectors;
-
 
 /**
  * Spring测试，继承于该测试的类，不应该在在加上{@link BeforeEach}与{@link AfterEach}
@@ -32,7 +39,7 @@ public abstract class BaseSpringTest extends BaseTestCase {
     /**
      * 注解spring上下文对象
      */
-    private AnnotationConfigApplicationContext context;
+    private GenericApplicationContext context;
 
     /**
      * <ol>
@@ -47,20 +54,43 @@ public abstract class BaseSpringTest extends BaseTestCase {
      */
     @Override
     protected void onInit() throws Throwable {
-        context = new AnnotationConfigApplicationContext();
+        // 实例化 context
+        this.context = createApplication();
+
+        // ---------- 资源初始化 ----------
         // 从当前项目路径上下文添加配置文件
         // 添加配置文件属性
-        addConfigurationFile();
+        addDefaultConfigurationFile();
+        RunTestAttributes runTestAttributes = getRunTestAttributes();
+        if (runTestAttributes != null) {
+            runTestAttributes.apply(this);
+        }
         new ConfigFileApplicationListener() {
             public void apply() {
                 addPropertySources(context.getEnvironment(), context);
                 addPostProcessors(context);
             }
         }.apply();
-        onInitSpringEnv();
         registerDefaultComponent();
+        // spring环境初始化，回调接口
+        onInitSpringEnv();
+
+        // 构建spring环境
+        ConfigurableEnvironment environment = context.getEnvironment();
+        Envs.reset(new SpringEnv((SystemEnv) Envs.getCurrentEnv(), environment));
         context.refresh();
+
+        // 完成后的回调
         onRefreshComplete();
+    }
+
+    /**
+     * 创建{@link ApplicationContext}实例。子类可以实现，如果遇到Web环境，则需要创建{@link WebApplicationContext}
+     *
+     * @return ApplicationContext实例
+     */
+    protected GenericApplicationContext createApplication() {
+        return new AnnotationConfigApplicationContext();
     }
 
     @Override
@@ -69,6 +99,15 @@ public abstract class BaseSpringTest extends BaseTestCase {
         if (context != null) {
             context.close();
         }
+    }
+
+    /**
+     * 添加inline property。形如server.port=222
+     *
+     * @param inlinePropertys inlinePropertys
+     */
+    public void addInlineProperty(String... inlinePropertys) {
+        TestPropertySourceUtils.addInlinedPropertiesToEnvironment(context, inlinePropertys);
     }
 
     /**
@@ -91,6 +130,7 @@ public abstract class BaseSpringTest extends BaseTestCase {
      * @param properties 配置文件
      */
     public void addProperty(@NonNull Properties properties) {
+        properties.forEach((key, value) -> addProperty(key.toString(), value.toString()));
     }
 
     /**
@@ -109,6 +149,16 @@ public abstract class BaseSpringTest extends BaseTestCase {
                     .of(".".concat(prefix).concat(".").concat(entry.getKey()).concat("=").concat(entry.getValue()))
                     .applyTo(context.getEnvironment(), TestPropertyValues.Type.MAP);
         }
+    }
+
+    /**
+     * 把value字符串数组的数据向Spring环境中添加配置
+     *
+     * @param prefix 配置前缀，如spring.server
+     * @param values values
+     */
+    public void addPropertyWithArray(String prefix, String[] values) {
+        addPropertyWithList(prefix, Lists.newArrayList(values));
     }
 
     /**
@@ -210,25 +260,20 @@ public abstract class BaseSpringTest extends BaseTestCase {
     /**
      * spring环境添加默认的配置属性
      */
-    private void addConfigurationFile() {
+    private void addDefaultConfigurationFile() {
         // 添加默认加载uno-test配置文件
-        Set<RunTest> mergedAnnotations = AnnotatedElementUtils.findAllMergedAnnotations(this.getClass(), RunTest.class);
-        if (CollectionUtils.isEmpty(mergedAnnotations)) {
-            addProperty("spring.config.name", "uno");
-            addProperty("spring.profiles.active", "test");
-        } else {
-            // name
-            String configNames = String.join(",", mergedAnnotations.stream()
-                    .filter(str -> !StringUtils.isEmpty(str))
-                    .flatMap(runTest -> Arrays.stream(StringUtils.commaDelimitedListToStringArray(runTest.profile())))
-                    .collect(Collectors.toSet()));
-            addProperty("spring.config.name", configNames);
-            String activeNames = String.join(",", mergedAnnotations.stream()
-                    .filter(str -> !StringUtils.isEmpty(str))
-                    .flatMap(runTest -> Arrays.stream(StringUtils.commaDelimitedListToStringArray(runTest.active())))
-                    .collect(Collectors.toSet()));
-            addProperty("spring.profiles.active", activeNames);
-        }
+        addProperty("spring.config.name", "uno");
+        addProperty("spring.profiles.active", "test");
+    }
+
+    /**
+     * 注册auto configuration
+     *
+     * @param autoConfigurations the autoConfigurations
+     */
+    public void registerAutoConfiguration(Class<?>... autoConfigurations) {
+        getRunTestAttributes().addAutoConfigurationClasses(autoConfigurations);
+        registerComponent(autoConfigurations);
     }
 
     /**
@@ -237,7 +282,9 @@ public abstract class BaseSpringTest extends BaseTestCase {
      * @param components 组件Class数组对象
      */
     public void registerComponent(Class<?>... components) {
-        context.register(components);
+        if (context instanceof AnnotationConfigRegistry && ObjectUtils.isNotEmpty(components)) {
+            ((AnnotationConfigRegistry) context).register(components);
+        }
     }
 
     public <T> T getBean(Class<T> beanClass) {
@@ -249,7 +296,7 @@ public abstract class BaseSpringTest extends BaseTestCase {
      *
      * @return
      */
-    public AnnotationConfigApplicationContext getContext() {
+    public GenericApplicationContext getContext() {
         return context;
     }
 
@@ -276,5 +323,14 @@ public abstract class BaseSpringTest extends BaseTestCase {
      */
     protected void onContextClose() throws Throwable {
 
+    }
+
+    /**
+     * 获取 RunTestAttributes实例
+     *
+     * @return RunTestAttributes
+     */
+    protected RunTestAttributes getRunTestAttributes() {
+        return null;
     }
 }

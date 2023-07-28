@@ -1,28 +1,28 @@
 package cc.allio.uno.component.sequential.context;
 
-import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.core.OptionContext;
 import cc.allio.uno.component.sequential.process.handle.ProcessHandler;
-import cc.allio.uno.core.bus.MessageBus;
-import cc.allio.uno.core.bus.MessageContext;
+import cc.allio.uno.component.sequential.Sequential;
+import cc.allio.uno.core.bus.EventContext;
+import cc.allio.uno.core.bus.EventTracer;
 import cc.allio.uno.core.bus.Topic;
 import org.springframework.context.ApplicationContext;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
- * 消息总线上下文对象
+ * 事件总线上下文对象
  *
  * @author jiangwei
  * @date 2021/12/29 14:41
  * @modify 1.0.6
  * @since 1.0
  */
-public interface SequentialContext extends OptionContext, MessageContext {
+public interface SequentialContext extends EventContext {
 
     /**
-     * 定义一个全局处理使出过程中id，在消息总线路由中这个id唯一保持不变
+     * 定义一个全局处理使出过程中id，在事件总线路由中这个id唯一保持不变
      *
      * @return 全局唯一的值
      */
@@ -53,7 +53,7 @@ public interface SequentialContext extends OptionContext, MessageContext {
     /**
      * 复制原有Context，改变它的上下文Id值。</br>
      * Note:</br>
-     * 在消息总线路由中，如果在不同的{@link Topic}中发布某个{@link Topic}使用的{@link SequentialContext}，这必然是不正确的，</br>
+     * 在事件总线路由中，如果在不同的{@link Topic}中发布某个{@link Topic}使用的{@link SequentialContext}，这必然是不正确的，</br>
      * 那么结论就是{@link SequentialContext}将会是一个新的（或者说可以做成链路追踪那样，设置一个追踪链？），</br>
      * 所以说就有加上这个方法的意义
      *
@@ -70,8 +70,18 @@ public interface SequentialContext extends OptionContext, MessageContext {
     static SequentialContext empty() {
         return new SequentialContext() {
             @Override
-            public Optional<MessageBus<SequentialContext>> getMessageBus() {
-                return Optional.empty();
+            public String getTopicPath() {
+                return null;
+            }
+
+            @Override
+            public Topic<?> getTopic() {
+                return null;
+            }
+
+            @Override
+            public EventTracer getEventTracer() {
+                return null;
             }
 
             @Override
@@ -102,6 +112,11 @@ public interface SequentialContext extends OptionContext, MessageContext {
             @Override
             public Optional<ApplicationContext> getApplicationContext() {
                 return Optional.empty();
+            }
+
+            @Override
+            public Map<String, Object> getAll() {
+                return null;
             }
 
             @Override

@@ -18,8 +18,13 @@ import java.util.*;
  * @since 1.0
  */
 @Data
-@ConfigurationProperties("automic.uno.kafka")
+@ConfigurationProperties("allio.uno.kafka")
 public class UnoKafkaProperties {
+
+    /**
+     * 是否启用kafka
+     */
+    private boolean enable = false;
 
     /**
      * broker地址
@@ -51,14 +56,19 @@ public class UnoKafkaProperties {
         private String groupId = "uno-group";
 
         /**
-         * 设置消费者分组最初的消费进度为 earliest 。可参考博客 https://blog.csdn.net/lishuangzhe7047/article/details/74530417 理解
+         * 指定位移消费：
+         * <ul>
+         *     <li>latest：默认，从最新位置开始消费（如果在_consumer_offset没有找到）</li>
+         *     <li>earliest：从0开始消费（如果在_consumer_offset没有找到）</li>
+         *     <li>none：直接抛出异常</li>
+         * </ul>
          */
         private String autoOffsetReset = "earliest";
 
         /**
-         * 是否自动提交消费进度
+         * 是否自动提交消费进度，由封装程序进行自动提交，避免重复消费（但可能存在消费丢失的可能性）。
          */
-        private Boolean enableAutoCommit = false;
+        private Boolean enableAutoCommit = true;
 
         /**
          * 自动提交消费进度频率
@@ -94,6 +104,11 @@ public class UnoKafkaProperties {
          * 隔离界别 read_uncommitted、read_committed
          */
         private String isolationLevel = "read_uncommitted";
+
+        /**
+         * @see ConsumerConfig#HEARTBEAT_INTERVAL_MS_CONFIG
+         */
+        private Long heartbeatIntervalMs = 3000L;
 
         /**
          * 把当前所有配置参数以{@link Properties}形式存储，其中包含broker地址
@@ -158,9 +173,9 @@ public class UnoKafkaProperties {
         private String valueSerializer = StringSerializer.class.getName();
 
         /**
-         * 分批发送 每次批量发送消息的最大数量 默认16Kb
+         * 分批发送 每次批量发送消息的最大数量 默认4M
          */
-        private String batchSize = "16384";
+        private String batchSize = "4194304";
 
         /**
          * 每次批量发送消息的最大内存 单位 字节  默认 32M
@@ -168,9 +183,9 @@ public class UnoKafkaProperties {
         private String bufferMemory = "33554432";
 
         /**
-         * 批处理延迟时间上限。达到这个延迟后，无法消息是否达到最大数量都会发送
+         * 批处理延迟时间上限。达到这个延迟后，无法消息是否达到最大数量都会发送，默认25ms
          */
-        private String lingerMs = "10000";
+        private String lingerMs = "100";
 
         /**
          * 生产者事务ID

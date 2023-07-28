@@ -1,16 +1,16 @@
 package cc.allio.uno.gis.jackson.geojson.parser;
 
-import cc.allio.uno.core.util.ObjectUtil;
+import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
-import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import cc.allio.uno.gis.jackson.geojson.annotation.*;
+import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ListMultimap;
+import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import cc.allio.uno.core.annotation.document.DocumentFactoryException;
 import cc.allio.uno.core.annotation.Annotated;
 
@@ -79,7 +79,7 @@ public class FeatureGeoJsonParser<T> extends BaseIgnoreDeserializerObjectMapper<
         if (null != properties && StringUtils.isNotBlank(propertiesName)) {
             nodeObject.replace(propertiesName, properties);
             // @GeoJsonProperty
-        } else if (null != properties && !ObjectUtil.isEmpty(propertyAnnotated)) {
+        } else if (null != properties && !ObjectUtils.isEmpty(propertyAnnotated)) {
             if (propertyAnnotated.size() == 1) {
                 nodeObject.replace(propertyAnnotated.get(0).getName(), properties);
             } else {

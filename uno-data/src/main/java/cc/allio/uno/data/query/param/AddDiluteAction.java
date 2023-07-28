@@ -1,8 +1,8 @@
 package cc.allio.uno.data.query.param;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.util.type.TypeOperatorFactory;
-import cc.allio.uno.data.query.QueryWrapper;
+import cc.allio.uno.core.type.TypeOperatorFactory;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 
 /**

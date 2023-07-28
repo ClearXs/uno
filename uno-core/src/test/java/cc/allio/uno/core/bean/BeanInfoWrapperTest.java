@@ -2,10 +2,14 @@ package cc.allio.uno.core.bean;
 
 import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.User;
+import com.google.common.collect.Lists;
+import lombok.Data;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
 import java.beans.IntrospectionException;
+import java.util.List;
+import java.util.Set;
 
 /**
  * BeanInfoWrapper 单元测试
@@ -55,9 +59,46 @@ class BeanInfoWrapperTest extends BaseTestCase {
                 .verifyComplete();
     }
 
-    @Override
-    protected void onDown() throws Throwable {
-
+    @Test
+    void testNull() throws IntrospectionException {
+        User user = new User();
+        BeanInfoWrapper<User> infoWrapper = new BeanInfoWrapper<>(User.class);
+        infoWrapper.set(user, "name", null).subscribe();
     }
 
+    @Test
+    void testSetArray() throws IntrospectionException {
+        TestComplex testComplex = new TestComplex();
+        BeanInfoWrapper<TestComplex> infoWrapper = new BeanInfoWrapper<>(TestComplex.class);
+        infoWrapper.set(testComplex, "arrays", Lists.newArrayList("2", "2")).subscribe();
+
+        assertEquals(2, testComplex.getArrays().length);
+    }
+
+    @Test
+    void testSetList() throws IntrospectionException {
+        TestComplex testComplex = new TestComplex();
+        BeanInfoWrapper<TestComplex> infoWrapper = new BeanInfoWrapper<>(TestComplex.class);
+        infoWrapper.set(testComplex, "list", Lists.newArrayList("2", "2")).subscribe();
+
+        assertEquals(2, testComplex.getList().size());
+    }
+
+    @Test
+    void testSetSet() throws IntrospectionException {
+        TestComplex testComplex = new TestComplex();
+        BeanInfoWrapper<TestComplex> infoWrapper = new BeanInfoWrapper<>(TestComplex.class);
+        infoWrapper.set(testComplex, "set", Lists.newArrayList("2", "2")).subscribe();
+
+        assertEquals(1, testComplex.getSet().size());
+    }
+
+    @Data
+    public class TestComplex {
+        private String[] arrays;
+
+        private List<String> list;
+
+        private Set<String> set;
+    }
 }

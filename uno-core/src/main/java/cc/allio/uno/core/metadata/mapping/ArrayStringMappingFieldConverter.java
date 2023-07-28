@@ -1,7 +1,7 @@
 package cc.allio.uno.core.metadata.mapping;
 
-import cc.allio.uno.core.util.JsonUtil;
-import cc.allio.uno.core.util.ObjectUtil;
+import cc.allio.uno.core.util.JsonUtils;
+import cc.allio.uno.core.util.ObjectUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
@@ -33,10 +33,10 @@ public class ArrayStringMappingFieldConverter extends BaseMappingFieldConverter<
         // 处理collection数据
         List<String> maybeList = parseCollectionValue(value);
         // 处理json数据
-        if (ObjectUtil.isEmpty(maybeList)) {
+        if (ObjectUtils.isEmpty(maybeList)) {
             maybeList = parseJsonValue(value);
         }
-        return ObjectUtil.isEmpty(maybeList) ? value.toString() : maybeList.get(0);
+        return ObjectUtils.isEmpty(maybeList) ? value.toString() : maybeList.get(0);
     }
 
     /**
@@ -61,10 +61,10 @@ public class ArrayStringMappingFieldConverter extends BaseMappingFieldConverter<
     private List<String> parseJsonValue(Object value) {
         List<String> maybeList = Lists.newArrayList();
         try {
-            maybeList = JsonUtil.readList(value.toString(), String.class);
+            maybeList = JsonUtils.readList(value.toString(), String.class);
         } catch (Throwable ex) {
             try {
-                JsonNode jsonNode = JsonUtil.readTree(value.toString());
+                JsonNode jsonNode = JsonUtils.readTree(value.toString());
                 if (jsonNode.isArray()) {
                     ArrayNode arrayNode = (ArrayNode) jsonNode;
                     for (JsonNode node : arrayNode) {

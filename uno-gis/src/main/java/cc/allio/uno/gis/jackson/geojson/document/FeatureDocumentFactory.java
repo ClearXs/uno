@@ -1,12 +1,12 @@
 package cc.allio.uno.gis.jackson.geojson.document;
 
-import cc.allio.uno.gis.jackson.geojson.crs.Crs;
-import cc.allio.uno.core.annotation.*;
+import cc.allio.uno.core.annotation.Annotated;
 import cc.allio.uno.core.annotation.document.Document;
 import cc.allio.uno.core.annotation.document.DocumentFactory;
 import cc.allio.uno.core.annotation.document.DocumentFactoryException;
 import cc.allio.uno.core.annotation.document.IntrospectionDocumentFactory;
 import cc.allio.uno.gis.jackson.geojson.annotation.*;
+import cc.allio.uno.gis.jackson.geojson.crs.Crs;
 import com.google.common.collect.ListMultimap;
 import org.locationtech.jts.geom.Geometry;
 

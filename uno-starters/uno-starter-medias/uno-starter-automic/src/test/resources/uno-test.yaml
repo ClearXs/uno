@@ -1,7 +1,0 @@
-allio:
-  uno:
-    media:
-      url: http://124.131.236.14:8099/video
-      authorize:
-        username: liaocheng
-        password: 123456

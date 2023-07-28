@@ -539,9 +539,4 @@ public class CalendarUtil {
         return strSwi;
     }
 
-
-    public static void main(String[] args) {
-        Date date = generateDateTime(2021, 10, 11, 8, 0, 0);
-        System.out.println(DateUtil.format(date, DateUtil.PATTERN_DATETIME));
-    }
 }

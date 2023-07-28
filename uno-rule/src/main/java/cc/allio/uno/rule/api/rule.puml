@@ -1,0 +1,74 @@
+@startuml
+'https://plantuml.com/class-diagram
+interface Rule extends Serializable {
+    Long getId();
+    String getName();
+    List<RuleAttr> getRuleAttr();
+    RuleAttr getIndexByExpr(String expr);
+    String getLiteralExpr();
+}
+
+interface RuleAttr {
+    String getKey();
+    String getName();
+    String getUnit();
+    LogicPredicate getLogic();
+    OP getOp();
+    Object getTriggerValue();
+    String getExpr();
+    String getIndexExpr();
+    Rule getRule();
+}
+
+interface Fact {
+    Rule getRule();
+    Object getValue(String key);
+    Map<String, Object> ruleValues();
+}
+
+interface RuleEngine {
+    RuleResult fire(Rule rule, Fact fact, Duration timer);
+    void finish(RuleResult result);
+}
+
+interface RuleResult {
+    Rule getRule();
+    Fact getFact();
+    Long getId();
+    Set<MatchIndex> get(long timeout, TimeUnit timeUnit);
+    Flux<MatchIndex> getOnReactive();
+    boolean isMatched();
+    boolean isMatchedOnSync();
+    Mono<Boolean> isMatchedOnReactive();
+    void addLister(Listener listener);
+    Date getResultTime();
+    Throwable getErr();
+    void release();
+}
+
+class DroolsRuleEngine implements RuleEngine {}
+
+
+abstract class BaseEvent {}
+interface Listener {
+    void onTrigger(Rule rule, Set<MatchIndex> matchIndices);
+    void onNoMatch(Rule rule);
+    void onError(Throwable ex);
+}
+
+class ErrorEvent extends BaseEvent {}
+class MatchEvent extends BaseEvent {}
+class NoMatchEvent extends BaseEvent {}
+
+
+RuleAttr *-- Rule : use
+Fact *-- RuleEngine : use
+Rule *-- RuleEngine : use
+RuleResult *-- RuleEngine : use
+Listener *-- RuleResult : use
+ErrorEvent *-- RuleResult : use
+FireEvent *-- RuleResult : use
+MatchEvent *-- RuleResult : use
+NoMatchEvent *-- RuleResult : use
+
+@enduml

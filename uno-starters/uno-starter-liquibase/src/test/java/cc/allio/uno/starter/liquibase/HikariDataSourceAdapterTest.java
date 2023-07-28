@@ -3,7 +3,6 @@ package cc.allio.uno.starter.liquibase;
 import cc.allio.uno.test.BaseTestCase;
 import com.microsoft.sqlserver.jdbc.SQLServerDriver;
 import com.zaxxer.hikari.HikariDataSource;
-import oracle.jdbc.driver.OracleDriver;
 import org.junit.jupiter.api.Test;
 import org.postgresql.Driver;
 
@@ -51,10 +50,5 @@ class HikariDataSourceAdapterTest extends BaseTestCase {
         hikariDataSource.setDriverClassName(SQLServerDriver.class.getName());
         dbType = dataSourceAdapter.dbType(hikariDataSource);
         assertEquals("mssql", dbType);
-
-        // Oracle
-        hikariDataSource.setDriverClassName(OracleDriver.class.getName());
-        dbType = dataSourceAdapter.dbType(hikariDataSource);
-        assertEquals("oracle", dbType);
     }
 }

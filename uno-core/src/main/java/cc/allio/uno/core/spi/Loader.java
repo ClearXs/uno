@@ -1,6 +1,5 @@
 package cc.allio.uno.core.spi;
 
-import cc.allio.uno.core.util.ClassUtil;
 import com.google.auto.service.AutoService;
 import com.google.common.collect.Lists;
 
@@ -38,10 +37,6 @@ public abstract class Loader {
      * @return ServiceLoader实例对象
      */
     public static <T> ServiceLoader<T> load(Class<T> typeClass) {
-        boolean containsAutoService = ClassUtil.containsAnnotation(typeClass, AutoService.class);
-        if (!containsAutoService) {
-            throw new NullPointerException("Given Type Not Contains @AutoService");
-        }
         return ServiceLoader.load(typeClass);
     }
 

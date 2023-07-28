@@ -1,14 +1,17 @@
 package cc.allio.uno.component.http.metadata;
 
 import cc.allio.uno.component.http.openapi.OpenApiSpecificationParser;
-import cc.allio.uno.core.util.JsonUtil;
+import cc.allio.uno.core.util.JsonUtils;
+import com.google.common.collect.Maps;
 import io.swagger.v3.oas.models.OpenAPI;
 
 import java.time.Duration;
+import java.util.Map;
 
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import reactor.test.StepVerifier;
 
 /**
@@ -216,7 +219,7 @@ class HttpSwapperTest extends HttpTestCase {
         user.setName("");
         prepareResponse(res ->
                 res.addHeader("Content-Type", "application/json")
-                        .setBody(JsonUtil.toJson(user)));
+                        .setBody(JsonUtils.toJson(user)));
         StepVerifier.create(
                         HttpSwapper
                                 .build(url)
@@ -264,7 +267,7 @@ class HttpSwapperTest extends HttpTestCase {
         user.setName("jw");
         prepareResponse(res ->
                 res.addHeader("Content-Type", "application/json")
-                        .setBody(JsonUtil.toJson(user)));
+                        .setBody(JsonUtils.toJson(user)));
         StepVerifier.create(
                         HttpSwapper
                                 .build(url, HttpMethod.GET)
@@ -285,7 +288,7 @@ class HttpSwapperTest extends HttpTestCase {
         user.setName("jw");
         prepareResponse(res ->
                 res.addHeader("Content-Type", "application/json")
-                        .setBody(JsonUtil.toJson(user)));
+                        .setBody(JsonUtils.toJson(user)));
         StepVerifier.create(
                         HttpSwapper
                                 .build(url)
@@ -296,6 +299,30 @@ class HttpSwapperTest extends HttpTestCase {
                                 .flatMap(res -> res.toExpect(User.class)))
                 .expectNext(user)
                 .verifyComplete();
+    }
+
+    @Test
+    void testAddHeader() {
+        String url = "http://localhost:8080/test/timeout";
+        HttpSwapper.build(url)
+                .addHeader("Content-Type", "text/plain");
+    }
+
+    @Test
+    void testFromData() {
+        String url = "http://localhost:8080/test/timeout";
+        Map<String, Object> var = Maps.newHashMap();
+        var.put("t1", "t1");
+
+        HttpSwapper.build(url, HttpMethod.POST)
+                .setMediaType(MediaType.APPLICATION_FORM_URLENCODED);
+    }
+
+    @Test
+    void testInterceptor() {
+        String url = "http://localhost:8080/test/timeout";
+        HttpSwapper.build(url)
+                .addInterceptor((chain, context) -> null);
     }
 
     /**
@@ -318,6 +345,4 @@ class HttpSwapperTest extends HttpTestCase {
         long id;
         String name;
     }
-
-
 }

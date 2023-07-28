@@ -20,15 +20,14 @@ public interface Listener<C> {
      * @param obj   监听参数
      * @throws Throwable 监听回调过程发生异常抛出
      */
-    void listen(EventNode<C> event, C obj) throws Throwable;
+    void listen(Node<C> event, C obj) ;
 
     /**
      * 获取事件类型
      *
-     * @return {@link TopicEvent}Class对象
+     * @return {@link BusEvent}Class对象
      */
-    Class<? extends TopicEvent> getEventType();
-
+    Class<? extends BusEvent> getEventType();
 
     /**
      * Listener装饰器，存放ListenerId
@@ -47,13 +46,12 @@ public interface Listener<C> {
         }
 
         @Override
-        public void listen(EventNode<C> event, C obj) throws Throwable {
+        public void listen(Node<C> event, C obj) {
             listener.listen(event, obj);
         }
 
-
         @Override
-        public Class<? extends TopicEvent> getEventType() {
+        public Class<? extends BusEvent> getEventType() {
             return listener.getEventType();
         }
 

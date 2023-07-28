@@ -18,8 +18,8 @@ package cc.allio.uno.auto.service;
 
 import cc.allio.uno.auto.AbstractUnoProcessor;
 import cc.allio.uno.auto.model.MultiSetMap;
-import cc.allio.uno.auto.model.TypeHelper;
 import cc.allio.uno.auto.model.Sets;
+import cc.allio.uno.auto.model.TypeHelper;
 
 import javax.annotation.processing.Filer;
 import javax.annotation.processing.ProcessingEnvironment;

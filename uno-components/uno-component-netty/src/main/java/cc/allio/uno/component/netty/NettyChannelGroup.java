@@ -1,6 +1,6 @@
 package cc.allio.uno.component.netty;
 
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 
@@ -80,7 +80,7 @@ public class NettyChannelGroup implements ChannelGroup {
 
     @Override
     public void removeAll() throws InterruptedException {
-        if (Collections.isNotEmpty(channels)) {
+        if (CollectionUtils.isNotEmpty(channels)) {
             for (Channel channel : channels) {
                 // 阻塞关闭
                 channel.closeFuture();

@@ -1,12 +1,11 @@
 package cc.allio.uno.core.metadata.convert;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.metadata.Metadata;
 import cc.allio.uno.core.metadata.mapping.MappingField;
 import cc.allio.uno.core.metadata.mapping.MappingFieldConverter;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
-import cc.allio.uno.core.util.type.TypeValue;
-import com.google.common.collect.Maps;
+import cc.allio.uno.core.type.TypeValue;
+import cc.allio.uno.core.metadata.Metadata;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
@@ -88,14 +87,13 @@ public abstract class AbstractRichConverter<T extends Metadata> implements RichC
                         if (type != null) {
                             setter = new TypeValue(type, setter).tryTransfer();
                         }
-                        return sequentialWrapper.setCoverage(mappingField.getName(), true, setter)
-                                .then(metadata.putMappingValue(mappingField, setter));
+                        // 设置值在values
+                        Object setValue = setter;
+                        return Mono.justOrEmpty(Optional.ofNullable(metadata.getValues()))
+                                .doOnNext(values -> values.put(mappingField.getName(), setValue))
+                                .then(sequentialWrapper.setCoverage(mappingField.getName(), false, setValue));
                     })
-                    .onErrorContinue((err, o) -> err.printStackTrace())
-                    .switchIfEmpty(
-                            Mono.just(name)
-                                    // 放入无法解析的缓存中
-                                    .doOnNext(nodeName -> Optional.ofNullable(metadata.getUndefinedValues()).orElse(Maps.newHashMap()).put(nodeName, expected)));
+                    .onErrorContinue((err, o) -> err.printStackTrace());
         } else {
             return sequentialWrapper.set(name, expected);
         }

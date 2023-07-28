@@ -19,8 +19,8 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * <p>Getter annotation example with a {@link java.util.Map}:
  * <pre>
  *    &#064;GeoJsonProperties
- *    public Map&lt;String, Object&gt; getProperties() {
- *       return Collections.singletonMap("key", "value");
+ *    public Map&lt;String, Object&gt; getInlineProperties() {
+ *       return CollectionUtils.singletonMap("key", "value");
  *    }
  * </pre>
  * <p>Field annotation example with a {@link java.util.Map}:

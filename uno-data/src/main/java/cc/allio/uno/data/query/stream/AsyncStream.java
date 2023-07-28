@@ -1,11 +1,14 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.query.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.exception.QueryException;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Async stream
@@ -26,9 +29,11 @@ public class AsyncStream<T> implements DataStream<Collection<T>> {
     public Collection<T> read(QueryFilter queryFilter) throws Throwable {
         return CompletableFuture.supplyAsync(() -> {
                     try {
-                        return source.read(queryFilter).collectList().block();
+                        AtomicReference<List<T>> ref = new AtomicReference<>();
+                        source.read(queryFilter).collectList().subscribe(ref::set);
+                        return ref.get();
                     } catch (Throwable ex) {
-                        throw new RuntimeException(ex);
+                        throw new QueryException(ex);
                     }
                 })
                 .exceptionally(err -> Collections.emptyList())

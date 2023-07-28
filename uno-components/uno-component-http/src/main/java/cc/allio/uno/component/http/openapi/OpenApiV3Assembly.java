@@ -1,7 +1,7 @@
 package cc.allio.uno.component.http.openapi;
 
-import cc.allio.uno.core.util.Requires;
 import cc.allio.uno.component.http.metadata.HttpSwapper;
+import cc.allio.uno.core.util.Requires;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.PathItem;
 import io.swagger.v3.oas.models.security.SecurityScheme;

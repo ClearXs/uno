@@ -1,5 +1,8 @@
 package cc.allio.uno.data.orm.dialect.func;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * SQL Func
  *
@@ -7,12 +10,32 @@ package cc.allio.uno.data.orm.dialect.func;
  * @date 2023/1/12 16:19
  * @since 1.1.4
  */
-public interface Func {
+@Getter
+@AllArgsConstructor
+public enum Func {
 
     // Aggregate
-    String MIN_FUNCTION = "min";
-    String MAX_FUNCTION = "max";
-    String AVG_FUNCTION = "avg";
-    String COUNT_FUNCTION = "count";
-    String SUM_FUNCTION = "sum";
+    MIN_FUNCTION("MIN"),
+    MAX_FUNCTION("MAX"),
+    AVG_FUNCTION("AVG"),
+    COUNT_FUNCTION("COUNT"),
+    SUM_FUNCTION("SUM");
+
+    // 函数名称
+    private final String name;
+
+    /**
+     * 根据给定的名称获取Func实例
+     *
+     * @param maybeFunc func 名称
+     * @return Func or null
+     */
+    public static Func of(String maybeFunc) {
+        for (Func value : values()) {
+            if (value.getName().equals(maybeFunc)) {
+                return value;
+            }
+        }
+        return null;
+    }
 }

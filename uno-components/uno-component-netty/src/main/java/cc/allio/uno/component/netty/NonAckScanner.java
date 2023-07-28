@@ -6,7 +6,7 @@ import cc.allio.uno.component.netty.transport.body.Body;
 import cc.allio.uno.component.netty.transport.body.MonitorBody;
 import cc.allio.uno.component.netty.transport.body.OfflineBody;
 import cc.allio.uno.component.netty.transport.body.RegisterBody;
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 
@@ -56,7 +56,7 @@ public class NonAckScanner implements Runnable {
             }
         }
         // 移除这个message
-        if (Collections.isNotEmpty(unActiveMessage)) {
+        if (CollectionUtils.isNotEmpty(unActiveMessage)) {
             Enumeration<Long> keys = unActiveMessage.keys();
             while (keys.hasMoreElements()){
                 Long key = keys.nextElement();

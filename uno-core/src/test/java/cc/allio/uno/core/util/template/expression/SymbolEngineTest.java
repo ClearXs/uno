@@ -1,7 +1,7 @@
 package cc.allio.uno.core.util.template.expression;
 
-import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.BaseTestCase;
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.User;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -19,7 +19,7 @@ class SymbolEngineTest extends BaseTestCase {
     void testOnlyObject() throws Throwable {
         User user = new User();
         user.setName("name");
-        String name = engine.run("name", user);
+        String name = engine.run("name", user, false);
         assertEquals("name", name);
     }
 
@@ -35,12 +35,12 @@ class SymbolEngineTest extends BaseTestCase {
         User user1 = new User();
         user1.setName("1");
         users.add(user1);
-        String e1 = engine.run("users[0].name", users);
+        String e1 = engine.run("users[0].name", users, false);
         assertEquals("0", e1);
-        String e2 = engine.run("users[1].name", users);
+        String e2 = engine.run("users[1].name", users, false);
         assertEquals("1", e2);
         // throws
-        assertThrows(IndexOutOfBoundsException.class, () -> engine.run("users[22].name", users));
+        assertThrows(IndexOutOfBoundsException.class, () -> engine.run("users[22].name", users, false));
     }
 
     /**
@@ -49,24 +49,24 @@ class SymbolEngineTest extends BaseTestCase {
     @Test
     void testMap() throws Throwable {
         Map<Object, Object> throwMap = Maps.newHashMap();
-        String re = engine.run("", throwMap);
+        String re = engine.run("", throwMap, false);
         assertEquals("", re);
 
         Map<String, Object> map = Maps.newHashMap();
         // map 直接取值
         map.put("name", "name");
-        re = engine.run("name", map);
+        re = engine.run("name", map, false);
         assertEquals("name", re);
         // map-object取值
         User user = new User();
         user.setName("name");
         map.put("user", user);
-        re = engine.run("user.name", map);
+        re = engine.run("user.name", map, false);
         assertEquals("name", re);
         // map-list-object取值
         List<User> users = Lists.newArrayList(user);
         map.put("users", users);
-        re = engine.run("users[0].name", map);
+        re = engine.run("users[0].name", map, false);
         assertEquals("name", re);
     }
 
@@ -78,22 +78,22 @@ class SymbolEngineTest extends BaseTestCase {
         user.setName("name");
         person.setUser(user);
         // 从对象中取值
-        String re = engine.run("id", person);
+        String re = engine.run("id", person, false);
         assertEquals("1", re);
 
-        re = engine.run("user.name", person);
+        re = engine.run("user.name", person, false);
         assertEquals("name", re);
 
         Level level = new Level();
         level.setPerson(person);
-        re = engine.run("person.user.name", level);
+        re = engine.run("person.user.name", level, false);
         assertEquals("name", re);
 
         Map<String, Object> map = Maps.newHashMap();
         map.put("person", person);
         level.setMap(map);
         // path: object->map->object->object->properties
-        re = engine.run("map.person.user.name", level);
+        re = engine.run("map.person.user.name", level, false);
         assertEquals("name", re);
 
         List list = Lists.newArrayList();
@@ -101,7 +101,7 @@ class SymbolEngineTest extends BaseTestCase {
         level.setList(list);
 
         // path: object->list-map-object-object-properties
-        re = engine.run("list[0].person.user.name", level);
+        re = engine.run("list[0].person.user.name", level, false);
         assertEquals("name", re);
     }
 

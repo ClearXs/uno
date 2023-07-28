@@ -14,7 +14,7 @@ public class ListInterchangeTest extends BaseTestCase {
         list.add("1");
 
         ListInterchange interchange = new ListInterchange();
-        Object change = interchange.change("list[0]", list);
+        Object change = interchange.change("list[0]", list, false);
         assertEquals("1", change);
     }
 }

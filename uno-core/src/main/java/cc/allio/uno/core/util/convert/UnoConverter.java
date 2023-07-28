@@ -2,9 +2,9 @@ package cc.allio.uno.core.util.convert;
 
 import cc.allio.uno.core.function.CheckedFunction;
 import cc.allio.uno.core.function.Unchecked;
-import cc.allio.uno.core.util.ClassUtil;
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.ConvertUtil;
-import cc.allio.uno.core.util.ReflectUtil;
+import cc.allio.uno.core.util.ReflectUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cglib.core.Converter;
@@ -43,7 +43,7 @@ public class UnoConverter implements Converter {
 			return null;
 		}
 		// 类型一样，不需要转换
-		if (ClassUtil.isAssignableValue(target, value)) {
+		if (ClassUtils.isAssignableValue(target, value)) {
 			return value;
 		}
 		try {
@@ -66,7 +66,7 @@ public class UnoConverter implements Converter {
 		// 忽略抛出异常的函数，定义完整泛型，避免编译问题
 		CheckedFunction<String, TypeDescriptor> uncheckedFunction = (key) -> {
 			// 这里 property 理论上不会为 null
-			Field field = ReflectUtil.getField(clazz, fieldName);
+			Field field = ReflectUtils.getField(clazz, fieldName);
 			if (field == null) {
 				throw new NoSuchFieldException(fieldName);
 			}

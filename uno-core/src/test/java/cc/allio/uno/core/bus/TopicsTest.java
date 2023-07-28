@@ -35,7 +35,7 @@ class TopicsTest extends BaseTestCase {
     void testUnlink() {
         Subscription subscription = Subscription.of("/test");
         topics.link(subscription)
-                .flatMap(Topic::findNode)
+                .flatMapMany(Topic::findNode)
                 .flatMap(node -> {
                     node.doLift(o -> log.info("node left subscribe id: {}", node.getSubscribeId()));
                     return topics.unlink("/test");

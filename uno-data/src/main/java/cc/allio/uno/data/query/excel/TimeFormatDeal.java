@@ -4,7 +4,7 @@ import cc.allio.uno.core.util.DateUtil;
 import cc.allio.uno.data.query.param.TimeDimension;
 
 /**
- *导出表头和表数据的时间格式处理类
+ * 导出表头和表数据的时间格式处理类
  *
  * @author cxd
  * @date 2022/12/30 22:49
@@ -25,7 +25,6 @@ public class TimeFormatDeal {
             return "MM-dd HH:mm";
         }
     }
-
 
     public static String getTimeHeadFormat(TimeDimension timeDimension) {
         if (TimeDimension.MONTH.equals(timeDimension)) {

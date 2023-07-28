@@ -1,8 +1,6 @@
 package cc.allio.uno.test.runner;
 
-import cc.allio.uno.test.feign.FeignRunner;
 import com.google.common.collect.Lists;
-import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.util.Assert;
 
 import java.util.*;
@@ -17,19 +15,12 @@ import java.util.stream.Collectors;
  */
 public class RunnerCenter {
 
-    private static volatile RunnerCenter instance;
-
     /**
      * 可以被共享的Runner实例
      */
     public final RunnerList sharedRunner = new RunnerList();
 
     public RunnerCenter() {
-        sharedRunner.add(new CoreTestRunner());
-        sharedRunner.add(new FeignRunner());
-        sharedRunner.add(new InjectRunner());
-        sharedRunner.add(new ContextCloseRunner());
-        sharedRunner.add(new ContextCompleteRunner());
     }
 
     /**
@@ -37,67 +28,43 @@ public class RunnerCenter {
      *
      * @param runner runner实例对象
      */
-    public void register(Runner runner) {
-        sharedRunner.add(runner);
+    public void register(Runner... runner) {
+        sharedRunner.addAll(Lists.newArrayList(runner));
+    }
+
+    /**
+     * 注册私有的Runner实例
+     *
+     * @param runners runner实例对象
+     */
+    public void register(Collection<Runner> runners) {
+        sharedRunner.addAll(runners);
     }
 
     /**
      * 根据给定被标识的class对象，获取当前能够被执行的{@link Runner}对象
      *
-     * @param signedAnnotationClass 某个指定的
-     * @return
+     * @return CoreRunner
      */
-    public Runner.CoreRunner getRunner(Class<?> signedAnnotationClass) {
-        Set<Running> mergedRunning = AnnotatedElementUtils.findAllMergedAnnotations(signedAnnotationClass, Running.class);
-
-        // 构建CloseRunner列表
+    public CoreRunner getRunner() {
         List<Runner> registerRunners = Lists.newArrayList();
         registerRunners.addAll(sharedRunner.getSharedRegisterRunner());
-        // @Running注解获取Runner
-        List<Runner> runningRegisterRunner = mergedRunning.stream()
-                .map(running -> sharedRunner.findSpecify(running.value()))
-                // 不能分享
-                .filter(runner -> RegisterRunner.class.isAssignableFrom(runner.getClass()) && !runner.shared())
-                .collect(Collectors.toList());
-        registerRunners.addAll(runningRegisterRunner);
 
         // 构建RefreshCompleteRunner列表
         List<Runner> refreshCompleteRunners = Lists.newArrayList();
         refreshCompleteRunners.addAll(sharedRunner.getSharedRefreshCompleteRunner());
-        List<Runner> runningRefreshCompleteRunner = mergedRunning.stream()
-                .map(running -> sharedRunner.findSpecify(running.value()))
-                // 不能分享
-                .filter(runner -> RefreshCompleteRunner.class.isAssignableFrom(runner.getClass()) && !runner.shared())
-                .collect(Collectors.toList());
-        refreshCompleteRunners.addAll(runningRefreshCompleteRunner);
 
+        // 构建CloseRunner列表
         List<Runner> closeRunner = Lists.newArrayList();
         closeRunner.addAll(sharedRunner.getSharedContextCloseRunner());
-        List<Runner> runningCloseRunner = mergedRunning.stream()
-                .map(running -> sharedRunner.findSpecify(running.value()))
-                // 不能分享
-                .filter(runner -> CloseRunner.class.isAssignableFrom(runner.getClass()) && !runner.shared())
-                .collect(Collectors.toList());
-        closeRunner.addAll(runningCloseRunner);
-        return new Runner.CoreRunner(registerRunners, refreshCompleteRunners, closeRunner);
+        return new CoreRunner(registerRunners, refreshCompleteRunners, closeRunner);
     }
 
     /**
-     * 获取单实例对象
-     *
-     * @return 单实例对象
+     * 清空所有的Runner
      */
-    public static RunnerCenter getSharedInstance() {
-        RunnerCenter sharedInstance = instance;
-        if (sharedInstance == null) {
-            synchronized (RunnerCenter.class) {
-                if (sharedInstance == null) {
-                    instance = new RunnerCenter();
-                    sharedInstance = instance;
-                }
-            }
-        }
-        return sharedInstance;
+    public void clear() {
+        sharedRunner.clear();
     }
 
     /**
@@ -135,7 +102,7 @@ public class RunnerCenter {
         /**
          * 获取可以被共享的{@link RegisterRunner}列表
          *
-         * @return
+         * @return List<Runner>
          */
         public List<Runner> getSharedRegisterRunner() {
             return stream()
@@ -147,7 +114,7 @@ public class RunnerCenter {
         /**
          * 获取可以被共享的{@link RefreshCompleteRunner}列表
          *
-         * @return
+         * @return List<Runner>
          */
         public List<Runner> getSharedRefreshCompleteRunner() {
             return stream()
@@ -159,7 +126,7 @@ public class RunnerCenter {
         /**
          * 获取可以被共享的{@link CloseRunner}列表
          *
-         * @return
+         * @return List<Runner>
          */
         public List<Runner> getSharedContextCloseRunner() {
             return stream()

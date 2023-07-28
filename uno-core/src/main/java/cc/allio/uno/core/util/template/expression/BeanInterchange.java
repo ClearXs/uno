@@ -1,7 +1,7 @@
 package cc.allio.uno.core.util.template.expression;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.util.type.Types;
+import cc.allio.uno.core.type.Types;
 
 /**
  * Bean对象替换
@@ -13,9 +13,9 @@ import cc.allio.uno.core.util.type.Types;
 public class BeanInterchange extends BaseInterchange implements KeyInterchange {
 
     @Override
-    protected Object onChange(String text, Object value) {
+    protected Object onChange(String text, Object value, boolean langsym) {
         ObjectWrapper wrapper = new ObjectWrapper(value);
-        return wrapper.getForce(text);
+        return reValue(wrapper.getForce(text), langsym);
     }
 
     @Override

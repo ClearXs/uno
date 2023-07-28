@@ -2,7 +2,7 @@ package cc.allio.uno.component.flink.task;
 
 import cc.allio.uno.core.util.calculate.Calculator;
 import cc.allio.uno.core.task.AccumulatedTask;
-import cc.allio.uno.core.util.Collections;
+import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.CoreBeanUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.flink.api.common.eventtime.WatermarkStrategy;
@@ -43,7 +43,7 @@ public class AccumulatedCountTask<T, C> extends AbstractFlinkTask<T, C> {
                 .process(new ProcessAllWindowFunction<Tuple3<String, Long, T>, C, GlobalWindow>() {
                     @Override
                     public void process(ProcessAllWindowFunction<Tuple3<String, Long, T>, C, GlobalWindow>.Context context, Iterable<Tuple3<String, Long, T>> elements, Collector<C> out) throws Exception {
-                        C c = calculator.calculation(Optional.ofNullable(CoreBeanUtil.getContext()), Collections.newArrayList(elements));
+                        C c = calculator.calculation(Optional.ofNullable(CoreBeanUtil.getContext()), CollectionUtils.newArrayList(elements));
                         out.collect(c);
                     }
                 }, builder.outputType);

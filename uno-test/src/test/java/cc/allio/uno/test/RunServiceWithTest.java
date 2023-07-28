@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @RunServiceTest(mapperScan = RunServiceWithTest.TestMapperScan.class)
 @RunTest(profile = "application")
-class RunServiceWithTest extends BaseCoreTest {
+class RunServiceWithTest extends CoreTest {
 
     @Test
     void testGetTestService() {

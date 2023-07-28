@@ -1,24 +1,23 @@
 package cc.allio.uno.component.sequential.context;
 
-import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.component.sequential.process.Processor;
-import cc.allio.uno.core.bean.BeanInfoWrapper;
-import cc.allio.uno.core.bus.DefaultMessageContext;
-import cc.allio.uno.core.util.id.IdGenerator;
-import cc.allio.uno.core.bus.MessageBus;
 import cc.allio.uno.component.sequential.process.handle.ProcessHandler;
+import cc.allio.uno.core.bean.BeanInfoWrapper;
+import cc.allio.uno.core.bus.DefaultEventContext;
+import cc.allio.uno.core.util.id.IdGenerator;
+import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.core.util.CoreBeanUtil;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
 
 /**
- * 消息总线数据上下文
+ * 事件总线数据上下文
  *
  * @author jw
  * @date 2021/12/17 15:47
  */
-public class DefaultSequentialContext extends DefaultMessageContext implements SequentialContext {
+public class DefaultSequentialContext extends DefaultEventContext implements SequentialContext {
 
     /**
      * 时序数据
@@ -37,8 +36,8 @@ public class DefaultSequentialContext extends DefaultMessageContext implements S
         this.sequential = sequential;
     }
 
-    public DefaultSequentialContext(Sequential sequential, ApplicationContext applicationContext, MessageBus<SequentialContext> messageBus) {
-        super(Collections.emptyMap(), messageBus, applicationContext);
+    public DefaultSequentialContext(Sequential sequential, ApplicationContext applicationContext) {
+        super(Collections.emptyMap(), applicationContext);
         this.contextId = IdGenerator.defaultGenerator().getNextId();
         this.sequential = sequential;
     }

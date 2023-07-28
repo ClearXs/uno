@@ -1,6 +1,9 @@
 package cc.allio.uno.core.bean;
 
-import cc.allio.uno.core.util.type.TypeValue;
+import cc.allio.uno.core.type.TypeValue;
+import cc.allio.uno.core.type.Types;
+import cc.allio.uno.core.util.ClassUtils;
+import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -11,7 +14,10 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.util.concurrent.CompletableFuture;
+import java.lang.reflect.Array;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Stream;
 
 /**
  * 增强对Bean对象的操作。<b>禁止在Bean上添加{@link lombok.experimental.Accessors}</b>的注解
@@ -24,6 +30,7 @@ import java.util.concurrent.CompletableFuture;
  * @date 2021/12/17 0:05
  * @since 1.0.0
  */
+@Getter
 @Slf4j
 public class BeanInfoWrapper<T> {
 
@@ -41,21 +48,16 @@ public class BeanInfoWrapper<T> {
     }
 
     /**
-     * 获取{@link BeanInfo}
-     *
-     * @return BeanInfo实例
-     */
-    public BeanInfo getBeanInfo() {
-        return this.beanInfo;
-    }
-
-    /**
      * 获取所有PropertyDescriptor
      *
      * @return
      */
     public Flux<PropertyDescriptor> findAll() {
-        return Flux.fromArray(beanInfo.getPropertyDescriptors());
+        return Flux.fromArray(beanInfo.getPropertyDescriptors())
+                .filter(p -> {
+                    String name = p.getName();
+                    return !"class".equals(name);
+                });
     }
 
     /**
@@ -72,7 +74,9 @@ public class BeanInfoWrapper<T> {
                 .switchIfEmpty(Mono.empty())
                 .single()
                 .onErrorResume(error -> {
-                    log.info("get field {} descriptor error", name);
+                    if (log.isDebugEnabled()) {
+                        log.debug("get field {} descriptor error", name);
+                    }
                     return Mono.empty();
                 });
     }
@@ -85,12 +89,9 @@ public class BeanInfoWrapper<T> {
      * @throws NullPointerException name为null时抛出
      */
     public PropertyDescriptor find(String name) {
-        try {
-            return CompletableFuture.supplyAsync(() -> findByName(name).block()).get();
-        } catch (Throwable ex) {
-            // ignore
-            return null;
-        }
+        AtomicReference<PropertyDescriptor> ref = new AtomicReference<>();
+        findByName(name).subscribe(ref::set);
+        return ref.get();
     }
 
     /**
@@ -100,12 +101,9 @@ public class BeanInfoWrapper<T> {
      * @return true 包含 false 不包含
      */
     public Boolean contains(String name) {
-        try {
-            return CompletableFuture.supplyAsync(() -> findByName(name).hasElement().block()).get();
-        } catch (Throwable ex) {
-            // ignore
-            return false;
-        }
+        AtomicBoolean ref = new AtomicBoolean();
+        findByName(name).hasElement().subscribe(ref::set);
+        return ref.get();
     }
 
     /**
@@ -142,12 +140,9 @@ public class BeanInfoWrapper<T> {
      * @return 该对象这个字段的值或者null
      */
     public Object getForce(Object target, String name) {
-        try {
-            return CompletableFuture.supplyAsync(() -> get(target, name).block()).get();
-        } catch (Throwable ex) {
-            // ignore
-            return null;
-        }
+        AtomicReference<Object> ref = new AtomicReference<>();
+        get(target, name).subscribe(ref::set);
+        return ref.get();
     }
 
     /**
@@ -160,12 +155,9 @@ public class BeanInfoWrapper<T> {
      * @return 该对象这个字段的值或者null
      */
     public <F> F getForce(Object target, String name, Class<F> fieldType) {
-        try {
-            return CompletableFuture.supplyAsync(() -> get(target, name, fieldType).block()).get();
-        } catch (Throwable ex) {
-            // ignore
-            return null;
-        }
+        AtomicReference<F> ref = new AtomicReference<>();
+        get(target, name, fieldType).subscribe(ref::set);
+        return ref.get();
     }
 
     /**
@@ -196,8 +188,13 @@ public class BeanInfoWrapper<T> {
     public synchronized Mono<T> setCoverage(T target, String name, boolean forceCoverage, Object... value) {
         Assert.notNull(name, "target must not null");
         return findByName(name)
-                .flatMap(descriptor -> write(target, descriptor, forceCoverage, value))
-                .doOnError(error -> log.info("target {} set field {} value error set empty", target.getClass().getSimpleName(), name));
+                .flatMap(descriptor ->
+                        write(target, descriptor, forceCoverage, value)
+                                .onErrorContinue((error, o) -> {
+                                    if (log.isDebugEnabled()) {
+                                        log.debug("target {} set field {} value error set empty", target.getClass().getSimpleName(), name);
+                                    }
+                                }));
     }
 
     /**
@@ -237,18 +234,36 @@ public class BeanInfoWrapper<T> {
                                 .collectList()
                                 .flatMap(values -> {
                                     try {
-                                        writeMethod.invoke(target, values.toArray());
-                                    } catch (Throwable ex) {
-                                        return Mono.error(ex);
+                                        Class<?> propertyType = descriptor.getPropertyType();
+                                        if (Types.isArray(propertyType)) {
+                                            // 数组赋值
+                                            Object[] arrayValues = values.stream()
+                                                    .flatMap(o -> {
+                                                        if (Types.isArray(o.getClass())) {
+                                                            return Stream.of((Object[]) o);
+                                                        }
+                                                        return Stream.empty();
+                                                    })
+                                                    .toArray(Object[]::new);
+                                            Object o = Array.newInstance(ClassUtils.getArrayClassType(propertyType), arrayValues.length);
+                                            for (int i = 0; i < arrayValues.length; i++) {
+                                                Array.set(o, i, arrayValues[i]);
+                                            }
+                                            writeMethod.invoke(target, o);
+                                        } else {
+                                            writeMethod.invoke(target, values.toArray());
+                                        }
+                                    } catch (Throwable err) {
+                                        if (log.isDebugEnabled()) {
+                                            log.debug("Target {} set field {} value error set empty", target.getClass().getSimpleName(), descriptor.getName());
+                                        }
                                     }
                                     return Mono.just(target);
-                                }))
-                .doOnError(error -> log.info("target {} set field {} value error set empty", target.getClass().getSimpleName(), descriptor.getName()));
+                                })
+                );
         if (forceCoverage) {
             return writeMono;
         }
         return read(target, descriptor).switchIfEmpty(writeMono).then(Mono.just(target));
     }
-
-
 }

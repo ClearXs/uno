@@ -14,7 +14,7 @@ import lombok.Data;
 @AllArgsConstructor(staticName = "of")
 public class CacheKey {
 
-    public static final String COMPANY_PREFIX = "automic";
+    public static final String COMPANY_PREFIX = "allio";
 
     /**
      * 字符串标识

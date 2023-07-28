@@ -7,7 +7,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.apache.flink.streaming.api.environment.StreamExecutionEnvironment;
 
 @Data
-@ConfigurationProperties("automic.uno.flink")
+@ConfigurationProperties("allio.uno.flink")
 public class UnoFlinkProperties {
 
     /**

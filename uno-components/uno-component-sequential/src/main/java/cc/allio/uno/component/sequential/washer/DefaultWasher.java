@@ -1,6 +1,8 @@
 package cc.allio.uno.component.sequential.washer;
 
-import cc.allio.uno.component.sequential.Sequential;
+import cc.allio.uno.component.sequential.context.SequentialContext;
+import cc.allio.uno.core.type.RegexType;
+import cc.allio.uno.core.type.Type;
 import com.google.auto.service.AutoService;
 import org.springframework.util.ObjectUtils;
 
@@ -16,11 +18,9 @@ import java.util.function.Predicate;
 @AutoService(Washer.class)
 public class DefaultWasher implements Washer {
 
-    private static final String DEFAULT_TYPE = "DEFAULT-TYPE";
-
     @Override
-    public Predicate<Sequential> cleaning() {
-        return sequential -> !ObjectUtils.isEmpty(sequential.getCode());
+    public Predicate<SequentialContext> cleaning() {
+        return context -> !ObjectUtils.isEmpty(context.getRealSequential().getCode());
     }
 
     @Override
@@ -29,12 +29,13 @@ public class DefaultWasher implements Washer {
     }
 
     @Override
-    public String getType() {
-        return DEFAULT_TYPE;
+    public Type getType() {
+        // 默认匹配所有字符串
+        return new RegexType("[\\s\\S]*");
     }
 
     @Override
-    public boolean contains(String type) {
-        return DEFAULT_TYPE.equals(type);
+    public String description() {
+        return "compare the context -> !ObjectUtils.isEmpty(context.getRealSequential().getCode())";
     }
 }

@@ -1,24 +1,37 @@
 package cc.allio.uno.starter.sequential;
 
-import cc.allio.uno.component.sequential.bus.SequentialMessageBus;
-import cc.allio.uno.component.sequential.process.SpringProcessor;
+import cc.allio.uno.component.sequential.SubscriptionProperties;
+import cc.allio.uno.component.sequential.process.Processor;
+import cc.allio.uno.core.bus.EventBusFactory;
+import cc.allio.uno.core.type.TypeManager;
+import cc.allio.uno.component.sequential.bus.SequentialEventBus;
+import cc.allio.uno.component.sequential.process.DefaultProcessor;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
 
 @Configuration
 @AutoConfigureOrder(Ordered.HIGHEST_PRECEDENCE)
+@EnableConfigurationProperties(SubscriptionProperties.class)
 public class UnoSequentialAutoConfiguration {
 
     @Bean
-    public SpringProcessor springProcessor() {
-        return new SpringProcessor();
+    public SequentialEventBus sequentialEventBus() {
+        SequentialEventBus eventBus = new SequentialEventBus();
+        EventBusFactory.reset(eventBus);
+        return eventBus;
     }
 
+    /**
+     * 依赖于{@link TypeManager}。需要确保容器中存在{@link TypeManager}实例
+     */
     @Bean
-    public SequentialMessageBus sequentialMessageBus() {
-        return new SequentialMessageBus();
+    @ConditionalOnBean({SequentialEventBus.class, TypeManager.class})
+    public Processor springProcessor(SequentialEventBus eventBus, TypeManager typeManager) {
+        return new DefaultProcessor(typeManager);
     }
 
 }

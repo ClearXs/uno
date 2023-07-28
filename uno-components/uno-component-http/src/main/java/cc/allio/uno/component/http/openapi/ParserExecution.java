@@ -1,6 +1,6 @@
 package cc.allio.uno.component.http.openapi;
 
-import cc.allio.uno.core.util.ClassUtil;
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.Requires;
 
 import java.security.AccessController;
@@ -27,7 +27,7 @@ public class ParserExecution {
      * @see #execute(Class, String, ParserContext)
      */
     public <T> T execute(Class<? extends Parser<T>> expectParser, String unresolved, ParserContext context) {
-        String genericClassName = ClassUtil.getSingleGenericClassName(expectParser);
+        String genericClassName = ClassUtils.getSingleGenericClassName(expectParser);
         Object target = execute(expectParser.getName(), unresolved, context);
         return AccessController.doPrivileged((PrivilegedAction<T>) () -> {
             ClassLoader currentClassLoader = Thread.currentThread().getContextClassLoader();
@@ -56,7 +56,7 @@ public class ParserExecution {
         synchronized (this) {
             Parser<?> parser = Optional
                     .ofNullable(parserCache.get(expectParser))
-                    .orElseThrow(() -> new NullPointerException(String.format("execution %s without in cache.", expectParser)));
+                    .orElseThrow(() -> new NullPointerException(String.format("execution %s without in store.", expectParser)));
             // 解析前动作
             parser.preParse(context);
             // 解析时动作

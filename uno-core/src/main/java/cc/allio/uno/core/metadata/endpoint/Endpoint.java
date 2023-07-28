@@ -1,45 +1,25 @@
 package cc.allio.uno.core.metadata.endpoint;
 
-import cc.allio.uno.core.metadata.Metadata;
 import cc.allio.uno.core.metadata.endpoint.source.*;
+import cc.allio.uno.core.metadata.Metadata;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.ApplicationContextAware;
 
-import java.util.List;
-import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * <b>数据接入的端点。</b>
  * <p>
- * 使其称为Spring-Bean，在Bean初始化时调用{@link #open()}方法，对{@link #registerSource(JsonSource...)}注册的数据源进行注册
+ * 使其称为Spring-Bean，在Bean初始化时调用{@link #open()}方法，对{@link AggregationSource#registerSources(Source[])} 注册的数据源进行注册
  * </p>
  *
  * @author jiangwei
  * @date 2022/9/27 15:14
  * @since 1.1.0
  */
-public interface Endpoint<T extends Metadata> extends InitializingBean, DisposableBean {
-
-    /**
-     * 注册数据源对象
-     *
-     * @param source 数据源对象实例
-     */
-    void registerSource(JsonSource... source);
-
-    /**
-     * 获取已经注册的所有数据源
-     *
-     * @return 数据源集合
-     */
-    List<JsonSource> getSources();
-
-    /**
-     * 根据指定类型的获取对应的数据源
-     *
-     * @return 数据源
-     */
-    <S extends JsonSource> Optional<S> getSource(Class<S> sourceClass);
+public interface Endpoint<T extends Metadata> extends AggregationSource<T, JsonSource>, InitializingBean, DisposableBean, ApplicationContextAware {
 
     /**
      * 设置数据源搜集器
@@ -49,6 +29,13 @@ public interface Endpoint<T extends Metadata> extends InitializingBean, Disposab
     void setCollector(SourceCollector<T> collector);
 
     /**
+     * 获取收集器
+     *
+     * @return SourceCollector
+     */
+    SourceCollector<T> getCollector();
+
+    /**
      * 设置数据源转换器
      *
      * @param converter 转换器实例
@@ -56,14 +43,21 @@ public interface Endpoint<T extends Metadata> extends InitializingBean, Disposab
     void setConverter(SourceConverter<T> converter);
 
     /**
+     * 获取转换器
+     *
+     * @return SourceConverter
+     */
+    SourceConverter<T> getConverter();
+
+    /**
      * 端点初始化时进行调用
      */
-    void open();
+    void open() throws Exception;
 
     /**
      * 端点关闭时进行调用
      */
-    void close();
+    void close() throws Exception;
 
     @Override
     default void afterPropertiesSet() throws Exception {
@@ -73,5 +67,15 @@ public interface Endpoint<T extends Metadata> extends InitializingBean, Disposab
     @Override
     default void destroy() throws Exception {
         close();
+    }
+
+    @Override
+    default void subscribe(Consumer<T> next) {
+        throw new UnsupportedOperationException("Endpoint un support operation");
+    }
+
+    @Override
+    default void register(ApplicationContext context) {
+        throw new UnsupportedOperationException("Endpoint un support operation");
     }
 }

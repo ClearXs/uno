@@ -28,9 +28,9 @@ public class UnoKafkaManagement {
         return new UnoKafkaSender(KafkaSender.create(SenderOptions.create(producerProperties)));
     }
 
-    public UnoKafkaSender createSender(Duration duration) {
+    public UnoKafkaSender createSender(Duration timeout) {
         Properties producerProperties = kafkaProperties.getProducer().toProperties(kafkaProperties.getBootstraps());
-        return new UnoKafkaSender(KafkaSender.create(SenderOptions.create(producerProperties)), duration);
+        return new UnoKafkaSender(KafkaSender.create(SenderOptions.create(producerProperties)), timeout);
     }
 
     public UnoKafkaReceiver createReceive(String... topics) {

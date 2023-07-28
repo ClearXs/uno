@@ -4,9 +4,12 @@ import cc.allio.uno.component.sequential.convert.TestSequentialConvert;
 import cc.allio.uno.core.metadata.mapping.DefaultMappingMetadata;
 import cc.allio.uno.core.metadata.mapping.MappingField;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
+import cc.allio.uno.core.type.DefaultType;
+import cc.allio.uno.core.type.Type;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.Map;
 import java.util.function.Predicate;
 
 @Data
@@ -27,8 +30,8 @@ public class TestSequential extends BaseSequential {
     }
 
     @Override
-    public String getType() {
-        return "test";
+    public Type getType() {
+        return DefaultType.of("test");
     }
 
     @Override
@@ -54,5 +57,10 @@ public class TestSequential extends BaseSequential {
     @Override
     public MappingMetadata getMapping() {
         return mappingMetadata;
+    }
+
+    @Override
+    public Map<String, Object> getValues() {
+        return null;
     }
 }

@@ -1,8 +1,7 @@
 package cc.allio.uno.gis.config;
 
-import cc.allio.uno.gis.jackson.JtsModule3D;
-import cc.allio.uno.gis.jackson.JacksonProperties;
 import cc.allio.uno.gis.jackson.JtsModule;
+import cc.allio.uno.gis.jackson.JtsModule3D;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.locationtech.jts.geom.GeometryFactory;
@@ -13,11 +12,11 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration(proxyBeanMethods = false)
 @AllArgsConstructor
-@EnableConfigurationProperties(JacksonProperties.class)
+@EnableConfigurationProperties(UnoGisProperties.class)
 public class UnoGisJacksonAutoConfiguration implements InitializingBean {
 
     private final ObjectMapper objectMapper;
-    private final JacksonProperties jacksonProperties;
+    private final UnoGisProperties gisProperties;
 
     @Override
     public void afterPropertiesSet() throws Exception {
@@ -29,7 +28,7 @@ public class UnoGisJacksonAutoConfiguration implements InitializingBean {
     }
 
     public GeometryFactory geometryFactory() {
-        return new GeometryFactory(precisionModel(), jacksonProperties.getDefaultSRID());
+        return new GeometryFactory(precisionModel(), gisProperties.getDefaultSrid());
     }
 
     public PrecisionModel precisionModel() {

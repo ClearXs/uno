@@ -1,11 +1,12 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.geom.GeometryCollection;
 import org.locationtech.jts.geom.GeometryFactory;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.GEOMETRIES;
 
 
 /**
@@ -31,6 +32,6 @@ public class GeometryCollectionParser extends BaseParser implements GeometryPars
 	@Override
 	public GeometryCollection geometryFromJson(JsonNode node) throws JsonMappingException {
 		return geometryFactory.createGeometryCollection(
-			geometriesFromJson(node.get(GeoJson.GEOMETRIES)));
+			geometriesFromJson(node.get(GEOMETRIES)));
 	}
 }

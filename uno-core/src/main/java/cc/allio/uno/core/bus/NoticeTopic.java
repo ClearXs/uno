@@ -1,8 +1,11 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.bus.event.EventNode;
+import cc.allio.uno.core.bus.event.Node;
+import com.google.common.collect.Maps;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
+import java.util.Map;
 import java.util.function.Supplier;
 
 /**
@@ -17,35 +20,42 @@ public class NoticeTopic<C> extends AbstractTopic<C> implements Comparable<Topic
     /**
      * 维护Topic-Node之间关系
      */
-    private Notice<C> notice;
+    private final Map<Subscription, Notice<C>> notice;
 
-    public NoticeTopic(Subscription subscription) {
-        super(subscription.getPath());
-        this.notice = new Notice<>(subscription);
+    public NoticeTopic(String path) {
+        super(path);
+        this.notice = Maps.newConcurrentMap();
     }
 
     @Override
-    public void exchange(Supplier<C> supplier) {
-        notice.notify(supplier);
+    public synchronized Mono<Node<C>> addSubscriber(Subscription subscription) {
+        return notice.computeIfAbsent(subscription, s -> new Notice<>(subscription)).getAsyncNode();
     }
 
     @Override
-    public Mono<EventNode<C>> findNode() {
-        return notice.getAsyncNode();
+    public Flux<C> exchange(Supplier<C> supplier) {
+        return Flux.fromIterable(notice.values())
+                .flatMap(n -> n.notify(supplier));
     }
 
     @Override
-    public void discard(Long listener) {
-        if (notice != null) {
-            notice.releaseListener(listener);
+    public Flux<Node<C>> findNode() {
+        return Flux.fromIterable(notice.values())
+                .flatMap(Notice::getAsyncNode);
+    }
+
+    @Override
+    public synchronized void discard(Long listener) {
+        for (Notice<C> n : notice.values()) {
+            n.releaseListener(listener);
         }
     }
 
     @Override
-    public void discardAll() {
-        notice.disappear();
+    public synchronized void discardAll() {
+        notice.forEach((k, v) -> v.disappear().subscribe());
         // help gc
-        notice = null;
+        notice.clear();
     }
 
     @Override

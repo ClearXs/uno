@@ -1,7 +1,7 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.DatasourceTestEnvironment;
-import cc.allio.uno.test.env.MybatisPlusTestEnvironment;
+import cc.allio.uno.test.env.DataSourceEnvironment;
+import cc.allio.uno.test.env.MybatisPlusEnvironment;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.stereotype.Service;
@@ -14,13 +14,15 @@ import java.lang.annotation.*;
  * @author jiangwei
  * @date 2022/10/28 16:28
  * @since 1.1.0
+ * @deprecated 自1.1.4版本之后删除，使用cc.allio.uno.test.env.anno包下的注解构建环境
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @RunTest(envs = {
-        @RunTest.Environment(env = DatasourceTestEnvironment.class),
-        @RunTest.Environment(env = MybatisPlusTestEnvironment.class)}, components = RunServiceTest.Scan.class)
+        @RunTest.Environment(env = DataSourceEnvironment.class),
+        @RunTest.Environment(env = MybatisPlusEnvironment.class)}, components = RunServiceTest.Scan.class)
+@Deprecated
 public @interface RunServiceTest {
 
     /**
@@ -30,7 +32,7 @@ public @interface RunServiceTest {
      */
     Class<?> mapperScan();
 
-    @ComponentScan(basePackages = "cc.allio.uno.**.service.**", includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Service.class))
+    @ComponentScan(basePackages = "cc.allio.**.service.**", includeFilters = @ComponentScan.Filter(type = FilterType.ANNOTATION, value = Service.class))
     class Scan {
 
     }

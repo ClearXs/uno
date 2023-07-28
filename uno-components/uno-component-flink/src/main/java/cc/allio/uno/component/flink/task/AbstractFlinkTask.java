@@ -1,6 +1,6 @@
 package cc.allio.uno.component.flink.task;
 
-import cc.allio.uno.component.flink.*;
+import cc.allio.uno.component.flink.UnoFlinkProperties;
 import cc.allio.uno.core.task.Task;
 import cc.allio.uno.core.util.CoreBeanUtil;
 import lombok.extern.slf4j.Slf4j;

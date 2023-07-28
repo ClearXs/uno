@@ -38,7 +38,7 @@ public class DefaultChain<IN, OUT> implements Chain<IN, OUT> {
     }
 
     @Override
-    public Mono<OUT> proceed(ChainContext<IN> context) throws Throwable {
+    public Mono<OUT> proceed(ChainContext<IN> context) {
         return Mono.defer(() -> {
                     if (index < nodes.size()) {
                         Node<IN, OUT> node = nodes.get(index);

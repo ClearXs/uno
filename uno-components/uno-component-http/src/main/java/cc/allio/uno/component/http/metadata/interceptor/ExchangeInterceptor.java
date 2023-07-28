@@ -57,8 +57,7 @@ public class ExchangeInterceptor implements Interceptor {
         // cookie
         requestBody.cookies(cookies -> cookies.putAll(requestMetadata.getCookies()));
         // request-body
-        HttpRequestBody decorationBody = HttpRequestBodyRegistry.getSharedInstance()
-                .getHttpRequestBody(requestMetadata);
+        HttpRequestBody decorationBody = HttpRequestBodyRegistry.getSharedInstance().getHttpRequestBody(requestMetadata);
         if (decorationBody != null) {
             requestBody.body(decorationBody.getBody(requestMetadata));
         }

@@ -1,11 +1,12 @@
 package cc.allio.uno.gis.jackson.parsers;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.locationtech.jts.geom.GeometryFactory;
 import org.locationtech.jts.geom.LineString;
 import org.locationtech.jts.geom.MultiLineString;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.COORDINATES;
 
 /**
  * Created by mihaildoronin on 11/11/15.
@@ -18,7 +19,7 @@ public class MultiLineStringParser extends BaseParser implements GeometryParser<
 
 	public MultiLineString multiLineStringFromJson(JsonNode root) {
 		return geometryFactory.createMultiLineString(
-			lineStringsFromJson(root.get(GeoJson.COORDINATES)));
+			lineStringsFromJson(root.get(COORDINATES)));
 	}
 
 	private LineString[] lineStringsFromJson(JsonNode array) {

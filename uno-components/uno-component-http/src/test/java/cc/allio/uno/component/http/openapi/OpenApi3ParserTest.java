@@ -1,6 +1,6 @@
 package cc.allio.uno.component.http.openapi;
 
-import cc.allio.uno.core.util.FileUtil;
+import cc.allio.uno.core.util.FileUtils;
 import cc.allio.uno.test.BaseTestCase;
 import io.swagger.v3.oas.models.OpenAPI;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void openApiV3Parser() {
-        FileUtil.readFileToString("classpath:openapi/open_api_v3_example.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/open_api_v3_example.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.3", api.getOpenapi());
         });
@@ -39,7 +39,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void testJetlinksSystemApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/系统管理相关接口_OpenAPI.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/系统管理相关接口_OpenAPI.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });
@@ -51,7 +51,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void testJetlinksRuleEngineApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/规则引擎相关接口_OpenAPI.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/规则引擎相关接口_OpenAPI.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });
@@ -63,7 +63,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void testJetlinksDeviceReceiveApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/设备接入相关接口_OpenAPI.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/设备接入相关接口_OpenAPI.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });
@@ -74,7 +74,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void testJetlinksDeviceManageApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/设备管理相关接口_OpenAPI.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/设备管理相关接口_OpenAPI.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });
@@ -85,7 +85,7 @@ class OpenApi3ParserTest extends BaseTestCase {
      */
     @Test
     void testJetlinksNotifyManageApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/通知管理相关接口_OpenAPI.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/通知管理相关接口_OpenAPI.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });
@@ -93,7 +93,7 @@ class OpenApi3ParserTest extends BaseTestCase {
 
     @Test
     void testJetlinksApi() {
-        FileUtil.readFileToString("classpath:openapi/jetlinks/Jetlinks.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/jetlinks/Jetlinks.json", apiJson -> {
             OpenAPI api = OpenApiSpecificationParser.holder().parseV3(apiJson);
             assertEquals("3.0.1", api.getOpenapi());
         });

@@ -1,9 +1,9 @@
 package cc.allio.uno.core.util.template.expression;
 
 import cc.allio.uno.core.util.template.GenericTokenParser;
-import cc.allio.uno.core.util.type.Types;
 import cc.allio.uno.core.util.template.TokenParser;
 import cc.allio.uno.core.util.template.Tokenizer;
+import cc.allio.uno.core.type.Types;
 
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
@@ -20,7 +20,7 @@ public class ListInterchange extends BaseInterchange implements ListableIntercha
     private final TokenParser tokenParser = new GenericTokenParser(Tokenizer.SMALL_BRACKETS);
 
     @Override
-    protected Object onChange(String text, Object value) {
+    protected Object onChange(String text, Object value, boolean langsym) {
         List<?> listable = (List<?>) value;
         // get index
         AtomicReference<Integer> indexRef = new AtomicReference<>();
@@ -29,7 +29,7 @@ public class ListInterchange extends BaseInterchange implements ListableIntercha
             return content;
         });
         Integer index = indexRef.get();
-        return listable.get(index);
+        return reValue(listable.get(index), langsym);
     }
 
     @Override

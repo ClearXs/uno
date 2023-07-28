@@ -9,9 +9,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 /**
- *实现设备历史监测数据进行导出时候，调用该类方法进行导出表格表头的生成
+ * 实现设备历史监测数据进行导出时候，调用该类方法进行导出表格表头的生成
  *
  * @author cxd
  * @date 2022/12/30 22:49
@@ -53,7 +52,7 @@ public class CellHeader {
         }
         this.timeField = timeField;
         this.dataField = dataField;
-        this.contemporaneous=contemporaneous;
+        this.contemporaneous = contemporaneous;
     }
 
 

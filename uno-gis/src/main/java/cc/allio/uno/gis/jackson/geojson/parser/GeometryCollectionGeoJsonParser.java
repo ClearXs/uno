@@ -1,20 +1,21 @@
 package cc.allio.uno.gis.jackson.geojson.parser;
 
-import cc.allio.uno.gis.jackson.geojson.GeoJson;
-import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonGeometries;
-import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonBeanAnnotated;
+import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonGeometries;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.JavaType;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.google.common.collect.ListMultimap;
+import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import cc.allio.uno.core.annotation.document.DocumentFactoryException;
 import cc.allio.uno.core.annotation.Annotated;
 
 import java.io.IOException;
 import java.lang.annotation.Annotation;
+
+import static cc.allio.uno.gis.jackson.geojson.GeoJson.GEOMETRIES;
 
 
 /**
@@ -36,7 +37,7 @@ public class GeometryCollectionGeoJsonParser<T> extends BaseIgnoreDeserializerOb
 		ObjectMapper mapper = (ObjectMapper) jsonParser.getCodec();
 		ObjectNode nodeObject = mapper.readTree(jsonParser);
 		// 取JSON数组
-		ArrayNode geometries = nodeObject.withArray(GeoJson.GEOMETRIES);
+		ArrayNode geometries = nodeObject.withArray(GEOMETRIES);
 		// 创建ObjectNode
 		ObjectMapper copyMapper = getIgnoreDeserializerAnnotationMapper(mapper);
 		ObjectNode objectNode = copyMapper.createObjectNode();

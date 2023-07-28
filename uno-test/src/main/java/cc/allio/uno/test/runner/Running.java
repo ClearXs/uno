@@ -8,10 +8,12 @@ import java.lang.annotation.*;
  * @author jiangwei
  * @date 2022/10/28 16:32
  * @since 1.1.0
+ * @deprecated 自1.1.4版本后删除
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.ANNOTATION_TYPE)
+@Deprecated
 public @interface Running {
 
     /**

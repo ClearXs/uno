@@ -6,12 +6,8 @@ import org.junit.jupiter.api.Test;
 
 class TestSequentialConvertTest extends BaseTestCase {
 
-    TestSequentialConvert converter;
+    TestSequentialConvert converter = new TestSequentialConvert(TestSequential.class);;
 
-    @Override
-    protected void onInit() {
-        converter = new TestSequentialConvert(TestSequential.class);
-    }
 
     @Test
     void testConvertType() {
@@ -29,8 +25,4 @@ class TestSequentialConvertTest extends BaseTestCase {
         });
     }
 
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

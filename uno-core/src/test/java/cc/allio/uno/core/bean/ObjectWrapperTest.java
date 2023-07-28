@@ -4,6 +4,8 @@ import cc.allio.uno.core.User;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
 
+import java.util.Map;
+
 public class ObjectWrapperTest {
 
     @Test
@@ -43,5 +45,16 @@ public class ObjectWrapperTest {
                 .as(StepVerifier::create)
                 .expectNext("name1")
                 .verifyComplete();
+    }
+
+    @Test
+    void testGetAllValues() {
+        User user = new User();
+        user.setName("name");
+        user.setType("type");
+        ObjectWrapper wrapper = new ObjectWrapper(user);
+        Map<String, Object> allValuesForce = wrapper.findAllValuesForce();
+        System.out.println(allValuesForce);
+
     }
 }

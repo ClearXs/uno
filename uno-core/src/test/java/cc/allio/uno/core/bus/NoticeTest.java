@@ -1,9 +1,9 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.BaseTestCase;
-import cc.allio.uno.core.bus.event.EventNode;
-import cc.allio.uno.core.bus.event.LiftEvent;
 import cc.allio.uno.core.bus.event.EmitEvent;
+import cc.allio.uno.core.bus.event.LiftEvent;
+import cc.allio.uno.core.bus.event.Node;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Mono;
@@ -28,7 +28,7 @@ class NoticeTest extends BaseTestCase {
 
     @Test
     void testOnNotify() {
-        Mono<EventNode<TestMessageContext>> mono = notice.getAsyncNode();
+        Mono<Node<TestMessageContext>> mono = notice.getAsyncNode();
         mono.doOnNext(node ->
                         node.reply(EmitEvent.class, message -> assertEquals("test", message.get("test").get())))
                 .then(Mono.just(new TestMessageContext()))
@@ -38,7 +38,7 @@ class NoticeTest extends BaseTestCase {
 
     @Test
     void testDisappear() {
-        Mono<EventNode<TestMessageContext>> mono = notice.getAsyncNode();
+        Mono<Node<TestMessageContext>> mono = notice.getAsyncNode();
         mono.doOnNext(node -> node.reply(LiftEvent.class, o -> log.info("discard this node"))).subscribe();
         assertDoesNotThrow(() -> notice.disappear());
     }
@@ -48,7 +48,7 @@ class NoticeTest extends BaseTestCase {
      */
     @Test
     void testBatchSubscription() {
-        Mono<EventNode<TestMessageContext>> mono = notice.getAsyncNode();
+        Mono<Node<TestMessageContext>> mono = notice.getAsyncNode();
         mono.doOnNext(node -> {
                     for (int i = 0; i < 100; i++) {
                         if (i % 2 == 0) {
@@ -74,7 +74,7 @@ class NoticeTest extends BaseTestCase {
      */
     @Test
     void testCustomizeEvent() {
-        Mono<EventNode<TestMessageContext>> mono = notice.getAsyncNode();
+        Mono<Node<TestMessageContext>> mono = notice.getAsyncNode();
         mono.doOnNext(node -> node.reply(TestTopicEvent.class, context -> log.info("Customize event callback")))
                 .then(Mono.just(context))
                 .doOnNext(context -> notice.load(TestTopicEvent.class, context))
@@ -91,7 +91,7 @@ class NoticeTest extends BaseTestCase {
         timing();
         ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);
         for (int i = 0; i < 100000; i++) {
-            EventNode<TestMessageContext> node = notice.getNode();
+            Node<TestMessageContext> node = notice.getNode();
             if (i % 2 == 0) {
                 executor.submit(() -> {
                     node.reply(EmitEvent.class, context -> assertEquals("test", context.get("test").get()));

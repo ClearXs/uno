@@ -2,6 +2,7 @@ package cc.allio.uno.component.sequential;
 
 import cc.allio.uno.core.metadata.CompositeMetadata;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
+import cc.allio.uno.core.type.Type;
 
 import java.util.Map;
 import java.util.function.Predicate;
@@ -16,7 +17,7 @@ import java.util.function.Predicate;
 public interface CompositeSequential extends CompositeMetadata<Sequential>, Sequential {
 
     @Override
-    default String getType() {
+    default Type getType() {
         return null;
     }
 
@@ -41,7 +42,7 @@ public interface CompositeSequential extends CompositeMetadata<Sequential>, Sequ
     }
 
     @Override
-    default Map<String, Object> getUndefinedValues() {
+    default Map<String, Object> getValues() {
         return null;
     }
 }

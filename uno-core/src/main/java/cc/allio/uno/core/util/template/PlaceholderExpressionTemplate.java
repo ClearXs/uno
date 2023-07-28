@@ -1,8 +1,8 @@
 package cc.allio.uno.core.util.template;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.util.template.expression.SymbolEngine;
 import cc.allio.uno.core.util.template.expression.Engine;
+import cc.allio.uno.core.util.template.expression.SymbolEngine;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
@@ -41,21 +41,26 @@ public class PlaceholderExpressionTemplate implements ExpressionTemplate {
 
     private final TokenParser tokenParser;
     private final Engine engine;
+    private final boolean langsym;
 
     PlaceholderExpressionTemplate(Tokenizer tokenizer) {
+        this(tokenizer, false);
+    }
+
+    PlaceholderExpressionTemplate(Tokenizer tokenizer, boolean langsym) {
         this.tokenParser = new GenericTokenParser(tokenizer);
         this.engine = new SymbolEngine(StringPool.DOT);
+        this.langsym = langsym;
     }
 
     @Override
     public String parseTemplate(@NonNull String template, @NonNull Object target) {
         return tokenParser.parse(template, expression -> {
             try {
-                return engine.run(expression, target);
+                return engine.run(expression, target, langsym);
             } catch (Throwable e) {
                 return expression;
             }
-
         });
     }
 

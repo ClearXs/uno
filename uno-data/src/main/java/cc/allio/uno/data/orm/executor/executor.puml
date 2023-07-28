@@ -1,0 +1,72 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface SQLCommandExecutor {
+}
+
+class MybatisCommandExecutor implements SQLCommandExecutor {}
+
+class EsSQLCommandExecutor implements SQLCommandExecutor {}
+
+class InfluxDBSQLCommandExecutor implements SQLCommandExecutor {}
+
+interface ResultSetHandler extends Function {}
+
+class BeanResultSetHandler implements ResultSetHandler {}
+class BoolResultHandler implements ResultSetHandler {}
+class DefaultResultSetHandler implements ResultSetHandler {}
+class MapResultSetHandler implements ResultSetHandler {}
+
+interface ListResultSetHandler extends Function {}
+class DefaultListResultSetHandler implements ListResultSetHandler {}
+class ListBeanResultSetHandler implements ListResultSetHandler {}
+class ListMapResultHandler implements ListResultSetHandler {}
+class SQLColumnDefListResultSetHandler implements ListResultSetHandler {}
+
+class ResultSet implements Iterable {
+
+}
+
+class ResultGroup {
+    List<ResultRow> resultRows;
+    Map<String, ResultRow> resultRowMap;
+    void addRow(ResultRow row);
+    void addAllRows(Collection<ResultRow> resultRows);
+    ResultRow getRow(int index);
+    ResultRow getRow(String columnName);
+    ResultRow getRow(MethodReferenceColumn<?> ref);
+    <T> T toEntity(Class<T> entity);
+    Map<String, Object> toMap();
+    String toJson();
+}
+
+class ResultRow {
+    int index;
+    SQLName column;
+    Object value;
+    JDBCType jdbcType;
+    JavaType<?> javaType;
+}
+
+class SQLColumnDef {
+    SQLName sqlName;
+    String comment;
+    DataType dataType;
+    boolean isPk;
+    boolean isFk;
+    boolean isNonNull;
+    boolean isNull;
+    boolean isUnique;
+}
+
+
+ResultRow *-- ResultGroup : use
+ResultGroup *-- ResultSet : use
+ResultSet *-- ResultSetHandler : use
+ResultSet *-- ListResultSetHandler : use
+SQLColumnDef *-- ResultSetHandler : use
+SQLColumnDef *-- ListResultSetHandler : use
+
+ResultSetHandler *-- SQLCommandExecutor : use
+ListResultSetHandler *-- SQLCommandExecutor : use
+@enduml

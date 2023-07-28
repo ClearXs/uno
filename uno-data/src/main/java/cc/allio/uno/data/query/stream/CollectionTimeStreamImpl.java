@@ -1,7 +1,9 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.data.query.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 /**
  * 读取某个集合数据流
@@ -13,6 +15,10 @@ import reactor.core.publisher.Flux;
 public class CollectionTimeStreamImpl<T> implements CollectionTimeStream<T> {
 
     private final Flux<T> c;
+
+    public CollectionTimeStreamImpl(List<T> c) {
+        this.c = Flux.fromIterable(c);
+    }
 
     public CollectionTimeStreamImpl(Flux<T> c) {
         this.c = c;

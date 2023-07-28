@@ -1,0 +1,35 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+interface OperatorMetadata {
+    SQLQueryOperator query(DBType dbType);
+    SQLInsertOperator insert(DBType dbType);
+    SQLUpdateOperator update(DBType dbType);
+    SQLDeleteOperator delete(DBType dbType);
+    SQLCreateTableOperator createTable(DBType dbType);
+    SQLDropTableOperator dropTable(DBType dbType);
+    SQLExistTableOperator existTable(DBType dbType);
+    SQLShowColumnsOperator showColumns(DBType dbType);
+    OperatorMetadataKey getKey();
+}
+
+class OperatorMetadataKey {}
+
+class DruidOperatorMetadata implements OperatorMetadata {}
+
+class ElasticSearchOperatorMetadata implements OperatorMetadata {}
+
+class SQLOperatorFactory {
+    Map<OperatorMetadataKey, OperatorMetadata> CACHES = Maps.newHashMapWithExpectedSize(3);
+    <T extends OperatorMetadata> T getSystemOperatorMetadata();
+    <T extends OperatorMetadata> T getOperatorMetadata(OperatorMetadataKey operatorKey);
+    <T extends SQLOperator<T>> T getSQLOperator(Class<T> operatorClass);
+    <T extends SQLOperator<T>> T getSQLOperator(Class<T> operatorClass, OperatorMetadataKey operatorKey);
+    <T extends SQLOperator<T>> T getSQLOperator(Class<T> operatorClass, DBType dbType);
+    <T extends SQLOperator<T>> T getSQLOperator(Class<T> operatorClass, OperatorMetadataKey operatorKey, DBType dbType);
+}
+OperatorMetadataKey *-- OperatorMetadata : use
+
+OperatorMetadata *-- SQLOperatorFactory : use
+
+@enduml

@@ -1,10 +1,10 @@
 package cc.allio.uno.gis.jackson.geojson.introspector;
 
-import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
-import cc.allio.uno.gis.jackson.geojson.serializer.GeoJsonSerializer;
 import com.fasterxml.jackson.databind.introspect.Annotated;
 import com.fasterxml.jackson.databind.introspect.JacksonAnnotationIntrospector;
 import com.google.common.collect.Maps;
+import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
+import cc.allio.uno.gis.jackson.geojson.serializer.GeoJsonSerializer;
 
 import java.util.Map;
 

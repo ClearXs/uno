@@ -1,8 +1,8 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.DatasourceTestEnvironment;
-import cc.allio.uno.test.env.MybatisPlusTestEnvironment;
-import cc.allio.uno.test.env.MybatisTestEnvironment;
+import cc.allio.uno.test.env.DataSourceEnvironment;
+import cc.allio.uno.test.env.MybatisEnvironment;
+import cc.allio.uno.test.env.MybatisPlusEnvironment;
 
 import java.lang.annotation.*;
 
@@ -12,14 +12,16 @@ import java.lang.annotation.*;
  * @author jiangwei
  * @date 2022/10/28 16:30
  * @since 1.1.0
+ * @deprecated 自1.1.4版本之后删除，使用cc.allio.uno.test.env.anno包下的注解构建环境
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @RunTest(envs = {
-        @RunTest.Environment(env = DatasourceTestEnvironment.class),
-        @RunTest.Environment(env = MybatisPlusTestEnvironment.class),
-        @RunTest.Environment(env = MybatisTestEnvironment.class)})
+        @RunTest.Environment(env = DataSourceEnvironment.class),
+        @RunTest.Environment(env = MybatisPlusEnvironment.class),
+        @RunTest.Environment(env = MybatisEnvironment.class)})
+@Deprecated
 public @interface RunMapperTest {
 
     /**

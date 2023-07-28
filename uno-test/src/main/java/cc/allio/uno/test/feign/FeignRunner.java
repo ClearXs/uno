@@ -1,6 +1,6 @@
 package cc.allio.uno.test.feign;
 
-import cc.allio.uno.test.BaseCoreTest;
+import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.runner.RefreshCompleteRunner;
 import com.google.common.collect.Sets;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
@@ -38,7 +38,7 @@ import java.util.stream.Collectors;
 public class FeignRunner implements RefreshCompleteRunner {
 
     @Override
-    public void run(BaseCoreTest coreTest) throws Throwable {
+    public void onRefreshComplete(CoreTest coreTest) throws Throwable {
         ClassPathScanningCandidateComponentProvider scanner = new ClassPathScanningCandidateComponentProvider(false, coreTest.getContext().getEnvironment());
         scanner.setResourceLoader(coreTest.getContext());
         scanner.addIncludeFilter(new AnnotationTypeFilter(FeignClient.class));

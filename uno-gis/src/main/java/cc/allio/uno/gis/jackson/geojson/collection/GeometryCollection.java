@@ -1,11 +1,11 @@
 package cc.allio.uno.gis.jackson.geojson.collection;
 
-import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonGeometries;
-import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import org.locationtech.jts.geom.Geometry;
+import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonGeometries;
 import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonType;
+import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 import cc.allio.uno.gis.jackson.geojson.serializer.FeatureType;
 import cc.allio.uno.gis.jackson.geojson.serializer.GeoJsonSerializer;
 

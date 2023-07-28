@@ -1,8 +1,8 @@
 package cc.allio.uno.core.metadata;
 
-import cc.allio.uno.core.metadata.convert.ConverterFactory;
 import cc.allio.uno.core.User;
-import cc.allio.uno.uno.core.metadata.mapping.*;
+import cc.allio.uno.core.metadata.convert.ConverterFactory;
+import cc.allio.uno.core.metadata.mapping.*;
 import com.google.common.collect.Maps;
 import reactor.core.publisher.Mono;
 
@@ -27,7 +27,7 @@ public class UserMetadata extends User implements Metadata {
     }
 
     @Override
-    public Map<String, Object> getUndefinedValues() {
+    public Map<String, Object> getValues() {
         return null;
     }
 

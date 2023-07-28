@@ -1,9 +1,9 @@
 package cc.allio.uno.data.query.stream;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.util.type.Types;
-import cc.allio.uno.data.query.QueryFilter;
-import cc.allio.uno.data.query.QueryWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.core.type.Types;
+import cc.allio.uno.data.query.mybatis.QueryFilter;
+import cc.allio.uno.data.query.mybatis.QueryWrapper;
 import cc.allio.uno.data.query.param.QuerySetting;
 import reactor.core.publisher.Flux;
 
@@ -35,7 +35,7 @@ public class OutliersIgnoreTimeStream<T> extends FunctionalityTimeStream<T> {
         return source
                 // 空数据和负值过滤
                 .filter(o -> {
-                    ObjectWrapper wrapper = new ObjectWrapper(o);
+                    ValueWrapper wrapper = ValueWrapper.get(o);
                     boolean dataNotEmpty = true;
                     for (String dataField : dataFields) {
                         Object value = wrapper.getForce(dataField);

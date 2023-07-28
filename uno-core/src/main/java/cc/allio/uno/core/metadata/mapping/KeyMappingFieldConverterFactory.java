@@ -16,11 +16,16 @@ public class KeyMappingFieldConverterFactory {
     private KeyMappingFieldConverterFactory() {
     }
 
-    public static Map<String, MappingFieldConverter<?>> mappingFieldConverter = Maps.newHashMap();
+    private static final Map<String, MappingFieldConverter<?>> mappingFieldConverterCaches = Maps.newHashMap();
 
     static {
-        mappingFieldConverter.put(MappingFieldConverter.ARRAY_STRING_MAPPING_FIELD, new ArrayStringMappingFieldConverter());
-        mappingFieldConverter.put(MappingFieldConverter.GENERIC_FIELD_MAPPING_FIELD, new DefaultMappingFieldConverter());
+        putMappingFieldConverter(MappingFieldConverter.ARRAY_STRING_MAPPING_FIELD, new ArrayStringMappingFieldConverter());
+        putMappingFieldConverter(MappingFieldConverter.GENERIC_FIELD_MAPPING_FIELD, new DefaultMappingFieldConverter());
+    }
+
+
+    public static void putMappingFieldConverter(String keyConverter, MappingFieldConverter<?> mappingFieldConverter) {
+        mappingFieldConverterCaches.put(keyConverter, mappingFieldConverter);
     }
 
     /**
@@ -29,6 +34,6 @@ public class KeyMappingFieldConverterFactory {
      * @return MappingFieldConverter
      */
     public static MappingFieldConverter<?> getMappingFieldConverter(String keyConverter) {
-        return mappingFieldConverter.get(keyConverter);
+        return mappingFieldConverterCaches.get(keyConverter);
     }
 }

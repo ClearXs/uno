@@ -1,32 +1,32 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.DatasourceTestEnvironment;
-import cc.allio.uno.test.env.MybatisPlusTestEnvironment;
-import cc.allio.uno.test.env.TestSpringEnvironmentFacade;
+import cc.allio.uno.test.env.DataSourceEnvironment;
+import cc.allio.uno.test.env.MybatisPlusEnvironment;
+import cc.allio.uno.test.env.EnvironmentFacade;
 import org.apache.ibatis.session.Configuration;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 
 @RunTest(envs = {
-        @RunTest.Environment(env = DatasourceTestEnvironment.class),
-        @RunTest.Environment(env = MybatisPlusTestEnvironment.class)},
+        @RunTest.Environment(env = DataSourceEnvironment.class),
+        @RunTest.Environment(env = MybatisPlusEnvironment.class)},
         components = {RunTestWithTest.TestBean.class},
         profile = "whatever",
         active = "")
-class RunTestWithTest extends BaseCoreTest {
+class RunTestWithTest extends CoreTest {
 
     @Inject
     private TestBean testBean;
 
     @Test
     void testEnvCount() {
-        TestSpringEnvironmentFacade env = getEnv();
+        EnvironmentFacade env = getEnv();
         assertEquals(2, env.size());
     }
 
     @Test
     void testConfigFileReader() {
-        String property = getProperty("automic.uno");
+        String property = getProperty("allio.uno");
         assertEquals("test", property);
     }
 

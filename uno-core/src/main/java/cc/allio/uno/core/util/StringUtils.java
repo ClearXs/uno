@@ -12,6 +12,8 @@ import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -158,7 +160,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
      */
     public static String joinUrl(String templateUrl, Map<String, ?> vars) {
         Requires.isNotNulls(templateUrl, vars);
-        if (Collections.isEmpty(vars)) {
+        if (CollectionUtils.isEmpty(vars)) {
             return templateUrl;
         }
         // 解析占位符个数
@@ -170,14 +172,30 @@ public class StringUtils extends org.springframework.util.StringUtils {
         AtomicReference<String> join = new AtomicReference<>(templateUrl);
         Flux.fromIterable(placeholderParameters)
                 .map(PlaceholderParameter::getName)
+                // {guid}占位符的拼接
                 .doOnNext(placeholder -> {
                     Object value = vars.get(placeholder);
                     vars.remove(placeholder);
-                    String replace = join.get().replace(StringPool.LEFT_BRACE.concat(placeholder).concat(StringPool.RIGHT_BRACE), String.valueOf(value));
+                    String encodeOfParameter = String.valueOf(value);
+                    try {
+                        encodeOfParameter = URLEncoder.encode(encodeOfParameter, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        // ignore
+                    }
+                    String replace = join.get().replace(StringPool.LEFT_BRACE.concat(placeholder).concat(StringPool.RIGHT_BRACE), encodeOfParameter);
                     join.set(replace);
                 })
                 .thenMany(Flux.fromIterable(vars.entrySet()))
-                .map(entity -> entity.getKey().concat(StringPool.EQUALS).concat(String.valueOf(entity.getValue())))
+                // ?par=1&par=2 请求参数的拼接
+                .map(entity -> {
+                    String encodeOfParameter = String.valueOf(entity.getValue());
+                    try {
+                        encodeOfParameter = URLEncoder.encode(encodeOfParameter, "UTF-8");
+                    } catch (UnsupportedEncodingException e) {
+                        // ignore
+                    }
+                    return entity.getKey().concat(StringPool.EQUALS).concat(encodeOfParameter);
+                })
                 .doOnNext(compose -> {
                     String oldUrl = join.get();
                     String newUrl = oldUrl.concat(compose).concat(StringPool.AMPERSAND);
@@ -438,7 +456,6 @@ public class StringUtils extends org.springframework.util.StringUtils {
      *     text: user($p,$p) tokenizer: ()
      *     return $p,$p
      * </pre>
-     *
      *
      * @param text      原始文本数据
      * @param tokenizer Tokenizer

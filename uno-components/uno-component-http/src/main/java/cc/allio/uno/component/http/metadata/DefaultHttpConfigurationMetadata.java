@@ -13,7 +13,7 @@ public class DefaultHttpConfigurationMetadata implements HttpConfigurationMetada
     private String baseUrl;
     private String urlPath;
     private int bufferSize;
-    private Duration timeout = Duration.ofMillis(30000);
+    private Duration timeout = Duration.ofMillis(15000);
 
     @Override
     public String getBaseUrl() {

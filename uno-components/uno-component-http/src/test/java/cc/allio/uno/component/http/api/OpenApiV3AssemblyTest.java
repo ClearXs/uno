@@ -1,11 +1,11 @@
 package cc.allio.uno.component.http.api;
 
+import cc.allio.uno.component.http.metadata.HttpResponseMetadata;
+import cc.allio.uno.component.http.metadata.HttpSwapper;
 import cc.allio.uno.component.http.openapi.OpenApiConverter;
 import cc.allio.uno.component.http.openapi.OpenApiSpecificationParser;
 import cc.allio.uno.component.http.openapi.OpenApiV3Assembly;
-import cc.allio.uno.component.http.metadata.HttpSwapper;
-import cc.allio.uno.component.http.metadata.HttpResponseMetadata;
-import cc.allio.uno.core.util.FileUtil;
+import cc.allio.uno.core.util.FileUtils;
 import cc.allio.uno.test.BaseTestCase;
 import io.swagger.v3.oas.models.OpenAPI;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ class OpenApiV3AssemblyTest extends BaseTestCase {
 
     @Override
     protected void onInit() throws Throwable {
-        FileUtil.readFileToString("classpath:openapi/open_api_v3_example.json", apiJson -> {
+        FileUtils.readSingleFileForceToString("classpath:openapi/open_api_v3_example.json", apiJson -> {
             openAPI = OpenApiSpecificationParser.holder().parseV3(apiJson);
             converter = new OpenApiV3Assembly(openAPI, "localhost:8080", "token");
         });

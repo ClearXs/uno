@@ -2,6 +2,7 @@ package cc.allio.uno.starter.kafka;
 
 import cc.allio.uno.component.kafka.UnoKafkaManagement;
 import cc.allio.uno.component.kafka.UnoKafkaProperties;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,6 +19,7 @@ import org.springframework.context.annotation.Configuration;
 public class UnoKafkaAutoConfiguration {
 
     @Bean
+    @ConditionalOnProperty(prefix = "cc.uno.kafka", value = "enable", havingValue = "true")
     public UnoKafkaManagement unoKafkaManagement(UnoKafkaProperties kafkaProperties) {
         return new UnoKafkaManagement(kafkaProperties);
     }

@@ -1,7 +1,8 @@
 package cc.allio.uno.component.sequential.transform;
 
-import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.core.spi.AutoTypeLoader;
+import cc.allio.uno.component.sequential.context.SequentialContext;
+import cc.allio.uno.core.spi.Loader;
+import cc.allio.uno.core.type.TypeManager;
 import com.google.common.collect.Lists;
 
 import java.util.ArrayList;
@@ -17,12 +18,12 @@ import java.util.Objects;
  */
 public class TransformBuilder {
 
+    private final List<Transducer> transducerGroup;
     /**
      * 转换的数据
      */
-    private Sequential item;
-
-    private final List<Transducer> transducerGroup;
+    private SequentialContext item;
+    private final TypeManager typeManager;
 
     /**
      * 适用于转换的集合
@@ -30,12 +31,12 @@ public class TransformBuilder {
     private static final List<Transducer> TRANSDUCERS;
 
     static {
-        TRANSDUCERS = AutoTypeLoader.loadToList(Transducer.class);
+        TRANSDUCERS = Loader.loadList(Transducer.class);
     }
 
-
-    private TransformBuilder() {
+    private TransformBuilder(TypeManager typeManager) {
         transducerGroup = new ArrayList<>();
+        this.typeManager = typeManager;
     }
 
     /**
@@ -43,8 +44,17 @@ public class TransformBuilder {
      *
      * @return 转换器对象
      */
-    public static TransformBuilder control() {
-        return new TransformBuilder();
+    public static TransformBuilder control(TypeManager typeManager) {
+        return new TransformBuilder(typeManager);
+    }
+
+    /**
+     * 添加一个数据变换器
+     *
+     * @param transducer transducer
+     */
+    public void addTransform(Transducer transducer) {
+        transducerGroup.add(transducer);
     }
 
     /**
@@ -53,7 +63,7 @@ public class TransformBuilder {
      * @param item 转换的数据
      * @return 当前实例对象
      */
-    public TransformBuilder buildItem(Sequential item) {
+    public TransformBuilder buildItem(SequentialContext item) {
         this.item = item;
         return this;
     }
@@ -66,7 +76,7 @@ public class TransformBuilder {
     public TransformBuilder buildTransducer() {
         if (Objects.nonNull(item)) {
             for (Transducer transducer : TRANSDUCERS) {
-                if (transducer.contains(item.getType())) {
+                if (typeManager.match(transducer.getType(), item.getRealSequential().getType())) {
                     transducerGroup.add(transducer);
                 }
             }

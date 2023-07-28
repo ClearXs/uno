@@ -4,7 +4,12 @@ import cc.allio.uno.core.annotation.document.Document;
 import cc.allio.uno.core.annotation.document.DocumentFactory;
 import cc.allio.uno.core.annotation.document.DocumentFactoryException;
 import cc.allio.uno.gis.jackson.geojson.GeoJson;
+import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonType;
 import cc.allio.uno.gis.jackson.geojson.crs.Crs;
+import cc.allio.uno.gis.jackson.geojson.document.FeatureCollectionDocument;
+import cc.allio.uno.gis.jackson.geojson.document.FeatureDocument;
+import cc.allio.uno.gis.jackson.geojson.document.GeometryCollectionDocument;
+import cc.allio.uno.gis.jackson.serialization.GeometrySerializer;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.JsonSerializer;
@@ -12,9 +17,6 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.jsontype.TypeSerializer;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
 import org.locationtech.jts.geom.Geometry;
-import cc.allio.uno.gis.jackson.geojson.annotation.GeoJsonType;
-import cc.allio.uno.gis.jackson.geojson.document.*;
-import cc.allio.uno.gis.jackson.serialization.GeometrySerializer;
 
 import java.io.IOException;
 

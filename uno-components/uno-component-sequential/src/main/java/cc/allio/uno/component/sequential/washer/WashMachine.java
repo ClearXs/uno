@@ -1,11 +1,21 @@
 package cc.allio.uno.component.sequential.washer;
 
+import cc.allio.uno.component.sequential.context.SequentialContext;
 import cc.allio.uno.component.sequential.Sequential;
+import cc.allio.uno.core.reactive.BufferRate;
+import cc.allio.uno.data.orm.executor.SQLCommandExecutor;
+import cc.allio.uno.data.orm.executor.SQLCommandExecutorFactory;
 import com.google.common.collect.Lists;
+import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
+import reactor.core.Disposable;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.*;
-import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * 清洗机器
@@ -16,60 +26,119 @@ import java.util.function.Predicate;
  */
 @Slf4j
 public class WashMachine {
-	private final Queue<Washer> wightWasher;
-	private final Sequential sequential;
 
-	WashMachine(Sequential sequential, List<Washer> washers) {
-		this.wightWasher = new PriorityQueue<>((Comparator.comparingInt(Washer::order)));
-		if (Objects.nonNull(washers)) {
-			this.wightWasher.addAll(Lists.newArrayList(washers));
-		}
-		this.sequential = sequential;
-	}
+    private FluxSink<WasherRecord> recorder;
+    private final Disposable recorderDisposable;
 
-	/**
-	 * <b>启动清洁装置</b></br>
-	 * 按照优先级依次调用清洗器，不存在清洗器时默认返回true
-	 */
-	public boolean start() {
-		boolean result = wightWasher.stream()
-			.map(Washer::cleaning)
-			.reduce(Predicate::and)
-			.orElse(a -> true)
-			.test(sequential);
-		if (!result) {
-			record();
-		}
-		return result;
-	}
+    private final Queue<Washer> wightWasher;
+    private final SequentialContext context;
 
-	public void stop() {
-		this.wightWasher.clear();
-	}
+    WashMachine(SequentialContext sequentialContext, List<Washer> washers) {
+        this.wightWasher = new PriorityQueue<>((Comparator.comparingInt(Washer::order)));
+        if (Objects.nonNull(washers)) {
+            this.wightWasher.addAll(Lists.newArrayList(washers));
+        }
+        this.context = sequentialContext;
+        this.recorderDisposable =
+                BufferRate.create(Flux.<WasherRecord>create(sink -> recorder = sink))
+                        .doOnNext(records -> {
+                            SQLCommandExecutor sqlExecutor = SQLCommandExecutorFactory.getSQLExecutor(SQLCommandExecutor.ELASTICSEARCH_SQL_COMMAND_EXECUTOR_KEY);
+                            if (sqlExecutor != null) {
+                                sqlExecutor.batchInsertPojos(records);
+                            }
+                        })
+                        .onErrorContinue((err, o) -> log.error("the save wash record is failed", err))
+                        .subscribe();
+    }
 
-	/**
-	 * 判断当前清洗装置中是否包含目标的的清洗器
-	 *
-	 * @param target 目标清洗class对象
-	 * @return true存在，false不存在
-	 */
-	public boolean contains(Class<? extends Washer> target) {
-		if (Objects.isNull(target)) {
-			throw new IllegalArgumentException("Target Washer Class type is null");
-		}
-		for (Washer washer : wightWasher) {
-			if (washer.getClass().isAssignableFrom(target)) {
-				return true;
-			}
-		}
-		return false;
-	}
+    /**
+     * <b>启动清洁装置</b></br>
+     * 按照优先级依次调用清洗器，不存在清洗器时默认返回true
+     */
+    public boolean start() {
+        // 满足的条件集合
+        List<Washer> satisfy = Lists.newArrayList();
+        boolean result = true;
+        for (Washer washer : wightWasher) {
+            boolean test = washer.cleaning().test(context);
+            if (!test) {
+                satisfy.add(washer);
+            }
+            result = result && test;
+        }
+        if (!result) {
+            record(satisfy);
+        }
+        return result;
+    }
 
-	/**
-	 * 记录清洁过程的'脏物品'
-	 */
-	public void record() {
-		// TODO 计划使用ES存储这部分脏数据
-		log.warn("Wash Dirty data: {}", sequential);
-	}
+    /**
+     * 清楚清洗器
+     */
+    public void stop() {
+        this.wightWasher.clear();
+        if (recorderDisposable != null && !recorderDisposable.isDisposed()) {
+            recorderDisposable.dispose();
+        }
+    }
+
+    /**
+     * 判断当前清洗装置中是否包含目标的的清洗器
+     *
+     * @param target 目标清洗class对象
+     * @return true存在，false不存在
+     */
+    public boolean contains(Class<? extends Washer> target) {
+        if (Objects.isNull(target)) {
+            throw new IllegalArgumentException("Target Washer Class type is null");
+        }
+        for (Washer washer : wightWasher) {
+            if (washer.getClass().isAssignableFrom(target)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 记录清洁过程的'脏物品'，采用es存储数据。记录达到清洗的条件与对应清洗值
+     *
+     * @param conditions 达到清洗的条件
+     */
+    private void record(List<Washer> conditions) {
+        // 构建WasherRecord
+        WasherRecord washerRecord = new WasherRecord();
+        Sequential sequential = context.getRealSequential();
+        washerRecord.setType(sequential.getOriginType().getCode());
+        Map<String, String> conditionsDescription = conditions.stream().collect(Collectors.toMap(v -> v.getClass().getSimpleName(), Washer::description));
+        washerRecord.setConditions(conditionsDescription);
+        washerRecord.setProperties(sequential.getValues());
+        recorder.next(washerRecord);
+    }
+
+    /**
+     * 清洗记录
+     */
+    @Data
+    @Table(name = "wash_${type}")
+    public static class WasherRecord {
+
+        @Id
+        private Long id;
+
+        /**
+         * 时序数据类型
+         */
+        private String type;
+
+        /**
+         * 条件集的描述
+         */
+        private Map<String, String> conditions;
+
+        /**
+         * 记录属性
+         */
+        private Map<String, Object> properties;
+    }
 }

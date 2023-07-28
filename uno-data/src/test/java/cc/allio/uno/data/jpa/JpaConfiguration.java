@@ -10,8 +10,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import java.util.Optional;
 
 @Configuration
-@EnableJpaRepositories("cc.allio.uno.uno.data.jpa")
-@EntityScan("cc.allio.uno.uno")
+@EnableJpaRepositories("cc.allio.uno.data.jpa")
+@EntityScan("cc.allio.uno")
 @EnableJpaAuditing
 public class JpaConfiguration {
 
