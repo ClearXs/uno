@@ -76,6 +76,7 @@
         <easy-rules.version>4.1.0</easy-rules.version>
         <spring-statemachine.version>2.2.0.RELEASE</spring-statemachine.version>
         <jakarta.json-api.version>2.0.1</jakarta.json-api.version>
+        <concurrentunit.version>0.4.6</concurrentunit.version>
     </properties>
 
     <dependencyManagement>
@@ -232,6 +233,7 @@
                 <version>${lombok.version}</version>
                 <scope>provided</scope>
             </dependency>
+            <!--  ======================== test framework ======================== -->
             <!-- junit -->
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -250,6 +252,12 @@
                 <groupId>org.mockito</groupId>
                 <artifactId>mockito-junit-jupiter</artifactId>
                 <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>net.jodah</groupId>
+                <artifactId>concurrentunit</artifactId>
+                <version>${concurrentunit.version}</version>
                 <scope>test</scope>
             </dependency>
             <!-- auto -->

@@ -4,6 +4,7 @@ import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.bus.event.EmitEvent;
 import cc.allio.uno.core.bus.event.Node;
 import com.google.common.collect.Lists;
+import net.jodah.concurrentunit.Waiter;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -11,7 +12,13 @@ import reactor.test.StepVerifier;
 import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EventBusTest extends BaseTestCase {
 
@@ -146,5 +153,22 @@ public class EventBusTest extends BaseTestCase {
         AtomicReference<Node<?>> atTwo = new AtomicReference<>();
         bus.subscribeOnRepeatable(Subscription.of("1")).subscribe(atTwo::set);
         atOne.get().equals(atTwo.get());
+    }
+
+    @Test
+    void testConcurrent() throws InterruptedException {
+        CountDownLatch counter = new CountDownLatch(100000000);
+        for (int i = 0; i < 1000; i++) {
+            String topic = "t1" + "/" + i;
+            bus.subscribe(topic)
+                    .flatMap(Node::onNext)
+                    .doOnNext(c -> counter.countDown())
+                    .subscribe();
+        }
+
+        for (int i = 0; i < 100000; i++) {
+            bus.publish("/t1/**", new DefaultEventContext());
+        }
+        counter.await();
     }
 }
