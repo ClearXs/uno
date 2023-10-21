@@ -15,13 +15,13 @@ import cc.allio.uno.test.RunTest;
 import cc.allio.uno.test.env.annotation.DataSourceEnv;
 import cc.allio.uno.test.env.annotation.MybatisPlusEnv;
 import com.google.common.collect.Lists;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 import lombok.Data;
 import org.apache.ibatis.session.*;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
-import javax.persistence.Column;
-import javax.persistence.Table;
 import java.sql.SQLException;
 import java.util.List;
 

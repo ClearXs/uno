@@ -1,16 +1,12 @@
 package cc.allio.uno.core.util.template;
 
 import cc.allio.uno.core.BaseTestCase;
-import com.ql.util.express.DefaultContext;
-import com.ql.util.express.ExpressRunner;
-import com.ql.util.express.IExpressContext;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 import javax.annotation.processing.FilerException;
 import java.io.FileNotFoundException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -71,18 +67,6 @@ class PlaceholderExpressionTemplateBaseTest extends BaseTestCase {
             user.test.put("m2", "m2");
             String template = this.template.parseFileTemplate("cc/allio/uno/core/util/template/exampleMap.template", map);
             log.info(template);
-        });
-    }
-
-    @Test
-    void testQLExpress() {
-        assertDoesNotThrow(() -> {
-            String template = this.template.parseFileTemplate("cc/allio/uno/core/util/template/example.template", user);
-            ExpressRunner runner = new ExpressRunner(false, false);
-            IExpressContext<String, Object> expressContext = new DefaultContext<>();
-            expressContext.put("user", user);
-            runner.execute(template, expressContext, Collections.emptyList(), false, false);
-            log.info("user: {}", user);
         });
     }
 

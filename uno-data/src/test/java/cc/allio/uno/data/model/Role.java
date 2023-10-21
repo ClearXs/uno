@@ -1,9 +1,8 @@
 package cc.allio.uno.data.model;
 
+import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.data.domain.Persistable;
-
-import javax.persistence.*;
 
 @Getter
 @Setter

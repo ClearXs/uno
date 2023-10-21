@@ -3,11 +3,10 @@ package cc.allio.uno.data.orm.sql.dml.druid;
 import cc.allio.uno.data.orm.type.DBType;
 import cc.allio.uno.test.BaseTestCase;
 import com.google.common.collect.Lists;
+import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
-
-import javax.persistence.Table;
 
 public class DruidInsertOperatorTest extends BaseTestCase {
 
