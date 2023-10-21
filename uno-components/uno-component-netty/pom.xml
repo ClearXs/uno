@@ -6,7 +6,7 @@
     <parent>
         <artifactId>uno-components</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.4.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
 
     <artifactId>uno-component-netty</artifactId>

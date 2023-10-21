@@ -1,6 +1,7 @@
 package cc.allio.uno.test;
 
 import cc.allio.uno.core.util.StringUtils;
+import jakarta.annotation.Priority;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.context.properties.bind.Bindable;
 import org.springframework.boot.context.properties.bind.Binder;
@@ -8,8 +9,6 @@ import org.springframework.boot.context.properties.source.ConfigurationPropertyS
 import org.springframework.boot.context.properties.source.MapConfigurationPropertySource;
 import org.springframework.test.context.support.TestPropertySourceUtils;
 import org.springframework.util.ClassUtils;
-
-import javax.annotation.Priority;
 
 import static cc.allio.uno.test.TestContext.WEB_SERVER;
 

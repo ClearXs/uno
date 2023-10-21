@@ -7,9 +7,9 @@ import cc.allio.uno.data.orm.sql.SQLException;
 import cc.allio.uno.data.orm.sql.dml.JoinFrom;
 import cc.allio.uno.data.orm.sql.dml.SelectFrom;
 import cc.allio.uno.data.orm.sql.dml.SubQueryFrom;
+import jakarta.persistence.Table;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import javax.persistence.Table;
 import java.util.Collection;
 
 /**

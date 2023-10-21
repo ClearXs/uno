@@ -10,8 +10,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.boot.context.config.ConfigFileApplicationListener;
-import org.springframework.boot.context.properties.ConfigurationBeanFactoryMetadata;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigRegistry;
@@ -65,13 +63,14 @@ public abstract class BaseSpringTest extends BaseTestCase {
         if (runTestAttributes != null) {
             runTestAttributes.apply(this);
         }
-        new ConfigFileApplicationListener() {
-            public void apply() {
-                addPropertySources(context.getEnvironment(), context);
-                addPostProcessors(context);
-            }
-        }.apply();
-        registerDefaultComponent();
+
+//        addPropertySources(context.getEnvironment());
+//        new ConfigFileApplicationListener() {
+//            public void apply() {
+//                addPostProcessors(context);
+//            }
+//        }.apply();
+//        registerDefaultComponent();
         // spring环境初始化，回调接口
         onInitSpringEnv();
 
@@ -250,12 +249,12 @@ public abstract class BaseSpringTest extends BaseTestCase {
         beanFactory.registerBeanDefinition(beanType.getName(), beanDefinitionBuilder.getRawBeanDefinition());
     }
 
-    /**
-     * spring环境中注册默认的bean
-     */
-    public void registerDefaultComponent() {
-        registerComponent(ConfigurationBeanFactoryMetadata.class);
-    }
+//    /**
+//     * spring环境中注册默认的bean
+//     */
+//    public void registerDefaultComponent() {
+//        registerComponent(ConfigurationBeanFactoryMetadata.class);
+//    }
 
     /**
      * spring环境添加默认的配置属性

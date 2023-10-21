@@ -2,7 +2,7 @@ package cc.allio.uno.component.http.metadata;
 
 import cc.allio.uno.core.serializer.JsonNodeEnhancer;
 import com.fasterxml.jackson.databind.JsonNode;
-import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
@@ -18,9 +18,9 @@ public interface HttpResponseMetadata extends HttpMetadata {
      * 获取响应的状态
      *
      * @return 响应的状态码
-     * @see HttpStatus
+     * @see HttpStatusCode
      */
-    HttpStatus getStatus();
+    HttpStatusCode getStatus();
 
     /**
      * 获取期望类型的结果的流数据

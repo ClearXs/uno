@@ -5,7 +5,6 @@ import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.core.annotation.AnnotatedElementUtils;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
-import sun.reflect.generics.reflectiveObjects.TypeVariableImpl;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
@@ -98,38 +97,6 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             return (Class<?>) exceptType;
         }
         return null;
-    }
-
-    /**
-     * 获取目标Class对象所有的泛型数组
-     *
-     * @param clazz 待转换的Class对象
-     * @param <T>   对象范型
-     * @return 获取到的字符串数组
-     */
-    public static <T> String[] getAllGenericClassNames(Class<? extends T> clazz) {
-        if (clazz == null) {
-            return new String[0];
-        }
-        Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
-            if (typeArguments.length == 0) {
-                throw new NullPointerException(String.format("target %s can't find generic", clazz.getName()));
-            }
-
-            return Arrays.stream(typeArguments)
-                    .flatMap(argument -> {
-                        if (argument instanceof TypeVariableImpl) {
-                            return Stream.of(((TypeVariableImpl<?>) argument).getBounds());
-                        }
-                        return Stream.of(argument);
-                    })
-                    .map(Type::getTypeName)
-                    .collect(Collectors.toList())
-                    .toArray(new String[]{});
-        }
-        return new String[0];
     }
 
     /**

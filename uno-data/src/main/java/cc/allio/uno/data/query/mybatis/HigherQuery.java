@@ -1,6 +1,5 @@
 package cc.allio.uno.data.query.mybatis;
 
-import cc.allio.uno.data.query.mybatis.mapper.QueryMapper;
 import cc.allio.uno.data.query.stream.ValueTime;
 
 import java.util.Collection;
@@ -11,7 +10,6 @@ import java.util.Map;
  *
  * @author jiangwei
  * @date 2023/4/17 18:17
- * @see QueryMapper
  * @see BaseHigherQuery
  * @since 1.1.4
  */

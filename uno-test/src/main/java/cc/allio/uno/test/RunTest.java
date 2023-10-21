@@ -7,7 +7,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.web.reactive.context.ReactiveWebApplicationContext;
-import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.WebApplicationContext;
@@ -107,7 +106,6 @@ public @interface RunTest {
          * Creates a web application context (reactive or servlet based) and sets a
          * {@code server.port=0} {@link org.springframework.core.env.Environment} property (which usually triggers
          * listening on a random port). Often used in conjunction with a
-         * {@link LocalServerPort @LocalServerPort} injected field on the test.
          */
         RANDOM_PORT(true),
 

@@ -1,8 +1,8 @@
 package cc.allio.uno.component.websocket;
 
 import com.google.auto.service.AutoService;
+import jakarta.websocket.Session;
 
-import javax.websocket.Session;
 import java.util.function.Predicate;
 
 /**
@@ -22,5 +22,4 @@ public interface ConnectionAuthenticator {
      * @return 断言实例
      */
     Predicate<Session> auth(ConnectionContext connectionContext);
-
 }

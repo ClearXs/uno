@@ -2,7 +2,7 @@ package cc.allio.uno.core.proxy;
 
 import lombok.extern.slf4j.Slf4j;
 import net.sf.cglib.proxy.MethodProxy;
-import org.apache.commons.beanutils.MethodUtils;
+import org.apache.commons.lang3.reflect.MethodUtils;
 import org.springframework.core.annotation.AnnotationUtils;
 
 import java.lang.reflect.Method;

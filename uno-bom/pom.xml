@@ -12,12 +12,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cc.allio</groupId>
     <artifactId>uno-bom</artifactId>
-    <version>1.1.4.RELEASE</version>
+    <version>1.1.5.RELEASE</version>
     <packaging>pom</packaging>
 
     <properties>
         <!-- 统一版本管理 -->
-        <uno.version>1.1.4.RELEASE</uno.version>
+        <uno.version>1.1.5.RELEASE</uno.version>
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
@@ -28,20 +28,17 @@
         <!-- 代理相关 -->
         <byte-buddy.version>1.12.2</byte-buddy.version>
         <cglib.version>3.3.0</cglib.version>
-        <spring-webflux.version>5.2.15.RELEASE</spring-webflux.version>
         <lombok.version>1.18.22</lombok.version>
         <!-- 单元测试框架 -->
         <junit-jupiter.version>5.6.2</junit-jupiter.version>
         <mockito.version>4.0.0</mockito.version>
         <guava.version>30.1.1-jre</guava.version>
         <!-- swagger -->
-        <swagger-v3.version>2.1.11</swagger-v3.version>
+        <swagger-v3.version>2.2.17</swagger-v3.version>
         <swagger-v2.version>1.6.2</swagger-v2.version>
         <qlexpress.version>3.2.0</qlexpress.version>
-        <mybatis-spring-boot.version>2.2.1</mybatis-spring-boot.version>
-        <mybatis-plus-boot.version>3.4.2</mybatis-plus-boot.version>
-        <flink.version>1.14.3</flink.version>
-        <flink-minlog.version>1.2</flink-minlog.version>
+        <mybatis-spring-boot.version>3.0.2</mybatis-spring-boot.version>
+        <mybatis-plus-boot.version>3.5.3</mybatis-plus-boot.version>
         <!-- 国人reactor后台管理框架 -->
         <hsweb-framework.version>4.0.11</hsweb-framework.version>
         <!-- 数据库 -->
@@ -53,19 +50,13 @@
         <mybatis-plus-dynamic.version>3.3.6</mybatis-plus-dynamic.version>
         <!-- 链路追踪 -->
         <oepntracing.version>0.31.0</oepntracing.version>
-        <!-- es -->
-        <easy-es.version>0.9.40</easy-es.version>
-        <!-- feign -->
-        <feign-reactor.version>2.0.15</feign-reactor.version>
-        <easyexcel.version>2.2.10</easyexcel.version>
-        <springfox-swagger2.version>2.10.5</springfox-swagger2.version>
+        <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
         <geotools.version>27.0</geotools.version>
         <postgis-jdbc.version>2.5.1</postgis-jdbc.version>
-        <aviator.version>5.3.2</aviator.version>
         <easypoi.version>4.4.0</easypoi.version>
         <appache-commons-csv.version>1.8</appache-commons-csv.version>
         <!-- elasticsearch -->
-        <elasticsearch-client.version>7.17.7</elasticsearch-client.version>
+        <elasticsearch-client.version>8.7.1</elasticsearch-client.version>
         <!-- influxdb -->
         <influxdb-client.version>6.7.0</influxdb-client.version>
         <shardingsphere.version>5.3.1</shardingsphere.version>
@@ -73,8 +64,7 @@
         <!-- tdengine -->
         <tdengine.version>3.2.4</tdengine.version>
 
-        <easy-rules.version>4.1.0</easy-rules.version>
-        <spring-statemachine.version>2.2.0.RELEASE</spring-statemachine.version>
+        <spring-statemachine.version>3.2.1</spring-statemachine.version>
         <jakarta.json-api.version>2.0.1</jakarta.json-api.version>
         <concurrentunit.version>0.4.6</concurrentunit.version>
     </properties>
@@ -106,11 +96,6 @@
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-component-flink</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
                 <artifactId>uno-component-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
@@ -128,11 +113,6 @@
             <dependency>
                 <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-core</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-starter-flink</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
@@ -191,12 +171,6 @@
                 <groupId>org.springframework.statemachine</groupId>
                 <artifactId>spring-statemachine-core</artifactId>
                 <version>${spring-statemachine.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework</groupId>
-                <artifactId>spring-webflux</artifactId>
-                <version>${spring-webflux.version}</version>
-                <scope>provided</scope>
             </dependency>
             <!-- cglib -->
             <dependency>
@@ -308,31 +282,6 @@
                 <version>${mybatis-plus-boot.version}</version>
                 <scope>provided</scope>
             </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-streaming-java_2.12</artifactId>
-                <version>${flink.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-clients_2.12</artifactId>
-                <version>${flink.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-kafka_2.12</artifactId>
-                <version>${flink.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.flink</groupId>
-                <artifactId>flink-connector-jdbc_2.12</artifactId>
-                <version>${flink.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.esotericsoftware.minlog</groupId>
-                <artifactId>minlog</artifactId>
-                <version>${flink-minlog.version}</version>
-            </dependency>
             <!-- 数据库 -->
             <!-- Druid -->
             <dependency>
@@ -395,11 +344,6 @@
                 <version>${oepntracing.version}</version>
             </dependency>
             <dependency>
-                <groupId>cn.easy-es</groupId>
-                <artifactId>easy-es-boot-starter</artifactId>
-                <version>2.0.0-beta1</version>
-            </dependency>
-            <dependency>
                 <groupId>com.playtika.reactivefeign</groupId>
                 <artifactId>feign-reactor-cloud</artifactId>
                 <version>${feign-reactor.version}</version>
@@ -413,11 +357,6 @@
                 <groupId>com.playtika.reactivefeign</groupId>
                 <artifactId>feign-reactor-spring-configuration</artifactId>
                 <version>${feign-reactor.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>easyexcel</artifactId>
-                <version>${easyexcel.version}</version>
             </dependency>
             <dependency>
                 <groupId>io.springfox</groupId>
@@ -445,11 +384,6 @@
                 <version>${postgis-jdbc.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.googlecode.aviator</groupId>
-                <artifactId>aviator</artifactId>
-                <version>${aviator.version}</version>
-            </dependency>
-            <dependency>
                 <groupId>cn.afterturn</groupId>
                 <artifactId>easypoi-annotation</artifactId>
                 <version>${easypoi.version}</version>
@@ -468,26 +402,6 @@
                 <groupId>org.apache.commons</groupId>
                 <artifactId>commons-csv</artifactId>
                 <version>${appache-commons-csv.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>co.elastic.clients</groupId>
-                <artifactId>elasticsearch-java</artifactId>
-                <version>${elasticsearch-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-high-level-client</artifactId>
-                <version>${elasticsearch-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch.client</groupId>
-                <artifactId>elasticsearch-rest-client</artifactId>
-                <version>${elasticsearch-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.elasticsearch</groupId>
-                <artifactId>elasticsearch</artifactId>
-                <version>${elasticsearch-client.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.influxdb</groupId>
@@ -519,11 +433,6 @@
                 <groupId>org.apache.shardingsphere</groupId>
                 <artifactId>shardingsphere-sql-parser-oracle</artifactId>
                 <version>${shardingsphere.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.jeasy</groupId>
-                <artifactId>easy-rules-core</artifactId>
-                <version>${easy-rules.version}</version>
             </dependency>
             <dependency>
                 <groupId>jakarta.json</groupId>

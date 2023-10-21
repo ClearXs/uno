@@ -79,7 +79,7 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
     }
 
     @Override
-    public HttpStatus getStatus() {
+    public HttpStatusCode getStatus() {
         return response.statusCode();
     }
 
@@ -94,14 +94,14 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
                             JsonUtils.toJson(supplier.get().getBody()));
             throw WebClientResponseException.create(
                     getStatus().value(),
-                    getStatus().name(),
+                    String.valueOf(getStatus().value()),
                     response.headers().asHttpHeaders(),
                     msg.getBytes(),
                     null,
                     new HttpRequest() {
                         @Override
-                        public String getMethodValue() {
-                            return ClientResponseWrapper.this.getMethod().name();
+                        public HttpMethod getMethod() {
+                            return supplier.get().getMethod();
                         }
 
                         @Override

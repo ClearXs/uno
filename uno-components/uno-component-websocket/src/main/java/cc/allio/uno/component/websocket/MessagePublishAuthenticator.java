@@ -1,6 +1,7 @@
 package cc.allio.uno.component.websocket;
 
-import javax.websocket.Session;
+import jakarta.websocket.Session;
+
 import java.util.function.Predicate;
 
 /**

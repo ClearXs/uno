@@ -5,7 +5,7 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.4.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,6 @@
 
     <modules>
         <module>uno-component-http</module>
-        <module>uno-component-flink</module>
         <module>uno-component-websocket</module>
         <module>uno-component-sequential</module>
         <module>uno-component-kafka</module>

@@ -5,12 +5,12 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.4.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-data</artifactId>
-    <version>1.1.4.RELEASE</version>
+    <version>1.1.5.RELEASE</version>
     <description>
         summary: uno数据层操作，包含于数据源、mybatis-plus、reactive-jpa、elasticsearch、influxdb等（依赖包于provide）
         features: 提供数据聚合等操作

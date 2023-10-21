@@ -1,6 +1,6 @@
 # Liquibase数据库版本控制
 
-版本号：1.1.4.RELEASE
+版本号：1.1.5.RELEASE
 
 <a href="https://liquibase.org/">liquibase</a>是一个数据库变更的版本控制工具。项目中通过liquibase解析用户编写的liquibase的配置文件,生成sql语句，并执行和记录。执行是根据记录确定sql语句是否曾经执行过，和配置文件里的预判断语句确定sql是否执行。
 

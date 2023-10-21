@@ -32,7 +32,8 @@ public class FromStatement extends ExpressionStatement<FromStatement> implements
 
     @Override
     public FromStatement from(Class<?> tableEntity) throws SQLException {
-        javax.persistence.Table table = ClassUtils.getAnnotation(tableEntity, javax.persistence.Table.class);
+
+        jakarta.persistence.Table table = ClassUtils.getAnnotation(tableEntity, jakarta.persistence.Table.class);
         if (table == null) {
             throw new SQLException("Specifies @Table annotation for entity");
         }
@@ -74,7 +75,7 @@ public class FromStatement extends ExpressionStatement<FromStatement> implements
 
     @Override
     public void syntaxCheck() throws SQLException {
-
+        // TODO document why this method is empty
     }
 
     @Override

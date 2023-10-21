@@ -9,11 +9,11 @@ import cc.allio.uno.data.orm.type.TypeRegistry;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.google.common.collect.Lists;
+import jakarta.persistence.Column;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 
-import javax.persistence.Column;
-import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Collection;
 
