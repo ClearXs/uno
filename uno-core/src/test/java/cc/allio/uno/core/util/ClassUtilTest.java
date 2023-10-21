@@ -2,12 +2,12 @@ package cc.allio.uno.core.util;
 
 import cc.allio.uno.core.BaseTestCase;
 import com.google.common.collect.Maps;
+import jakarta.annotation.Priority;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
-import javax.annotation.Priority;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;

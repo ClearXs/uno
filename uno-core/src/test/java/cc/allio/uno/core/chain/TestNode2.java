@@ -1,8 +1,7 @@
 package cc.allio.uno.core.chain;
 
+import jakarta.annotation.Priority;
 import reactor.core.publisher.Mono;
-
-import javax.annotation.Priority;
 
 @Priority(2)
 public class TestNode2 implements Node<String, String> {

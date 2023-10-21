@@ -1,8 +1,7 @@
 package cc.allio.uno.data.orm;
 
+import jakarta.persistence.Id;
 import lombok.Data;
-
-import javax.persistence.Id;
 
 @Data
 public class User {

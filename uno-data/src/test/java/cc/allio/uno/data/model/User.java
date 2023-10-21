@@ -1,9 +1,9 @@
 package cc.allio.uno.data.model;
 
 import cc.allio.uno.data.orm.jpa.model.BaseEntity;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
 import lombok.*;
-
-import javax.persistence.*;
 
 @Getter
 @Setter
