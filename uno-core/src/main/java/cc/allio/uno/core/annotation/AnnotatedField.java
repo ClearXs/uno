@@ -1,7 +1,7 @@
 package cc.allio.uno.core.annotation;
 
 import cc.allio.uno.core.annotation.document.DocumentFactoryException;
-import org.apache.commons.lang.reflect.FieldUtils;
+import org.apache.commons.lang3.reflect.FieldUtils;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;

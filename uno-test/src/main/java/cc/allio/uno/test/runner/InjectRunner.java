@@ -4,9 +4,9 @@ import cc.allio.uno.core.util.ReflectUtils;
 import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.Inject;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Resource;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.annotation.Resource;
 import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Set;

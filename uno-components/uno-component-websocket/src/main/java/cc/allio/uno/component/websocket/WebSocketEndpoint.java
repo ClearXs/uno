@@ -5,10 +5,10 @@ import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.Tokenizer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
@@ -123,7 +123,7 @@ public interface WebSocketEndpoint {
                                 arrayNode.add(jsonNode);
                             }
                         } catch (Throwable ex) {
-                            ex.printStackTrace();
+                            throw new RuntimeException(ex);
                         }
                     });
                     return Optional.of(arrayNode.toPrettyString());

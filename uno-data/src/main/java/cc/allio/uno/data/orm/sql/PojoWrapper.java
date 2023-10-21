@@ -11,9 +11,9 @@ import cc.allio.uno.core.util.template.Tokenizer;
 import cc.allio.uno.data.orm.type.JavaType;
 import cc.allio.uno.data.orm.type.StringJavaType;
 import cc.allio.uno.data.orm.type.TypeRegistry;
+import jakarta.persistence.Id;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import javax.persistence.Id;
 import java.lang.reflect.Field;
 import java.util.Date;
 import java.util.List;
@@ -108,7 +108,7 @@ public class PojoWrapper<T> extends ObjectWrapper {
      */
     public Table getTable() {
         // 取jpa注解
-        javax.persistence.Table table = AnnotationUtils.findAnnotation(pojoClass, javax.persistence.Table.class);
+        jakarta.persistence.Table table = AnnotationUtils.findAnnotation(pojoClass, jakarta.persistence.Table.class);
         String indexName = StringPool.EMPTY;
         if (table != null) {
             indexName = table.name();
@@ -129,7 +129,7 @@ public class PojoWrapper<T> extends ObjectWrapper {
     public List<SQLColumnDef> getSQLColumnDef() {
         return pojoFields.stream()
                 .map(SQLColumnDef::of)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**

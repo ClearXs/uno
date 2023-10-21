@@ -1,7 +1,5 @@
 package cc.allio.uno.test.env.annotation.properties;
 
-import org.springframework.boot.autoconfigure.elasticsearch.ElasticsearchRestClientProperties;
-
 import java.lang.annotation.*;
 
 /**
@@ -9,7 +7,6 @@ import java.lang.annotation.*;
  *
  * @author jiangwei
  * @date 2023/7/5 16:03
- * @see ElasticsearchRestClientProperties
  * @since 1.1.4
  */
 @Documented

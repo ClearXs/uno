@@ -16,7 +16,6 @@ import java.util.function.BiPredicate;
  * @date 2022/1/5 00:55
  * @see InMemoryCache
  * @see ConcurrentMemoryCache
- * @see RedisCache
  * @since 1.0
  */
 public interface Cache<T> {

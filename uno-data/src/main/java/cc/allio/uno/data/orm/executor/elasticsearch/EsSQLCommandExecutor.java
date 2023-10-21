@@ -188,7 +188,8 @@ public class EsSQLCommandExecutor implements SQLCommandExecutor {
             // 设置文档基础信息
             resultGroup.setId(hit.id());
             resultGroup.setIndex(hit.index());
-            resultGroup.setType(Optional.ofNullable(hit.type()).orElse(StringPool.EMPTY));
+            // TODO 确定es返回字段的类型
+//            resultGroup.setType(Optional.ofNullable(hit).orElse(StringPool.EMPTY));
             resultGroup.setScore(Optional.ofNullable(hit.score()).orElse(0D));
             // 设置分片信息
             resultGroup.setNodeId(hit.node());

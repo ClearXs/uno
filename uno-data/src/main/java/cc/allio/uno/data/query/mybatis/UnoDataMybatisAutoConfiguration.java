@@ -1,25 +1,19 @@
 package cc.allio.uno.data.query.mybatis;
 
-import cc.allio.uno.data.query.mybatis.injector.QueryList;
 import cc.allio.uno.data.query.mybatis.query.interceptor.QueryInterceptor;
 import cc.allio.uno.data.query.mybatis.type.DateDimensionTypeHandler;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties;
-import com.baomidou.mybatisplus.core.injector.AbstractMethod;
-import com.baomidou.mybatisplus.core.injector.ISqlInjector;
 import org.apache.ibatis.type.TypeHandlerRegistry;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.EnableAspectJAutoProxy;
-
-import java.util.List;
 
 /**
  * UNO-DATA配置
@@ -37,19 +31,8 @@ public class UnoDataMybatisAutoConfiguration implements ApplicationContextAware,
     private ApplicationContext applicationContext;
 
     @Bean
-    public QueryList unoQueryList() {
-        return new QueryList();
-    }
-
-    @Bean
     public QueryInterceptor unoQueryInterceptor() {
         return new QueryInterceptor();
-    }
-
-    @Bean
-    @ConditionalOnMissingBean
-    public ISqlInjector sqlInjector(List<AbstractMethod> otherMethod) {
-        return new UnoSqlInjector(otherMethod);
     }
 
     @Override

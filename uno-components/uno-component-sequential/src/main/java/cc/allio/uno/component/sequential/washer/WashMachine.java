@@ -6,14 +6,14 @@ import cc.allio.uno.core.reactive.BufferRate;
 import cc.allio.uno.data.orm.executor.SQLCommandExecutor;
 import cc.allio.uno.data.orm.executor.SQLCommandExecutorFactory;
 import com.google.common.collect.Lists;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
-import javax.persistence.Id;
-import javax.persistence.Table;
 import java.util.*;
 import java.util.stream.Collectors;
 

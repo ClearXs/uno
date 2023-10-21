@@ -3,7 +3,6 @@ package cc.allio.uno.test;
 import cc.allio.uno.core.bus.EventBus;
 import cc.allio.uno.test.env.PropertiesVisitor;
 import cc.allio.uno.test.env.Visitor;
-import cc.allio.uno.test.feign.FeignRunner;
 import cc.allio.uno.test.runner.AnnoMetadataRunner;
 import cc.allio.uno.test.runner.InjectRunner;
 import cc.allio.uno.test.runner.Runner;
@@ -56,8 +55,6 @@ public class TestManager {
         getTestContext().getRunTestAttributes().addListenerClasses(CoreTestListener.class, PrintTimingListener.class, WebListener.class);
         // 注册默认Visitor
         getTestContext().getRunTestAttributes().addVisitorClasses(PropertiesVisitor.class);
-        // 注册默认Runner
-        getTestContext().getRunTestAttributes().addRunnerClasses(FeignRunner.class, InjectRunner.class, AnnoMetadataRunner.class);
     }
 
 

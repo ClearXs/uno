@@ -1,9 +1,8 @@
 package cc.allio.uno.data.orm.jpa.repository;
 
+import jakarta.persistence.EntityManager;
 import org.springframework.data.jpa.repository.support.JpaEntityInformation;
 import org.springframework.data.jpa.repository.support.SimpleJpaRepository;
-
-import javax.persistence.EntityManager;
 
 /**
  * JPA Repository

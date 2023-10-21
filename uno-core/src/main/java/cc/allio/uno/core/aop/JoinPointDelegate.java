@@ -1,16 +1,16 @@
 package cc.allio.uno.core.aop;
 
+import org.aspectj.lang.JoinPoint;
 import org.springframework.aop.aspectj.MethodInvocationProceedingJoinPoint;
 import org.springframework.aop.support.AopUtils;
 import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
-import java.util.stream.Collectors;
 
 public class JoinPointDelegate {
 
-    private final MethodInvocationProceedingJoinPoint point;
+    private final JoinPoint point;
 
     public JoinPointDelegate(MethodInvocationProceedingJoinPoint point) {
         this.point = point;
@@ -42,7 +42,10 @@ public class JoinPointDelegate {
      */
     public Method getMethod() {
         String name = point.getSignature().getName();
-        Class<?>[] argClasses = Arrays.stream(point.getArgs()).map(Object::getClass).collect(Collectors.toList()).toArray(new Class<?>[]{});
+        Class<?>[] argClasses = Arrays.stream(point.getArgs())
+                .map(Object::getClass)
+                .toList()
+                .toArray(new Class<?>[]{});
         // 尝试知道获取AOP原始Class对象
         Class<?> maybeOriginClass = AopUtils.getTargetClass(point.getTarget());
         return ClassUtils.getMethod(maybeOriginClass, name, argClasses);

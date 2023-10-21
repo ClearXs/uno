@@ -6,7 +6,7 @@
     <parent>
         <groupId>cc.allio</groupId>
         <artifactId>uno</artifactId>
-        <version>1.1.4.RELEASE</version>
+        <version>1.1.5.RELEASE</version>
     </parent>
 
     <artifactId>uno-rule</artifactId>
@@ -30,10 +30,6 @@
         <dependency>
             <groupId>org.drools</groupId>
             <artifactId>drools-mvel</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.jeasy</groupId>
-            <artifactId>easy-rules-core</artifactId>
         </dependency>
         <!-- UNO -->
         <dependency>

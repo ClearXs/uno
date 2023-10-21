@@ -2,10 +2,10 @@ package cc.allio.uno.test.env;
 
 import cc.allio.uno.test.env.annotation.properties.DataSourceProperties;
 import cc.allio.uno.test.CoreTest;
+import jakarta.annotation.Priority;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 
-import javax.annotation.Priority;
 import java.lang.annotation.Annotation;
 
 /**

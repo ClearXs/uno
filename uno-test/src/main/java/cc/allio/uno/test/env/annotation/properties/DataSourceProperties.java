@@ -1,6 +1,5 @@
 package cc.allio.uno.test.env.annotation.properties;
 
-import org.springframework.boot.jdbc.DataSourceInitializationMode;
 import org.springframework.boot.jdbc.EmbeddedDatabaseConnection;
 
 import java.lang.annotation.*;
@@ -53,12 +52,6 @@ public @interface DataSourceProperties {
      * set.
      */
     String jndiName() default "";
-
-    /**
-     * Mode to apply when determining if DataSource initialization should be performed
-     * using the available DDL and DML scripts.
-     */
-    DataSourceInitializationMode initializationMode() default DataSourceInitializationMode.EMBEDDED;
 
     /**
      * Platform to use in the DDL or DML scripts (such as schema-${platform}.sql or

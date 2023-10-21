@@ -1,6 +1,7 @@
 package cc.allio.uno.core.proxy;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import net.bytebuddy.ByteBuddy;
 import net.bytebuddy.dynamic.DynamicType;
@@ -8,7 +9,6 @@ import net.bytebuddy.implementation.FieldAccessor;
 import net.bytebuddy.implementation.MethodDelegation;
 import net.bytebuddy.implementation.bind.annotation.*;
 import net.bytebuddy.matcher.ElementMatchers;
-import org.apache.commons.lang.StringUtils;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

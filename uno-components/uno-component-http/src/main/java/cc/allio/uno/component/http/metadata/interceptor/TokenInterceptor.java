@@ -5,14 +5,15 @@ import cc.allio.uno.core.chain.Chain;
 import cc.allio.uno.core.chain.ChainContext;
 import cc.allio.uno.core.util.StringUtils;
 import com.google.common.collect.Maps;
+import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 import reactor.core.publisher.Mono;
 
-import javax.annotation.Priority;
 import java.util.Arrays;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -24,7 +25,7 @@ import java.util.stream.Collectors;
  * @date 2022/8/24 17:11
  * @since 1.0
  */
-@Priority(Integer.MIN_VALUE)
+@Order(Integer.MIN_VALUE)
 public class TokenInterceptor implements Interceptor {
 
     private final TokenRequest tokenRequest;
@@ -56,7 +57,7 @@ public class TokenInterceptor implements Interceptor {
                 .filter(tokenRequest.getTokenVerify())
                 .then(proceed)
                 .onErrorResume(WebClientResponseException.class, error -> {
-                    HttpStatus status = error.getStatusCode();
+                    HttpStatusCode status = error.getStatusCode();
                     // 捕捉Token异常错误
                     if (HttpStatus.UNAUTHORIZED == status) {
                         // 构建Token请求

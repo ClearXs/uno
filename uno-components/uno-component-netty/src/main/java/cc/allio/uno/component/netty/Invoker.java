@@ -1,8 +1,8 @@
 package cc.allio.uno.component.netty;
 
 import cc.allio.uno.component.netty.exception.RemoteSendException;
+import cc.allio.uno.component.netty.exception.RemoteTimeoutException;
 import cc.allio.uno.component.netty.transport.body.Body;
-import org.springframework.remoting.RemoteTimeoutException;
 
 /**
  * 调用

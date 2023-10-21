@@ -1,12 +1,12 @@
 package cc.allio.uno.websocket.demo;
 
 import cc.allio.uno.component.websocket.BaseWebsocketEndpoint;
+import jakarta.websocket.Session;
+import jakarta.websocket.server.ServerEndpoint;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.FluxSink;
 
-import javax.websocket.Session;
-import javax.websocket.server.ServerEndpoint;
 import java.util.List;
 
 @Slf4j

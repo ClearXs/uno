@@ -1,9 +1,8 @@
 package cc.allio.uno.component.websocket;
 
 import cc.allio.uno.core.util.JsonUtils;
+import jakarta.websocket.Session;
 import lombok.Data;
-
-import javax.websocket.Session;
 
 /**
  * 单播推送WebSocket
