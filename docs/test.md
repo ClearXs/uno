@@ -121,7 +121,6 @@ public class RedisEnvTest extends BaseTestCase {
 | Redis         | `@RedisEnv`       | `@RedisProperties`       |      |
 | DataSource    | `@DataSourceEnv`  | `@DataSourceProperties`  |      |
 | ElasticSearch | `@EsEnv`          | `@EsProperties`          |      |
-| Feign         | `@FeignEnv`       |                          |      |
 | Mybatis       | `@MybatisEnv`     | `@MybatisProperties`     |      |
 | MybatisPlus   | `@MybatisPlusEnv` | `@MybatisPlusProperties` |      |
 | ...           |                   |                          |      |
