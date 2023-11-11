@@ -10,12 +10,14 @@
     <version>1.1.5.RELEASE</version>
     <description>构建大型应用需要的基本能力 --- all in one</description>
     <url>https://github.com/b6688c/uno</url>
+
     <developers>
         <developer>
             <name>j.x</name>
             <email>jiangw1027@gmail.com</email>
         </developer>
     </developers>
+
     <modules>
         <module>uno-bom</module>
         <module>uno-core</module>

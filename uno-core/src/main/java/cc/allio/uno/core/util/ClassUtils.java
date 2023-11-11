@@ -1,6 +1,7 @@
 package cc.allio.uno.core.util;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.exception.Exceptions;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
 import org.springframework.core.annotation.AnnotatedElementUtils;
@@ -13,7 +14,6 @@ import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -24,10 +24,6 @@ import java.util.stream.Stream;
  */
 public class ClassUtils extends org.springframework.util.ClassUtils {
 
-    private ClassUtils() {
-
-    }
-
     /**
      * 获取class对象只有一个的泛型全限定类名
      *
@@ -36,13 +32,10 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @return 返回一个泛型对象或者空字符串
      * @throws NullPointerException 当class对象没有泛型时抛出异常
      */
-    public static <T> String getSingleGenericClassName(Class<? extends T> clazz) {
-        if (clazz == null) {
-            return "";
-        }
+    public static <T> String getSingleGenericClassName(@NonNull Class<? extends T> clazz) {
         Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
+        if (type instanceof ParameterizedType pt) {
+            Type[] typeArguments = pt.getActualTypeArguments();
             if (typeArguments.length == 0) {
                 throw new NullPointerException(String.format("Target %s can't find generic", clazz.getName()));
             }
@@ -62,8 +55,8 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             return new String[0];
         }
         Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType) {
-            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
+        if (type instanceof ParameterizedType pt) {
+            Type[] typeArguments = pt.getActualTypeArguments();
             if (typeArguments.length == 0) {
                 throw new NullPointerException(String.format("Target %s can't find generic", clazz.getName()));
             }
@@ -114,8 +107,8 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
                 return e;
             }
         });
-        if (exceptType instanceof ClassNotFoundException) {
-            throw new ClassNotFoundException(((ClassNotFoundException) exceptType).getMessage());
+        if (exceptType instanceof ClassNotFoundException notfound) {
+            throw new ClassNotFoundException(notfound.getMessage());
         }
         return (Class<?>) exceptType;
     }
@@ -137,8 +130,8 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
                     return e;
                 }
             });
-            if (exceptType instanceof ClassNotFoundException) {
-                throw new ClassNotFoundException(((ClassNotFoundException) exceptType).getMessage());
+            if (exceptType instanceof ClassNotFoundException notfound) {
+                throw new ClassNotFoundException(notfound.getMessage());
             }
             actualTypes.add((Class<?>) exceptType);
         }
@@ -169,7 +162,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
     public static Class<?>[] objectToClass(Object... args) {
         return Arrays.stream(args)
                 .map(Object::getClass)
-                .collect(Collectors.toList())
+                .toList()
                 .toArray(new Class<?>[]{});
     }
 
@@ -202,16 +195,17 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             try {
                 method = clazz.getDeclaredMethod(targetMethodName, argsClass);
             } catch (NoSuchMethodException e2) {
-                e2.printStackTrace();
+                throw Exceptions.unchecked(e2);
             }
         }
         if (method == null) {
             Set<Method> allMethods = new HashSet<>();
             allMethods.addAll(Arrays.asList(clazz.getMethods()));
             allMethods.addAll(Arrays.asList(clazz.getDeclaredMethods()));
-            List<Method> targetMethods = allMethods.stream()
-                    .filter(m -> targetMethodName.equals(m.getName()) && argsClass.length == m.getParameterCount())
-                    .collect(Collectors.toList());
+            List<Method> targetMethods =
+                    allMethods.stream()
+                            .filter(m -> targetMethodName.equals(m.getName()) && argsClass.length == m.getParameterCount())
+                            .toList();
             if (CollectionUtils.isNotEmpty(targetMethods)) {
                 method = targetMethods.get(0);
             }
@@ -285,7 +279,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @return true 存在 false 不存在
      * @deprecated 1.1.4版本后删除，使用{@link AnnotatedElementUtils#hasAnnotation(AnnotatedElement, Class)}
      */
-    @Deprecated
+    @Deprecated(since = "1.1.4", forRemoval = true)
     public static <T extends Annotation> boolean containsAnnotation(Class<?> instanceClass, Class<T> annotationType) {
         try {
             getAnnotation(instanceClass, annotationType);
@@ -424,9 +418,6 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         private Object[] constructorParameters;
         private Supplier<? extends I> ifErrorDefaultValue;
         private boolean isExcludeNull;
-
-        InstantiationBuilder() {
-        }
 
         /**
          * 添加一个待实例化的Class对象

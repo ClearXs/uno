@@ -1,5 +1,7 @@
 package cc.allio.uno.rule.api.vistor;
 
+import cc.allio.uno.core.datastructure.tree.Element;
+
 import java.util.List;
 
 /**
@@ -9,7 +11,7 @@ import java.util.List;
  * @date 2023/4/26 12:04
  * @since 1.1.4
  */
-public interface GroupElement<T extends Element> extends Element {
+public interface GroupElement<T extends LiteralElement> extends LiteralElement {
 
     /**
      * 添加子节点元素
