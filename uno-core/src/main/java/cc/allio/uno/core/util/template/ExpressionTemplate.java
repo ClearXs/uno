@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
-
+ 
 /**
  * Express模版。基于模版文件解析内容<br/>
  *
@@ -80,32 +80,6 @@ public interface ExpressionTemplate {
      */
     default String parseTemplate(String template, String k1, Object v1, String k2, Object v2, String k3, Object v3) {
         return parseTemplate(template, Tuples.of(k1, v1, k2, v2, k3, v3));
-    }
-
-
-    /**
-     * 解析模板。需要指定模板中占位符包含<b>'T1'、'T2'</b>的标识
-     *
-     * @param template 模板
-     * @param v1       模板变量v1
-     * @param v2       模板变量v2
-     * @return 解析完成的字符串
-     */
-    default String parseTemplate(String template, Object v1, Object v2) {
-        return parseTemplate(template, Tuples.of("T1", v1, "T2", v2));
-    }
-
-    /**
-     * 解析模板。需要指定模板中占位符包含<b>'T1'、'T2'、'T3'</b>的标识
-     *
-     * @param template 模板
-     * @param v1       模板变量v1
-     * @param v2       模板变量v2
-     * @param v3       模板变量v3
-     * @return 解析完成的字符串
-     */
-    default String parseTemplate(String template, Object v1, Object v2, Object v3) {
-        return parseTemplate(template, Tuples.of("T1", v1, "T2", v2, "T3", v3));
     }
 
     /**

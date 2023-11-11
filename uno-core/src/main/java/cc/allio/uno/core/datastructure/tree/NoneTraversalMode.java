@@ -1,4 +1,4 @@
-package cc.allio.uno.rule.api.vistor;
+package cc.allio.uno.core.datastructure.tree;
 
 /**
  * 优先访问枝干
@@ -14,7 +14,7 @@ public class NoneTraversalMode implements TraversalMode {
     @Override
     public void doTraversal(TraversalElement e, Visitor visitor) {
         e.doAccept(visitor);
-        e.getChildrens().forEach(c -> c.accept(visitor, getMode()));
+        e.getChildren().forEach(c -> c.accept(visitor, getMode()));
     }
 
     @Override

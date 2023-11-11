@@ -1,5 +1,7 @@
 package cc.allio.uno.rule.api.vistor;
 
+import cc.allio.uno.core.datastructure.tree.Element;
+import cc.allio.uno.core.datastructure.tree.Traversal;
 import cc.allio.uno.rule.api.LogicPredicate;
 import cc.allio.uno.rule.api.RuleAttr;
 import com.google.common.collect.Lists;
@@ -15,15 +17,11 @@ import java.util.List;
  */
 public class DefaultCompilationRule implements CompilationRule {
 
-    DefaultCompilationRule() {
-
-    }
-
     @Override
     public GroupElement<?> treeifyBin(List<RuleAttr> ruleItems) {
         // 根节点为 AND group
         LogicGroup root = new LogicGroup(null, LogicPredicate.AND);
-        root.setLevel(Element.ROOT_NODE);
+        root.setDepth(Element.ROOT_NODE);
         // 获取第一个节点创建遍历表达式
         LogicGroup p = null;
         for (RuleAttr item : ruleItems) {
@@ -46,7 +44,7 @@ public class DefaultCompilationRule implements CompilationRule {
             } else if (p.getLogic() == LogicPredicate.OR) {
                 if (item.getLogic() == LogicPredicate.AND) {
                     // 放入 and group 中
-                    List<TraversalElement> attrElement = p.getAttrElement();
+                    List<LiteralTraversalElement> attrElement = p.getAttrElement();
                     p.clearAttrElement();
                     // 规则项重组为and节点
                     LogicGroup n = new LogicGroup(p, LogicPredicate.AND);
@@ -72,12 +70,12 @@ public class DefaultCompilationRule implements CompilationRule {
                     int level = Element.ROOT_NODE;
                     Element parent = e.getParent();
                     if (parent != null) {
-                        level = parent.getLevel() + 1;
+                        level = parent.getDepth() + 1;
                     }
-                    if (e instanceof AttrElement) {
-                        ((AttrElement) e).setLevel(level);
-                    } else if (e instanceof LogicGroup) {
-                        ((LogicGroup) e).setLevel(level);
+                    if (e instanceof AttrElement attr) {
+                        attr.setDepth(level);
+                    } else if (e instanceof LogicGroup logicGroup) {
+                        logicGroup.setDepth(level);
                     }
                 });
     }
@@ -87,8 +85,8 @@ public class DefaultCompilationRule implements CompilationRule {
         List<RuleAttr> ruleAttrs = Lists.newArrayList();
         tree.accept(
                 e -> {
-                    if (e instanceof AttrElement) {
-                        RuleAttr ruleAttr = ((AttrElement) e).getRuleAttr();
+                    if (e instanceof AttrElement attr) {
+                        RuleAttr ruleAttr = attr.getRuleAttr();
                         ruleAttrs.add(ruleAttr);
                     }
                 },

@@ -2,7 +2,7 @@ package cc.allio.uno.rule.api.visitor;
 
 import cc.allio.uno.rule.api.vistor.CompilationRule;
 import cc.allio.uno.rule.api.vistor.GroupElement;
-import cc.allio.uno.rule.api.vistor.Traversal;
+import cc.allio.uno.core.datastructure.tree.Traversal;
 import cc.allio.uno.rule.api.LogicPredicate;
 import cc.allio.uno.rule.api.OP;
 import cc.allio.uno.rule.api.RuleAttr;

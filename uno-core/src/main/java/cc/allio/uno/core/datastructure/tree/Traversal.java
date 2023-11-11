@@ -1,4 +1,4 @@
-package cc.allio.uno.rule.api.vistor;
+package cc.allio.uno.core.datastructure.tree;
 
 /**
  * 规则树遍历方式

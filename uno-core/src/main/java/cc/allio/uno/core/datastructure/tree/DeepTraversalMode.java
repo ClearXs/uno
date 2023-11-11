@@ -1,4 +1,4 @@
-package cc.allio.uno.rule.api.vistor;
+package cc.allio.uno.core.datastructure.tree;
 
 import cc.allio.uno.core.util.CollectionUtils;
 
@@ -15,15 +15,12 @@ import java.util.List;
  */
 public class DeepTraversalMode implements TraversalMode {
 
-    DeepTraversalMode() {
-    }
-
     @Override
     public void doTraversal(TraversalElement e, Visitor visitor) {
         // 深度优先
         Deque<TraversalElement> dfsStack = new ArrayDeque<>();
         dfsStack.push(e);
-        List<TraversalElement> childrens = e.getChildrens();
+        List<TraversalElement> childrens = e.getChildren();
         deepAccept(childrens, dfsStack);
         while (!dfsStack.isEmpty()) {
             TraversalElement element = dfsStack.pollLast();
@@ -31,10 +28,10 @@ public class DeepTraversalMode implements TraversalMode {
         }
     }
 
-    private void deepAccept(List<TraversalElement> childrens, Deque<TraversalElement> dfsStack) {
+    private void deepAccept(List<? extends TraversalElement> childrens, Deque<TraversalElement> dfsStack) {
         if (CollectionUtils.isNotEmpty(childrens)) {
             childrens.forEach(dfsStack::offerLast);
-            childrens.forEach(e -> deepAccept(e.getChildrens(), dfsStack));
+            childrens.forEach(e -> deepAccept(e.getChildren(), dfsStack));
         }
     }
 

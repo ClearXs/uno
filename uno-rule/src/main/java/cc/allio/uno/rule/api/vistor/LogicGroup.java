@@ -1,14 +1,16 @@
 package cc.allio.uno.rule.api.vistor;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.datastructure.tree.Element;
 import cc.allio.uno.core.util.CollectionUtils;
+import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.rule.api.LogicPredicate;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 /**
  * logic
@@ -17,93 +19,118 @@ import java.util.stream.Collectors;
  * @date 2023/4/26 11:53
  * @since 1.1.4
  */
-public class LogicGroup extends TraversalElement implements GroupElement<TraversalElement> {
+public class LogicGroup extends LiteralTraversalElement implements GroupElement<LiteralTraversalElement> {
+
+    @Getter
+    private final Serializable id;
 
     @Getter
     private final LogicPredicate logic;
-    @Setter
+
     @Getter
-    private GroupElement<TraversalElement> parent;
-    private final List<TraversalElement> childrens;
+    private GroupElement<LiteralTraversalElement> parent;
+    private List<Element> children;
 
     @Setter
     @Getter
-    private int level;
+    private int depth;
 
-    public LogicGroup(GroupElement<TraversalElement> parent, LogicPredicate logic) {
+    public LogicGroup(GroupElement<LiteralTraversalElement> parent, LogicPredicate logic) {
         this.parent = parent;
         this.logic = logic;
-        this.childrens = Lists.newArrayList();
+        this.children = Lists.newArrayList();
         if (parent != null) {
-            this.level = parent.getLevel() + 1;
+            this.depth = parent.getDepth() + 1;
         }
+        this.id = IdGenerator.defaultGenerator().toHex();
     }
 
     @Override
-    public List<TraversalElement> getChildrens() {
-        return childrens;
+    public <T extends Element> void setParent(T parent) {
+        this.parent = (GroupElement<LiteralTraversalElement>) parent;
     }
 
     @Override
     public boolean isLeaf() {
-        return childrens.isEmpty();
+        return children.isEmpty();
     }
 
     @Override
-    public boolean addElement(TraversalElement element) {
-        return childrens.add(element);
+    public <T extends Element> List<T> getChildren() {
+        return (List<T>) children;
     }
 
     @Override
-    public boolean addElements(List<TraversalElement> elements) {
-        return childrens.addAll(elements);
+    public <T extends Element> void addChildren(T element) {
+        addElement((LiteralTraversalElement) element);
     }
 
     @Override
-    public boolean removeElement(TraversalElement element) {
-        return childrens.remove(element);
+    public <T extends Element> void setChildren(List<T> children) {
+        clearChildren();
+        this.children.addAll(children);
     }
 
     @Override
-    public List<TraversalElement> getGroupElement() {
-        return childrens.stream()
+    public void clearChildren() {
+        children.clear();
+    }
+
+    @Override
+    public boolean addElement(LiteralTraversalElement element) {
+        return children.add(element);
+    }
+
+    @Override
+    public boolean addElements(List<LiteralTraversalElement> elements) {
+        return children.addAll(elements);
+    }
+
+    @Override
+    public boolean removeElement(LiteralTraversalElement element) {
+        return children.remove(element);
+    }
+
+    @Override
+    public List<LiteralTraversalElement> getGroupElement() {
+        return children.stream()
                 .filter(e -> GroupElement.class.isAssignableFrom(e.getClass()))
-                .map(TraversalElement.class::cast)
-                .collect(Collectors.toList());
+                .map(LiteralTraversalElement.class::cast)
+                .toList();
     }
 
     @Override
-    public List<TraversalElement> getAttrElement() {
-        return childrens.stream()
+    public List<LiteralTraversalElement> getAttrElement() {
+        return children.stream()
                 .filter(e -> AttrElement.class.isAssignableFrom(e.getClass()))
-                .map(AttrElement.class::cast)
-                .collect(Collectors.toList());
+                .map(LiteralTraversalElement.class::cast)
+                .toList();
     }
 
     @Override
     public void clearAttrElement() {
-        childrens.removeIf(AttrElement.class::isInstance);
+        children.removeIf(AttrElement.class::isInstance);
     }
 
     @Override
     public String getLiteral() {
-        if (isRoot() && CollectionUtils.isNotEmpty(childrens)) {
+        if (isRoot() && CollectionUtils.isNotEmpty(children)) {
             // root 节点第一个元素一定时OR
-            LogicGroup element = (LogicGroup) childrens.get(0);
+            LogicGroup element = (LogicGroup) children.get(0);
             return element.getLiteral();
         }
         StringBuilder literalExpr = new StringBuilder();
-        for (int i = 0; i < childrens.size(); i++) {
-            TraversalElement children = childrens.get(i);
+        for (int i = 0; i < children.size(); i++) {
+            LiteralTraversalElement children = (LiteralTraversalElement) this.children.get(i);
             String literal = children.getLiteral();
             // 构建 a = xxx && xxx 或者 a = xx && (b = xx)
             literalExpr.append(literal).append(StringPool.SPACE);
-            if (i != childrens.size() - 1) {
+            if (i != this.children.size() - 1) {
                 literalExpr.append(logic.getSm()).append(StringPool.SPACE);
             }
         }
         // 如果只有一个children 则不进行，否则添加 '('  ')'
-        if (childrens.size() == 1) {
+        if (children.size() == 1) {
             return literalExpr.toString();
         }
         literalExpr.insert(0, StringPool.LEFT_BRACKET);

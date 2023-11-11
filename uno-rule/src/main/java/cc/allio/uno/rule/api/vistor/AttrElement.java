@@ -1,9 +1,13 @@
 package cc.allio.uno.rule.api.vistor;
 
+import cc.allio.uno.core.datastructure.tree.Element;
+import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.rule.api.RuleAttr;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
@@ -15,10 +19,12 @@ import java.util.Objects;
  * @date 2023/4/26 11:53
  * @since 1.1.4
  */
-public class AttrElement extends TraversalElement implements Element {
+public class AttrElement extends LiteralTraversalElement implements LiteralElement {
+
+    private final Serializable id;
 
     @Getter
-    private final GroupElement<?> parent;
+    private GroupElement<?> parent;
     @Getter
     private final RuleAttr ruleAttr;
 
@@ -27,24 +33,50 @@ public class AttrElement extends TraversalElement implements Element {
      */
     @Setter
     @Getter
-    private int level;
+    private int depth;
 
     public AttrElement(GroupElement<?> parent, RuleAttr ruleAttr) {
         this.parent = parent;
         this.ruleAttr = ruleAttr;
         if (parent != null) {
-            this.level = parent.getLevel() + 1;
+            this.depth = parent.getDepth() + 1;
         }
+        this.id = IdGenerator.defaultGenerator().toHex();
     }
 
     @Override
-    public List<TraversalElement> getChildrens() {
-        return Collections.emptyList();
+    public Serializable getId() {
+        return id;
+    }
+
+    @Override
+    public <T extends Element> void setParent(T parent) {
+        this.parent = (GroupElement<?>) parent;
     }
 
     @Override
     public boolean isLeaf() {
         return true;
+    }
+
+    @Override
+    public <T extends Element> List<T> getChildren() {
+        return Collections.emptyList();
+    }
+
+    @Override
+    public <T extends Element> void addChildren(T element) {
+        Exceptions.eee("AttrElement is leaf element, cannot addChildren", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public <T extends Element> void setChildren(List<T> children) {
+        Exceptions.eee("AttrElement is leaf element, cannot setChildren", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public void clearChildren() {
+        Exceptions.eee("AttrElement is leaf element, cannot clearChildren", UnsupportedOperationException.class);
     }
 
     @Override
