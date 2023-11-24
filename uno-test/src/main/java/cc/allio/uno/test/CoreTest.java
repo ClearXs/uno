@@ -1,6 +1,5 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.Environment;
 import cc.allio.uno.test.env.EnvironmentFacade;
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.runner.CoreRunner;
@@ -51,48 +50,46 @@ public class CoreTest extends BaseSpringTest {
 
     @Override
     protected void onInitSpringEnv() throws Throwable {
-        Collection<Runner> registerRunner = getCoreRunner().getRegisterRunner();
-        for (Runner runner : registerRunner) {
-            try {
-                runner.run(this);
-            } catch (Throwable ex) {
-                // ignore Exception
-                log.error("run is failed", ex);
+        CoreRunner coreRunner = getCoreRunner();
+        if (coreRunner != null) {
+            Collection<Runner> registerRunner = getCoreRunner().getRegisterRunner();
+            for (Runner runner : registerRunner) {
+                try {
+                    runner.run(this);
+                } catch (Throwable ex) {
+                    // ignore Exception
+                    log.error("run is failed", ex);
+                }
             }
         }
     }
 
     @Override
     protected void onRefreshComplete() throws Throwable {
-        for (Runner runner : getCoreRunner().getRefreshCompleteRunner()) {
-            try {
-                runner.run(this);
-            } catch (Throwable ex) {
-                // ignore Exception
-                log.error("runner: {} run is failed", runner, ex);
+        CoreRunner coreRunner = getCoreRunner();
+        if (coreRunner != null) {
+            for (Runner runner : getCoreRunner().getRefreshCompleteRunner()) {
+                try {
+                    runner.run(this);
+                } catch (Throwable ex) {
+                    // ignore Exception
+                    log.error("runner: {} run is failed", runner, ex);
+                }
             }
         }
     }
 
-    /**
-     * 触发uno-core环境构建事件，子类实现。
-     * 模板方法
-     *
-     * @deprecated 1.1.4版本之后删除
-     */
-    @Deprecated
-    protected void onEnvBuild() {
-
-    }
-
     @Override
     protected void onContextClose() throws Throwable {
-        for (Runner runner : getCoreRunner().getCloseRunner()) {
-            try {
-                runner.run(this);
-            } catch (Throwable ex) {
-                // ignore Exception
-                log.error("runner: {} run is failed", runner, ex);
+        CoreRunner coreRunner = getCoreRunner();
+        if (coreRunner != null) {
+            for (Runner runner : getCoreRunner().getCloseRunner()) {
+                try {
+                    runner.run(this);
+                } catch (Throwable ex) {
+                    // ignore Exception
+                    log.error("runner: {} run is failed", runner, ex);
+                }
             }
         }
     }
@@ -100,18 +97,6 @@ public class CoreTest extends BaseSpringTest {
     @Override
     public RunTestAttributes getRunTestAttributes() {
         return new RunTestAttributes(getTestClass());
-    }
-
-    /**
-     * 子类提供Spring环境类
-     * 模板方法
-     *
-     * @return 环境类实例
-     * @deprecated 1.1.4版本之后删除
-     */
-    @Deprecated
-    public Environment supportEnv() {
-        return null;
     }
 
     // ----------------- get/set -----------------
@@ -199,7 +184,15 @@ public class CoreTest extends BaseSpringTest {
         }
         // 从components中寻找
         MergedAnnotation<RunTest> runAnno = testClassAnnos.get(RunTest.class);
-        Class<?>[] components = runAnno.getClassArray("components");
+        Class<?>[] components = null;
+        try {
+            components = runAnno.getClassArray("components");
+        } catch (NoSuchElementException ex) {
+            // ignore
+        }
+        if (components == null) {
+            return null;
+        }
         for (Class<?> component : components) {
             testClassAnnos = MergedAnnotations.from(component);
             if (testClassAnnos.isPresent(annoType)) {
@@ -262,9 +255,11 @@ public class CoreTest extends BaseSpringTest {
     public Set<AnnotationMetadata> getComponentAnnotations() {
         Set<AnnotationMetadata> annotationMetadatas = Sets.newHashSet();
         MergedAnnotation<RunTest> annotation = getMergedAnnotation(RunTest.class);
-        Class<?>[] components = annotation.getClassArray("components");
-        for (Class<?> component : components) {
-            annotationMetadatas.add(AnnotationMetadata.introspect(component));
+        if (annotation != null) {
+            Class<?>[] components = annotation.getClassArray("components");
+            for (Class<?> component : components) {
+                annotationMetadatas.add(AnnotationMetadata.introspect(component));
+            }
         }
         return annotationMetadatas;
     }

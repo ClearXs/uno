@@ -55,6 +55,8 @@ public class TestManager {
         getTestContext().getRunTestAttributes().addListenerClasses(CoreTestListener.class, PrintTimingListener.class, WebListener.class);
         // 注册默认Visitor
         getTestContext().getRunTestAttributes().addVisitorClasses(PropertiesVisitor.class);
+        // 注册默认Runner
+        getTestContext().getRunTestAttributes().addRunnerClasses(InjectRunner.class, AnnoMetadataRunner.class);
     }
 
 

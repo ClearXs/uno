@@ -7,9 +7,7 @@ import org.apache.ibatis.session.Configuration;
 import org.junit.jupiter.api.Test;
 import org.mybatis.spring.SqlSessionTemplate;
 
-@RunTest(envs = {
-        @RunTest.Environment(env = DataSourceEnvironment.class),
-        @RunTest.Environment(env = MybatisPlusEnvironment.class)},
+@RunTest(
         components = {RunTestWithTest.TestBean.class},
         profile = "whatever",
         active = "")

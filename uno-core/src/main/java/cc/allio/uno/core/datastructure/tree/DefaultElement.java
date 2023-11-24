@@ -6,6 +6,7 @@ import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.Serializable;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -25,7 +26,7 @@ public class DefaultElement extends TraversalElement {
     @Setter
     private Element parent;
 
-    private final List<Element> children;
+    private List<? super Element> children;
 
     public DefaultElement(@NonNull Serializable id) {
         this.id = id;
@@ -45,13 +46,12 @@ public class DefaultElement extends TraversalElement {
 
     @Override
     public <T extends Element> void setChildren(List<T> children) {
-        clearChildren();
-        this.children.addAll(children);
+        this.children = Collections.singletonList(children);
     }
 
     @Override
     public void addChildren(Element element) {
-        children.add(element);
+        this.children.add(element);
     }
 
     @Override

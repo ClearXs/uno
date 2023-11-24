@@ -2,28 +2,62 @@ package cc.allio.uno.core.datastructure.tree;
 
 import cc.allio.uno.core.BaseTestCase;
 import com.google.common.collect.Lists;
+import lombok.Getter;
+import lombok.NonNull;
 import org.junit.jupiter.api.Test;
 
+import java.io.Serializable;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+import java.util.function.Function;
 
 public class TreeSupportTest extends BaseTestCase {
 
-    static List<Expand> testData = Lists.newArrayList(
+    List<Expand> testData = Lists.newArrayList(
             new DefaultExpand(1, 0),
-            new DefaultExpand(2, 0),
             new DefaultExpand(3, 0),
+            new DefaultExpand(2, 0),
             new DefaultExpand(4, 1),
+            new DefaultExpand(6, 2),
             new DefaultExpand(5, 2)
     );
 
     @Test
     void testTreeifyAndExpand() {
-        List<Element> treeify = TreeSupport.treeify(testData);
+        List<DefaultElement> treeify = TreeSupport.treeify(testData);
 
         assertEquals(3, treeify.size());
 
-        List<Expand> expands = TreeSupport.expand(treeify);
+        List<DefaultExpand> expands = TreeSupport.expand(Lists.newArrayList(treeify));
 
         assertEquals(testData.size(), expands.size());
+    }
+
+    @Test
+    void testComparatorTreeify() {
+        List<Element> treeify =
+                TreeSupport.treeify(
+                        testData,
+                        expand -> new Role(expand.getId(), Comparator.comparingInt(Role::getSort))
+                );
+        assertEquals(3, treeify.size());
+        Element element = treeify.get(1);
+        assertNotNull(element);
+        Element sort = element.getChildren().get(0);
+        assertNotNull(sort);
+        assertEquals(5, sort.getId());
+    }
+
+
+    @Getter
+    public static class Role extends ComparableElement<Role> {
+
+        private final int sort;
+
+        public Role(@NonNull Serializable id, Comparator<Role> comparator) {
+            super(id, comparator);
+            this.sort = (int) id;
+        }
     }
 }

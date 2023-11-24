@@ -29,19 +29,21 @@ public abstract class DynamicConfigure implements EnvConfigure {
     public BeanDefinition extract(CoreTest coreTest, MergedAnnotation<Annotation> annotation) {
         // 保存文件
         try {
-            URL resource = getClass().getResource(StringPool.SLASH);
+            URL resource = ClassLoader.getSystemResource("./");
             if (resource == null) {
                 throw new NullPointerException("the class can't get '/' resource");
             }
             String currentClassPath = resource.getPath();
             // 动态生成一个配置类
+            String newConfigurationClassName =
+                    getClass().getPackage().getName()
+                            + StringPool.ORIGIN_DOT
+                            + getClass().getSimpleName()
+                            + StringPool.DOLLAR
+                            + IdGenerator.defaultGenerator().getNextIdAsString();
             DynamicType.Unloaded<Object> dynamicType =
                     new ByteBuddy().subclass(Object.class)
-                            .name(getClass().getPackage().getName()
-                                    + StringPool.ORIGIN_DOT
-                                    + getClass().getSimpleName()
-                                    + StringPool.DOLLAR
-                                    + IdGenerator.defaultGenerator().getNextIdAsString())
+                            .name(newConfigurationClassName)
                             .annotateType(buildAnnoDesc(coreTest, annotation))
                             .make();
             Class<?> configureClass = dynamicType.load(getClass().getClassLoader()).getLoaded();

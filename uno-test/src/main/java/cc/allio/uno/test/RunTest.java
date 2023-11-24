@@ -42,16 +42,6 @@ public @interface RunTest {
     String active() default "test";
 
     /**
-     * 提供测试运行的环境
-     *
-     * @return Environment数组
-     * @see Environment
-     * @deprecated 1.1.4版本后启用，使用cc.allio.uno.test.anno包下后缀为Env的注解
-     */
-    @Deprecated
-    Environment[] envs() default {};
-
-    /**
      * 提供spring的组件，使其注册为Spring-Bean
      *
      * @return 被spring @Component注解的class对象
@@ -136,30 +126,6 @@ public @interface RunTest {
         public boolean isEmbedded() {
             return this.embedded;
         }
-    }
-
-    /**
-     * 注解以获取当前测试所需要的环境
-     */
-    @Documented
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.TYPE)
-    @Deprecated
-    @interface Environment {
-
-        /**
-         * {@link Environment}的Class对象，用于进行实例化
-         *
-         * @return
-         */
-        Class<? extends cc.allio.uno.test.env.Environment> env();
-
-        /**
-         * 用于实例化{@link Environment}的Class对象时构造器器的参数列表的全限定类名，根据该参数进行传参数
-         *
-         * @return
-         */
-        Class<?>[] classArgs() default {};
     }
 
 }
