@@ -13,6 +13,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.fasterxml.jackson.databind.type.CollectionLikeType;
 import com.fasterxml.jackson.databind.type.MapType;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.lang.Nullable;
 
@@ -33,7 +34,7 @@ import java.util.Collections;
 @Slf4j
 public class JsonUtils {
 
-    private static final ObjectMapper INSTANCE = newJsonMapper();
+    private static ObjectMapper instance = newJsonMapper();
 
     private JsonUtils() {
 
@@ -45,7 +46,7 @@ public class JsonUtils {
      * @return 空json数据 object node
      */
     public static ObjectNode empty() {
-        return INSTANCE.createObjectNode();
+        return instance.createObjectNode();
     }
 
     /**
@@ -54,7 +55,7 @@ public class JsonUtils {
      * @return array node
      */
     public static ArrayNode arrayEmpty() {
-        return INSTANCE.createArrayNode();
+        return instance.createArrayNode();
     }
 
     /**
@@ -387,7 +388,7 @@ public class JsonUtils {
      * @return 单实例对象 json mapper
      */
     public static ObjectMapper getJsonMapper() {
-        return INSTANCE;
+        return instance;
     }
 
     /**
@@ -448,6 +449,15 @@ public class JsonUtils {
         mapper.getDeserializationConfig().withoutFeatures(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
         // 单引号处理
         mapper.configure(JsonReadFeature.ALLOW_SINGLE_QUOTES.mappedFeature(), true);
+        // 解决时间序列化问题
+        mapper.registerModule(new JavaTimeModule());
         return mapper;
+    }
+
+    /**
+     * 由外部传递{@link ObjectMapper}进行使用
+     */
+    public static void reset(ObjectMapper objectMapper) {
+        JsonUtils.instance = objectMapper;
     }
 }
