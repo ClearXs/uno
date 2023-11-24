@@ -1,6 +1,5 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.test.env.Environment;
 import org.junit.jupiter.api.Test;
 
 /**
@@ -8,24 +7,13 @@ import org.junit.jupiter.api.Test;
  *
  * @author jiangwei
  * @date 2022/2/26 14:11
- * @see org.springframework.boot.test.context.ConfigFileApplicationContextInitializer
- * @see org.springframework.boot.context.config.ConfigFileApplicationListener
  * @since 1.0
  */
 public class ConfigDataLoaderTest extends CoreTest {
-    @Override
-    protected void onEnvBuild() {
-
-    }
 
     @Test
     void testLoad() {
-        assertEquals("test", getProperty("allio.uno"));
-    }
-
-    @Override
-    public Environment supportEnv() {
-        return null;
+        assertEquals("uno", getProperty("allio"));
     }
 
     @Override

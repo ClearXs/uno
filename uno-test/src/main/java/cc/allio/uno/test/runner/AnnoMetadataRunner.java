@@ -47,7 +47,9 @@ public class AnnoMetadataRunner implements RegisterRunner {
             // 解析当前注解上的Env注解
             if (AnnotatedElementUtils.hasAnnotation(anno.getType(), Env.class)) {
                 Env env = AnnotatedElementUtils.findMergedAnnotation(anno.getType(), Env.class);
-                resolveEnv(coreTest, env);
+                if (env != null) {
+                    resolveEnv(coreTest, env);
+                }
             }
         }
         for (MergedAnnotation<Annotation> anno : mergedAnnotations) {
@@ -55,7 +57,9 @@ public class AnnoMetadataRunner implements RegisterRunner {
             if (AnnotatedElementUtils.hasAnnotation(anno.getType(), AnnoConfigure.class)
                     && AnnotatedElementUtils.hasAnnotation(anno.getType(), Extractor.class)) {
                 Extractor extractor = AnnotatedElementUtils.findMergedAnnotation(anno.getType(), Extractor.class);
-                extractEnv(anno, extractor, coreTest);
+                if (extractor != null) {
+                    extractEnv(anno, extractor, coreTest);
+                }
             }
         }
 
@@ -64,7 +68,7 @@ public class AnnoMetadataRunner implements RegisterRunner {
     /**
      * 构建Environment实例，解析
      *
-     * @param envClasses Environment
+     * @param env Environment
      */
     public void resolveEnv(CoreTest coreTest, Env env) throws Throwable {
         Class<? extends Environment>[] envClasses = env.value();
@@ -72,10 +76,7 @@ public class AnnoMetadataRunner implements RegisterRunner {
         Class<? extends Environment>[] allowEnv = Stream.of(envClasses).filter(c -> !parsedEnvCaches.contains(c)).toArray(Class[]::new);
         if (ObjectUtils.isNotEmpty(allowEnv)) {
             ClassUtils.Instantiation<Environment> instantiation =
-                    ClassUtils.<Environment>instantiationBuilder()
-                            .addMultiForInstanceClasses(allowEnv)
-                            .setExcludeNull(true)
-                            .build();
+                    ClassUtils.<Environment>instantiationBuilder().addMultiForInstanceClasses(allowEnv).setExcludeNull(true).build();
             instantiation.addFeature(new ClassUtils.DeDuplicationFeature<>());
             instantiation.addFeature(new ClassUtils.SortFeature<>());
             List<Environment> environments = instantiation.create();
@@ -106,8 +107,8 @@ public class AnnoMetadataRunner implements RegisterRunner {
             if (configureExtractor != null) {
                 // 动态生成bean 配置类
                 BeanDefinition beanDefinition = configureExtractor.extract(coreTest, anno);
-                if (beanDefinition != null) {
-                    GenericApplicationContext context = coreTest.getContext();
+                GenericApplicationContext context = coreTest.getContext();
+                if (beanDefinition != null && context != null) {
                     context.registerBeanDefinition(anno.getType().getName(), beanDefinition);
                 }
                 envConfigureCaches.add(extractorClazz);

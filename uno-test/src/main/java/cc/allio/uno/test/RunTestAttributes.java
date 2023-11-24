@@ -3,7 +3,6 @@ package cc.allio.uno.test;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
-import cc.allio.uno.test.env.Environment;
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.runner.CoreRunner;
 import cc.allio.uno.test.runner.Runner;
@@ -37,8 +36,6 @@ public class RunTestAttributes {
     // 配置文件对应环境
     @Getter
     private String active = "test";
-    @Getter
-    private final Set<RunTest.Environment> envs = Sets.newHashSet();
     // spring bean集合
     @Getter
     private final Set<Class<?>> componentsClasses = Sets.newHashSet();
@@ -74,34 +71,17 @@ public class RunTestAttributes {
                 .get(RunTest.class)
                 .synthesize(MergedAnnotation::isPresent)
                 .orElse(null);
-        if (runTest == null) {
-            throw new IllegalArgumentException(String.format("present test class %s nonexistence @RunTest", testClass.getName()));
+        if (runTest != null) {
+            this.profile = runTest.profile();
+            this.active = runTest.active();
+            this.webEnvironment = runTest.webEnvironment();
+            addComponents(runTest.components());
+            addInlineProperties(runTest.properties());
+            addRunnerClasses(runTest.runner());
+            addVisitorClasses(runTest.visitor());
+            addListenerClasses(runTest.listeners());
+            initInstance();
         }
-        this.profile = runTest.profile();
-        this.active = runTest.active();
-        this.webEnvironment = runTest.webEnvironment();
-        addEnvs(runTest.envs());
-        addComponents(runTest.components());
-        addInlineProperties(runTest.properties());
-        addRunnerClasses(runTest.runner());
-        addVisitorClasses(runTest.visitor());
-        addListenerClasses(runTest.listeners());
-        initInstance();
-    }
-
-    public RunTestAttributes(String profile, String active, RunTest.Environment[] envs,
-                             Class<?>[] components, String[] properties, RunTest.WebEnvironment webEnvironment,
-                             Class<? extends Runner>[] runner, Class<? extends Visitor>[] visitor, Class<? extends TestListener>[] listeners) {
-        this.profile = profile;
-        this.active = active;
-        this.webEnvironment = webEnvironment;
-        addEnvs(envs);
-        addComponents(components);
-        addInlineProperties(properties);
-        addRunnerClasses(runner);
-        addVisitorClasses(visitor);
-        addListenerClasses(listeners);
-        initInstance();
     }
 
     /**
@@ -111,15 +91,6 @@ public class RunTestAttributes {
         this.runners.addAll(create(runnerClasses));
         this.visitors.addAll(create(visitorClasses));
         this.testListeners.addAll(create(listenersClasses));
-    }
-
-    /**
-     * 添加{@link Environment}
-     *
-     * @param envs envs
-     */
-    public void addEnvs(RunTest.Environment... envs) {
-        this.envs.addAll(Lists.newArrayList(envs));
     }
 
     public void addComponents(Class<?>... componentClasses) {

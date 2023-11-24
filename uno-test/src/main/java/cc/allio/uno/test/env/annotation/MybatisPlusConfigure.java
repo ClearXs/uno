@@ -20,7 +20,7 @@ public class MybatisPlusConfigure extends DynamicConfigure {
     protected AnnotationDescription[] buildAnnoDesc(CoreTest coreTest, MergedAnnotation<Annotation> annotation) {
         AnnotationDescription.Builder annoBuilder = AnnotationDescription.Builder.ofType(MapperScan.class);
         String[] basePackages = annotation.getStringArray("basePackages");
-        if (basePackages == null || basePackages.length == 0) {
+        if (basePackages.length == 0) {
             String packageName = coreTest.getTestClass().getPackage().getName();
             basePackages = new String[]{packageName};
         }

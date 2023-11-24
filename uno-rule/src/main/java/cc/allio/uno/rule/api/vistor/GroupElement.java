@@ -1,7 +1,5 @@
 package cc.allio.uno.rule.api.vistor;
 
-import cc.allio.uno.core.datastructure.tree.Element;
-
 import java.util.List;
 
 /**

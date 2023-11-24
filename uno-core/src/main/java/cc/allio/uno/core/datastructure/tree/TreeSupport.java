@@ -1,10 +1,10 @@
 package cc.allio.uno.core.datastructure.tree;
 
+import cc.allio.uno.core.util.CollectionUtils;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -15,14 +15,16 @@ import java.util.stream.Collectors;
  * @date 2023/11/9 11:34
  * @since 1.1.5
  */
-public class TreeSupport {
+public final class TreeSupport {
 
+    private TreeSupport() {
+    }
 
     /**
      * @see #treeify(List, Function)
      */
-    public static <T extends Expand, R extends Element> List<R> treeify(List<T> expandTrees) {
-        return (List<R>) treeify(expandTrees, e -> new DefaultElement(e.getId()));
+    public static <T extends Expand> List<DefaultElement> treeify(List<T> expandTrees) {
+        return treeify(expandTrees, e -> new DefaultElement(e.getId()));
     }
 
     /**
@@ -40,7 +42,10 @@ public class TreeSupport {
      * @param <R>         继承于{@link Element}的泛型
      * @return hierarchy filter expand tree depth == 0的结点
      */
-    public static <T extends Expand, R extends Element> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
+    public static synchronized <T extends Expand, R extends Element> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
+        if (CollectionUtils.isEmpty(expandTrees)) {
+            return Collections.emptyList();
+        }
         // transfer expand id must not null
         Map<Serializable, R> idElement =
                 expandTrees.stream()
@@ -59,19 +64,27 @@ public class TreeSupport {
             }
         }
 
-        // 返回根结点数据
-        return idElement.values()
-                .stream()
-                .filter(e -> e.getDepth() == Element.ROOT_NODE)
-                .toList();
+        T fake = expandTrees.getFirst();
+
+        R sentinel = treeFunc.apply(fake);
+        for (R virtual : idElement.values()) {
+            if (virtual.getDepth() == Element.ROOT_NODE) {
+                // 触发Element添加结点的特性，如排序
+                sentinel.addChildren(virtual);
+            }
+        }
+
+        return sentinel.getChildren();
     }
 
-
     /**
-     * @see #expand(List, Function)
+     * @see #expand(List, Function, Comparator)
      */
-    public static <T extends Expand, R extends Element> List<T> expand(List<R> forest) {
-        return (List<T>) expand(forest, (r) -> new DefaultExpand(r.getId(), r.getParent() != null ? r.getParent().getId() : null));
+    public static <R extends Element> List<DefaultExpand> expand(List<R> forest) {
+        return expand(
+                forest,
+                r -> new DefaultExpand(r.getId(), r.getParent() != null ? r.getParent().getId() : null),
+                null);
     }
 
     /**
@@ -80,14 +93,15 @@ public class TreeSupport {
      *
      * @param forest     树
      * @param expandFunc 树结构展缓为平展结构
+     * @param comparator 用于平展结构的排序，可以为null
      * @param <T>        继承于{@link Expand}的泛型
      * @param <R>        继承于{@link Element}的泛型
      * @return expand
      */
-    public static <T extends Expand, R extends Element> List<T> expand(List<R> forest, Function<R, T> expandFunc) {
+    public static synchronized <T extends Expand, R extends Element> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
         List<T> expands = Lists.newArrayList();
         try {
-            Element.ROOT_SENTINEL.setChildren(forest);
+            Element.ROOT_SENTINEL.setChildren(Lists.newArrayList(forest));
             Element.ROOT_SENTINEL.accept(e -> {
                 // 忽略哨兵结点
                 if (!Element.ROOT_SENTINEL.equals(e)) {
@@ -96,6 +110,9 @@ public class TreeSupport {
             });
         } finally {
             Element.ROOT_SENTINEL.clearChildren();
+        }
+        if (comparator != null) {
+            expands.sort(comparator);
         }
         return expands;
     }

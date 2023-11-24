@@ -23,10 +23,7 @@ public class MybatisConfigure extends DynamicConfigure {
         String[] values = annotation.getStringArray("value");
         String[] basePackages = annotation.getStringArray("basePackages");
         // values and basePackages mutual alias for
-        if ((values != null && values.length == 0) && basePackages != null && basePackages.length == 0) {
-            basePackages = new String[]{coreTestPackageName};
-        }
-        if (values == null && basePackages == null){
+        if (values.length == 0 && basePackages.length == 0) {
             basePackages = new String[]{coreTestPackageName};
         }
         annoBuilder = annoBuilder.defineArray("value", values)

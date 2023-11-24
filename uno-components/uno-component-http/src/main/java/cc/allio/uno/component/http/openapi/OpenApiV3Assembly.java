@@ -131,7 +131,7 @@ public class OpenApiV3Assembly implements OpenApiConverter {
      */
     private Flux<HttpSwapper> buildSwappers(String path, PathItem pathItem) {
         return Flux.fromIterable(pathItem.readOperationsMap().entrySet())
-                .map(operation -> HttpSwapper.build(host.concat(path), HttpMethod.resolve(operation.getKey().name())));
+                .map(operation -> HttpSwapper.build(host.concat(path), HttpMethod.valueOf(operation.getKey().name())));
     }
 
     /**

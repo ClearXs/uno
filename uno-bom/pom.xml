@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.1.5</version>
+        <version>3.2.0</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -22,8 +22,6 @@
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
         <auto-service.version>1.0.1</auto-service.version>
-        <!-- json对象处理 -->
-        <jackson.version>2.11.4</jackson.version>
         <!-- 代理相关 -->
         <byte-buddy.version>1.12.2</byte-buddy.version>
         <cglib.version>3.3.0</cglib.version>
@@ -36,7 +34,8 @@
         <swagger-v3.version>2.2.17</swagger-v3.version>
         <swagger-v2.version>1.6.2</swagger-v2.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
-        <mybatis-spring-boot.version>3.0.2</mybatis-spring-boot.version>
+        <!-- mybatis 还为支持springboot3.2.x 临时处理 -->
+        <mybatis-spring-boot.version>3.0.3-SNAPSHOT</mybatis-spring-boot.version>
         <mybatis-plus-boot.version>3.5.3</mybatis-plus-boot.version>
         <!-- 数据库 -->
         <druid.version>1.2.20</druid.version>
@@ -175,35 +174,6 @@
                 <groupId>cglib</groupId>
                 <artifactId>cglib</artifactId>
                 <version>${cglib.version}</version>
-            </dependency>
-            <!-- bytebuddy -->
-            <dependency>
-                <groupId>net.bytebuddy</groupId>
-                <artifactId>byte-buddy</artifactId>
-                <version>${byte-buddy.version}</version>
-            </dependency>
-            <!-- jackson -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-core</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>${jackson.version}</version>
-            </dependency>
-            <!-- lombok -->
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>${lombok.version}</version>
-                <scope>provided</scope>
             </dependency>
             <!--  ======================== test framework ======================== -->
             <!-- junit -->
