@@ -12,7 +12,6 @@
     <artifactId>uno-demo</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>uno-liquibase-demo</module>
         <module>uno-websocket-demo</module>
     </modules>
 

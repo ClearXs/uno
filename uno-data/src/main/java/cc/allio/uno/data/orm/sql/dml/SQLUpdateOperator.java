@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.sql.dml;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 import cc.allio.uno.data.orm.sql.*;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;

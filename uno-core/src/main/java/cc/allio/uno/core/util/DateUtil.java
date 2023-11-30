@@ -14,12 +14,13 @@ import java.time.temporal.TemporalAmount;
 import java.time.temporal.TemporalQuery;
 import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 /**
  * 日期工具类
  *
- * @author L.cm
+ * @author j.x
  */
 public class DateUtil {
 
@@ -31,6 +32,13 @@ public class DateUtil {
     public static final String PATTERN_YEAR = "yyyy";
 
     public static final String PATTERN_TIME = "HH:mm:ss";
+
+    // ISO
+    public static final String ISO_PATTERN_DATE = "yyyy-MM-dd";
+    public static final String ISO_PATTERN_TIME = "HH:mm:ss.SSSXXX";
+    public static final String ISO_PATTERN_DATE_TIME = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+    // 匹配ISO的时间 如
+    public static Pattern ISO_PATTERN = Pattern.compile(".*T.*|.*T.*\\..*|.*\\..");
 
     /**
      * 老 date 格式化
@@ -399,30 +407,81 @@ public class DateUtil {
 
     /**
      * 尝试按照不同时间格式解析给定的字符串数据
+     * <ul>
+     *     <li>ISO时间格式解析</li>
+     *     <li>标准的时间格式解析</li>
+     * </ul>
      *
      * @param dateStr 时间字符串
      * @return Date or null
+     * @see #tryIsoParse(String)
+     * @see #tryUniParse(String)
      */
     public static Date parse(String dateStr) {
+        Date parseDate;
+        if (ISO_PATTERN.matcher(dateStr).matches()) {
+            parseDate = tryIsoParse(dateStr);
+        } else {
+            parseDate = tryUniParse(dateStr);
+        }
+        return parseDate;
+    }
+
+    /**
+     * 尽最有可能的匹配对iso时间解析，顺序为：
+     * <ol>
+     *     <li>{@link #ISO_PATTERN_DATE_TIME}</li>
+     *     <li>{@link #ISO_PATTERN_DATE}</li>
+     * </ol>
+     *
+     * @param dateStr 时间子串
+     * @return Date or null
+     */
+    public static Date tryIsoParse(String dateStr) {
+        Date parseDate = null;
+        try {
+            parseDate = DateUtil.parse(dateStr, ISO_PATTERN_DATE_TIME);
+        } catch (Throwable e1) {
+            // ignore
+            try {
+                parseDate = DateUtil.parse(dateStr, ISO_PATTERN_DATE);
+            } catch (Throwable e2) {
+                // ignore
+            }
+        }
+        return parseDate;
+    }
+
+    /**
+     * 尽最可能匹配对通用时间格式进行解析。顺序为
+     * <ol>
+     *     <li>{@link #PATTERN_DATETIME}</li>
+     *     <li>{@link #PATTERN_HOUR}</li>
+     *     <li>{@link #PATTERN_DATE}</li>
+     * </ol>
+     *
+     * @param dateStr 时间子串
+     * @return Date or null
+     */
+    public static Date tryUniParse(String dateStr) {
         Date parseDate = null;
         try {
             parseDate = DateUtil.parse(dateStr, DateUtil.PATTERN_DATETIME);
-        } catch (Throwable ex) {
-        }
-        if (parseDate == null) {
+        } catch (Throwable e1) {
+            // ignore
             try {
                 parseDate = DateUtil.parse(dateStr, DateUtil.PATTERN_HOUR);
-            } catch (Throwable ex) {
+            } catch (Throwable e2) {
+                // ignore
             }
         }
-
         if (parseDate == null) {
             try {
                 parseDate = DateUtil.parse(dateStr, DateUtil.PATTERN_DATE);
             } catch (Throwable ex) {
+                // ignore
             }
         }
-
         return parseDate;
     }
 

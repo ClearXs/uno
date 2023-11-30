@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor;
 import cc.allio.uno.core.bean.ObjectWrapper;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.JsonUtils;
-import cc.allio.uno.data.orm.sql.MethodReferenceColumn;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;

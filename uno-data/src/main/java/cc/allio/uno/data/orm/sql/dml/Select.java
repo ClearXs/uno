@@ -4,7 +4,7 @@ import cc.allio.uno.core.StringPool;
 import cc.allio.uno.data.orm.dialect.func.Func;
 import cc.allio.uno.data.orm.sql.word.Distinct;
 import cc.allio.uno.data.orm.sql.ColumnStatement;
-import cc.allio.uno.data.orm.sql.MethodReferenceColumn;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 
 import java.util.Collection;
 

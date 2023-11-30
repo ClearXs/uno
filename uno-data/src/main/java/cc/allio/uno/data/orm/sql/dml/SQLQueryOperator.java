@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.sql.dml;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dialect.func.Func;
 import cc.allio.uno.data.orm.sql.*;
 import cc.allio.uno.data.orm.sql.dml.local.OrderCondition;

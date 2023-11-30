@@ -1,5 +1,7 @@
 package cc.allio.uno.data.orm.sql;
 
+import cc.allio.uno.core.function.MethodReferenceColumn;
+
 /**
  * where eq1=eq2...
  *

@@ -3,7 +3,6 @@ package cc.allio.uno.core.type;
 import cc.allio.uno.core.util.DateUtil;
 import org.springframework.util.ObjectUtils;
 
-import java.text.ParseException;
 import java.util.Date;
 
 /**
@@ -17,17 +16,13 @@ public class DateCalculateOperator extends UnsupportedCalculateOperator {
 
     @Override
     public Object convert(Object target, Class<?> maybeType) {
-        try {
-            if (target instanceof Date) {
-                return target;
-            }
-            if (ObjectUtils.isEmpty(target)) {
-                return defaultValue();
-            } else {
-                return DateUtil.DATETIME_FORMAT.parse(target.toString());
-            }
-        } catch (ParseException e) {
-            throw new NullPointerException(e.getMessage());
+        if (target instanceof Date) {
+            return target;
+        }
+        if (ObjectUtils.isEmpty(target)) {
+            return defaultValue();
+        } else {
+            return DateUtil.parse(target.toString());
         }
     }
 

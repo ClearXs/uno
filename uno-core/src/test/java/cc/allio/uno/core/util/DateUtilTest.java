@@ -55,13 +55,23 @@ class DateUtilTest extends BaseTestCase {
 
     }
 
-    @Override
-    protected void onInit() throws Throwable {
-
+    @Test
+    void testIsoParse() {
+        String isoStr = "2023-11-30T08:48:19.304+08:00";
+        Date parse = DateUtil.parse(isoStr);
+        assertNotNull(parse);
     }
 
-    @Override
-    protected void onDown() throws Throwable {
-
+    @Test
+    void testUniParse() {
+        String str1 = "2023-11-30 08:48:19";
+        Date d1 = DateUtil.parse(str1);
+        assertNotNull(d1);
+        String str2 = "2x23-11-30 08:48:19d";
+        Date d2 = DateUtil.parse(str2);
+        assertNull(d2);
+        String str3 = "2023-11-30";
+        Date d3 = DateUtil.parse(str3);
+        assertNotNull(d3);
     }
 }

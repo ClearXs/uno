@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.sql.dml;
 
 
 import cc.allio.uno.data.orm.sql.ColumnStatement;
-import cc.allio.uno.data.orm.sql.MethodReferenceColumn;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 
 import java.util.Collection;
 

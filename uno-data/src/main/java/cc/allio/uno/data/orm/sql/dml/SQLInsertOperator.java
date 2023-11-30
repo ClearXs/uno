@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.sql.dml;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.data.orm.sql.MethodReferenceColumn;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 import cc.allio.uno.data.orm.sql.SQLName;
 import cc.allio.uno.data.orm.sql.SQLPrepareOperator;
 import cc.allio.uno.data.orm.sql.SQLTableOperator;

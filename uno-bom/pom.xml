@@ -119,11 +119,6 @@
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-starter-liquibase</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>

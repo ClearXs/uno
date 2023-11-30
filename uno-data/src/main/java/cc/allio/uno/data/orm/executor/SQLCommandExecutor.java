@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.api.Key;
 import cc.allio.uno.core.env.Envs;
+import cc.allio.uno.core.function.MethodReferenceColumn;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.executor.elasticsearch.EsSQLCommandExecutor;
 import cc.allio.uno.data.orm.executor.mybatis.MybatisSQLCommandExecutor;
