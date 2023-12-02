@@ -6,7 +6,9 @@ import org.junit.jupiter.api.Test;
 public class ReflectToolTest extends BaseTestCase {
 
     @Test
-    void testSingleGenericType() {
+    void testGenericType() {
+
+        // 接口测试
         Class<?> genericType1 = ReflectTool.getGenericType(new AImpl(), A.class);
 
         assertEquals(String.class, genericType1);
@@ -17,6 +19,11 @@ public class ReflectToolTest extends BaseTestCase {
 
         Class<?> genericType3 = ReflectTool.getGenericType(new BImpl(), B.class, 1);
         assertEquals(Integer.class, genericType3);
+
+        // 类测试
+        Class<?> genericType4 = ReflectTool.getGenericType(new CImpl(), C.class);
+        assertEquals(String.class, genericType4);
+
     }
 
 
@@ -26,10 +33,16 @@ public class ReflectToolTest extends BaseTestCase {
     interface B<T1, T2> {
     }
 
+    static abstract class C<T1> {
+
+    }
+
     static class AImpl implements A<String> {
     }
 
     static class BImpl implements B<String, Integer> {
     }
 
+    static class CImpl extends C<String> {
+    }
 }
