@@ -7,20 +7,20 @@ package cc.allio.uno.core.type;
  * @date 2021/12/23 20:16
  * @since 1.0
  */
-public class ByteTypeOperator extends UnsupportedCalculateOperator {
+public class ByteTypeOperator extends UnsupportedCalculateOperator<Byte> {
 
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Byte.parseByte(target.toString());
+    public Byte convert(Object target, Class<?> maybeType) {
+        return Types.parseByte(target);
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Byte.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object defaultValue() {
+    public Byte defaultValue() {
         return Byte.valueOf("0");
     }
 

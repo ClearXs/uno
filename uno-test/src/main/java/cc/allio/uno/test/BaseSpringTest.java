@@ -1,5 +1,6 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.core.env.Env;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.env.SpringEnv;
 import cc.allio.uno.core.env.SystemEnv;
@@ -54,7 +55,7 @@ public abstract class BaseSpringTest extends BaseTestCase {
     @Override
     protected void onInit() throws Throwable {
         // 实例化 context
-        this.context = createApplication();
+        this.context = createApplicationContext();
 
         // ---------- 资源初始化 ----------
         // 从当前项目路径上下文添加配置文件
@@ -70,7 +71,10 @@ public abstract class BaseSpringTest extends BaseTestCase {
 
         // 构建spring环境
         ConfigurableEnvironment environment = context.getEnvironment();
-        Envs.reset(new SpringEnv((SystemEnv) Envs.getCurrentEnv(), environment));
+        Env env = Envs.getCurrentEnv();
+        if (env instanceof SystemEnv systemEnv) {
+            Envs.reset(new SpringEnv(systemEnv, environment));
+        }
         context.refresh();
 
         // 完成后的回调
@@ -82,7 +86,7 @@ public abstract class BaseSpringTest extends BaseTestCase {
      *
      * @return ApplicationContext实例
      */
-    protected GenericApplicationContext createApplication() {
+    protected GenericApplicationContext createApplicationContext() {
         return new AnnotationConfigApplicationContext();
     }
 

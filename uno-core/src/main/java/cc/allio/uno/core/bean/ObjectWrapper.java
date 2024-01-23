@@ -1,6 +1,7 @@
 package cc.allio.uno.core.bean;
 
 import cc.allio.uno.core.util.CollectionUtils;
+import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -9,8 +10,6 @@ import reactor.util.function.Tuples;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * POJO对象包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
@@ -124,11 +123,10 @@ public class ObjectWrapper implements ValueWrapper {
      * @return tuple2
      */
     @Override
-    public Flux<Tuple2<String, Object>> findAllValues() {
+    public Flux<Tuple2<String, Object>> findTupleValues() {
         return findAll()
                 .flatMap(propertyDescriptor ->
-                        get(propertyDescriptor.getName())
-                                .map(value -> Tuples.of(propertyDescriptor.getName(), value)));
+                        get(propertyDescriptor.getName()).map(value -> Tuples.of(propertyDescriptor.getName(), value)));
     }
 
     /**
@@ -137,16 +135,21 @@ public class ObjectWrapper implements ValueWrapper {
      * @return Map
      */
     @Override
-    public Map<String, Object> findAllValuesForce() {
-        AtomicReference<List<Tuple2<String, Object>>> ref = new AtomicReference<>();
-        findAllValues().collectList().subscribe(ref::set);
-        List<Tuple2<String, Object>> allValues = ref.get();
+    public Map<String, Object> findMapValuesForce() {
+        List<Tuple2<String, Object>> allValues = findTupleValues().collectList().block();
         if (CollectionUtils.isEmpty(allValues)) {
             return Collections.emptyMap();
         }
-        return allValues
-                .stream()
-                .collect(Collectors.toMap(Tuple2::getT1, Tuple2::getT2));
+        Map<String, Object> result = Maps.newHashMap();
+        for (Tuple2<String, Object> allValue : allValues) {
+            String key = allValue.getT1();
+            Object value = allValue.getT2();
+            if (EMPTY_VALUE.equals(value)) {
+                value = null;
+            }
+            result.put(key, value);
+        }
+        return result;
     }
 
     /**

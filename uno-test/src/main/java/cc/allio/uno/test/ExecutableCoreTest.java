@@ -3,9 +3,6 @@ package cc.allio.uno.test;
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.runner.CoreRunner;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.web.reactive.context.AnnotationConfigReactiveWebServerApplicationContext;
-import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
-import org.springframework.context.support.GenericApplicationContext;
 
 import java.util.Set;
 
@@ -25,20 +22,6 @@ public class ExecutableCoreTest extends CoreTest {
     public ExecutableCoreTest(Class<?> testClass, TestContext testContext) {
         this.testClass = testClass;
         this.testContext = testContext;
-    }
-
-    @Override
-    protected GenericApplicationContext createApplication() {
-        return getTestContext().get(TestContext.WEB_SERVER)
-                .map(web -> {
-                    if ("servlet".equals(web)) {
-                        return new AnnotationConfigServletWebServerApplicationContext();
-                    } else if ("reactive".equals(web)) {
-                        return new AnnotationConfigReactiveWebServerApplicationContext();
-                    }
-                    return super.createApplication();
-                })
-                .orElseGet(super::createApplication);
     }
 
     /**

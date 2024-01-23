@@ -52,6 +52,21 @@ public interface Element extends Serializable {
     }
 
     /**
+     * 获取父节点Id
+     *
+     * @return Element
+     * @since 1.1.6
+     */
+    default Serializable getParentId() {
+        return getParent() != null ? getParent().getId() : null;
+    }
+
+    /**
+     * 设置父节点Id
+     */
+    void setParentId(Serializable parentId);
+
+    /**
      * 获取父节点
      *
      * @return Element
@@ -91,7 +106,7 @@ public interface Element extends Serializable {
     /**
      * 添加子结点
      */
-   <T extends Element> void addChildren(T element);
+    <T extends Element> void addChildren(T element);
 
     /**
      * 覆盖并设置子结点
@@ -121,4 +136,11 @@ public interface Element extends Serializable {
      * @param traversal 遍历原则
      */
     void accept(Visitor visitor, Traversal traversal);
+
+    /**
+     * 获取Sentinel结点
+     */
+    static Element getRootSentinel() {
+        return new DefaultElement(-1, -1);
+    }
 }

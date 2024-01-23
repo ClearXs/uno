@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.template;
 
-import cc.allio.uno.core.util.IoUtil;
+import cc.allio.uno.core.util.IoUtils;
 import com.google.common.collect.Maps;
 import org.springframework.core.io.UrlResource;
 import reactor.util.function.Tuple2;
@@ -137,7 +137,7 @@ public interface ExpressionTemplate {
         URL url = Thread.currentThread().getContextClassLoader().getResource(file);
         if (url != null) {
             UrlResource resource = new UrlResource(url);
-            String template = IoUtil.readToString(resource.getInputStream());
+            String template = IoUtils.readToString(resource.getInputStream());
             return parseTemplate(template, target);
         }
         throw new FileNotFoundException(String.format("%s file not found", file));

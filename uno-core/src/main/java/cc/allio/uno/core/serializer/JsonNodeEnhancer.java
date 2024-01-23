@@ -1,6 +1,6 @@
 package cc.allio.uno.core.serializer;
 
-import cc.allio.uno.core.util.BigDecimalUtil;
+import cc.allio.uno.core.util.BigDecimalUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.JsonNodeType;
 import lombok.extern.slf4j.Slf4j;
@@ -78,7 +78,7 @@ public class JsonNodeEnhancer {
      */
     public BigDecimal asBigDecimal(String fieldName, Supplier<BigDecimal> defaultValue) {
         String maybeBigDecimal = asString(fieldName);
-        BigDecimal maybe = BigDecimalUtil.creator(maybeBigDecimal);
+        BigDecimal maybe = BigDecimalUtils.creator(maybeBigDecimal);
         if (Objects.isNull(maybe)) {
             return defaultValue.get();
         }

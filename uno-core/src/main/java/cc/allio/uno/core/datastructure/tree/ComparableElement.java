@@ -1,7 +1,5 @@
 package cc.allio.uno.core.datastructure.tree;
 
-import lombok.NonNull;
-
 import java.io.Serializable;
 import java.util.Comparator;
 
@@ -9,7 +7,7 @@ public class ComparableElement<T extends ComparableElement<T>> extends DefaultEl
 
     private final Comparator<T> comparator;
 
-    public ComparableElement(@NonNull Serializable id, Comparator<T> comparator) {
+    public ComparableElement(Serializable id, Comparator<T> comparator) {
         super(id);
         this.comparator = comparator;
     }

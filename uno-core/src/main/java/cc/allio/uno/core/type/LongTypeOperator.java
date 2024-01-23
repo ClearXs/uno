@@ -7,46 +7,46 @@ package cc.allio.uno.core.type;
  * @date 2021/12/24 15:42
  * @since 1.0
  */
-public class LongTypeOperator implements TypeOperator {
+public class LongTypeOperator implements TypeOperator<Long> {
 
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Long.parseLong(target.toString());
+    public Long convert(Object target, Class<?> maybeType) {
+        return Types.parseLong(target);
     }
 
     @Override
     public int signum(Object target) {
-        long aLong = Long.parseLong(target.toString());
+        long aLong = convert(target);
         return Long.signum(aLong);
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Long.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object add(Object origin, Object passive) {
-        return Long.parseLong(origin.toString()) + Long.parseLong(passive.toString());
+    public Long add(Long origin, Long passive) {
+        return origin + passive;
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
-        return Long.parseLong(origin.toString()) - Long.parseLong(passive.toString());
+    public Long subtract(Long origin, Long passive) {
+        return origin - passive;
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
-        return Long.parseLong(passive.toString()) * Long.parseLong(passive.toString());
+    public Long multiply(Long origin, Long passive) {
+        return origin * passive;
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
-        return Long.parseLong(origin.toString()) / Long.parseLong(passive.toString());
+    public Long divide(Long origin, Long passive) {
+        return origin / passive;
     }
 
     @Override
-    public Object defaultValue() {
+    public Long defaultValue() {
         return 0L;
     }
 

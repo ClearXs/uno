@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.convert;
 
-import cc.allio.uno.core.util.ConvertUtil;
+import cc.allio.uno.core.util.ConvertUtils;
 import cc.allio.uno.core.util.StringUtils;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.extern.slf4j.Slf4j;
@@ -93,14 +93,14 @@ public class StringToEnumConverter implements ConditionalGenericConverter {
 			Constructor constructor = (Constructor) accessibleObject;
 			Class<?> paramType = constructor.getParameterTypes()[0];
 			// 类型转换
-			Object object = ConvertUtil.convert(value, paramType);
+			Object object = ConvertUtils.convert(value, paramType);
 			return constructor.newInstance(object);
 		}
 		if (accessibleObject instanceof Method) {
 			Method method = (Method) accessibleObject;
 			Class<?> paramType = method.getParameterTypes()[0];
 			// 类型转换
-			Object object = ConvertUtil.convert(value, paramType);
+			Object object = ConvertUtils.convert(value, paramType);
 			return method.invoke(clazz, object);
 		}
 		return null;

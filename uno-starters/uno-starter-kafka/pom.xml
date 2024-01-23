@@ -5,16 +5,11 @@
     <parent>
         <artifactId>uno-starters</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6-beta.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-starter-kafka</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>

@@ -12,12 +12,12 @@ import java.util.Date;
  * @date 2021/12/23 20:24
  * @since 1.0
  */
-public class DateCalculateOperator extends UnsupportedCalculateOperator {
+public class DateCalculateOperator extends UnsupportedCalculateOperator<Date> {
 
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        if (target instanceof Date) {
-            return target;
+    public Date convert(Object target, Class<?> maybeType) {
+        if (Types.isDate(target.getClass())) {
+            return (Date) target;
         }
         if (ObjectUtils.isEmpty(target)) {
             return defaultValue();
@@ -28,11 +28,11 @@ public class DateCalculateOperator extends UnsupportedCalculateOperator {
 
     @Override
     public String fromString(Object target) {
-        return DateUtil.format((Date) convert(target, Date.class), DateUtil.PATTERN_DATETIME);
+        return DateUtil.format(convert(target, Date.class), DateUtil.PATTERN_DATETIME);
     }
 
     @Override
-    public Object defaultValue() {
+    public Date defaultValue() {
         return new Date();
     }
 

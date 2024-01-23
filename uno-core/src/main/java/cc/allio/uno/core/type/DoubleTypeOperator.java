@@ -7,45 +7,45 @@ package cc.allio.uno.core.type;
  * @date 2021/12/23 20:15
  * @since 1.0
  */
-public class DoubleTypeOperator implements TypeOperator {
+public class DoubleTypeOperator implements TypeOperator<Double> {
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Double.parseDouble(target.toString());
+    public Double convert(Object target, Class<?> maybeType) {
+        return Types.parseDouble(target);
     }
 
     @Override
     public int signum(Object target) {
-        double aDouble = Double.parseDouble(target.toString());
+        double aDouble = convert(target);
         return Double.compare(aDouble, Double.NaN);
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Double.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object add(Object origin, Object passive) {
-        return Double.parseDouble(origin.toString()) + Double.parseDouble(passive.toString());
+    public Double add(Double origin, Double passive) {
+        return origin + passive;
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
-        return Double.parseDouble(origin.toString()) - Double.parseDouble(passive.toString());
+    public Double subtract(Double origin, Double passive) {
+        return origin - passive;
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
-        return Double.parseDouble(origin.toString()) * Double.parseDouble(passive.toString());
+    public Double multiply(Double origin, Double passive) {
+        return origin * passive;
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
-        return Double.parseDouble(origin.toString()) / Double.parseDouble(passive.toString());
+    public Double divide(Double origin, Double passive) {
+        return origin / passive;
     }
 
     @Override
-    public Object defaultValue() {
+    public Double defaultValue() {
         return 0d;
     }
 

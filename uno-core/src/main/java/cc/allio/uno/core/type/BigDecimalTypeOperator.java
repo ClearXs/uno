@@ -10,55 +10,45 @@ import java.math.RoundingMode;
  * @date 2021/12/23 20:18
  * @since 1.0
  */
-public class BigDecimalTypeOperator implements TypeOperator {
+public class BigDecimalTypeOperator implements TypeOperator<BigDecimal> {
 
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return new BigDecimal(target.toString());
+    public BigDecimal convert(Object target, Class<?> maybeType) {
+        return Types.parseBigDecimal(target);
     }
 
     @Override
     public int signum(Object target) {
-        BigDecimal bigDecimal = new BigDecimal(target.toString());
-        return bigDecimal.signum();
+        return convert(target).signum();
     }
 
     @Override
     public String fromString(Object target) {
-        BigDecimal bigDecimal = new BigDecimal(target.toString());
-        return bigDecimal.toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object add(Object origin, Object passive) {
-        return new BigDecimal(origin.toString())
-                .add(new BigDecimal(passive.toString()))
-                .setScale(2, RoundingMode.UP);
+    public BigDecimal add(BigDecimal origin, BigDecimal passive) {
+        return origin.add(passive).setScale(2, RoundingMode.UP);
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
-        return new BigDecimal(origin.toString())
-                .subtract(new BigDecimal(passive.toString()))
-                .setScale(2, RoundingMode.UP);
+    public BigDecimal subtract(BigDecimal origin, BigDecimal passive) {
+        return origin.subtract(passive).setScale(2, RoundingMode.UP);
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
-        return new BigDecimal(origin.toString())
-                .multiply(new BigDecimal(origin.toString()))
-                .setScale(2, RoundingMode.UP);
+    public BigDecimal multiply(BigDecimal origin, BigDecimal passive) {
+        return origin.multiply(passive).setScale(2, RoundingMode.UP);
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
-        return new BigDecimal(origin.toString())
-                .divide(new BigDecimal(passive.toString()))
-                .setScale(2, RoundingMode.UP);
+    public BigDecimal divide(BigDecimal origin, BigDecimal passive) {
+        return origin.divide(passive, 2, RoundingMode.UP);
     }
 
     @Override
-    public Object defaultValue() {
+    public BigDecimal defaultValue() {
         return BigDecimal.ZERO;
     }
 

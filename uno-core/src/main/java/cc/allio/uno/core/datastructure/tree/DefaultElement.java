@@ -2,11 +2,9 @@ package cc.allio.uno.core.datastructure.tree;
 
 import com.google.common.collect.Lists;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
 import java.io.Serializable;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -20,23 +18,44 @@ import java.util.List;
 public class DefaultElement extends TraversalElement {
 
     private final Serializable id;
+
+    @Getter
+    private Serializable parentId;
     @Setter
     private int depth;
 
     @Setter
     private Element parent;
 
-    private List<? super Element> children;
+    private List<Element> children;
 
-    public DefaultElement(@NonNull Serializable id) {
+    public DefaultElement(Serializable id) {
         this.id = id;
         this.children = Lists.newArrayList();
     }
 
-    public DefaultElement(@NonNull Serializable id, int depth) {
+    public DefaultElement(Serializable id, Integer depth) {
         this.id = id;
         this.depth = depth;
         this.children = Lists.newArrayList();
+    }
+
+    public DefaultElement(Serializable id, Serializable parentId) {
+        this.id = id;
+        this.parentId = parentId;
+        this.children = Lists.newArrayList();
+    }
+
+    public DefaultElement(Serializable id, Serializable parentId, int depth) {
+        this.id = id;
+        this.parentId = parentId;
+        this.depth = depth;
+        this.children = Lists.newArrayList();
+    }
+
+    @Override
+    public void setParentId(Serializable parentId) {
+        this.parentId = parentId;
     }
 
     @Override
@@ -46,7 +65,12 @@ public class DefaultElement extends TraversalElement {
 
     @Override
     public <T extends Element> void setChildren(List<T> children) {
-        this.children = Collections.singletonList(children);
+        this.children = (List<Element>) children;
+    }
+
+    @Override
+    public <T extends Element> List<T> getChildren() {
+        return (List<T>) children;
     }
 
     @Override

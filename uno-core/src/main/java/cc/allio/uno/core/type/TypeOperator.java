@@ -3,19 +3,20 @@ package cc.allio.uno.core.type;
 /**
  * 类型操作
  *
+ * @param <T> 具体操作的类型实体
  * @author jiangwei
  * @date 2021/12/23 20:06
  * @since 1.0
  */
-public interface TypeOperator extends CalculateOperator {
+public interface TypeOperator<T> extends CalculateOperator<T> {
 
     /**
      * 转换动作
      *
-     * @param target    目标对象
+     * @param target 目标对象
      * @return 转换后的对象，可能也为原对象
      */
-    default Object convert(Object target) {
+    default T convert(Object target) {
         return convert(target, getType());
     }
 
@@ -26,7 +27,7 @@ public interface TypeOperator extends CalculateOperator {
      * @param maybeType 目标对象可能的类型
      * @return 转换后的对象，可能也为原对象
      */
-    Object convert(Object target, Class<?> maybeType);
+    T convert(Object target, Class<?> maybeType);
 
     /**
      * 判断数字为正数、0或负数
@@ -48,7 +49,7 @@ public interface TypeOperator extends CalculateOperator {
      *
      * @return 默认返回为null, 由实现类实现
      */
-    default Object defaultValue() {
+    default T defaultValue() {
         return null;
     }
 

@@ -9,7 +9,7 @@ import java.io.Serializable;
  * @date 2023/11/9 11:32
  * @since 1.1.5
  */
-public interface Expand {
+public interface Expand extends Serializable {
 
     /**
      * 获取当前结点的标识

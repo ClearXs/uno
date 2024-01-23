@@ -15,6 +15,7 @@ import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -74,8 +75,8 @@ public class BeanInfoWrapper<T> {
                 .switchIfEmpty(Mono.empty())
                 .single()
                 .onErrorResume(error -> {
-                    if (log.isDebugEnabled()) {
-                        log.debug("get field {} descriptor error", name);
+                    if (log.isWarnEnabled()) {
+                        log.warn("get field {} descriptor error", name);
                     }
                     return Mono.empty();
                 });
@@ -191,8 +192,8 @@ public class BeanInfoWrapper<T> {
                 .flatMap(descriptor ->
                         write(target, descriptor, forceCoverage, value)
                                 .onErrorContinue((error, o) -> {
-                                    if (log.isDebugEnabled()) {
-                                        log.debug("target {} set field {} value error set empty", target.getClass().getSimpleName(), name);
+                                    if (log.isWarnEnabled()) {
+                                        log.warn("target {} set field {} value error set empty", target.getClass().getSimpleName(), name);
                                     }
                                 }));
     }
@@ -208,17 +209,22 @@ public class BeanInfoWrapper<T> {
         return Mono.justOrEmpty(descriptor.getReadMethod())
                 .flatMap(readMethod -> {
                     try {
-                        return Mono.justOrEmpty(readMethod.invoke(target));
+                        Object result = readMethod.invoke(target);
+                        return Mono.just(Objects.requireNonNullElse(result, ValueWrapper.EMPTY_VALUE));
                     } catch (Throwable ex) {
                         return Mono.error(ex);
                     }
                 })
-                .onErrorContinue((err, o) -> log.info("Target {} get field {} value error", target.getClass().getSimpleName(), descriptor.getName(), err));
+                .onErrorContinue((err, o) -> {
+                    if (log.isWarnEnabled()) {
+                        log.warn("Target {} get field {} value error", target.getClass().getSimpleName(), descriptor.getName(), err);
+                    }
+                });
     }
 
     /**
      * 调用指定bean{@link PropertyDescriptor}的WriteMethod方法，进行字段赋值。
-     * <p>根据配置的<code>forceCoverage</code>参数，判断是否进行强行覆盖值（如果字段不为空的化）</p>
+     * <p>根据配置的<code>forceCoverage</code>参数，判断是否进行强行覆盖值（如果字段不为空）</p>
      *
      * @param target        写入指定bean
      * @param descriptor    字段对象
@@ -254,8 +260,8 @@ public class BeanInfoWrapper<T> {
                                             writeMethod.invoke(target, values.toArray());
                                         }
                                     } catch (Throwable err) {
-                                        if (log.isDebugEnabled()) {
-                                            log.debug("Target {} set field {} value error set empty", target.getClass().getSimpleName(), descriptor.getName());
+                                        if (log.isWarnEnabled()) {
+                                            log.warn("Target {} set field {} value error set empty", target.getClass().getSimpleName(), descriptor.getName());
                                         }
                                     }
                                     return Mono.just(target);
@@ -264,6 +270,12 @@ public class BeanInfoWrapper<T> {
         if (forceCoverage) {
             return writeMono;
         }
-        return read(target, descriptor).switchIfEmpty(writeMono).then(Mono.just(target));
+        return read(target, descriptor)
+                .flatMap(v -> {
+                    if (ValueWrapper.EMPTY_VALUE.equals(v)) {
+                        return writeMono;
+                    }
+                    return Mono.just(target);
+                });
     }
 }

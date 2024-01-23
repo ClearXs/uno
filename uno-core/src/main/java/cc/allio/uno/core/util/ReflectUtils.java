@@ -16,7 +16,6 @@
  */
 package cc.allio.uno.core.util;
 
-import com.google.common.collect.Streams;
 import org.springframework.beans.BeansException;
 import org.springframework.cglib.core.CodeGenerationException;
 import org.springframework.core.convert.Property;
@@ -29,10 +28,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * 反射工具类
@@ -71,7 +67,7 @@ public class ReflectUtils extends ReflectionUtils {
      */
     public static PropertyDescriptor[] getPropertiesHelper(Class<?> type, boolean read, boolean write) {
         try {
-            PropertyDescriptor[] all = CoreBeanUtil.getPropertyDescriptors(type);
+            PropertyDescriptor[] all = BeanUtils.getPropertyDescriptors(type);
             if (read && write) {
                 return all;
             } else {
@@ -99,7 +95,7 @@ public class ReflectUtils extends ReflectionUtils {
      */
     @Nullable
     public static Property getProperty(Class<?> propertyType, String propertyName) {
-        PropertyDescriptor propertyDescriptor = CoreBeanUtil.getPropertyDescriptor(propertyType, propertyName);
+        PropertyDescriptor propertyDescriptor = BeanUtils.getPropertyDescriptor(propertyType, propertyName);
         if (propertyDescriptor == null) {
             return null;
         }
@@ -152,41 +148,6 @@ public class ReflectUtils extends ReflectionUtils {
     }
 
     /**
-     * 获取当前class所有的field，包含其父类
-     *
-     * @param clazz the clazz
-     * @return all field of class
-     */
-    public static List<Field> getAllField(Class<?> clazz) {
-        Stream<Field> allField = Stream.empty();
-        while (clazz != Object.class) {
-            Field[] declaredFields = clazz.getDeclaredFields();
-            allField = Streams.concat(Arrays.stream(declaredFields), allField);
-            clazz = clazz.getSuperclass();
-        }
-        return allField.collect(Collectors.toList());
-    }
-
-    /**
-     * 获取 类属性
-     *
-     * @param clazz     类信息
-     * @param fieldName 属性名
-     * @return Field
-     */
-    @Nullable
-    public static Field getField(Class<?> clazz, String fieldName) {
-        while (clazz != Object.class) {
-            try {
-                return clazz.getDeclaredField(fieldName);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
-    }
-
-    /**
      * 获取 所有 field 属性上的注解
      *
      * @param clazz           类
@@ -197,7 +158,7 @@ public class ReflectUtils extends ReflectionUtils {
      */
     @Nullable
     public static <T extends Annotation> T getAnnotation(Class<?> clazz, String fieldName, Class<T> annotationClass) {
-        Field field = ReflectUtils.getField(clazz, fieldName);
+        Field field = FieldUtils.getField(clazz, fieldName);
         if (field == null) {
             return null;
         }

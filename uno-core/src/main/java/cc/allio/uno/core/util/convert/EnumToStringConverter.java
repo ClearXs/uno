@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.convert;
 
-import cc.allio.uno.core.util.ConvertUtil;
+import cc.allio.uno.core.util.ConvertUtils;
 import com.fasterxml.jackson.annotation.JsonValue;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.convert.TypeDescriptor;
@@ -77,7 +77,7 @@ public class EnumToStringConverter implements ConditionalGenericConverter {
                 return ((Enum) source).name();
             }
             int ordinal = ((Enum) source).ordinal();
-            return ConvertUtil.convert(ordinal, targetClazz);
+            return ConvertUtils.convert(ordinal, targetClazz);
         }
         try {
             return EnumToStringConverter.invoke(sourceClazz, accessibleObject, source, targetClazz);
@@ -98,12 +98,12 @@ public class EnumToStringConverter implements ConditionalGenericConverter {
             Method method = (Method) accessibleObject;
             Class<?> paramType = method.getParameterTypes()[0];
             // 类型转换
-            Object object = ConvertUtil.convert(source, paramType);
+            Object object = ConvertUtils.convert(source, paramType);
             value = method.invoke(clazz, object);
         }
         if (value == null) {
             return null;
         }
-        return ConvertUtil.convert(value, targetClazz);
+        return ConvertUtils.convert(value, targetClazz);
     }
 }

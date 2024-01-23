@@ -723,7 +723,7 @@ public class DateUtil {
      * @return 时间
      */
     public static Integer hour() {
-        return NumberUtil.toInt(format(new Date(), "HH"));
+        return NumberUtils.toInt(format(new Date(), "HH"));
     }
 
     /**
@@ -732,7 +732,7 @@ public class DateUtil {
      * @return 当日24条数据
      */
     public static Collection<Date> getHourDataSet() {
-        Date dayBegin = CalendarUtil.getFirstSecondOfDay(DateUtil.now());
+        Date dayBegin = CalendarUtils.getFirstSecondOfDay(DateUtil.now());
         Calendar cal = Calendar.getInstance();
         cal.setTime(dayBegin);
         PriorityQueue<Date> dataSets = new PriorityQueue<>(Date::compareTo);

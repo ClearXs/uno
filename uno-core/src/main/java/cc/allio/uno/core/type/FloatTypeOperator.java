@@ -7,45 +7,45 @@ package cc.allio.uno.core.type;
  * @date 2021/12/23 20:11
  * @since 1.0
  */
-public class FloatTypeOperator implements TypeOperator {
+public class FloatTypeOperator implements TypeOperator<Float> {
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Float.parseFloat(target.toString());
+    public Float convert(Object target, Class<?> maybeType) {
+        return Types.parseFloat(target);
     }
 
     @Override
     public int signum(Object target) {
-        float aFloat = Float.parseFloat(target.toString());
+        float aFloat = convert(target);
         return Float.compare(aFloat, Float.NaN);
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Float.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object add(Object origin, Object passive) {
-        return Float.parseFloat(origin.toString()) + Float.parseFloat(passive.toString());
+    public Float add(Float origin, Float passive) {
+        return origin + passive;
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
-        return Float.parseFloat(origin.toString()) - Float.parseFloat(passive.toString());
+    public Float subtract(Float origin, Float passive) {
+        return origin - passive;
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
-        return Float.parseFloat(origin.toString()) * Float.parseFloat(passive.toString());
+    public Float multiply(Float origin, Float passive) {
+        return origin * passive;
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
-        return Float.parseFloat(origin.toString()) / Float.parseFloat(passive.toString());
+    public Float divide(Float origin, Float passive) {
+        return origin / passive;
     }
 
     @Override
-    public Object defaultValue() {
+    public Float defaultValue() {
         return 0f;
     }
 

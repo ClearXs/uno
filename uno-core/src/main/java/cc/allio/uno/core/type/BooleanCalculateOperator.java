@@ -7,19 +7,19 @@ package cc.allio.uno.core.type;
  * @date 2021/12/23 20:10
  * @since 1.0
  */
-public class BooleanCalculateOperator extends UnsupportedCalculateOperator {
+public class BooleanCalculateOperator extends UnsupportedCalculateOperator<Boolean> {
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Boolean.parseBoolean(target.toString());
+    public Boolean convert(Object target, Class<?> maybeType) {
+        return Types.parseBoolean(target);
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Boolean.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object defaultValue() {
+    public Boolean defaultValue() {
         return Boolean.FALSE;
     }
 

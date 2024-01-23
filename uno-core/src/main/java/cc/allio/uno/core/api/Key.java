@@ -21,5 +21,5 @@ public interface Key {
      *
      * @return key
      */
-    String getKey();
+    String key();
 }

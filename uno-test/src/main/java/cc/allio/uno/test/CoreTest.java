@@ -39,11 +39,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     public CoreTest(Class<?> testClass) {
-        if (testClass == null) {
-            this.testClass = getClass();
-        } else {
-            this.testClass = testClass;
-        }
+        this.testClass = Objects.requireNonNullElseGet(testClass, this::getClass);
     }
 
     // ----------------- lifecycle -----------------

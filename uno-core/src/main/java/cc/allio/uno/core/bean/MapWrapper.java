@@ -101,7 +101,7 @@ public class MapWrapper implements ValueWrapper {
     }
 
     @Override
-    public Flux<Tuple2<String, Object>> findAllValues() {
+    public Flux<Tuple2<String, Object>> findTupleValues() {
         return Flux.fromIterable(
                 instance.entrySet().stream()
                         .map(entry -> Tuples.of(entry.getKey(), entry.getValue()))

@@ -46,4 +46,14 @@ class DefaultChainTest extends BaseTestCase {
                 .verifyComplete();
     }
 
+    @Test
+    void testErrorContinue() throws Throwable {
+        ErrorNode errorNode = new ErrorNode();
+        SetDefaultValueNode defaultValueNode = new SetDefaultValueNode();
+        DefaultChain<String, String> chain = new DefaultChain<>(Arrays.asList(errorNode, defaultValueNode));
+        TestChainContext context = new TestChainContext();
+        chain.proceed(context).subscribe();
+        assertEquals("default", context.getAttribute().get("test"));
+    }
+
 }

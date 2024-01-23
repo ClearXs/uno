@@ -6,7 +6,7 @@ import cc.allio.uno.core.bean.BeanInfoWrapper;
 import cc.allio.uno.core.bus.DefaultEventContext;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.component.sequential.Sequential;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.core.util.BeanUtils;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
@@ -71,7 +71,7 @@ public class DefaultSequentialContext extends DefaultEventContext implements Seq
 
     @Override
     public Sequential getSequential() {
-        return CoreBeanUtil.copy(sequential, sequential.getClass());
+        return BeanUtils.copy(sequential, sequential.getClass());
     }
 
     @Override

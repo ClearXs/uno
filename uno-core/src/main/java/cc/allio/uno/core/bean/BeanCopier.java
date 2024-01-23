@@ -2,7 +2,7 @@ package cc.allio.uno.core.bean;
 
 
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.core.util.BeanUtils;
 import cc.allio.uno.core.util.StringUtils;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Label;
@@ -272,7 +272,7 @@ public abstract class BeanCopier {
 
         @Override
         protected Object firstInstance(Class type) {
-            return CoreBeanUtil.newInstance(type);
+            return BeanUtils.newInstance(type);
         }
 
         @Override

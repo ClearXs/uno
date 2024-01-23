@@ -100,13 +100,14 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      */
     public static Class<?> getSingleActualGenericType(Class<?> clazz) throws ClassNotFoundException {
         String expectClassname = getSingleGenericClassName(clazz);
-        Object exceptType = AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-            try {
-                return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
-            } catch (ClassNotFoundException e) {
-                return e;
-            }
-        });
+        Object exceptType = AccessController.doPrivileged(
+                (PrivilegedAction<Object>) () -> {
+                    try {
+                        return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
+                    } catch (ClassNotFoundException e) {
+                        return e;
+                    }
+                });
         if (exceptType instanceof ClassNotFoundException notfound) {
             throw new ClassNotFoundException(notfound.getMessage());
         }
@@ -694,9 +695,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         @Override
         public void execute(Instantiation<I> instantiation) {
             Class<? extends I>[] waitForInstanceClasses = instantiation.getWaitForInstanceClasses();
-            instantiation.rewriteInstanceClasses(
-                    Stream.of(waitForInstanceClasses).distinct().toArray(Class[]::new)
-            );
+            instantiation.rewriteInstanceClasses(Stream.of(waitForInstanceClasses).distinct().toArray(Class[]::new));
         }
     }
 }

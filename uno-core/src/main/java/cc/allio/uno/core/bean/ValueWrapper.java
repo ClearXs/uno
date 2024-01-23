@@ -2,6 +2,8 @@ package cc.allio.uno.core.bean;
 
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.CollectionUtils;
+import cc.allio.uno.core.util.FieldUtils;
+import com.google.common.collect.Lists;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -9,10 +11,7 @@ import reactor.util.function.Tuple2;
 import java.beans.BeanInfo;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
@@ -27,6 +26,8 @@ import java.util.stream.Collectors;
  * @since 1.1.4
  */
 public interface ValueWrapper {
+
+    Empty EMPTY_VALUE = new Empty();
 
     /**
      * 给定字段判断是否包含当前bean中是否包含该字段
@@ -61,7 +62,7 @@ public interface ValueWrapper {
      * 获取对象某个字段的值
      *
      * @param field 字段
-     * @return 单数据源对象
+     * @return 单数据源对象，如果原始数据为null，则返回{@link #EMPTY_VALUE}，需要使用方进行判断
      * @see BeanInfoWrapper#get(Object, String)
      */
     default Mono<Object> get(Field field) {
@@ -207,16 +208,16 @@ public interface ValueWrapper {
      *
      * @return tuple2
      */
-    Flux<Tuple2<String, Object>> findAllValues();
+    Flux<Tuple2<String, Object>> findTupleValues();
 
     /**
      * 强制获取该pojo所有的值
      *
      * @return Map
      */
-    default Map<String, Object> findAllValuesForce() {
+    default Map<String, Object> findMapValuesForce() {
         AtomicReference<List<Tuple2<String, Object>>> ref = new AtomicReference<>();
-        findAllValues().collectList().subscribe(ref::set);
+        findTupleValues().collectList().subscribe(ref::set);
         List<Tuple2<String, Object>> values = ref.get();
         if (CollectionUtils.isNotEmpty(values)) {
             return values.stream().collect(Collectors.toMap(Tuple2::getT1, Tuple2::getT2));
@@ -225,11 +226,64 @@ public interface ValueWrapper {
     }
 
     /**
+     * 获取引用的目标实体的所有值
+     */
+    default Flux<Object> findValues() {
+        return findTupleValues().map(Tuple2::getT2);
+    }
+
+    /**
+     * @see #findValues()
+     */
+    default List<Object> findValuesForce() {
+        List<String> fields = findNamesForce();
+        List<Object> values = Lists.newArrayList();
+        for (String field : fields) {
+            Object value = getForce(field);
+            if (value == null) {
+                value = EMPTY_VALUE;
+            }
+            values.add(value);
+        }
+        return values;
+    }
+
+    /**
+     * 获取引用的目标实体的所有字段名称
+     */
+    default Flux<String> findNames() {
+        return findTupleValues().map(Tuple2::getT1);
+    }
+
+    /**
+     * @see #findNames()
+     */
+    default List<String> findNamesForce() {
+        Object target = getTarget();
+        return Arrays.stream(FieldUtils.getAllFields(target.getClass()))
+                .map(Field::getName)
+                .toList();
+    }
+
+    /**
      * 获取引用的目标实体
      *
      * @return 实体
      */
     Object getTarget();
+
+    /**
+     * 给定一个对象，判断该对象是否是{@link #EMPTY_VALUE}，如果是，则返回null，否则返回原始对象
+     *
+     * @param ori ori
+     * @return null or ori
+     */
+    static Object restore(Object ori) {
+        if (EMPTY_VALUE.equals(ori)) {
+            return null;
+        }
+        return ori;
+    }
 
     /**
      * 根据给定的对象获取ValueWrapper实例

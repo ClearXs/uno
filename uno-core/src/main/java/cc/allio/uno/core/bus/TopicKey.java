@@ -71,7 +71,7 @@ public interface TopicKey {
      */
     static TopicKey create(String prefix, Object pojo) {
         ObjectWrapper wrapper = new ObjectWrapper(pojo);
-        return create(prefix, wrapper.findAllValuesForce().values().stream().map(Object::toString).toArray(String[]::new));
+        return create(prefix, wrapper.findMapValuesForce().values().stream().map(Object::toString).toArray(String[]::new));
     }
 
     /**
