@@ -1,18 +1,9 @@
 package cc.allio.uno.data.orm.executor;
 
-import cc.allio.uno.core.env.Envs;
-import cc.allio.uno.core.util.ClassUtils;
-import com.google.common.collect.Maps;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.Map;
-import java.util.Optional;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
-
 /**
- * SQL Executor simple Factory
+ * DSL Executor factory
  *
  * @author jiangwei
  * @date 2023/4/16 23:38
@@ -21,15 +12,9 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 @Slf4j
 public final class CommandExecutorFactory {
 
-    private static final Map<ExecutorKey, CommandExecutor> CACHES = Maps.newConcurrentMap();
-    private static final ReadWriteLock lock = new ReentrantReadWriteLock();
+    private static CommandExecutorRegistry registry;
 
     private CommandExecutorFactory() {
-    }
-
-    public static <T extends CommandExecutor> T register(ExecutorKey executorKey, Class<T> executorClass, Object... values) {
-        CommandExecutor executor = CACHES.computeIfAbsent(executorKey, k -> ClassUtils.newInstance(executorClass, values));
-        return register(executor);
     }
 
     /**
@@ -39,43 +24,69 @@ public final class CommandExecutorFactory {
      * @param <T>             T
      * @return command executor
      */
-    public static <T extends CommandExecutor> T register(CommandExecutor commandExecutor) {
-        Lock writeLock = lock.writeLock();
-        writeLock.lock();
-        try {
-            CommandExecutor executor = CACHES.computeIfAbsent(commandExecutor.getKey(), k -> commandExecutor);
-            if (log.isDebugEnabled()) {
-                log.debug("Command executor register instance executor [{}]", executor.getClass().getName());
-            }
-            Envs.setProperty(ExecutorKey.SQL_EXECUTOR_TYPE_KEY, commandExecutor.getKey().key());
-            return (T) executor;
-        } finally {
-            writeLock.unlock();
-        }
+    public static <T extends CommandExecutor> T register(T commandExecutor) {
+        return getRegistry().registerCommandExecutor(commandExecutor.getOptions(), () -> commandExecutor, true);
     }
 
     /**
-     * 获取{@link CommandExecutor}实例
+     * 基于{@link ExecutorKey#getSystemExecutorKey()}获取的{@link CommandExecutor}实例
      *
-     * @return SQLExecutor
+     * @return DSLExecutor or null
      */
-    public static <T extends CommandExecutor> T getSQLExecutor() {
-        return getSQLExecutor(ExecutorKey.getSystemExecutorKey());
+    public static <T extends CommandExecutor> T getDSLExecutor() {
+        return getDSLExecutor(ExecutorKey.getSystemExecutorKey());
     }
 
     /**
      * 获取{@link CommandExecutor}实例
      *
      * @param executorKey 判断使用何种执行器key
-     * @return SQLExecutor
+     * @return DSLExecutor
      */
-    public static <T extends CommandExecutor> T getSQLExecutor(ExecutorKey executorKey) {
-        Lock readLock = lock.readLock();
-        readLock.lock();
-        try {
-            return (T) Optional.ofNullable(executorKey).map(CACHES::get).orElse(null);
-        } finally {
-            readLock.unlock();
+    public static <T extends CommandExecutor> T getDSLExecutor(ExecutorKey executorKey) {
+        return getRegistry().getCommandExecutor(executorKey);
+    }
+
+    /**
+     * 根据唯一标识获取{@link CommandExecutor}实例
+     *
+     * @param key key
+     * @return DSLExecutor
+     */
+    public static <T extends CommandExecutor> T getDSLExecutor(String key) {
+        return getRegistry().getCommandExecutor(key);
+    }
+
+    /**
+     * 移除Command executor
+     *
+     * @param executorKey executorKey
+     * @return if true removed
+     * @see CommandExecutorRegistry#remove(ExecutorKey)
+     */
+    public static boolean remove(ExecutorKey executorKey) {
+        return getRegistry().remove(executorKey);
+    }
+
+    /**
+     * 移除Command executor
+     *
+     * @param key key
+     * @return if true removed
+     * @see CommandExecutorRegistry#remove(String)
+     */
+    public static boolean remove(String key) {
+        return getRegistry().remove(key);
+    }
+
+    private static CommandExecutorRegistry getRegistry() {
+        if (registry == null) {
+            setRegistry(new CommandExecutorRegistryImpl());
         }
+        return registry;
+    }
+
+    public static void setRegistry(CommandExecutorRegistry registry) {
+        CommandExecutorFactory.registry = registry;
     }
 }

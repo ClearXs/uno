@@ -2,6 +2,9 @@ package cc.allio.uno.core.function;
 
 import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.User;
+import cc.allio.uno.core.function.lambda.MethodReference;
+import cc.allio.uno.core.function.lambda.SerializedLambda;
+import cc.allio.uno.core.function.lambda.StaticMethodReference;
 import org.junit.jupiter.api.Test;
 
 class SerializedLambdaTest extends BaseTestCase {

@@ -15,14 +15,14 @@ import java.util.Queue;
 public class BreadthTraversalMode implements TraversalMode {
 
     @Override
-    public void doTraversal(TraversalElement e, Visitor visitor) {
-        Queue<TraversalElement> bfsQueue = new LinkedList<>();
+    public <T extends TraversalElement<T>> void doTraversal(T e, Visitor<T> visitor) {
+        Queue<TraversalElement<T>> bfsQueue = new LinkedList<>();
         bfsQueue.add(e);
         while (!bfsQueue.isEmpty()) {
-            TraversalElement element = bfsQueue.poll();
+            TraversalElement<T> element = bfsQueue.poll();
             element.doAccept(visitor);
             if (CollectionUtils.isNotEmpty(element.getChildren())) {
-                element.getChildren().forEach(chd -> bfsQueue.offer((TraversalElement) chd));
+                element.getChildren().forEach(bfsQueue::offer);
             }
         }
     }

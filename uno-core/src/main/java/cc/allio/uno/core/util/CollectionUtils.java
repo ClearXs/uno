@@ -1,5 +1,7 @@
 package cc.allio.uno.core.util;
 
+import com.google.common.collect.Sets;
+
 import java.util.*;
 
 /**
@@ -110,23 +112,6 @@ public class CollectionUtils extends org.springframework.util.CollectionUtils {
     }
 
     /**
-     * 根据对象的equals过滤数据
-     */
-    @SafeVarargs
-    public static <V> Collection<V> filter(Collection<V> collection, V... filters) throws IllegalAccessException, InstantiationException {
-        Collection<V> copyCollection = collection.getClass().newInstance();
-        copyCollection.addAll(collection);
-        Collection<V> filterCollection = collection.getClass().newInstance();
-        for (V filter : filters) {
-            if (collection.contains(filter)) {
-                filterCollection.add(filter);
-            }
-        }
-        copyCollection.removeAll(filterCollection);
-        return copyCollection;
-    }
-
-    /**
      * Map集合转换Properties实例
      *
      * @param map map
@@ -142,20 +127,55 @@ public class CollectionUtils extends org.springframework.util.CollectionUtils {
 
     /**
      * 两个集合求并集
+     *
+     * @param c1  c1
+     * @param c2  c2
+     * @param <V> 集合元素类型
+     * @return 求并集后的集合
      */
-    public static <V> boolean union(Collection<V> source, Collection<V> target) {
-        if (isEmpty(target) || isEmpty(source)) {
-            return false;
+    public static <V> Collection<V> union(Collection<V> c1, Collection<V> c2) {
+        if (isEmpty(c2) || isEmpty(c1)) {
+            return Collections.emptyList();
         }
-        boolean changed = false;
-        for (V o : target) {
-            boolean contains = source.contains(o);
-            if (!contains) {
-                source.add(o);
-                changed = true;
-            }
-        }
-        return changed;
+        Set<V> union = Sets.newHashSet();
+        union.addAll(c1);
+        union.addAll(c2);
+        return union;
     }
 
+    /**
+     * 两个集合求交集
+     *
+     * @param c1  c1
+     * @param c2  c2
+     * @param <V> 集合元素类型
+     * @return 求交集后的元素集合
+     */
+    public static <V> Collection<V> intersection(Collection<V> c1, Collection<V> c2) {
+        Set<V> intersection = Sets.newHashSet();
+        for (V v : c1) {
+            if (c2.contains(v)) {
+                intersection.add(v);
+            }
+        }
+        return intersection;
+    }
+
+    /**
+     * 以c1作为源求与c2的差集
+     *
+     * @param c1  c1
+     * @param c2  c2
+     * @param <V> 集合中的元素
+     * @return 求差集后的集合
+     */
+    public static <V> Collection<V> complement(Collection<V> c1, Collection<V> c2) {
+        Set<V> complement = Sets.newHashSet();
+        for (V v : c1) {
+            if (!c2.contains(v)) {
+                complement.add(v);
+            }
+        }
+        return complement;
+    }
 }

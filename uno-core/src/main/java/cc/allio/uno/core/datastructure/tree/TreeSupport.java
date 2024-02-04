@@ -24,7 +24,7 @@ public final class TreeSupport {
      * @see #treeify(List, Function)
      */
     public static <T extends Expand> List<DefaultElement> treeify(List<T> expandTrees) {
-        return treeify(expandTrees, e -> new DefaultElement(e.getId()));
+        return treeify(expandTrees, e -> new DefaultElement<>(e.getId()));
     }
 
     /**
@@ -36,7 +36,7 @@ public final class TreeSupport {
      * @param <R>         继承于{@link Element}的泛型
      * @return hierarchy filter expand tree depth == 0的结点
      */
-    public static synchronized <T extends Expand, R extends Element> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
+    public static synchronized <T extends Expand, R extends Element<R>> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
         if (CollectionUtils.isEmpty(expandTrees)) {
             return Collections.emptyList();
         }
@@ -66,7 +66,7 @@ public final class TreeSupport {
      * @param <R>      Tree Element
      * @return 调整完成的树
      */
-    public static <R extends Element> List<R> adjust(List<R> elements) {
+    public static <R extends Element<R>> List<R> adjust(List<R> elements) {
         if (CollectionUtils.isEmpty(elements)) {
             return elements;
         }
@@ -99,7 +99,7 @@ public final class TreeSupport {
     /**
      * @see #expand(List, Function, Comparator)
      */
-    public static <R extends Element> List<DefaultExpand> expand(List<R> forest) {
+    public static <R extends Element<R>> List<DefaultExpand> expand(List<R> forest) {
         return expand(
                 forest,
                 r -> new DefaultExpand(r.getId(), r.getParent() != null ? r.getParent().getId() : null),
@@ -117,7 +117,7 @@ public final class TreeSupport {
      * @param <R>        继承于{@link Element}的泛型
      * @return expand
      */
-    public static synchronized <T extends Expand, R extends Element> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
+    public static synchronized <T extends Expand, R extends Element<R>> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
         List<T> expands = Lists.newArrayList();
         try {
             Element.ROOT_SENTINEL.setChildren(Lists.newArrayList(forest));

@@ -15,7 +15,7 @@ import java.io.Serializable;
  */
 public interface RuleAttr extends Serializable {
 
-    String EXPRESS_TEMPLATE = "get(#{key}) #{op} #{value}";
+    String EXPRESS_TEMPLATE = "getValue(#{key}) #{op} #{value}";
     String SIMPLE_EXPRESS_TEMPLATE = "#{key} #{op} #{value}";
     ExpressionTemplate TEMPLATE = ExpressionTemplate.createTemplate(Tokenizer.HASH_BRACE, false);
 
@@ -71,7 +71,7 @@ public interface RuleAttr extends Serializable {
     /**
      * 获取rule index 构建的表达式。
      *
-     * @return 如 get(a) > xxx
+     * @return 如 getValue(a) > xxx
      */
     String getExpr();
 

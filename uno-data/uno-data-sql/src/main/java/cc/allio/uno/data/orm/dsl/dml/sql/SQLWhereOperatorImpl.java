@@ -227,7 +227,7 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
     }
 
     /**
-     * 拼接where and set
+     * 拼接where and setValue
      *
      * @param expr expr
      */

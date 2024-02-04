@@ -14,7 +14,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * Indicates the <em>id</em> of the generated <em>Feature</em>.
  * <p>This annotation is complementary to a {@link GeoJsonType#type()} of {@link FeatureType#FEATURE}
- * and can be present 0...1 times. No <em>id field</em> is set if missing.
+ * and can be present 0...1 times. No <em>id field</em> is setValue if missing.
  * <p>Getter annotation example with type {@link UUID}:
  * <pre>
  *    &#064;GeoJsonId

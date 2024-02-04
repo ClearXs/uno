@@ -172,7 +172,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

@@ -21,11 +21,18 @@ public class EsCommandExecutorLoader implements ExecutorLoader {
 
     @Override
     public CommandExecutor load(List<Interceptor> interceptors) {
-        ExecutorOptions executorOptions = new ExecutorOptions();
+        ExecutorOptions executorOptions = new ExecutorOptions(DBType.ELASTIC_SEARCH, ExecutorKey.ELASTICSEARCH, OperatorKey.ELASTICSEARCH);
         executorOptions.addInterceptors(interceptors);
-        executorOptions.setDbType(DBType.ELASTIC_SEARCH);
-        executorOptions.setOperatorKey(OperatorKey.ELASTICSEARCH);
-        executorOptions.setExecutorKey(ExecutorKey.ELASTICSEARCH);
+        return load(executorOptions);
+    }
+
+    @Override
+    public CommandExecutor load(ExecutorOptions executorOptions) {
         return new EsCommandExecutor(executorOptions, restClientBuilder);
+    }
+
+    @Override
+    public boolean match(DBType dbType) {
+        return DBType.ELASTIC_SEARCH == dbType;
     }
 }

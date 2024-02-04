@@ -40,7 +40,7 @@ public class RedisSQLInsertOperator implements InsertOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return null;
     }
 

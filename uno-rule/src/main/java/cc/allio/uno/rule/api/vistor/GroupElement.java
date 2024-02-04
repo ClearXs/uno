@@ -9,7 +9,7 @@ import java.util.List;
  * @date 2023/4/26 12:04
  * @since 1.1.4
  */
-public interface GroupElement<T extends LiteralElement> extends LiteralElement {
+public interface GroupElement<T extends LiteralElement<T>> extends LiteralElement<T> {
 
     /**
      * 添加子节点元素

@@ -46,7 +46,7 @@ public class PojoWrapper<T> extends ObjectWrapper {
         this.pojo = pojo;
         this.pojoClass = pojo.getClass();
         this.pojoFields = FieldUtils.getAllFieldsList(pojoClass);
-        this.columnDefs = getSQLColumnDef();
+        this.columnDefs = getColumnDef();
     }
 
     public PojoWrapper(Class<?> pojoClass) {
@@ -54,7 +54,7 @@ public class PojoWrapper<T> extends ObjectWrapper {
         this.pojo = null;
         this.pojoClass = pojoClass;
         this.pojoFields = FieldUtils.getAllFieldsList(pojoClass);
-        this.columnDefs = getSQLColumnDef();
+        this.columnDefs = getColumnDef();
     }
 
     private void checkPojo(Object maybePojo) {
@@ -188,13 +188,13 @@ public class PojoWrapper<T> extends ObjectWrapper {
      * @return the columns
      */
     public static List<DSLName> findColumns(Class<?> pojoClass) {
-        return new PojoWrapper<>(pojoClass).getSQLColumnDef().stream().map(ColumnDef::getDslName).toList();
+        return new PojoWrapper<>(pojoClass).getColumnDef().stream().map(ColumnDef::getDslName).toList();
     }
 
     /**
      * 获取该pojo字段的解析的sql字段
      */
-    public List<ColumnDef> getSQLColumnDef() {
+    public List<ColumnDef> getColumnDef() {
         return pojoFields.stream()
                 .map(this::createColumnDef)
                 .toList();

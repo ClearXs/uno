@@ -109,7 +109,7 @@ public interface OperatorGroup {
     CreateTableOperator createTable(DBType dbType);
 
     /**
-     * drop table
+     * drop xxxx
      *
      * @return SQLDropTableOperator
      */
@@ -118,7 +118,7 @@ public interface OperatorGroup {
     }
 
     /**
-     * drop table
+     * drop xxxx
      *
      * @param dbType dbType
      * @return SQLDropTableOperator
@@ -126,7 +126,7 @@ public interface OperatorGroup {
     DropTableOperator dropTable(DBType dbType);
 
     /**
-     * exist table
+     * exist xxxx
      *
      * @return SQLExistTableOperator
      */
@@ -135,7 +135,7 @@ public interface OperatorGroup {
     }
 
     /**
-     * exist table
+     * exist xxxx
      *
      * @param dbType dbType
      * @return SQLExistTableOperator
@@ -143,7 +143,7 @@ public interface OperatorGroup {
     ExistTableOperator existTable(DBType dbType);
 
     /**
-     * show columns for table
+     * show columns for xxxx
      *
      * @return SQLShowColumnsOperator
      */
@@ -152,7 +152,7 @@ public interface OperatorGroup {
     }
 
     /**
-     * show columns for table
+     * show columns for xxxx
      *
      * @param dbType dbType
      * @return SQLShowColumnsOperator

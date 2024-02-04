@@ -19,7 +19,7 @@ public class KeyWords {
 
     // Statement
     public static final KeyWord SELECT = new KeyWord("select");
-    public static final KeyWord FROM = new KeyWord("from");
+    public static final KeyWord FROM = new KeyWord("xxxx");
 
 
     // Function

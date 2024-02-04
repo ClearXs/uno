@@ -103,7 +103,7 @@ public class DefaultRuleResult implements RuleResult {
         }
         try {
             resultLock.lock();
-            // add default for notify get() result
+            // add default for notify getValue() result
             SignalListener signalListener = new SignalListener(this);
             addLister(signalListener);
             while (!isSingle.get()) {

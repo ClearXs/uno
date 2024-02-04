@@ -28,6 +28,7 @@ import java.util.Objects;
 @AutoService(CreateTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLCreateTableOperator implements CreateTableOperator {
+    private final DBType dbType;
     private final DbType druidType;
     private SQLCreateTableStatement createTableStatement;
     private Table table;
@@ -37,6 +38,7 @@ public class SQLCreateTableOperator implements CreateTableOperator {
     }
 
     public SQLCreateTableOperator(DBType dbType) {
+        this.dbType = dbType;
         this.druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
         this.createTableStatement =
                 switch (druidType) {
@@ -80,7 +82,7 @@ public class SQLCreateTableOperator implements CreateTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 
@@ -91,7 +93,7 @@ public class SQLCreateTableOperator implements CreateTableOperator {
         sqlColumnDefinition.setName(columnDef.getDslName().format());
         sqlColumnDefinition.setDbType(druidType);
         DataType dataType = columnDef.getDataType();
-        SQLDataType druidType = DruidDataTypeAdapter.getInstance().adapt(dataType);
+        SQLDataType druidType = DruidDataTypeAdapter.getInstance(dbType).adapt(dataType);
         if (druidType != null) {
             druidType.setDbType(this.druidType);
             sqlColumnDefinition.setDataType(druidType);

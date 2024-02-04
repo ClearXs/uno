@@ -908,7 +908,7 @@ public class CronExpression implements Serializable, Cloneable {
 				// ie: there's no max to overflow over
 				set.add(i);
 			} else {
-				// take the modulus to get the real value
+				// take the modulus to getValue the real value
 				int i2 = i % max;
 
 				// 1-indexed ranges should not include 0, and should include their max
@@ -1019,7 +1019,7 @@ public class CronExpression implements Serializable, Cloneable {
 			int sec = cl.get(Calendar.SECOND);
 			int min = cl.get(Calendar.MINUTE);
 
-			// get second.................................................
+			// getValue second.................................................
 			st = seconds.tailSet(sec);
 			if (st != null && st.size() != 0) {
 				sec = st.first();
@@ -1034,7 +1034,7 @@ public class CronExpression implements Serializable, Cloneable {
 			int hr = cl.get(Calendar.HOUR_OF_DAY);
 			t = -1;
 
-			// get minute.................................................
+			// getValue minute.................................................
 			st = minutes.tailSet(min);
 			if (st != null && st.size() != 0) {
 				t = min;
@@ -1055,7 +1055,7 @@ public class CronExpression implements Serializable, Cloneable {
 			int day = cl.get(Calendar.DAY_OF_MONTH);
 			t = -1;
 
-			// get hour...................................................
+			// getValue hour...................................................
 			st = hours.tailSet(hr);
 			if (st != null && st.size() != 0) {
 				t = hr;
@@ -1080,10 +1080,10 @@ public class CronExpression implements Serializable, Cloneable {
 			t = -1;
 			int tmon = mon;
 
-			// get day...................................................
+			// getValue day...................................................
 			boolean dayOfMSpec = !daysOfMonth.contains(NO_SPEC);
 			boolean dayOfWSpec = !daysOfWeek.contains(NO_SPEC);
-			if (dayOfMSpec && !dayOfWSpec) { // get day by day of month rule
+			if (dayOfMSpec && !dayOfWSpec) { // getValue day by day of month rule
 				st = daysOfMonth.tailSet(day);
 				if (lastdayOfMonth) {
 					if (!nearestWeekday) {
@@ -1196,7 +1196,7 @@ public class CronExpression implements Serializable, Cloneable {
 					// are 1-based
 					continue;
 				}
-			} else if (dayOfWSpec && !dayOfMSpec) { // get day by day of week rule
+			} else if (dayOfWSpec && !dayOfMSpec) { // getValue day by day of week rule
 				if (lastdayOfWeek) { // are we looking for the last XXX day of
 					// the month?
 					int dow = daysOfWeek.first(); // desired
@@ -1341,7 +1341,7 @@ public class CronExpression implements Serializable, Cloneable {
 				return null;
 			}
 
-			// get month...................................................
+			// getValue month...................................................
 			st = months.tailSet(mon);
 			if (st != null && st.size() != 0) {
 				t = mon;
@@ -1368,7 +1368,7 @@ public class CronExpression implements Serializable, Cloneable {
 			year = cl.get(Calendar.YEAR);
 			t = -1;
 
-			// get year...................................................
+			// getValue year...................................................
 			st = years.tailSet(year);
 			if (st != null && st.size() != 0) {
 				t = year;
@@ -1401,7 +1401,7 @@ public class CronExpression implements Serializable, Cloneable {
 	 * to daylight saving problems.
 	 *
 	 * @param cal  the calendar to operate on
-	 * @param hour the hour to set
+	 * @param hour the hour to setValue
 	 */
 	protected void setCalendarHour(Calendar cal, int hour) {
 		cal.set(Calendar.HOUR_OF_DAY, hour);

@@ -59,19 +59,19 @@ public @interface LoadBalancerRetryProperties {
         boolean enable() default false;
 
         /**
-         * Used to set {@link RetryBackoffSpec#minBackoff}.
+         * Used to setValue {@link RetryBackoffSpec#minBackoff}.
          */
         @PropertiesType(Duration.class)
         long minBackoff() default 5;
 
         /**
-         * Used to set {@link RetryBackoffSpec#maxBackoff}.
+         * Used to setValue {@link RetryBackoffSpec#maxBackoff}.
          */
         @PropertiesType(Duration.class)
         long maxBackoff() default Long.MAX_VALUE;
 
         /**
-         * Used to set {@link RetryBackoffSpec#jitter}.
+         * Used to setValue {@link RetryBackoffSpec#jitter}.
          */
         double jitter() default 0.5d;
     }

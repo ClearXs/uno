@@ -51,7 +51,7 @@ public class ElasticSearchDropIndexOperator implements DropTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

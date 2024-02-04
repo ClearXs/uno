@@ -82,7 +82,7 @@ public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperato
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

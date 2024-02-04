@@ -2,9 +2,11 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.StringPool;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * 类型公共方法集
@@ -530,7 +532,7 @@ public class Types {
         return !isEmpty(value);
     }
 
-    // ==================== get operate ====================
+    // ==================== getValue operate ====================
 
     /**
      * 获取Integer类型的数据
@@ -681,5 +683,19 @@ public class Types {
             return tryToValue;
         }
         return o;
+    }
+
+    /**
+     * 类型转换并通过调用acceptor消费转换后的数据
+     *
+     * @param obj      obj
+     * @param clazz    clazz
+     * @param acceptor acceptor
+     * @param <T>      转换的类型
+     */
+    public static <T> void cast(@Nonnull Object obj, @Nonnull Class<T> clazz, @Nonnull Consumer<T> acceptor) {
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            acceptor.accept(clazz.cast(obj));
+        }
     }
 }

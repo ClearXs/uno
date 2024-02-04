@@ -26,7 +26,7 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      */
     default <T> CreateTableOperator fromPojo(Class<T> pojoClass) {
         PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojoClass);
-        List<ColumnDef> columnDefs = pojoWrapper.getSQLColumnDef();
+        List<ColumnDef> columnDefs = pojoWrapper.getColumnDef();
         return from(pojoWrapper.getTable()).columns(columnDefs);
     }
 

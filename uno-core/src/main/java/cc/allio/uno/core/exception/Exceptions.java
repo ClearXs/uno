@@ -8,7 +8,7 @@ import java.lang.reflect.UndeclaredThrowableException;
 /**
  * 异常处理工具类
  *
- * @author L.cm
+ * @author jiangwei
  */
 public class Exceptions {
 
@@ -104,4 +104,13 @@ public class Exceptions {
         }
     }
 
+    /**
+     * 抛出{@link UnsupportedOperationException}移除
+     *
+     * @param message 异常消息
+     * @return message
+     */
+    public static UnsupportedOperationException unoperate(String message) {
+        return new UnsupportedOperationException(message);
+    }
 }

@@ -100,7 +100,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

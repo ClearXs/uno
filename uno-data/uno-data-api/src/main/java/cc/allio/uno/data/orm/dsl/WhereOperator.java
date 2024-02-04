@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl;
 
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 
 /**
  * where eq1=eq2...

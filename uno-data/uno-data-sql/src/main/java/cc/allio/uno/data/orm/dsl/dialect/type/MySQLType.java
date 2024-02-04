@@ -1,4 +1,6 @@
-package cc.allio.uno.data.orm.dsl.type;
+package cc.allio.uno.data.orm.dsl.dialect.type;
+
+import cc.allio.uno.data.orm.dsl.type.DSLType;
 
 /**
  * 对mysql库字段进行处理
@@ -12,7 +14,11 @@ public class MySQLType implements DSLType {
     private final DSLType sqlType;
 
     public MySQLType(DSLType sqlType) {
-        this.sqlType = sqlType;
+        this(sqlType, null, null);
+    }
+
+    public MySQLType(DSLType sqlType, Integer precision, Integer scale) {
+        this.sqlType = DSLTypeImpl.createBy(sqlType, precision, scale);
     }
 
     @Override
@@ -26,12 +32,12 @@ public class MySQLType implements DSLType {
     }
 
     @Override
-    public Integer getDefaultPrecision() {
-        return sqlType.getDefaultPrecision();
+    public Integer getPrecision() {
+        return sqlType.getPrecision();
     }
 
     @Override
-    public Integer getDefaultScala() {
-        return sqlType.getDefaultScala();
+    public Integer getScale() {
+        return sqlType.getScale();
     }
 }

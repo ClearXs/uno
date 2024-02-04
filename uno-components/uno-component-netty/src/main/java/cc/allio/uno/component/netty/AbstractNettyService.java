@@ -44,7 +44,7 @@ public abstract class AbstractNettyService implements RemoteService {
     /**
      * 请求-响应，他们使用的id都是相同的
      * 当请求来到时，根据请求的id put这个promisor对象
-     * 当响应到来时，根据响应的id，get这个promisor对象并向 set promise对象
+     * 当响应到来时，根据响应的id，get这个promisor对象并向 setValue promise对象
      */
     private final ConcurrentHashMap<Long, RemotePromisor> promises = new ConcurrentHashMap<>();
     /**

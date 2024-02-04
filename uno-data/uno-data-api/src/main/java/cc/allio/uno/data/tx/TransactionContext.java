@@ -1,5 +1,7 @@
 package cc.allio.uno.data.tx;
 
+import cc.allio.uno.data.orm.dsl.Self;
+import com.google.common.collect.Lists;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -7,6 +9,8 @@ import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.TransactionDefinition;
 import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
+
+import java.util.List;
 
 /**
  * 基于Spring编程式事物工具
@@ -53,6 +57,43 @@ public class TransactionContext {
                 }
             }
         }
+    }
+
+    /**
+     * 开启一个新的事物
+     */
+    public static TransactionBehavior open() {
+        if (transactionManager == null) {
+            throw new IllegalArgumentException("transactionManager is null, please set TransactionManger through out TransactionContext.transactionManager = xxx");
+        }
+        return new TransactionBehavior();
+    }
+
+    /**
+     * 事物行为
+     */
+    public static class TransactionBehavior implements Self<TransactionBehavior> {
+
+        private final List<TransactionAction> actions = Lists.newArrayList();
+
+        /**
+         * 提供事物行为动作
+         *
+         * @param action action
+         * @return TransactionBehavior
+         */
+        public TransactionBehavior then(TransactionAction action) {
+            this.actions.add(action);
+            return self();
+        }
+
+        /**
+         * 提交事物行为
+         */
+        public void commit() {
+            TransactionContext.execute(() -> actions.forEach(TransactionAction::doAccept));
+        }
+
     }
 
     /**

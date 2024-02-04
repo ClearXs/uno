@@ -1,7 +1,7 @@
 package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 
 import java.util.Arrays;
 import java.util.Set;

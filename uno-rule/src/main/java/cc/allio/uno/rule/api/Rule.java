@@ -43,7 +43,7 @@ public interface Rule extends Serializable {
 
     /**
      * 获取当前规则所包含属性项的字面表达式，形如：
-     * <p>>get('a') < xx</p>
+     * <p>>getValue('a') < xx</p>
      *
      * @return 字面量
      */

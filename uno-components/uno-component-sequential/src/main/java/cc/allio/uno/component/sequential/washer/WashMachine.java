@@ -43,7 +43,7 @@ public class WashMachine {
         this.recorderDisposable =
                 BufferRate.create(Flux.<WasherRecord>create(sink -> recorder = sink))
                         .doOnNext(records -> {
-                            CommandExecutor sqlExecutor = CommandExecutorFactory.getSQLExecutor(ExecutorKey.ELASTICSEARCH);
+                            CommandExecutor sqlExecutor = CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
                             if (sqlExecutor != null) {
                                 sqlExecutor.batchInsertPojos(records);
                             }

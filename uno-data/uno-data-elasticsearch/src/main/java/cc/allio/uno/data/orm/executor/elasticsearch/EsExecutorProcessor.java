@@ -26,7 +26,7 @@ public class EsExecutorProcessor implements BeanPostProcessor {
             proxyFactory.addAspect(EsExecutorAspect.class);
             NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
             pointcut.setMappedName("getExecutor");
-            MethodInterceptor methodInterceptor = invocation -> CommandExecutorFactory.getSQLExecutor(ExecutorKey.ELASTICSEARCH);
+            MethodInterceptor methodInterceptor = invocation -> CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
             proxyFactory.addAdvisor(new DefaultPointcutAdvisor(pointcut, methodInterceptor));
             return proxyFactory.getProxy();
         }

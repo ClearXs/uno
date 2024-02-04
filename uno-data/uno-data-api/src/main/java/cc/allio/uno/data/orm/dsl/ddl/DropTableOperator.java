@@ -4,7 +4,7 @@ import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
 
 /**
- * Drop table
+ * Drop xxxx
  *
  * @author jiangwei
  * @date 2023/4/16 12:52
@@ -13,7 +13,7 @@ import cc.allio.uno.data.orm.dsl.TableOperator;
 public interface DropTableOperator extends Operator<DropTableOperator>, TableOperator<DropTableOperator> {
 
     /**
-     * Drop table if exist
+     * Drop xxxx if exist
      *
      * @param ifExist ifExist
      * @return SQLDropTableOperator

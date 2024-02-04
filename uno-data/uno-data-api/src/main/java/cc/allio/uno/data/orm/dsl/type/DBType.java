@@ -2,10 +2,13 @@ package cc.allio.uno.data.orm.dsl.type;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.env.Envs;
+import cc.allio.uno.core.util.template.ExpressionTemplate;
+import cc.allio.uno.core.util.template.Tokenizer;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import org.springframework.boot.jdbc.DatabaseDriver;
 
 import java.util.List;
 
@@ -26,21 +29,27 @@ public interface DBType {
      */
     String DB_TYPE_CONFIG_KEY = "allio.uno.data.orm.dbtype";
 
-    DBType MYSQL = new DefaultDBType("MySQL", "com.mysql.cj.jdbc.Driver", DBCategory.RELATIONAL);
-    DBType POSTGRESQL = new DefaultDBType("PostgreSQL", "org.postgresql.Driver", DBCategory.RELATIONAL);
-    DBType SQLSERVER = new DefaultDBType("SQLServer", "com.microsoft.sqlserver.jdbc.SQLServerDriver", DBCategory.RELATIONAL);
-    DBType ORACLE = new DefaultDBType("Oracle", "oracle.jdbc.driver.OracleDriver", DBCategory.RELATIONAL);
-    DBType OPEN_GAUSS = new DefaultDBType(" OpenGauss", "org.opengauss.Driver", DBCategory.RELATIONAL);
-    DBType DB2 = new DefaultDBType(" Db2", "com.ibm.db2.jdbc.app.DB2Driver", DBCategory.RELATIONAL);
-    DBType MARIADB = new DefaultDBType("MariaDB", "org.mariadb.jdbc.Driver", DBCategory.RELATIONAL);
-    DBType SQLITE = new DefaultDBType("SQLite", "org.sqlite.JDBC", DBCategory.RELATIONAL);
-    DBType H2 = new DefaultDBType("H2", "org.h2.Driver", DBCategory.RELATIONAL);
-    DBType ELASTIC_SEARCH = new DefaultDBType("ElasticSearch", StringPool.EMPTY, DBCategory.SEARCH_ENGINES);
-    DBType MONGODB = new DefaultDBType("Mongodb", "org.mongodb.Driver", DBCategory.DOCUMENT);
-    DBType TD_ENGINE = new DefaultDBType("TDEngine", StringPool.EMPTY, DBCategory.TIME_SERIES);
-    DBType INFLUXDB = new DefaultDBType("Influxdb", StringPool.EMPTY, DBCategory.TIME_SERIES);
-    DBType NEO4J = new DefaultDBType("Neo4j", StringPool.EMPTY, DBCategory.GRAPH);
-    DBType REDIS = new DefaultDBType("Redis", StringPool.EMPTY, DBCategory.KEY_VALUE);
+    ExpressionTemplate JDBC_URL_TEMPLATE_PARSER = ExpressionTemplate.createTemplate(Tokenizer.HASH_BRACE);
+    String ADDRESS = "address";
+    String IP_PORTS_TEMPLATE = "#{" + ADDRESS + "}";
+    String DATABASE_NAME = "database_name";
+    String DATABASE_NAME_TEMPLATE = "#{" + DATABASE_NAME + "}";
+
+    DBType MYSQL = new DefaultDBType("MySQL", DatabaseDriver.MYSQL.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:mysql://" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE + "?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true");
+    DBType POSTGRESQL = new DefaultDBType("PostgreSQL", DatabaseDriver.POSTGRESQL.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:postgresql://" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE + "?stringtype=unspecified");
+    DBType SQLSERVER = new DefaultDBType("SQLServer", DatabaseDriver.SQLSERVER.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:sqlserver://" + IP_PORTS_TEMPLATE + ";database=" + DATABASE_NAME_TEMPLATE);
+    DBType ORACLE = new DefaultDBType("Oracle", DatabaseDriver.ORACLE.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:oracle:thin:@//" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE);
+    DBType OPEN_GAUSS = new DefaultDBType(" OpenGauss", "org.opengauss.Driver", DBCategory.RELATIONAL, "");
+    DBType DB2 = new DefaultDBType(" Db2", DatabaseDriver.DB2.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:db2://" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE);
+    DBType MARIADB = new DefaultDBType("MariaDB", DatabaseDriver.MARIADB.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:mariadb://" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE);
+    DBType SQLITE = new DefaultDBType("SQLite", DatabaseDriver.SQLITE.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:sqlite::memory:");
+    DBType H2 = new DefaultDBType("H2", DatabaseDriver.H2.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:h2:mem:" + DATABASE_NAME_TEMPLATE + ";IGNORECASE=TRUE");
+    DBType ELASTIC_SEARCH = new DefaultDBType("ElasticSearch", StringPool.EMPTY, DBCategory.SEARCH_ENGINES, "");
+    DBType MONGODB = new DefaultDBType("Mongodb", "org.mongodb.Driver", DBCategory.DOCUMENT, "");
+    DBType TD_ENGINE = new DefaultDBType("TDEngine", StringPool.EMPTY, DBCategory.TIME_SERIES, "");
+    DBType INFLUXDB = new DefaultDBType("Influxdb", StringPool.EMPTY, DBCategory.TIME_SERIES, "");
+    DBType NEO4J = new DefaultDBType("Neo4j", StringPool.EMPTY, DBCategory.GRAPH, "");
+    DBType REDIS = new DefaultDBType("Redis", StringPool.EMPTY, DBCategory.KEY_VALUE, "");
 
     /**
      * 类型集合
@@ -65,6 +74,15 @@ public interface DBType {
      * @return DBCategory
      */
     DBCategory getCategory();
+
+    /**
+     * 解析jdbcUrl模板
+     *
+     * @param address      连接ip与端口，如果是集群注意需按照对应集群的ip端口序列写法，比如:'192.168.2.1:3306,192.168.2.2:3306'
+     * @param dataBaseName 数据名称
+     * @return 解析后的模板
+     */
+    String parseTemplate(String address, String dataBaseName);
 
     /**
      * 获取当前项目中的数据库类型。多数据源采用主数据源作为数据库类型
@@ -123,6 +141,11 @@ public interface DBType {
         private final String name;
         private final String driverClassName;
         private final DBCategory category;
+        private final String jdbcUrlTemplate;
 
+        @Override
+        public String parseTemplate(String address, String dataBaseName) {
+            return JDBC_URL_TEMPLATE_PARSER.parseTemplate(getJdbcUrlTemplate(), ADDRESS, address, DATABASE_NAME, dataBaseName);
+        }
     }
 }

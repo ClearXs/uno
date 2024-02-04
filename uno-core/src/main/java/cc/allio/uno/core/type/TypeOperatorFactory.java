@@ -58,9 +58,13 @@ public class TypeOperatorFactory {
             return (TypeOperator<T>) new EnumTypeOperator(type);
         }
         Function<Class<?>, TypeOperator<?>> func = TRANSLATOR_FUNC_MAP.get(type);
-        TypeOperator<?> typeOperator = func.apply(type);
-        return Optional.ofNullable((TypeOperator<T>) typeOperator)
-                .orElseGet(() -> (TypeOperator<T>) DEFAULT_TYPE_OPERATOR);
+        if (func == null) {
+            return (TypeOperator<T>) DEFAULT_TYPE_OPERATOR;
+        } else {
+            TypeOperator<?> typeOperator = func.apply(type);
+            return Optional.ofNullable((TypeOperator<T>) typeOperator)
+                    .orElseGet(() -> (TypeOperator<T>) DEFAULT_TYPE_OPERATOR);
+        }
     }
 
     /**

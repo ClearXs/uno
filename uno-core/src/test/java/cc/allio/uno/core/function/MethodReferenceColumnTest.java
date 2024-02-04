@@ -1,6 +1,7 @@
 package cc.allio.uno.core.function;
 
 import cc.allio.uno.core.BaseTestCase;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 

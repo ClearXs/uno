@@ -7,14 +7,14 @@ import java.lang.annotation.*;
  * <blockquote>
  * <pre>
  *     class Test {
- *         void get(@ComposeOrigin Object obj);
+ *         void getValue(@ComposeOrigin Object obj);
  *     }
  *     class ComposeTest extends Test {
  *     	   Test[] tests;
  *         ComposeTes(Test... tests) {
  *             this.tests = tests;
  *         }
- *         void get(@ComposeOrigin Object obj) {
+ *         void getValue(@ComposeOrigin Object obj) {
  *             ...
  *         }
  *     }

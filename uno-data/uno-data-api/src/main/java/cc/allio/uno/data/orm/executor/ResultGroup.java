@@ -1,17 +1,23 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.JsonUtils;
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.Data;
+import org.checkerframework.checker.units.qual.K;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * 结果集。保持顺序一致性
@@ -33,7 +39,7 @@ public class ResultGroup {
      */
     public void addRow(ResultRow row) {
         resultRows.add(row.getIndex(), row);
-        resultRowMap.put(row.getColumn().format(), row);
+        resultRowMap.put(row.getColumn().format().toUpperCase(), row);
     }
 
     /**
@@ -114,5 +120,83 @@ public class ResultGroup {
      */
     public String toJson() {
         return JsonUtils.toJson(toMap());
+    }
+
+    /**
+     * 获取字段值，如果存在则回调 acceptor
+     *
+     * @param columnName columnName
+     * @param acceptor   acceptor
+     */
+    public void getOptionStringValue(String columnName, Consumer<String> acceptor) {
+        getOptionValue(columnName, Types::toString, acceptor);
+    }
+
+    /**
+     * 获取字段值，如果存在则回调 acceptor
+     *
+     * @param columnName columnName
+     * @param transfer   提供value的Object类型转换为R类型
+     * @param acceptor   acceptor
+     */
+    public <R> void getOptionValue(String columnName, Function<Object, R> transfer, Consumer<R> acceptor) {
+        Optional.ofNullable(getRow(columnName))
+                .map(ResultRow::getValue)
+                .map(transfer)
+                .ifPresent(acceptor);
+    }
+
+    /**
+     * @see #getValue(String, Function, Supplier)
+     */
+    public String getStringValue(String columnName, Supplier<String> defaultValue) {
+        return getValue(columnName, Types::toString, defaultValue);
+    }
+
+    /**
+     * @see #getValue(String, Function, Supplier, Function)
+     */
+    public <K> K getStringValue(String columnName, Supplier<String> defaultValue, Function<String, K> adjuster) {
+        return getValue(columnName, Types::toString, defaultValue, adjuster);
+    }
+
+
+    /**
+     * 获取字段值，提供字段转换器，如果为null或者不存在则使用default Value
+     *
+     * @param columnName   columnName
+     * @param transfer     提供value的Object类型转换为R类型
+     * @param defaultValue 默认值
+     * @param <R>          返回类型
+     * @return column value or default value
+     */
+    public <R> R getValue(String columnName, Function<Object, R> transfer, Supplier<R> defaultValue) {
+        return Optional.ofNullable(getRow(columnName))
+                .map(ResultRow::getValue)
+                .map(transfer)
+                .orElseGet(defaultValue);
+    }
+
+    /**
+     * 获取字段值，提供字段转换器，如果为null或者不存在则使用default Value，
+     * <b>该api提供对返回值的再次加工</b>
+     *
+     * @param columnName   columnName
+     * @param transfer     提供value的Object类型转换为R类型
+     * @param defaultValue 默认值
+     * @param adjuster     加工器，对值再次进行二次加工
+     * @param <R>          返回类型
+     * @param <K>          加工返回值的类型
+     * @return column value or default value
+     */
+    public <R, K> K getValue(String columnName, Function<Object, R> transfer, Supplier<R> defaultValue, Function<R, K> adjuster) {
+        R returnValue =
+                Optional.ofNullable(getRow(columnName))
+                        .map(ResultRow::getValue)
+                        .map(transfer)
+                        .orElseGet(defaultValue);
+        return Optional.ofNullable(returnValue)
+                .map(adjuster)
+                .orElse(null);
     }
 }

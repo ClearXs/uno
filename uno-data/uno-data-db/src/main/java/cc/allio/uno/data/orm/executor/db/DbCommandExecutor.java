@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor.db;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.api.Adapter;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
@@ -9,6 +10,7 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.SimpleExecutor;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.defaults.RawLanguageDriver;
@@ -19,6 +21,7 @@ import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.TransactionFactory;
 
 import java.lang.reflect.Field;
+import java.net.SocketTimeoutException;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -38,29 +41,28 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
 
     private final Executor executor;
     private final LanguageDriver languageDriver;
-    private final DbMybatisConfiguration configuration;
+    private final MybatisConfiguration configuration;
     private final MybatisSQLCommandAdapter sqlCommandAdapter;
     private final OperatorGroup operatorGroup;
     private static final String PACKAGE_NAME = DbCommandExecutor.class.getPackage().getName();
 
-    public DbCommandExecutor() {
-        this(new Configuration());
+    public DbCommandExecutor(MybatisConfiguration configuration) {
+        this(new ExecutorOptions(
+                DataSourceHelper.getDbType(configuration.getEnvironment().getDataSource()),
+                ExecutorKey.DB,
+                OperatorKey.SQL), configuration);
     }
 
-    public DbCommandExecutor(Configuration configuration) {
-        this(new ExecutorOptions(), configuration);
-    }
-
-    public DbCommandExecutor(ExecutorOptions options, Configuration configuration) {
+    public DbCommandExecutor(ExecutorOptions options, MybatisConfiguration configuration) {
         super(options);
         if (configuration == null) {
             throw new NullPointerException(String.format("expect %s but not found", Configuration.class.getName()));
         }
-        this.configuration = new DbMybatisConfiguration(configuration);
+        this.configuration = configuration;
         Environment environment = configuration.getEnvironment();
         TransactionFactory transactionFactory = environment.getTransactionFactory();
         Transaction tx = transactionFactory.newTransaction(environment.getDataSource(), TransactionIsolationLevel.READ_COMMITTED, false);
-        this.executor = configuration.newExecutor(tx);
+        this.executor = new SimpleExecutor(configuration, tx);
         this.languageDriver = new RawLanguageDriver();
         this.sqlCommandAdapter = new MybatisSQLCommandAdapter();
         this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.SQL);
@@ -86,10 +88,10 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
         ParameterMap parameterMap = getParameterMap(operator);
         MappedStatement.Builder statementBuilder =
                 new MappedStatement
-                        .Builder(configuration, PACKAGE_NAME + IdGenerator.defaultGenerator().getNextIdAsString(), sqlSource, sqlCommandType)
+                        .Builder(configuration, PACKAGE_NAME + StringPool.SLASH + getOptions().getKey(), sqlSource, sqlCommandType)
                         .parameterMap(parameterMap);
         // 验证连接是否正常，如果异常则重新建立连接
-        checkConnection();
+        checkAndReset();
         try {
             if (CommandType.EXIST_TABLE == commandType || CommandType.SELECT == commandType) {
                 ResultMap resultMap =
@@ -148,7 +150,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
                         Collections.emptyList()).build();
         ParameterMap parameterMap = getParameterMap(queryOperator);
         MappedStatement statement =
-                new MappedStatement.Builder(configuration, PACKAGE_NAME + IdGenerator.defaultGenerator().getNextIdAsString(), sqlSource, SqlCommandType.SELECT)
+                new MappedStatement.Builder(configuration, PACKAGE_NAME + StringPool.SLASH + getOptions().getKey(), sqlSource, SqlCommandType.SELECT)
                         .resultMaps(Collections.singletonList(resultMap))
                         .parameterMap(parameterMap)
                         .lang(languageDriver)
@@ -156,7 +158,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
                         .resultSetType(ResultSetType.DEFAULT)
                         .build();
         // 验证连接是否正常，如果异常则重新建立连接
-        checkConnection();
+        checkAndReset();
         try {
             List<ResultGroup> resultGroups = executor.query(statement, queryOperator.toMapValue(), RowBounds.DEFAULT, null);
             ResultSet resultSet = new ResultSet();
@@ -171,6 +173,16 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
     }
 
     @Override
+    public boolean check() throws SocketTimeoutException {
+        try {
+            Connection connection = executor.getTransaction().getConnection();
+            return !connection.isClosed();
+        } catch (SQLException ex) {
+            throw new SocketTimeoutException(ex.getMessage());
+        }
+    }
+
+    @Override
     public ExecutorKey getKey() {
         return ExecutorKey.DB;
     }
@@ -178,6 +190,11 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
     @Override
     public OperatorGroup getOperatorGroup() {
         return operatorGroup;
+    }
+
+    @Override
+    public void destroy() {
+        this.executor.close(true);
     }
 
     /**
@@ -213,13 +230,13 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
     /**
      * 检查当前{@link Executor}的Connection.检查关闭后，重置连接
      */
-    private void checkConnection() {
+    private void checkAndReset() {
         try {
-            Connection connection = executor.getTransaction().getConnection();
-            if (connection.isClosed()) {
+            boolean check = check();
+            if (!check) {
                 resetConnection();
             }
-        } catch (SQLException ex) {
+        } catch (SocketTimeoutException ex) {
             // ignore
         }
     }
@@ -255,7 +272,14 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
 
         @Override
         public CommandType reverse(SqlCommandType sqlCommandType) {
-            return null;
+            return switch (sqlCommandType) {
+                case SELECT -> CommandType.SELECT;
+                case INSERT -> CommandType.INSERT;
+                case FLUSH -> CommandType.FLUSH;
+                case DELETE -> CommandType.DELETE;
+                case UPDATE -> CommandType.UPDATE;
+                case UNKNOWN -> CommandType.UNKNOWN;
+            };
         }
     }
 }

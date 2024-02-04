@@ -1,4 +1,4 @@
-package cc.allio.uno.core.function;
+package cc.allio.uno.core.function.lambda;
 
 import java.io.Serializable;
 import java.util.function.Supplier;

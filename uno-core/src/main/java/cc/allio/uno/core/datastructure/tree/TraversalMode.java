@@ -37,7 +37,7 @@ public interface TraversalMode {
      * @param e       e
      * @param visitor visitor
      */
-    void doTraversal(TraversalElement e, Visitor visitor);
+    <T extends TraversalElement<T>> void doTraversal(T e, Visitor<T> visitor);
 
     /**
      * 获取遍历的模式

@@ -16,19 +16,19 @@ import java.util.List;
 public class DeepTraversalMode implements TraversalMode {
 
     @Override
-    public void doTraversal(TraversalElement e, Visitor visitor) {
+    public <T extends TraversalElement<T>> void doTraversal(T e, Visitor<T> visitor) {
         // 深度优先
-        Deque<TraversalElement> dfsStack = new ArrayDeque<>();
+        Deque<T> dfsStack = new ArrayDeque<>();
         dfsStack.push(e);
-        List<TraversalElement> childrens = e.getChildren();
+        List<T> childrens = e.getChildren();
         deepAccept(childrens, dfsStack);
         while (!dfsStack.isEmpty()) {
-            TraversalElement element = dfsStack.pollLast();
+            T element = dfsStack.pollLast();
             element.doAccept(visitor);
         }
     }
 
-    private void deepAccept(List<? extends TraversalElement> childrens, Deque<TraversalElement> dfsStack) {
+    private <T extends TraversalElement<T>> void deepAccept(List<T> childrens, Deque<T> dfsStack) {
         if (CollectionUtils.isNotEmpty(childrens)) {
             childrens.forEach(dfsStack::offerLast);
             childrens.forEach(e -> deepAccept(e.getChildren(), dfsStack));

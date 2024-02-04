@@ -60,7 +60,7 @@ public class ElasticSearchExistIndexOperator implements ExistTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

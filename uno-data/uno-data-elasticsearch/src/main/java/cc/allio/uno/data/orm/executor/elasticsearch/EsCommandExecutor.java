@@ -34,6 +34,7 @@ import org.elasticsearch.client.RestClient;
 import org.elasticsearch.client.RestClientBuilder;
 
 import java.io.IOException;
+import java.net.SocketTimeoutException;
 import java.sql.JDBCType;
 import java.util.Collections;
 import java.util.List;
@@ -53,14 +54,11 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
     private final ElasticsearchClient elasticsearchClient;
     private final ElasticsearchIndicesClient indicesClient;
     private final OperatorGroup operatorGroup;
-
-    public EsCommandExecutor(RestClientBuilder restClientBuilder) {
-        this(new ExecutorOptions(), restClientBuilder);
-    }
+    private final RestClient restClient;
 
     public EsCommandExecutor(ExecutorOptions options, RestClientBuilder restClientBuilder) {
         super(options);
-        RestClient restClient = restClientBuilder.build();
+        this.restClient = restClientBuilder.build();
         JsonpMapper mapper = new JacksonJsonpMapper();
         RestClientTransport transport = new RestClientTransport(restClient, mapper);
         this.indicesClient = new ElasticsearchIndicesClient(transport);
@@ -137,10 +135,10 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
                                         .map(field -> {
                                             ResultGroup resultGroup = new ResultGroup();
                                             ResultRow.ResultRowBuilder builder = ResultRow.builder();
-                                            builder.column(DSLName.of(SQLColumnDefListResultSetHandler.ROW_FIELD_NAME));
+                                            builder.column(DSLName.of(DSLColumnDefListResultSetHandler.ROW_FIELD_NAME));
                                             Property fieldProperty = field.getValue();
                                             DataType dataType = propertyAdapter.reverse(fieldProperty);
-                                            builder.jdbcType(JDBCType.valueOf(dataType.getSqlType().getJdbcType()));
+                                            builder.jdbcType(JDBCType.valueOf(dataType.getDslType().getJdbcType()));
                                             String fieldKey = field.getKey();
                                             builder.value(fieldKey);
                                             resultGroup.addRow(builder.build());
@@ -150,11 +148,16 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
                             .toList();
             ResultSet resultSet = new ResultSet();
             resultSet.setResultGroups(resultGroups);
-            return new SQLColumnDefListResultSetHandler().apply(resultSet);
+            return new DSLColumnDefListResultSetHandler().apply(resultSet);
         } catch (IOException ex) {
             log.error("Show columns has err", ex);
             return Collections.emptyList();
         }
+    }
+
+    @Override
+    public boolean check() throws SocketTimeoutException {
+        return restClient.isRunning();
     }
 
     /**
@@ -214,5 +217,14 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
     @Override
     public OperatorGroup getOperatorGroup() {
         return operatorGroup;
+    }
+
+    @Override
+    public void destroy() {
+        try {
+            restClient.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

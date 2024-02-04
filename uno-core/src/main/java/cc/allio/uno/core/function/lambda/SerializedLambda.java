@@ -1,4 +1,4 @@
-package cc.allio.uno.core.function;
+package cc.allio.uno.core.function.lambda;
 
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.StringUtils;

@@ -36,8 +36,8 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
     /**
      * 子类实现
      *
-     * @param operator         SQLOperator操作
-     * @param commandType      sql命令
+     * @param operator         DSLOperator操作
+     * @param commandType      DSL命令
      * @param resultSetHandler 结果集处理器
      * @return true 成功 false 失败
      */
@@ -51,7 +51,7 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
     /**
      * 子类实现
      *
-     * @param queryOperator    SQLQueryOperator
+     * @param queryOperator    QueryOperator
      * @param commandType      命令类型
      * @param resultSetHandler 结果集处理器
      * @param <R>              返回结果类型
@@ -63,7 +63,7 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
     /**
      * 给定操作的切面并执行
      *
-     * @param operator    sql operator
+     * @param operator    operator
      * @param commandType commandType
      * @param operate     给定操作
      * @param <T>         操作返回类型

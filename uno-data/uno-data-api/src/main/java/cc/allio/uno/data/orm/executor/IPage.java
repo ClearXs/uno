@@ -38,11 +38,11 @@ public interface IPage<T> extends Serializable {
     }
 
     /**
-     * 自动优化 COUNT SQL【 默认：true 】
+     * 自动优化 COUNT DSL【 默认：true 】
      *
      * @return true 是 / false 否
      */
-    default boolean optimizeCountSql() {
+    default boolean optimizeCountDSL() {
         return true;
     }
 

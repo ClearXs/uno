@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.*;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;

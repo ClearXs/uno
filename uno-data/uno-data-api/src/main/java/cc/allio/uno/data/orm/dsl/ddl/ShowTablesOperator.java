@@ -10,7 +10,7 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
  * @date 2024/1/4 16:56
  * @since 1.1.6
  */
-public interface ShowTablesOperator extends PrepareOperator<ShowTablesOperator>, Operator<ShowTablesOperator>, Self<ShowTablesOperator> {
+public interface ShowTablesOperator extends TableOperator<ShowTablesOperator>, PrepareOperator<ShowTablesOperator>, Self<ShowTablesOperator> {
 
     String CATALOG_FILED = "CATALOG";
     String SCHEMA_FILED = "SCHEMA";
@@ -28,7 +28,7 @@ public interface ShowTablesOperator extends PrepareOperator<ShowTablesOperator>,
      * database
      *
      * @param database database
-     * @return SQLShowTablesOperator
+     * @return ShowTablesOperator
      */
     default ShowTablesOperator database(String database) {
         return database(Database.of(DSLName.of(database)));
@@ -38,7 +38,7 @@ public interface ShowTablesOperator extends PrepareOperator<ShowTablesOperator>,
      * database
      *
      * @param database database
-     * @return SQLShowTablesOperator
+     * @return ShowTablesOperator
      */
     ShowTablesOperator database(Database database);
 
@@ -46,7 +46,16 @@ public interface ShowTablesOperator extends PrepareOperator<ShowTablesOperator>,
      * schema
      *
      * @param schema schema
-     * @return SQLShowTablesOperator
+     * @return ShowTablesOperator
      */
     ShowTablesOperator schema(String schema);
+
+    /**
+     * 作为库表查询的过滤，可以多次使用，如果多次则查询这多个信息
+     *
+     * @param table xxxx
+     * @return ShowTablesOperator
+     */
+    @Override
+    ShowTablesOperator from(Table table);
 }

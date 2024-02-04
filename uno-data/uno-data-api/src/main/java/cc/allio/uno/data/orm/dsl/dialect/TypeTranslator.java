@@ -21,6 +21,16 @@ public interface TypeTranslator {
     DSLType translate(DSLType sqlType);
 
     /**
+     * 类型转换
+     *
+     * @param sqlType   原始类型
+     * @param precision precision
+     * @param scale     scale
+     * @return 翻译后的类型
+     */
+    DSLType translate(DSLType sqlType, Integer precision, Integer scale);
+
+    /**
      * 获取数据库类型
      */
     DBType getDBType();

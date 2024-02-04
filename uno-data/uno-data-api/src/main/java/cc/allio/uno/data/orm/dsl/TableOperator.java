@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl;
 import java.util.function.UnaryOperator;
 
 /**
- * Table Operator (from xxx)
+ * Table Operator (xxxx xxx)
  *
  * @author jiangwei
  * @date 2023/4/16 18:07
@@ -14,7 +14,7 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
     /**
      * FROM XX
      *
-     * @param name table name
+     * @param name xxxx name
      * @return Operator
      */
     default T from(String name) {
@@ -24,7 +24,7 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
     /**
      * FROM XX
      *
-     * @param name table name
+     * @param name xxxx name
      * @return Operator
      */
     default T from(DSLName name) {
@@ -34,8 +34,8 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
     /**
      * FROM XX
      *
-     * @param name  table name
-     * @param alias table alias
+     * @param name  xxxx name
+     * @param alias xxxx alias
      * @return Operator
      */
     default T from(String name, String alias) {
@@ -65,7 +65,7 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
     /**
      * FROM XX
      *
-     * @param table table
+     * @param table xxxx
      * @return Operator
      */
     T from(Table table);
@@ -75,5 +75,5 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      *
      * @return Table
      */
-    Table getTable();
+    Table getTables();
 }

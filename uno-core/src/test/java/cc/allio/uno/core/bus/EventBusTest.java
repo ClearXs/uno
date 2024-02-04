@@ -171,4 +171,16 @@ public class EventBusTest extends BaseTestCase {
         }
         counter.await();
     }
+
+    @Test
+    void testHasTopic() {
+        bus.subscribe("/t1").subscribe();
+        assertTrue(bus.hasTopic("/t1"));
+
+        bus.subscribe("/t1/t2").subscribe();
+        assertTrue(bus.hasTopic("/t1/**"));
+
+        assertFalse(bus.hasTopic("/t2/**"));
+
+    }
 }

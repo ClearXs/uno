@@ -6,6 +6,7 @@ import cc.allio.uno.core.util.ClassUtils;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+import org.checkerframework.checker.units.qual.K;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -76,7 +77,7 @@ public class BeanInfoWrapper<T> {
                 .single()
                 .onErrorResume(error -> {
                     if (log.isWarnEnabled()) {
-                        log.warn("get field {} descriptor error", name);
+                        log.warn("getValue field {} descriptor error", name);
                     }
                     return Mono.empty();
                 });
@@ -162,6 +163,13 @@ public class BeanInfoWrapper<T> {
     }
 
     /**
+     * @see #setCoverage(Object, String, boolean, Object...)
+     */
+    public synchronized <K extends T> K setForce(K target, String name, Object... value) {
+        return setCoverageForce(target, name, true, value);
+    }
+
+    /**
      * 向目标对象设置字段的值，<b>目标字段如果存在值则不进行设置.</b>
      *
      * @param target 设置字段值的目标对象
@@ -171,8 +179,16 @@ public class BeanInfoWrapper<T> {
      * @throws NullPointerException 当值集合存在null时抛出异常
      * @see #setCoverage(Object, String, boolean, Object...)
      */
-    public synchronized Mono<T> set(T target, String name, Object... value) {
+    public synchronized <K extends T> Mono<K> set(K target, String name, Object... value) {
         return setCoverage(target, name, false, value);
+    }
+
+    /**
+     * @see #setCoverage(Object, String, boolean, Object...)
+     */
+    public synchronized <K extends T> K setCoverageForce(K target, String name, boolean forceCoverage, Object... value) {
+        setCoverage(target, name, forceCoverage, value).subscribe();
+        return target;
     }
 
     /**
@@ -186,14 +202,14 @@ public class BeanInfoWrapper<T> {
      * @throws NullPointerException 当值集合存在null时抛出异常
      * @see #write(Object, PropertyDescriptor, boolean, Object...)
      */
-    public synchronized Mono<T> setCoverage(T target, String name, boolean forceCoverage, Object... value) {
+    public synchronized <K extends T> Mono<K> setCoverage(K target, String name, boolean forceCoverage, Object... value) {
         Assert.notNull(name, "target must not null");
         return findByName(name)
                 .flatMap(descriptor ->
                         write(target, descriptor, forceCoverage, value)
                                 .onErrorContinue((error, o) -> {
                                     if (log.isWarnEnabled()) {
-                                        log.warn("target {} set field {} value error set empty", target.getClass().getSimpleName(), name);
+                                        log.warn("target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), name);
                                     }
                                 }));
     }
@@ -217,7 +233,7 @@ public class BeanInfoWrapper<T> {
                 })
                 .onErrorContinue((err, o) -> {
                     if (log.isWarnEnabled()) {
-                        log.warn("Target {} get field {} value error", target.getClass().getSimpleName(), descriptor.getName(), err);
+                        log.warn("Target {} getValue field {} value error", target.getClass().getSimpleName(), descriptor.getName(), err);
                     }
                 });
     }
@@ -232,8 +248,8 @@ public class BeanInfoWrapper<T> {
      * @param args          写入参数
      * @return 指定bean
      */
-    private Mono<T> write(T target, PropertyDescriptor descriptor, boolean forceCoverage, Object... args) {
-        Mono<T> writeMono = Mono.justOrEmpty(descriptor.getWriteMethod())
+    private <K extends T> Mono<K> write(K target, PropertyDescriptor descriptor, boolean forceCoverage, Object... args) {
+        Mono<K> writeMono = Mono.justOrEmpty(descriptor.getWriteMethod())
                 .flatMap(writeMethod ->
                         TypeValue.of(writeMethod.getParameterTypes(), args)
                                 .map(TypeValue::tryTransfer)
@@ -261,7 +277,7 @@ public class BeanInfoWrapper<T> {
                                         }
                                     } catch (Throwable err) {
                                         if (log.isWarnEnabled()) {
-                                            log.warn("Target {} set field {} value error set empty", target.getClass().getSimpleName(), descriptor.getName());
+                                            log.warn("Target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), descriptor.getName());
                                         }
                                     }
                                     return Mono.just(target);
@@ -277,5 +293,21 @@ public class BeanInfoWrapper<T> {
                     }
                     return Mono.just(target);
                 });
+    }
+
+    /**
+     * 基于class对象创建{@link BeanInfoWrapper}实例
+     *
+     * @param clazz clazz
+     * @param <T>   实例类型
+     * @return BeanInfoWrapper
+     */
+    public static <T> BeanInfoWrapper<T> of(Class<T> clazz) {
+        try {
+            return new BeanInfoWrapper<>(clazz);
+        } catch (IntrospectionException e) {
+            // ignore
+            return null;
+        }
     }
 }

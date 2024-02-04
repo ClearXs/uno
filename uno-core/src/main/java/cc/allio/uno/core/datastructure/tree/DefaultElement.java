@@ -15,7 +15,7 @@ import java.util.List;
  * @since 1.1.5
  */
 @Getter
-public class DefaultElement extends TraversalElement {
+public class DefaultElement<T extends DefaultElement<T>> extends TraversalElement<T> {
 
     private final Serializable id;
 
@@ -25,9 +25,9 @@ public class DefaultElement extends TraversalElement {
     private int depth;
 
     @Setter
-    private Element parent;
+    private T parent;
 
-    private List<Element> children;
+    private List<T> children;
 
     public DefaultElement(Serializable id) {
         this.id = id;
@@ -64,17 +64,17 @@ public class DefaultElement extends TraversalElement {
     }
 
     @Override
-    public <T extends Element> void setChildren(List<T> children) {
-        this.children = (List<Element>) children;
+    public void setChildren(List<T> children) {
+        this.children = children;
     }
 
     @Override
-    public <T extends Element> List<T> getChildren() {
-        return (List<T>) children;
+    public List<T> getChildren() {
+        return children;
     }
 
     @Override
-    public void addChildren(Element element) {
+    public void addChildren(T element) {
         this.children.add(element);
     }
 

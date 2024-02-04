@@ -48,9 +48,9 @@ public class Page<T> implements IPage<T> {
     protected List<OrderItem> orders = new ArrayList<>();
 
     /**
-     * 自动优化 COUNT SQL
+     * 自动优化 COUNT DSL
      */
-    protected boolean optimizeCountSql = true;
+    protected boolean optimizeCountDSL = true;
     /**
      * 是否进行 count 查询
      */
@@ -250,7 +250,7 @@ public class Page<T> implements IPage<T> {
      */
     @Deprecated
     public Page<T> setAsc(String... ascs) {
-        // 保证原来方法 set 的语意
+        // 保证原来方法 setValue 的语意
         removeOrder(OrderItem::isAsc);
         for (String s : ascs) {
             addOrder(OrderItem.asc(s));
@@ -267,7 +267,7 @@ public class Page<T> implements IPage<T> {
      */
     @Deprecated
     public Page<T> setDescs(List<String> descs) {
-        // 保证原来方法 set 的语意
+        // 保证原来方法 setValue 的语意
         if (CollectionUtils.isNotEmpty(descs)) {
             removeOrder(item -> !item.isAsc());
             for (String s : descs) {
@@ -297,12 +297,12 @@ public class Page<T> implements IPage<T> {
     }
 
     @Override
-    public boolean optimizeCountSql() {
-        return optimizeCountSql;
+    public boolean optimizeCountDSL() {
+        return optimizeCountDSL;
     }
 
-    public boolean isOptimizeCountSql() {
-        return optimizeCountSql();
+    public boolean isOptimizeCountDSL() {
+        return optimizeCountDSL();
     }
 
     @Override
@@ -318,8 +318,8 @@ public class Page<T> implements IPage<T> {
         return this;
     }
 
-    public Page<T> setOptimizeCountSql(boolean optimizeCountSql) {
-        this.optimizeCountSql = optimizeCountSql;
+    public Page<T> setOptimizeCountDSL(boolean optimizeCountDSL) {
+        this.optimizeCountDSL = optimizeCountDSL;
         return this;
     }
 

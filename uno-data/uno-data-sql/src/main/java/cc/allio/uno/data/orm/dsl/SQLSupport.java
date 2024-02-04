@@ -285,7 +285,7 @@ public final class SQLSupport implements Self<SQLSupport> {
      * </ul>
      *
      * @param binaryOpExpr binaryOpExpr
-     * @param trigger      当满足上述条件时，进行回调，接受两个类型，一个是包装后的expr实例（增加{@link #PLACEHOLDER}的占位符），另外一个是预处理的参数值类型
+     * @param trigger      当满足上述条件时，进行回调，接受三个参数，一个是包装后的expr实例（增加{@link #PLACEHOLDER}的占位符），一个是LogicMode，另外一个是预处理的参数值类型
      */
     public static void binaryExprTraversal(SQLBinaryOpExpr binaryOpExpr, TernaryConsumer<SQLExpr, LogicMode, List<Tuple2<String, Object>>> trigger) {
         SQLExpr left = binaryOpExpr.getLeft();
@@ -389,7 +389,7 @@ public final class SQLSupport implements Self<SQLSupport> {
      * @return SQLValuableExpr
      */
     public static SQLValuableExpr newSQLValue(DataType dataType, Object value) {
-        DSLType sqlType = dataType.getSqlType();
+        DSLType sqlType = dataType.getDslType();
         if (DSLType.CHAR.equals(sqlType)
                 || DSLType.VARCHAR.equals(sqlType)
                 || DSLType.LONGNVARCHAR.equals(sqlType)

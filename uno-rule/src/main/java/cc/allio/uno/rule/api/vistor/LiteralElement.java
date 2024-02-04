@@ -9,7 +9,7 @@ import cc.allio.uno.core.datastructure.tree.Element;
  * @date 2023/11/9 11:07
  * @since 1.1.5
  */
-public interface LiteralElement extends Element {
+public interface LiteralElement<T extends LiteralElement<T>> extends Element<T> {
 
     /**
      * 平展开当前规则group 节点规则表达式。

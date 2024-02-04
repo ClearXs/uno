@@ -2,10 +2,13 @@ package cc.allio.uno.data.orm.dsl.type;
 
 import cc.allio.uno.data.orm.dsl.dialect.TypeTranslatorHolder;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 
 import java.sql.Types;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * DSL 类型定义，基于{@link DBType#MYSQL}作基础类型进行定义
@@ -18,50 +21,50 @@ import java.util.List;
  */
 public interface DSLType {
 
-    DSLType BIGINT = DSLTypeImpl.BIGINT;
+    DSLType BIGINT = DefaultDSLType.BIGINT;
 
-    DSLType SMALLINT = DSLTypeImpl.SMALLINT;
+    DSLType SMALLINT = DefaultDSLType.SMALLINT;
 
-    DSLType INTEGER = DSLTypeImpl.INTEGER;
+    DSLType INTEGER = DefaultDSLType.INTEGER;
 
-    DSLType BIT = DSLTypeImpl.BIT;
+    DSLType BIT = DefaultDSLType.BIT;
 
-    DSLType TINYINT = DSLTypeImpl.TINYINT;
+    DSLType TINYINT = DefaultDSLType.TINYINT;
 
-    DSLType NUMBER = DSLTypeImpl.NUMBER;
+    DSLType NUMBER = DefaultDSLType.NUMBER;
 
-    DSLType DOUBLE = DSLTypeImpl.DOUBLE;
+    DSLType DOUBLE = DefaultDSLType.DOUBLE;
 
-    DSLType FLOAT = DSLTypeImpl.FLOAT;
+    DSLType FLOAT = DefaultDSLType.FLOAT;
 
     // ====================== 时间型 ======================
-    DSLType TIME = DSLTypeImpl.TIME;
+    DSLType TIME = DefaultDSLType.TIME;
 
-    DSLType TIMESTAMP = DSLTypeImpl.TIMESTAMP;
+    DSLType TIMESTAMP = DefaultDSLType.TIMESTAMP;
 
-    DSLType DATE = DSLTypeImpl.DATE;
+    DSLType DATE = DefaultDSLType.DATE;
 
-    DSLType DECIMAL = DSLTypeImpl.DECIMAL;
+    DSLType DECIMAL = DefaultDSLType.DECIMAL;
 
     // ====================== 字符型 ======================
-    DSLType CHAR = DSLTypeImpl.CHAR;
+    DSLType CHAR = DefaultDSLType.CHAR;
 
-    DSLType VARCHAR = DSLTypeImpl.VARCHAR;
+    DSLType VARCHAR = DefaultDSLType.VARCHAR;
 
-    DSLType NVARCHAR = DSLTypeImpl.NVARCHAR;
+    DSLType NVARCHAR = DefaultDSLType.NVARCHAR;
 
-    DSLType LONGVARCHAR = DSLTypeImpl.LONGVARCHAR;
+    DSLType LONGVARCHAR = DefaultDSLType.LONGVARCHAR;
 
-    DSLType LONGNVARCHAR = DSLTypeImpl.LONGNVARCHAR;
+    DSLType LONGNVARCHAR = DefaultDSLType.LONGNVARCHAR;
 
-    DSLType VARBINARY = DSLTypeImpl.VARBINARY;
+    DSLType VARBINARY = DefaultDSLType.VARBINARY;
 
-    DSLType LONGVARBINARY = DSLTypeImpl.LONGVARBINARY;
+    DSLType LONGVARBINARY = DefaultDSLType.LONGVARBINARY;
 
     // ====================== 高级类型 ======================
-    DSLType OBJECT = DSLTypeImpl.OBJECT;
+    DSLType OBJECT = DefaultDSLType.OBJECT;
 
-    DSLType ARRAY = DSLTypeImpl.ARRAY;
+    DSLType ARRAY = DefaultDSLType.ARRAY;
 
     /**
      * 获取sql type name
@@ -78,18 +81,18 @@ public interface DSLType {
     int getJdbcType();
 
     /**
-     * 获取默认的Precision
+     * 获取的Precision
      *
      * @return Precision
      */
-    Integer getDefaultPrecision();
+    Integer getPrecision();
 
     /**
-     * 获取默认的Scala
+     * 获取的Scala
      *
      * @return Scala
      */
-    Integer getDefaultScala();
+    Integer getScale();
 
     /**
      * 根据jdbc code获取SQLType实例
@@ -98,7 +101,7 @@ public interface DSLType {
      * @return SQLType
      */
     static DSLType getByJdbcCode(int jdbcCode) {
-        for (DSLType value : DSLTypeImpl.values()) {
+        for (DSLType value : DefaultDSLType.values()) {
             if (value.getJdbcType() == jdbcCode) {
                 return value;
             }
@@ -119,10 +122,30 @@ public interface DSLType {
         List<DSLType> getParent();
     }
 
+    @Data
+    @Builder
+    class DSLTypeImpl implements DSLType {
+        private final String name;
+        private final int jdbcType;
+        private final Integer precision;
+        private final Integer scale;
+
+        public static DSLTypeImpl createBy(DSLType dslType, Integer precision, Integer scale) {
+            DSLTypeImpl.DSLTypeImplBuilder builder = DSLTypeImpl.builder()
+                    .name(dslType.getName())
+                    .jdbcType(dslType.getJdbcType());
+            Integer definitePrecision = Optional.ofNullable(precision).orElse(dslType.getPrecision());
+            builder.precision(definitePrecision);
+            Integer definiteScale = Optional.ofNullable(scale).orElse(dslType.getScale());
+            builder.scale(definiteScale);
+            return builder.build();
+        }
+    }
+
 
     @Getter
     @AllArgsConstructor
-    enum DSLTypeImpl implements DSLType {
+    enum DefaultDSLType implements DSLType {
         // ====================== 数字型 ======================
         BIGINT("bigint", Types.BIGINT, 64, null),
         SMALLINT("smallint", Types.SMALLINT, 32, null),
@@ -154,7 +177,7 @@ public interface DSLType {
 
         private final String name;
         private final int jdbcType;
-        private final Integer defaultPrecision;
-        private final Integer defaultScala;
+        private final Integer precision;
+        private final Integer scale;
     }
 }

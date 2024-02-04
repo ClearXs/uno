@@ -24,6 +24,7 @@ import org.apache.ibatis.reflection.wrapper.ObjectWrapperFactory;
 import org.apache.ibatis.scripting.LanguageDriver;
 import org.apache.ibatis.scripting.LanguageDriverRegistry;
 import org.apache.ibatis.session.*;
+import org.apache.ibatis.session.defaults.DefaultSqlSessionFactory;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.type.JdbcType;
 import org.apache.ibatis.type.TypeAliasRegistry;
@@ -34,17 +35,19 @@ import java.util.*;
 
 /**
  * 替换一些mybatis{@link ResultSetHandler}的组件
+ * <p>注意：{@link #environment}如果使用父类进行设置或获取，将会导致使用默认数据源查询时会被替换，相应的代码在{@link DefaultSqlSessionFactory#openSession()}</p>
  *
  * @author jiangwei
  * @date 2023/4/14 17:51
  * @see #newResultSetHandler(Executor, MappedStatement, RowBounds, ParameterHandler, ResultHandler, BoundSql)
  * @since 1.1.4
  */
-public class DbMybatisConfiguration extends Configuration {
+public class MybatisConfiguration extends Configuration {
 
     private final Configuration configuration;
+    protected Environment environment;
 
-    public DbMybatisConfiguration(Configuration configuration) {
+    public MybatisConfiguration(Configuration configuration) {
         this.configuration = configuration;
     }
 
@@ -200,12 +203,16 @@ public class DbMybatisConfiguration extends Configuration {
 
     @Override
     public Environment getEnvironment() {
-        return configuration.getEnvironment();
+        if (environment == null) {
+            return configuration.getEnvironment();
+        } else {
+            return environment;
+        }
     }
 
     @Override
     public void setEnvironment(Environment environment) {
-        configuration.setEnvironment(environment);
+        this.environment = environment;
     }
 
     @Override
@@ -726,5 +733,12 @@ public class DbMybatisConfiguration extends Configuration {
     @Override
     protected void checkLocallyForDiscriminatedNestedResultMaps(ResultMap rm) {
         super.checkLocallyForDiscriminatedNestedResultMaps(rm);
+    }
+
+    /**
+     * 新创建一个mybatis configuration实例
+     */
+    public MybatisConfiguration copy() {
+        return new MybatisConfiguration(this.configuration);
     }
 }

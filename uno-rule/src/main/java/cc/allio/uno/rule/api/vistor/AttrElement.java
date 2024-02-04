@@ -1,6 +1,5 @@
 package cc.allio.uno.rule.api.vistor;
 
-import cc.allio.uno.core.datastructure.tree.Element;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.rule.api.RuleAttr;
@@ -19,12 +18,12 @@ import java.util.Objects;
  * @date 2023/4/26 11:53
  * @since 1.1.4
  */
-public class AttrElement extends LiteralTraversalElement implements LiteralElement {
+public class AttrElement extends LogicGroup {
 
     private final Serializable id;
 
     @Getter
-    private GroupElement<?> parent;
+    private LogicGroup parent;
     @Getter
     private final RuleAttr ruleAttr;
 
@@ -35,7 +34,8 @@ public class AttrElement extends LiteralTraversalElement implements LiteralEleme
     @Getter
     private int depth;
 
-    public AttrElement(GroupElement<?> parent, RuleAttr ruleAttr) {
+    public AttrElement(LogicGroup parent, RuleAttr ruleAttr) {
+        super(null, null);
         this.parent = parent;
         this.ruleAttr = ruleAttr;
         if (parent != null) {
@@ -50,27 +50,52 @@ public class AttrElement extends LiteralTraversalElement implements LiteralEleme
     }
 
     @Override
-    public <T extends Element> void setParent(T parent) {
-        this.parent = (GroupElement<?>) parent;
-    }
-
-    @Override
     public boolean isLeaf() {
         return true;
     }
 
     @Override
-    public <T extends Element> List<T> getChildren() {
+    public List<LogicGroup> getChildren() {
         return Collections.emptyList();
     }
 
     @Override
-    public <T extends Element> void addChildren(T element) {
+    public boolean addElement(LogicGroup element) {
+        throw Exceptions.eee("AttrElement is leaf element, cannot addElement", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public boolean addElements(List<LogicGroup> elements) {
+        throw Exceptions.eee("AttrElement is leaf element, cannot addElements", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public boolean removeElement(LogicGroup element) {
+        throw Exceptions.eee("AttrElement is leaf element, cannot LogicGroup", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public List<LogicGroup> getGroupElement() {
+        throw Exceptions.eee("AttrElement is leaf element, cannot getGroupElement", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public List<LogicGroup> getAttrElement() {
+        throw Exceptions.eee("AttrElement is leaf element, cannot getAttrElement", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public void clearAttrElement() {
+        throw Exceptions.eee("AttrElement is leaf element, cannot clearAttrElement", UnsupportedOperationException.class);
+    }
+
+    @Override
+    public void addChildren(LogicGroup element) {
         Exceptions.eee("AttrElement is leaf element, cannot addChildren", UnsupportedOperationException.class);
     }
 
     @Override
-    public <T extends Element> void setChildren(List<T> children) {
+    public void setChildren(List<LogicGroup> children) {
         Exceptions.eee("AttrElement is leaf element, cannot setChildren", UnsupportedOperationException.class);
     }
 

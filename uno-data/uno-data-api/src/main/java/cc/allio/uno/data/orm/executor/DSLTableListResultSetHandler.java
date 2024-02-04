@@ -1,6 +1,5 @@
 package cc.allio.uno.data.orm.executor;
 
-import cc.allio.uno.core.type.Types;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
@@ -15,7 +14,7 @@ import java.util.List;
  * @date 2024/1/4 18:56
  * @since 1.1.6
  */
-public class SQLTableListResultSetHandler implements ListResultSetHandler<Table> {
+public class DSLTableListResultSetHandler implements ListResultSetHandler<Table> {
 
     @Override
     public List<Table> apply(ResultSet resultSet) {
@@ -23,10 +22,10 @@ public class SQLTableListResultSetHandler implements ListResultSetHandler<Table>
                 .stream()
                 .map(r -> {
                     Table table = new Table();
-                    table.setCatalog(Types.toString(r.getRow(ShowTablesOperator.CATALOG_FILED).getValue()));
-                    table.setSchema(Types.toString(r.getRow(ShowTablesOperator.SCHEMA_FILED).getValue()));
-                    table.setName(DSLName.of(Types.toString(r.getRow(ShowTablesOperator.NAME_FILED).getValue()), DSLName.PLAIN_FEATURE));
-                    table.setType(Types.toString(r.getRow(ShowTablesOperator.TYPE_FILED).getValue()));
+                    r.getOptionStringValue(ShowTablesOperator.CATALOG_FILED, table::setCatalog);
+                    r.getOptionStringValue(ShowTablesOperator.SCHEMA_FILED, table::setSchema);
+                    r.getOptionStringValue(ShowTablesOperator.NAME_FILED, name -> table.setName(DSLName.of(name, DSLName.PLAIN_FEATURE)));
+                    r.getOptionStringValue(ShowTablesOperator.TYPE_FILED, table::setType);
                     return table;
                 })
                 .toList();

@@ -78,7 +78,7 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 
@@ -90,7 +90,7 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     @Override
     public InsertOperator batchInserts(List<DSLName> columns, List<List<Object>> values) {
         if (table == null) {
-            throw new DSLException("ensure invoke #from() given index");
+            throw new DSLException("ensure invoke #xxxx() given index");
         }
         List<BulkOperation> thisOp = values.stream()
                 .map(v ->

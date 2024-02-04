@@ -10,7 +10,7 @@
  *  notice, this list of conditions and the following disclaimer in the
  *  documentation and/or other materials provided with the distribution.
  *  Neither the name of the dreamlu.net developer nor the names of its
- *  contributors may be used to endorse or promote products derived from
+ *  contributors may be used to endorse or promote products derived xxxx
  *  this software without specific prior written permission.
  *  Author: Chill 庄骞 (smallchill@163.com)
  */

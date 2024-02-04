@@ -21,16 +21,16 @@ public class DbExecutorProcessor implements BeanPostProcessor {
 
     @Override
     public Object postProcessAfterInitialization(Object bean, String beanName) throws BeansException {
-        if (ClassUtils.isAssignable(DbExecutorAware.class, bean.getClass())) {
-            AspectJProxyFactory proxyFactory = new AspectJProxyFactory();
-            proxyFactory.setTarget(bean);
-            proxyFactory.addAspect(DbExecutorAspect.class);
-            NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
-            pointcut.setMappedName("getExecutor");
-            MethodInterceptor methodInterceptor = invocation -> CommandExecutorFactory.getSQLExecutor(ExecutorKey.DB);
-            proxyFactory.addAdvisor(new DefaultPointcutAdvisor(pointcut, methodInterceptor));
-            return proxyFactory.getProxy();
+        if (!ClassUtils.isAssignable(DbExecutorAware.class, bean.getClass())) {
+            return bean;
         }
-        return bean;
+        AspectJProxyFactory proxyFactory = new AspectJProxyFactory();
+        proxyFactory.setTarget(bean);
+        proxyFactory.addAspect(DbExecutorAspect.class);
+        NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+        pointcut.setMappedName("getExecutor");
+        MethodInterceptor methodInterceptor = invocation -> CommandExecutorFactory.getDSLExecutor(ExecutorKey.DB);
+        proxyFactory.addAdvisor(new DefaultPointcutAdvisor(pointcut, methodInterceptor));
+        return proxyFactory.getProxy();
     }
 }

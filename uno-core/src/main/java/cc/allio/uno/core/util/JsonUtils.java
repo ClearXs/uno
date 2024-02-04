@@ -242,7 +242,7 @@ public class JsonUtils {
      * @param <T>          每一个元素泛型
      * @param bytes        字节数组
      * @param elementClass 元素Class对象
-     * @return Set实例 set
+     * @return Set实例 setValue
      */
     public static <T> Set<T> readSet(byte[] bytes, Class<T> elementClass) {
         if (ObjectUtils.isEmpty(bytes)) {
@@ -395,7 +395,7 @@ public class JsonUtils {
      * 封装 Set type
      *
      * @param elementClass 集合值类型
-     * @return CollectionLikeType set type
+     * @return CollectionLikeType setValue type
      */
     public static CollectionLikeType getSetType(Class<?> elementClass) {
         return getJsonMapper().getTypeFactory().constructCollectionLikeType(Set.class, elementClass);

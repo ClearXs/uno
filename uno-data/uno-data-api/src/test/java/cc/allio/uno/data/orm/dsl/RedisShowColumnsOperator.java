@@ -40,7 +40,7 @@ public class RedisShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return null;
     }
 

@@ -66,8 +66,8 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public Table getTable() {
-        return queryOperator.getTable();
+    public Table getTables() {
+        return queryOperator.getTables();
     }
 
     @Override

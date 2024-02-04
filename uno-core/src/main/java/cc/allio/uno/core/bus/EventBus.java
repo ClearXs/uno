@@ -20,6 +20,32 @@ import java.util.function.LongConsumer;
 public interface EventBus<C extends EventContext> {
 
     /**
+     * @see #hasTopic(Subscription)
+     */
+    default boolean hasTopic(TopicKey topicKey) {
+        return hasTopic(topicKey.getSubscription());
+    }
+
+    /**
+     * @see #hasTopic(Subscription)
+     */
+    default boolean hasTopic(String path) {
+        return hasTopic(Subscription.of(path));
+    }
+
+    /**
+     * 根据指定的订阅信息判断是否存在订阅的主题
+     *
+     * @param subscription subscription
+     * @return true if exist, false otherwise
+     * @see #findTopic(Subscription)
+     */
+    default boolean hasTopic(Subscription subscription) {
+        Long topicCount = findTopic(subscription).count().block();
+        return topicCount != null && topicCount != 0;
+    }
+
+    /**
      * 根据主题路径获取指定的主题实例
      *
      * @param topicKey topicKey

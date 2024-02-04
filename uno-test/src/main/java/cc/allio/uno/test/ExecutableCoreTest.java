@@ -25,7 +25,7 @@ public class ExecutableCoreTest extends CoreTest {
     }
 
     /**
-     * set CoreRunner
+     * setValue CoreRunner
      *
      * @param coreRunner coreRunner
      * @see RunTestAttributes#getCoreRunner()
@@ -36,7 +36,7 @@ public class ExecutableCoreTest extends CoreTest {
     }
 
     /**
-     * get coreRunner
+     * getValue coreRunner
      *
      * @return coreRunner
      */

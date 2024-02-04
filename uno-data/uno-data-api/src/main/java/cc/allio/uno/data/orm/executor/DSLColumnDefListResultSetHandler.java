@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.DSLName;
@@ -16,7 +17,7 @@ import java.util.List;
  * @date 2023/7/4 14:54
  * @since 1.1.4
  */
-public class SQLColumnDefListResultSetHandler implements ListResultSetHandler<ColumnDef> {
+public class DSLColumnDefListResultSetHandler implements ListResultSetHandler<ColumnDef> {
 
     /**
      * 用于保存字段名称
@@ -30,7 +31,7 @@ public class SQLColumnDefListResultSetHandler implements ListResultSetHandler<Co
                 .map(r -> {
                     ResultRow field = r.getRow(ROW_FIELD_NAME);
                     return ColumnDef.builder()
-                            .dslName(DSLName.of(Types.toString(field.getValue()), DSLName.PLAIN_FEATURE))
+                            .dslName(r.getStringValue(ROW_FIELD_NAME, () -> StringPool.EMPTY, columnName -> DSLName.of(columnName, DSLName.PLAIN_FEATURE)))
                             .dataType(DataType.create(DSLType.getByJdbcCode(field.getJdbcType().getVendorTypeNumber())))
                             .build();
                 })

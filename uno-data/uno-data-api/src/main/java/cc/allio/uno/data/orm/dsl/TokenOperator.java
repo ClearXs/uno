@@ -77,7 +77,5 @@ public enum TokenOperator {
     ASSIGNMENT(":="),
     PG_And("&&"),
     PG_ST_DISTANCE("<->");
-
-
     private final String name;
 }

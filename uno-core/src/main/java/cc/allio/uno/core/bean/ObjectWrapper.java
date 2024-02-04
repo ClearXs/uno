@@ -161,4 +161,48 @@ public class ObjectWrapper implements ValueWrapper {
     public Object getTarget() {
         return instance;
     }
+
+    /**
+     * 设置字段值，如果字段值不存在，则不抛出异常
+     *
+     * @param instance instance
+     * @param name     name
+     * @param value    value
+     */
+    public static void setValue(Object instance, String name, Object... value) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            wrapper.setForce(name, value);
+        }
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param instance instance
+     * @param name     name
+     * @return value or null
+     */
+    public static Object getValue(Object instance, String name) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            return wrapper.getForce(name);
+        }
+        return null;
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param instance instance
+     * @param name     name
+     * @return value or null
+     */
+    public static <T> T getValue(Object instance, String name, Class<T> fieldType) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            return wrapper.getForce(name, fieldType);
+        }
+        return null;
+    }
 }

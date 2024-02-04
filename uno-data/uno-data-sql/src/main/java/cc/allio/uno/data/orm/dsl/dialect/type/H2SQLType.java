@@ -1,5 +1,6 @@
-package cc.allio.uno.data.orm.dsl.type;
+package cc.allio.uno.data.orm.dsl.dialect.type;
 
+import cc.allio.uno.data.orm.dsl.type.DSLType;
 import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,41 +15,19 @@ import java.util.List;
  * @date 2024/1/8 19:42
  * @since 1.1.6
  */
-public class H2SQLType implements DSLType {
-
-    private DSLType sqlType;
+public class H2SQLType extends AbstractDSLType {
 
     public H2SQLType(DSLType sqlType) {
-        for (H2LinkType linkType : H2LinkType.values()) {
-            List<DSLType> parent = linkType.getParent();
-            if (parent.stream().anyMatch(p -> p.getName().equals(sqlType.getName()))) {
-                this.sqlType = linkType;
-                break;
-            }
-        }
-        if (this.sqlType == null) {
-            this.sqlType = sqlType;
-        }
+        super(sqlType);
+    }
+
+    public H2SQLType(DSLType sqlType, Integer precision, Integer scale) {
+        super(sqlType, precision, scale);
     }
 
     @Override
-    public String getName() {
-        return sqlType.getName();
-    }
-
-    @Override
-    public int getJdbcType() {
-        return sqlType.getJdbcType();
-    }
-
-    @Override
-    public Integer getDefaultPrecision() {
-        return sqlType.getDefaultPrecision();
-    }
-
-    @Override
-    public Integer getDefaultScala() {
-        return sqlType.getDefaultScala();
+    protected DSLLinkType[] getDSLLinkValues() {
+        return H2LinkType.values();
     }
 
     @Getter
@@ -62,8 +41,8 @@ public class H2SQLType implements DSLType {
 
         private final String name;
         private final int jdbcType;
-        private final Integer defaultPrecision;
-        private final Integer defaultScala;
+        private final Integer precision;
+        private final Integer scale;
         private final List<DSLType> parent;
     }
 }

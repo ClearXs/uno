@@ -11,7 +11,7 @@ import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 
 /**
- * druid for modify table structure
+ * druid for modify xxxx structure
  *
  * @author jiangwei
  * @date 2023/6/8 19:55
@@ -54,7 +54,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return null;
     }
 }

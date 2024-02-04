@@ -66,7 +66,7 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

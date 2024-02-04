@@ -4,18 +4,18 @@ import java.lang.annotation.*;
 
 /**
  * 使用于代理对象。标记于方法上，表示当前方法可以使用组合类型的方法。<br/>
- * 比如说：Test的实例将使用ComposeTest#get()方法
+ * 比如说：Test的实例将使用ComposeTest#getValue()方法
  * <blockquote>
  * <pre>
  *     class Test {
- *         void get();
+ *         void getValue();
  *     }
  *     class ComposeTest extends Test {
  *     	   Test[] tests;
  *         ComposeTest(Test... tests) {
  *             this.tests = tests;
  *         }
- *         void get();
+ *         void getValue();
  *     }
  * </pre>
  * </blockquote>

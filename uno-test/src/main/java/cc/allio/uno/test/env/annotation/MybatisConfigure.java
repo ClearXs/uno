@@ -24,7 +24,8 @@ public class MybatisConfigure extends DynamicConfigure {
         String[] basePackages = annotation.getStringArray("basePackages");
         // values and basePackages mutual alias for
         if (values.length == 0 && basePackages.length == 0) {
-            basePackages = new String[]{coreTestPackageName};
+            // if not specified basePackages, use test package path and addition .mapper
+            basePackages = new String[]{coreTestPackageName.concat(".mapper")};
         }
         annoBuilder = annoBuilder.defineArray("value", values)
                 .defineArray("basePackages", basePackages)

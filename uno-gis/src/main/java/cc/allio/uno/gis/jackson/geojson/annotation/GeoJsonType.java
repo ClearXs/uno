@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 
 /**
  * Enables the annotated type to be serialized as a <em>GeoJson Object</em> by the {@link GeoJsonSerializer}.
- * <p>Please note that the {@link GeoJsonSerializer} needs to be set with the {@link JsonSerialize} annotation.
+ * <p>Please note that the {@link GeoJsonSerializer} needs to be setValue with the {@link JsonSerialize} annotation.
  * <p>Depending on the type, further annotations on fields or getters are complementary.
  * <p>{@link FeatureType#FEATURE}
  * <ul>

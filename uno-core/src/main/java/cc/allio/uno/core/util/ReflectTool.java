@@ -18,7 +18,6 @@ public class ReflectTool {
     private ReflectTool() {
     }
 
-
     /**
      * 获取某个实体的泛型
      *
@@ -30,10 +29,11 @@ public class ReflectTool {
     }
 
     /**
-     * 获取某个实体的泛型
+     * 获取某个实体的泛型。<b>给定{@param obj}必须是实现的子类，如果是lambda则不能无法获取</b>
      *
-     * @param obj   实体
-     * @param index 声明泛型的顺序
+     * @param obj                   实体
+     * @param superClassOrInterface 声明的类或接口
+     * @param index                 声明泛型的顺序
      * @return class or null
      * @throws NullPointerException obj or superClassOrInterface is null then throws
      */

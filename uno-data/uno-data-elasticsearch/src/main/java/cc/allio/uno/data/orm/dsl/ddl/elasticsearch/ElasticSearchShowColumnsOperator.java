@@ -61,7 +61,7 @@ public class ElasticSearchShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

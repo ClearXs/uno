@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.word.Distinct;

@@ -112,7 +112,7 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

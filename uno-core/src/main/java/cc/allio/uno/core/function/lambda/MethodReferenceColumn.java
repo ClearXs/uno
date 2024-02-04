@@ -1,4 +1,4 @@
-package cc.allio.uno.core.function;
+package cc.allio.uno.core.function.lambda;
 
 import cc.allio.uno.core.StringPool;
 import org.apache.commons.lang3.reflect.FieldUtils;

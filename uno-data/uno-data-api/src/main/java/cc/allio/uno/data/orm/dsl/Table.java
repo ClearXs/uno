@@ -23,12 +23,10 @@ public class Table {
      * 别名
      */
     private String alias;
-
     private String schema = "PUBLIC";
-
     private String catalog;
-
     private String type;
+    private String comment;
 
     /**
      * 根据表名创建{@link Table}实例

@@ -66,7 +66,7 @@ public class SQLDropTableOperator implements DropTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

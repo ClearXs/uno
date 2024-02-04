@@ -2,18 +2,20 @@ package cc.allio.uno.data.orm.dsl;
 
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.StringUtils;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
 import java.util.regex.Pattern;
 
 /**
- * sql name 如 table name、column name...根据指定格式化转换对应的name
+ * dsl name 如 xxxx name、column name...根据指定格式化转换对应的name
  *
  * @author jiangwei
  * @date 2023/4/17 16:16
  * @since 1.1.4
  */
 @Getter
+@EqualsAndHashCode(of = "name")
 public class DSLName implements Comparable<DSLName> {
 
     // 当前存入的dsl name

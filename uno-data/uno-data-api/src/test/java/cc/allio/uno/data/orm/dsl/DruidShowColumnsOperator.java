@@ -40,7 +40,7 @@ public class DruidShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return null;
     }
 

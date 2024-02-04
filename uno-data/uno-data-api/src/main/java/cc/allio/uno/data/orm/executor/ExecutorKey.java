@@ -15,7 +15,7 @@ import lombok.EqualsAndHashCode;
  */
 public interface ExecutorKey extends Key {
 
-    String SQL_EXECUTOR_TYPE_KEY = "allio.uno.data.orm.executor.key";
+    String DSL_EXECUTOR_TYPE_KEY = "allio.uno.data.orm.executor.key";
 
     ExecutorKey DB = returnKey("db");
     ExecutorKey ELASTICSEARCH = returnKey(OperatorKey.ELASTICSEARCH);
@@ -26,7 +26,7 @@ public interface ExecutorKey extends Key {
 
     @Override
     default String getProperties() {
-        return SQL_EXECUTOR_TYPE_KEY;
+        return DSL_EXECUTOR_TYPE_KEY;
     }
 
     static ExecutorKey returnKey(String key) {
@@ -43,7 +43,7 @@ public interface ExecutorKey extends Key {
      * @return ExecutorKey
      */
     static ExecutorKey getSystemExecutorKey() {
-        String executorKey = Envs.getProperty(SQL_EXECUTOR_TYPE_KEY);
+        String executorKey = Envs.getProperty(DSL_EXECUTOR_TYPE_KEY);
         return ExecutorKey.returnKey(executorKey);
     }
 

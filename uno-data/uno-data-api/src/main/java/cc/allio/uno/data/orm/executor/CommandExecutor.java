@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.bean.ValueWrapper;
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.*;
@@ -9,8 +9,10 @@ import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import com.google.common.collect.Lists;
 
 import java.io.Serializable;
+import java.net.SocketTimeoutException;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BooleanSupplier;
@@ -34,7 +36,7 @@ public interface CommandExecutor {
      */
     default <P> boolean createTable(Class<P> pojoClass) {
         PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojoClass);
-        return createTable(o -> o.from(pojoWrapper.getTable()).columns(pojoWrapper.getSQLColumnDef()));
+        return createTable(o -> o.from(pojoWrapper.getTable()).columns(pojoWrapper.getColumnDef()));
     }
 
     /**
@@ -50,7 +52,7 @@ public interface CommandExecutor {
     /**
      * 创表
      *
-     * @param createTableOperator SQLCreateTableOperator
+     * @param createTableOperator CreateTableOperator
      * @return true 成功 false 失败
      */
     default boolean createTable(CreateTableOperator createTableOperator) {
@@ -60,7 +62,7 @@ public interface CommandExecutor {
     /**
      * 创表
      *
-     * @param createTableOperator SQLCreateTableOperator
+     * @param createTableOperator CreateTableOperator
      * @param resultSetHandler    resultSetHandler
      * @return true 成功 false 失败
      */
@@ -91,7 +93,7 @@ public interface CommandExecutor {
     /**
      * 根据pojo class删除表
      *
-     * @param table the table
+     * @param table the xxxx
      * @return true 成功 false 失败
      */
     default boolean dropTable(Table table) {
@@ -153,7 +155,7 @@ public interface CommandExecutor {
     /**
      * 判断表是否存在
      *
-     * @param table the table
+     * @param table the xxxx
      * @return true 成功 false 失败
      */
     default boolean existTable(Table table) {
@@ -184,7 +186,7 @@ public interface CommandExecutor {
     /**
      * 判断表是否存在
      *
-     * @param existTableOperator SQLExistTableOperator
+     * @param existTableOperator ExistTableOperator
      * @return true 成功 false 失败
      */
     default boolean existTable(ExistTableOperator existTableOperator) {
@@ -194,7 +196,7 @@ public interface CommandExecutor {
     /**
      * 判断表是否存在
      *
-     * @param existTableOperator SQLExistTableOperator
+     * @param existTableOperator ExistTableOperator
      * @param resultSetHandler   resultSetHandler
      * @return true 成功 false 失败
      */
@@ -206,7 +208,7 @@ public interface CommandExecutor {
      * 获取某个表的字段
      *
      * @param pojoClass pojoClass
-     * @return SQLColumnDef
+     * @return ColumnDef
      */
     default <T> List<ColumnDef> showColumns(Class<T> pojoClass) {
         PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojoClass);
@@ -217,7 +219,7 @@ public interface CommandExecutor {
      * 获取某个表的字段
      *
      * @param tableName tableName
-     * @return SQLColumnDef
+     * @return ColumnDef
      */
     default List<ColumnDef> showColumns(String tableName) {
         return showColumns(o -> o.from(tableName));
@@ -226,8 +228,8 @@ public interface CommandExecutor {
     /**
      * 获取某个表的字段
      *
-     * @param table table
-     * @return SQLColumnDef
+     * @param table xxxx
+     * @return ColumnDef
      */
     default List<ColumnDef> showColumns(Table table) {
         return showColumns(o -> o.from(table));
@@ -237,7 +239,7 @@ public interface CommandExecutor {
      * 获取某个表的字段
      *
      * @param func the func
-     * @return SQLColumnDef
+     * @return ColumnDef
      */
     default List<ColumnDef> showColumns(UnaryOperator<ShowColumnsOperator> func) {
         return showColumns(func.apply(getOperatorGroup().showColumns(getOptions().getDbType())));
@@ -246,11 +248,20 @@ public interface CommandExecutor {
     /**
      * 获取某个表的字段
      *
-     * @param sqlShowColumnsOperator sqlShowColumnsOperator
-     * @return SQLColumnDef
+     * @param showColumnsOperator showColumnsOperator
+     * @return ColumnDef
      */
-    default List<ColumnDef> showColumns(ShowColumnsOperator sqlShowColumnsOperator) {
-        return queryList(sqlShowColumnsOperator.toQueryOperator(), CommandType.SHOW_COLUMNS, new SQLColumnDefListResultSetHandler());
+    default List<ColumnDef> showColumns(ShowColumnsOperator showColumnsOperator) {
+        return queryList(showColumnsOperator.toQueryOperator(), CommandType.SHOW_COLUMNS, new DSLColumnDefListResultSetHandler());
+    }
+
+    /**
+     * 基于{@link ExecutorOptions#getDatabase()}获取数据库表
+     *
+     * @return List<Table>
+     */
+    default List<Table> showTables() {
+        return showTables(o -> o.database(getOptions().getDatabase()));
     }
 
     /**
@@ -286,11 +297,11 @@ public interface CommandExecutor {
     /**
      * 获取某个数据库的表
      *
-     * @param sqlShowTablesOperator sqlShowTablesOperator
+     * @param showTablesOperator showTablesOperator
      * @return List<Table>
      */
-    default List<Table> showTables(ShowTablesOperator sqlShowTablesOperator) {
-        return queryList(sqlShowTablesOperator.toQueryOperator(), CommandType.SHOW_TABLES, new SQLTableListResultSetHandler());
+    default List<Table> showTables(ShowTablesOperator showTablesOperator) {
+        return queryList(showTablesOperator.toQueryOperator(), CommandType.SHOW_TABLES, new DSLTableListResultSetHandler());
     }
 
     /**
@@ -332,22 +343,22 @@ public interface CommandExecutor {
     /**
      * 插入数据
      *
-     * @param sqlInsertOperator SQLInsertOperator
+     * @param insertOperator insertOperator
      * @return true 成功 false 失败
      */
-    default boolean insert(InsertOperator sqlInsertOperator) {
-        return bool(sqlInsertOperator, CommandType.INSERT);
+    default boolean insert(InsertOperator insertOperator) {
+        return bool(insertOperator, CommandType.INSERT);
     }
 
     /**
      * 插入数据
      *
-     * @param sqlInsertOperator SQLInsertOperator
-     * @param resultSetHandler  resultSetHandler
+     * @param insertOperator   insertOperator
+     * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean insert(InsertOperator sqlInsertOperator, ResultSetHandler<Boolean> resultSetHandler) {
-        return bool(sqlInsertOperator, CommandType.INSERT, resultSetHandler);
+    default boolean insert(InsertOperator insertOperator, ResultSetHandler<Boolean> resultSetHandler) {
+        return bool(insertOperator, CommandType.INSERT, resultSetHandler);
     }
 
     /**
@@ -366,7 +377,7 @@ public interface CommandExecutor {
      * @param pojo the pojo
      * @return true 成功 false 失败
      */
-    default <P> boolean updatePojoById(P pojo, Object id) {
+    default <P, ID extends Serializable> boolean updatePojoById(P pojo, ID id) {
         PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
         ColumnDef theId = pojoWrapper.getPKColumn();
         return updatePojoByCondition(pojo, condition -> condition.eq(theId.getDslName(), id));
@@ -400,7 +411,7 @@ public interface CommandExecutor {
     /**
      * 更新数据
      *
-     * @param updateOperator SQLUpdateOperator
+     * @param updateOperator updateOperator
      * @return true 成功 false 失败
      */
     default boolean update(UpdateOperator updateOperator) {
@@ -410,12 +421,26 @@ public interface CommandExecutor {
     /**
      * 更新数据
      *
-     * @param updateOperator   SQLUpdateOperator
+     * @param updateOperator   updateOperator
      * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
     default boolean update(UpdateOperator updateOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(updateOperator, CommandType.UPDATE, resultSetHandler);
+    }
+
+    /**
+     * 基于POJO删除数据
+     * <b>需要注意，该API不会直接删除数据，如果存在删除标记，则会把删除标记做更新</b>
+     *
+     * @param pojo pojo
+     * @return true 成功 false 失败
+     * @see #deleteById(Class, Serializable)
+     */
+    default <T> boolean delete(T pojo) {
+        PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojo);
+        Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
+        return deleteById(pojo.getClass(), (Serializable) pkValue);
     }
 
     /**
@@ -426,7 +451,7 @@ public interface CommandExecutor {
      * @param id        id
      * @return true 成功 false 失败
      */
-    default boolean deleteById(Class<?> pojoClass, Serializable id) {
+    default <T, ID extends Serializable> boolean deleteById(Class<T> pojoClass, ID id) {
         ColumnDef pkColumn = PojoWrapper.findPKColumn(pojoClass);
         if (pkColumn == null) {
             throw new DSLException("Can not find the primary key column");
@@ -436,16 +461,56 @@ public interface CommandExecutor {
     }
 
     /**
-     * 基于POJO删除数据
+     * 删除所有数据
+     * <b>需要注意，该API不会直接删除数据，如果存在删除标记，则会把删除标记做更新</b>
      *
-     * @param pojo pojo
+     * @param pojoClass pojoClass
      * @return true 成功 false 失败
-     * @see #deleteById(Class, Serializable)
      */
-    default boolean delete(Object pojo) {
-        PojoWrapper<Object> pojoWrapper = new PojoWrapper<>(pojo);
-        Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
-        return deleteById(pojo.getClass(), (Serializable) pkValue);
+    default <T> boolean deleteAll(Class<T> pojoClass) {
+        ColumnDef pkColumn = PojoWrapper.findPKColumn(pojoClass);
+        if (pkColumn == null) {
+            throw new DSLException("Can not find the primary key column");
+        }
+        UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
+        return bool(update.from(pojoClass), CommandType.DELETE);
+    }
+
+    /**
+     * 删除所有数据
+     * <b>需要注意，该API不会直接删除数据，如果存在删除标记，则会把删除标记做更新</b>
+     *
+     * @param pojoClass pojoClass
+     * @return true 成功 false 失败
+     */
+    default <T> boolean deleteAll(Class<T> pojoClass, Iterable<? extends T> pojos) {
+        return deleteAllById(
+                pojoClass,
+                Lists.newArrayList(pojos)
+                        .stream()
+                        .map(pojo -> {
+                            PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojo);
+                            Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
+                            return (Serializable) pkValue;
+                        })
+                        .toList());
+    }
+
+    /**
+     * 批量根据id删除数据
+     * <b>需要注意，该API不会直接删除数据，如果存在删除标记，则会把删除标记做更新</b>
+     *
+     * @param pojoClass pojoClass
+     * @param ids       ids
+     * @return true 成功 false 失败
+     */
+    default <T, ID extends Serializable> boolean deleteAllById(Class<T> pojoClass, Iterable<ID> ids) {
+        ColumnDef pkColumn = PojoWrapper.findPKColumn(pojoClass);
+        if (pkColumn == null) {
+            throw new DSLException("Can not find the primary key column");
+        }
+        UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
+        return bool(update.from(pojoClass).in(pkColumn.getDslName(), ids), CommandType.DELETE);
     }
 
     /**
@@ -461,7 +526,7 @@ public interface CommandExecutor {
     /**
      * 删除数据
      *
-     * @param deleteOperator SQLUpdateOperator
+     * @param deleteOperator deleteOperator
      * @return true 成功 false 失败
      */
     default boolean delete(DeleteOperator deleteOperator) {
@@ -471,7 +536,7 @@ public interface CommandExecutor {
     /**
      * 删除数据
      *
-     * @param deleteOperator   SQLUpdateOperator
+     * @param deleteOperator   deleteOperator
      * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
@@ -482,18 +547,18 @@ public interface CommandExecutor {
     /**
      * bool操作，包含创建、更新、删除、插入表、删除表...
      *
-     * @param operator   SQLOperator操作
-     * @param sqlCommand sql命令
+     * @param operator Operator操作
+     * @param command  command
      * @return true 成功 false 失败
      */
-    default boolean bool(Operator<?> operator, CommandType sqlCommand) {
-        return bool(operator, sqlCommand, new BoolResultHandler());
+    default boolean bool(Operator<?> operator, CommandType command) {
+        return bool(operator, command, new BoolResultHandler());
     }
 
     /**
      * bool操作，包含创建、更新、删除、插入表、删除表...
      *
-     * @param operator         SQLOperator操作
+     * @param operator         operator
      * @param commandType      命令类型
      * @param resultSetHandler 结果集处理器
      * @return true 成功 false 失败
@@ -606,7 +671,7 @@ public interface CommandExecutor {
      * @param <T>         实体类型
      * @return 实体 or null
      */
-    default <T> T queryOneById(Class<T> entityClass, Serializable id) {
+    default <T, ID extends Serializable> T queryOneById(Class<T> entityClass, ID id) {
         PojoWrapper<T> pojoWrapper = new PojoWrapper<>(entityClass);
         return queryOne(entityClass, o ->
                 o.selects(PojoWrapper.findColumns(entityClass))
@@ -682,7 +747,7 @@ public interface CommandExecutor {
     /**
      * 查询一个结果
      *
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @return ResultGroup
      */
     default ResultGroup queryOne(QueryOperator queryOperator) {
@@ -703,7 +768,7 @@ public interface CommandExecutor {
     /**
      * 查询一个结果
      *
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @param <R>           结果集对象
      * @return ResultGroup
      */
@@ -734,6 +799,22 @@ public interface CommandExecutor {
     }
 
     /**
+     * 根据ids集合查询list实体
+     *
+     * @param entityClass entityClass
+     * @param ids         ids
+     * @param <T>         类型
+     * @return list
+     */
+    default <T, ID extends Serializable> List<T> queryListByIds(Class<T> entityClass, Iterable<ID> ids) {
+        ColumnDef pkColumn = PojoWrapper.findPKColumn(entityClass);
+        if (pkColumn == null) {
+            throw new DSLException("Can not find the primary key column");
+        }
+        return queryList(entityClass, o -> o.selects(PojoWrapper.findColumns(entityClass)).from(entityClass).in(pkColumn.getDslName(), ids));
+    }
+
+    /**
      * 查询list实体
      *
      * @param func        the func
@@ -752,7 +833,7 @@ public interface CommandExecutor {
     /**
      * 查询list实体
      *
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @param entityClass   entityClass
      * @param <T>           类型
      * @return list
@@ -774,7 +855,7 @@ public interface CommandExecutor {
     /**
      * 查询list-Map
      *
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @return list map
      */
     default List<Map<String, Object>> queryListMap(QueryOperator queryOperator) {
@@ -795,7 +876,7 @@ public interface CommandExecutor {
     /**
      * 查询list
      *
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @return List
      * @throws DSLException query failed throw
      */
@@ -819,7 +900,7 @@ public interface CommandExecutor {
     /**
      * 查询list
      *
-     * @param queryOperator    SQLQueryOperator
+     * @param queryOperator    queryOperator
      * @param resultSetHandler 结果集处理器
      * @param <R>              返回结果类型
      * @return List
@@ -832,7 +913,7 @@ public interface CommandExecutor {
     /**
      * 查询list
      *
-     * @param queryOperator    SQLQueryOperator
+     * @param queryOperator    queryOperator
      * @param commandType      命令类型
      * @param resultSetHandler 结果集处理器
      * @param <R>              返回结果类型
@@ -858,7 +939,7 @@ public interface CommandExecutor {
      * 查询分页
      *
      * @param page          page
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @param <R>           返回结果类型
      * @return List
      * @throws DSLException query failed throw
@@ -883,7 +964,7 @@ public interface CommandExecutor {
      * 查询分页
      *
      * @param page          page
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @return List
      * @throws DSLException query failed throw
      */
@@ -907,7 +988,7 @@ public interface CommandExecutor {
      * 查询分页
      *
      * @param page          page
-     * @param queryOperator SQLQueryOperator
+     * @param queryOperator queryOperator
      * @return List
      * @throws DSLException query failed throw
      */
@@ -934,7 +1015,7 @@ public interface CommandExecutor {
      * 查询分页
      *
      * @param page             page
-     * @param queryOperator    SQLQueryOperator
+     * @param queryOperator    queryOperator
      * @param resultSetHandler 结果集处理器
      * @param <R>              返回结果类型
      * @return List
@@ -951,6 +1032,14 @@ public interface CommandExecutor {
     }
 
     /**
+     * 检查连接是否正常
+     *
+     * @return it ture normal connection
+     * @throws SocketTimeoutException timeout throws
+     */
+    boolean check() throws SocketTimeoutException;
+
+    /**
      * 获取执行器key
      *
      * @return ExecutorKey
@@ -958,7 +1047,7 @@ public interface CommandExecutor {
     ExecutorKey getKey();
 
     /**
-     * 获取SQL操作元数据。
+     * 获取DSL操作元数据。
      *
      * @return OperatorMetadata实例
      */
@@ -970,4 +1059,11 @@ public interface CommandExecutor {
      * @return ExecutorOptions
      */
     ExecutorOptions getOptions();
+
+    /**
+     * 销毁，关闭数据连接通道
+     */
+    default void destroy() {
+
+    }
 }

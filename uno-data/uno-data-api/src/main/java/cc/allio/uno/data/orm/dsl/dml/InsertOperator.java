@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
 import cc.allio.uno.core.bean.ObjectWrapper;
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;

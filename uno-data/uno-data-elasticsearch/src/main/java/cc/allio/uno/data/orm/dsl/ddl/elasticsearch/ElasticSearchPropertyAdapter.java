@@ -9,7 +9,7 @@ import cc.allio.uno.core.util.StringUtils;
 
 import java.util.Objects;
 
-import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
+import static cc.allio.uno.data.orm.dsl.type.DSLType.DefaultDSLType.*;
 
 /**
  * JDBC数据类型转换为es类型
@@ -38,7 +38,7 @@ public class ElasticSearchPropertyAdapter implements DataTypeAdapter<Property> {
             dataType = DataType.createCharType(DSLType.VARCHAR, 64);
         }
         // 通用的做分组比较
-        DSLType sqlType = dataType.getSqlType();
+        DSLType sqlType = dataType.getDslType();
         // 每个数据库类型的做创建
         DSLType sqlTypeConstant = Objects.requireNonNullElse(DSLType.getByJdbcCode(sqlType.getJdbcType()), DSLType.VARCHAR);
         return switch (sqlTypeConstant) {

@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor;
 import java.util.function.Function;
 
 /**
- * SQL执行结果集处理器
+ * DSL执行结果集处理器
  *
  * @author jiangwei
  * @date 2023/4/18 13:16

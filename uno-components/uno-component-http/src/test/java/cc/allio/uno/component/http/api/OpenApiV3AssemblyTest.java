@@ -36,7 +36,7 @@ class OpenApiV3AssemblyTest extends BaseTestCase {
 
     @Test
     void testFindByPath() {
-        StepVerifier.create(converter.find("/user/get"))
+        StepVerifier.create(converter.find("/user/getValue"))
                 .expectNextCount(1)
                 .verifyComplete();
     }
@@ -72,7 +72,7 @@ class OpenApiV3AssemblyTest extends BaseTestCase {
     @Test
     void testSwap() {
         StepVerifier.create(
-                        converter.find("/user/get")
+                        converter.find("/user/getValue")
                                 .flatMap(swapper -> swapper
                                         .addParameter("id", "1")
                                         .swap()
@@ -85,7 +85,7 @@ class OpenApiV3AssemblyTest extends BaseTestCase {
     @Test
     void testAddToken() {
         StepVerifier.create(
-                        converter.find("/user/get")
+                        converter.find("/user/getValue")
                                 .flatMap(swapper -> swapper
                                         .addParameter("id", "1")
                                         .swap()

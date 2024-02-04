@@ -68,7 +68,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils implements Ap
         try {
             return context.getBean(clazz);
         } catch (NullPointerException | NoSuchBeanDefinitionException e) {
-            log.error("get bean failed, return default value");
+            log.error("getValue bean failed, return default value");
             return defaultValue;
         }
     }

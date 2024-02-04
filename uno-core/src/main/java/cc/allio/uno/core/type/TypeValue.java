@@ -39,13 +39,13 @@ public class TypeValue {
     /**
      * 转换器
      */
-    private final TypeOperator maybeTypeOperator;
+    private final TypeOperator<?> maybeTypeOperator;
 
     public TypeValue(Class<?> maybeType, Object value) {
         this(maybeType, value, TypeOperatorFactory.translator(maybeType));
     }
 
-    public TypeValue(Class<?> maybeType, Object value, TypeOperator typeOperator) {
+    public TypeValue(Class<?> maybeType, Object value, TypeOperator<?> typeOperator) {
         this.maybeType = maybeType;
         this.value = value;
         this.maybeTypeOperator = typeOperator;
@@ -84,8 +84,8 @@ public class TypeValue {
         try {
             maybeType.cast(maybeActual);
         } catch (ClassCastException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Try cast current value {} for type {} failed", value, maybeType.getName());
+            if (log.isTraceEnabled()) {
+                log.trace("Try cast current value {} for type {} failed", value, maybeType.getName());
             }
             if (Types.isArray(maybeType)) {
                 return arrayTransfer();
@@ -97,7 +97,9 @@ public class TypeValue {
                 try {
                     maybeActual = maybeTypeOperator.convert(maybeActual, maybeType);
                 } catch (NullPointerException | NumberFormatException e2) {
-                    log.debug("user translator {} get actual value {} type failed", maybeTypeOperator.getClass().getName(), value);
+                    if (log.isTraceEnabled()) {
+                        log.trace("user translator {} getValue actual value {} type failed", maybeTypeOperator.getClass().getName(), value);
+                    }
                     return value;
                 }
             }

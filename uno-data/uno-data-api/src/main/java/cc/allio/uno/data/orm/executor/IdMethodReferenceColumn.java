@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
-import cc.allio.uno.core.function.MethodReferenceColumn;
+import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.PojoWrapper;
 
 /**

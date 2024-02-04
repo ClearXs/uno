@@ -2,6 +2,7 @@ package cc.allio.uno.rule.api.vistor;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.datastructure.tree.Element;
+import cc.allio.uno.core.datastructure.tree.TraversalElement;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.rule.api.LogicPredicate;
@@ -19,7 +20,11 @@ import java.util.List;
  * @date 2023/4/26 11:53
  * @since 1.1.4
  */
-public class LogicGroup extends LiteralTraversalElement implements GroupElement<LiteralTraversalElement> {
+public class LogicGroup extends TraversalElement<LogicGroup> implements GroupElement<LogicGroup> {
+
+    @Getter
+    @Setter
+    private Serializable parentId;
 
     @Getter
     private final Serializable id;
@@ -28,14 +33,14 @@ public class LogicGroup extends LiteralTraversalElement implements GroupElement<
     private final LogicPredicate logic;
 
     @Getter
-    private GroupElement<LiteralTraversalElement> parent;
-    private List<Element> children;
+    private LogicGroup parent;
+    private final List<LogicGroup> children;
 
     @Setter
     @Getter
     private int depth;
 
-    public LogicGroup(GroupElement<LiteralTraversalElement> parent, LogicPredicate logic) {
+    public LogicGroup(LogicGroup parent, LogicPredicate logic) {
         this.parent = parent;
         this.logic = logic;
         this.children = Lists.newArrayList();
@@ -46,8 +51,8 @@ public class LogicGroup extends LiteralTraversalElement implements GroupElement<
     }
 
     @Override
-    public <T extends Element> void setParent(T parent) {
-        this.parent = (GroupElement<LiteralTraversalElement>) parent;
+    public void setParent(LogicGroup parent) {
+        this.parent = parent;
     }
 
     @Override
@@ -56,17 +61,18 @@ public class LogicGroup extends LiteralTraversalElement implements GroupElement<
     }
 
     @Override
-    public <T extends Element> List<T> getChildren() {
-        return (List<T>) children;
+    public List<LogicGroup> getChildren() {
+        return null;
     }
 
     @Override
-    public <T extends Element> void addChildren(T element) {
-        addElement((LiteralTraversalElement) element);
+    public void addChildren(LogicGroup element) {
+        addElement(element);
     }
 
+
     @Override
-    public <T extends Element> void setChildren(List<T> children) {
+    public void setChildren(List<LogicGroup> children) {
         clearChildren();
         this.children.addAll(children);
     }
@@ -77,51 +83,49 @@ public class LogicGroup extends LiteralTraversalElement implements GroupElement<
     }
 
     @Override
-    public boolean addElement(LiteralTraversalElement element) {
+    public boolean addElement(LogicGroup element) {
         return children.add(element);
     }
 
     @Override
-    public boolean addElements(List<LiteralTraversalElement> elements) {
+    public boolean addElements(List<LogicGroup> elements) {
         return children.addAll(elements);
     }
 
     @Override
-    public boolean removeElement(LiteralTraversalElement element) {
+    public boolean removeElement(LogicGroup element) {
         return children.remove(element);
     }
 
     @Override
-    public List<LiteralTraversalElement> getGroupElement() {
+    public List<LogicGroup> getGroupElement() {
         return children.stream()
-                .filter(e -> GroupElement.class.isAssignableFrom(e.getClass()))
-                .map(LiteralTraversalElement.class::cast)
+                .filter(e -> !e.isLeaf())
                 .toList();
     }
 
     @Override
-    public List<LiteralTraversalElement> getAttrElement() {
+    public List<LogicGroup> getAttrElement() {
         return children.stream()
-                .filter(e -> AttrElement.class.isAssignableFrom(e.getClass()))
-                .map(LiteralTraversalElement.class::cast)
+                .filter(LogicGroup::isLeaf)
                 .toList();
     }
 
     @Override
     public void clearAttrElement() {
-        children.removeIf(AttrElement.class::isInstance);
+        children.removeIf(LogicGroup::isLeaf);
     }
 
     @Override
     public String getLiteral() {
         if (isRoot() && CollectionUtils.isNotEmpty(children)) {
             // root 节点第一个元素一定时OR
-            LogicGroup element = (LogicGroup) children.get(0);
+            LogicGroup element = children.get(0);
             return element.getLiteral();
         }
         StringBuilder literalExpr = new StringBuilder();
         for (int i = 0; i < children.size(); i++) {
-            LiteralTraversalElement children = (LiteralTraversalElement) this.children.get(i);
+            LogicGroup children = this.children.get(i);
             String literal = children.getLiteral();
             // 构建 a = xxx && xxx 或者 a = xx && (b = xx)
             literalExpr.append(literal).append(StringPool.SPACE);

@@ -12,7 +12,7 @@ public class NoneTraversalMode implements TraversalMode {
     NoneTraversalMode() {}
 
     @Override
-    public void doTraversal(TraversalElement e, Visitor visitor) {
+    public <T extends TraversalElement<T>> void doTraversal(T e, Visitor<T> visitor) {
         e.doAccept(visitor);
         e.getChildren().forEach(c -> c.accept(visitor, getMode()));
     }

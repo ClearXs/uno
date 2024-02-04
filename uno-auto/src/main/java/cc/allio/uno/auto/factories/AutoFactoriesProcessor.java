@@ -1,19 +1,3 @@
-/*
- *      Copyright (c) 2018-2028, DreamLu All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  Redistributions of source code must retain the above copyright notice,
- *  this list of conditions and the following disclaimer.
- *  Redistributions in binary form must reproduce the above copyright
- *  notice, this list of conditions and the following disclaimer in the
- *  documentation and/or other materials provided with the distribution.
- *  Neither the name of the dreamlu.net developer nor the names of its
- *  contributors may be used to endorse or promote products derived from
- *  this software without specific prior written permission.
- *  Author: DreamLu 卢春梦 (596392912@qq.com)
- */
 package cc.allio.uno.auto.factories;
 
 import cc.allio.uno.auto.AbstractUnoProcessor;
@@ -48,14 +32,12 @@ import java.util.stream.Collectors;
 @SupportedOptions("debug")
 public class AutoFactoriesProcessor extends AbstractUnoProcessor {
     /**
-     * The location to look for factories.
-     * <p>Can be present in multiple JAR files.
-     */
-    private static final String FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories";
-    /**
      * devtools，有 Configuration 注解的 jar 一般需要 devtools 配置文件
      */
     private static final String DEVTOOLS_RESOURCE_LOCATION = "META-INF/spring-devtools.properties";
+    // Auto Configuration location
+    private static final String AUTO_CONFIGURATION_LOCATION = "META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports";
+
     /**
      * 数据承载
      */
@@ -123,10 +105,10 @@ public class AutoFactoriesProcessor extends AbstractUnoProcessor {
         }
         Filer filer = processingEnv.getFiler();
         try {
-            // 1. spring.factories
-            FileObject factoriesFile = filer.createResource(StandardLocation.CLASS_OUTPUT, "", FACTORIES_RESOURCE_LOCATION);
-            FactoriesFiles.writeFactoriesFile(factories, factoriesFile.openOutputStream());
-            String classesPath = factoriesFile.toUri().toString().split("classes")[0];
+            // 1. auto configuration file
+            FileObject autoConfigurationFile = filer.createResource(StandardLocation.CLASS_OUTPUT, "", AUTO_CONFIGURATION_LOCATION);
+            FactoriesFiles.writeFactoriesFile(factories, autoConfigurationFile.openOutputStream());
+            String classesPath = autoConfigurationFile.toUri().toString().split("classes")[0];
             Path projectPath = Paths.get(new URI(classesPath)).getParent();
             // 2. devtools 配置，因为有 @Configuration 注解的需要 devtools
             String projectName = projectPath.getFileName().toString();

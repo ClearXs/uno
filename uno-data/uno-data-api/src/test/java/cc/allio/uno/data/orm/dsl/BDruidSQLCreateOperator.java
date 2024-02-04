@@ -27,7 +27,7 @@ public class BDruidSQLCreateOperator implements CreateTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return null;
     }
 

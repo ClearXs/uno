@@ -13,7 +13,7 @@ import lombok.Data;
 public class DataType {
 
     // SQL类型
-    private DSLType sqlType;
+    private DSLType dslType;
     // 精度
     private Integer precision;
     // 范围
@@ -27,9 +27,9 @@ public class DataType {
      */
     public static DataType create(DSLType sqlType) {
         DataType dataType = new DataType();
-        dataType.setSqlType(sqlType);
-        dataType.setPrecision(sqlType.getDefaultPrecision());
-        dataType.setScale(sqlType.getDefaultScala());
+        dataType.setDslType(sqlType);
+        dataType.setPrecision(sqlType.getPrecision());
+        dataType.setScale(sqlType.getScale());
         return dataType;
     }
 
@@ -54,7 +54,7 @@ public class DataType {
      */
     public static DataType createNumberType(DSLType sqlType, Integer precision, Integer scale) {
         DataType dataType = new DataType();
-        dataType.setSqlType(sqlType);
+        dataType.setDslType(sqlType);
         dataType.setPrecision(precision);
         dataType.setScale(scale);
         return dataType;
@@ -69,7 +69,7 @@ public class DataType {
      */
     public static DataType createCharType(DSLType sqlType, Integer precision) {
         DataType dataType = new DataType();
-        dataType.setSqlType(sqlType);
+        dataType.setDslType(sqlType);
         dataType.setPrecision(precision);
         return dataType;
     }
@@ -82,7 +82,7 @@ public class DataType {
      */
     public static DataType createTimeType(DSLType sqlType) {
         DataType dataType = new DataType();
-        dataType.setSqlType(sqlType);
+        dataType.setDslType(sqlType);
         return dataType;
     }
 

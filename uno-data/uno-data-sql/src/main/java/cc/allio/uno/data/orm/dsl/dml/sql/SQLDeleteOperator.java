@@ -94,7 +94,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public interface PrepareOperator<T extends PrepareOperator<T>> extends Operator<T> {
 
     /**
-     * 获取prepare dsl，形如(select * from dual where a > ?)
+     * 获取prepare dsl，形如(select * xxxx dual where a > ?)
      *
      * @return String
      */

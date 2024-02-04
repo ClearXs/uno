@@ -115,7 +115,7 @@ public class JsonNodeEnhancer {
                     return fieldNode.asText(defaultValue.get());
                 }
             } catch (Throwable e) {
-                log.error("get {} asString failed", fieldName, e);
+                log.error("getValue {} asString failed", fieldName, e);
                 return defaultValue.get();
             }
         }

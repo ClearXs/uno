@@ -3,7 +3,7 @@ package cc.allio.uno.core.datastructure.tree;
 import java.io.Serializable;
 import java.util.Comparator;
 
-public class ComparableElement<T extends ComparableElement<T>> extends DefaultElement {
+public class ComparableElement<T extends ComparableElement<T>> extends DefaultElement<T> {
 
     private final Comparator<T> comparator;
 
@@ -13,7 +13,7 @@ public class ComparableElement<T extends ComparableElement<T>> extends DefaultEl
     }
 
     @Override
-    public void addChildren(Element element) {
+    public void addChildren(T element) {
         super.addChildren(element);
         if (comparator != null) {
             getChildren().sort((o1, o2) -> comparator.compare((T) o1, (T) o2));

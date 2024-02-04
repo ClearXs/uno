@@ -48,7 +48,7 @@ public abstract class BeanMap extends org.springframework.cglib.beans.BeanMap {
 		/**
 		 * Set the bean that the generated map should reflect. The bean may be swapped
 		 * out for another bean of the same type using {@link #setBean}.
-		 * Calling this method overrides any value previously set using {@link #setBeanClass}.
+		 * Calling this method overrides any value previously setValue using {@link #setBeanClass}.
 		 * You must call either this method or {@link #setBeanClass} before {@link #create}.
 		 *
 		 * @param bean the initial bean

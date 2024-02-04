@@ -95,7 +95,7 @@ public class CoreTest extends BaseSpringTest {
         return new RunTestAttributes(getTestClass());
     }
 
-    // ----------------- get/set -----------------
+    // ----------------- getValue/setValue -----------------
 
     public void setEnv(EnvironmentFacade env) {
         this.env = env;
@@ -111,7 +111,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     /**
-     * set CoreRunner
+     * setValue CoreRunner
      *
      * @param coreRunner coreRunner
      */
@@ -120,7 +120,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     /**
-     * get coreRunner
+     * getValue coreRunner
      *
      * @return coreRunner
      */

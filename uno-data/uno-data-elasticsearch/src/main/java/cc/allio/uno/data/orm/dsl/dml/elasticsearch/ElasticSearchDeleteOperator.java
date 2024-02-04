@@ -67,7 +67,7 @@ public class ElasticSearchDeleteOperator extends ElasticSearchGenericWhereOperat
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

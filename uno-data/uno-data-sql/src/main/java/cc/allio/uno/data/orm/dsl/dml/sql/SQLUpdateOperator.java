@@ -126,7 +126,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

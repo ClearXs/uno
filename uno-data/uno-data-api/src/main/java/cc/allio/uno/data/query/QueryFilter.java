@@ -17,7 +17,7 @@ public interface QueryFilter {
     String getDSL();
 
     /**
-     * set query wrapper
+     * setValue query wrapper
      *
      */
     void setQueryWrapper(QueryWrapper queryWrapper);

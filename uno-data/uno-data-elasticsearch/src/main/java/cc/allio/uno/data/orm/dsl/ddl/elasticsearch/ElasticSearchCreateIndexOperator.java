@@ -69,7 +69,7 @@ public class ElasticSearchCreateIndexOperator implements CreateTableOperator {
     }
 
     @Override
-    public Table getTable() {
+    public Table getTables() {
         return table;
     }
 

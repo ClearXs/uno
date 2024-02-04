@@ -1,12 +1,14 @@
 package cc.allio.uno.data.orm.dsl.type;
 
+import cc.allio.uno.data.orm.dsl.dialect.TypeTranslator;
+import cc.allio.uno.data.orm.dsl.dialect.TypeTranslatorHolder;
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.SQLDataTypeImpl;
 import com.alibaba.druid.sql.ast.expr.*;
 
 import java.util.Objects;
 
-import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
+import static cc.allio.uno.data.orm.dsl.type.DSLType.DefaultDSLType.*;
 
 /**
  * druid的类型转换器
@@ -16,13 +18,15 @@ import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
  * @since 1.1.4
  */
 public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
-    private static final DruidDataTypeAdapter INSTANCE = new DruidDataTypeAdapter();
 
-    private DruidDataTypeAdapter() {
+    private final DBType dbType;
+
+    private DruidDataTypeAdapter(DBType dbType) {
+        this.dbType = dbType;
     }
 
-    public static DruidDataTypeAdapter getInstance() {
-        return INSTANCE;
+    public static DruidDataTypeAdapter getInstance(DBType dbType) {
+        return new DruidDataTypeAdapter(dbType);
     }
 
     @Override
@@ -30,26 +34,28 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
         DataType dataType = o;
         // dataType为null，赋值于VARCHAR
         if (dataType == null) {
-            dataType = DataType.createCharType(DSLTypeImpl.VARCHAR, 64);
+            dataType = DataType.createCharType(DefaultDSLType.VARCHAR, 64);
         }
         // 通用的做分组比较
-        DSLType sqlType = dataType.getSqlType();
+        DSLType sqlType = dataType.getDslType();
         // 每个数据库类型的做创建
         DSLType sqlTypeConstant = Objects.requireNonNullElse(DSLType.getByJdbcCode(sqlType.getJdbcType()), DSLType.VARCHAR);
+        TypeTranslator typeTranslator = TypeTranslatorHolder.getTypeTranslator(dbType);
+        DSLType dbSQLType = typeTranslator.translate(sqlType, dataType.getPrecision(), dataType.getScale());
         // scale 随着 precision值进行赋予，precision没值时，scale没值
-        Integer precision = dataType.getPrecision();
-        Integer scale = dataType.getScale();
+        Integer precision = dbSQLType.getPrecision();
+        Integer scale = dbSQLType.getScale();
         switch (sqlTypeConstant) {
-            case DSLTypeImpl.BIGINT, DSLTypeImpl.SMALLINT, DSLTypeImpl.TINYINT, DSLTypeImpl.BIT, DSLTypeImpl.INTEGER, DSLTypeImpl.DOUBLE, DSLTypeImpl.NUMBER, DSLTypeImpl.FLOAT:
+            case DefaultDSLType.BIGINT, DefaultDSLType.SMALLINT, DefaultDSLType.TINYINT, DefaultDSLType.BIT, DefaultDSLType.INTEGER, DefaultDSLType.DOUBLE, DefaultDSLType.NUMBER, DefaultDSLType.FLOAT:
                 if (precision == null) {
-                    return new SQLDataTypeImpl(sqlType.getName());
+                    return new SQLDataTypeImpl(dbSQLType.getName());
                 } else if (scale == null) {
-                    return new SQLDataTypeImpl(sqlType.getName(), precision);
+                    return new SQLDataTypeImpl(dbSQLType.getName(), precision);
                 } else {
-                    return new SQLDataTypeImpl(sqlType.getName(), precision, scale);
+                    return new SQLDataTypeImpl(dbSQLType.getName(), precision, scale);
                 }
-            case DSLTypeImpl.DECIMAL:
-                SQLDataTypeImpl decimalDataType = new SQLDataTypeImpl(sqlType.getName());
+            case DefaultDSLType.DECIMAL:
+                SQLDataTypeImpl decimalDataType = new SQLDataTypeImpl(dbSQLType.getName());
                 if (precision != null) {
                     decimalDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
                 }
@@ -57,14 +63,14 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
                     decimalDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
                 }
                 return decimalDataType;
-            case DSLTypeImpl.DATE, DSLTypeImpl.TIME, DSLTypeImpl.TIMESTAMP:
-                SQLDataTypeImpl dateDataType = new SQLDataTypeImpl(sqlType.getName());
+            case DefaultDSLType.DATE, DefaultDSLType.TIME, DefaultDSLType.TIMESTAMP:
+                SQLDataTypeImpl dateDataType = new SQLDataTypeImpl(dbSQLType.getName());
                 if (precision != null) {
                     dateDataType.addArgument(new SQLIntegerExpr(precision));
                 }
                 return dateDataType;
             default:
-                SQLDataTypeImpl charDataType = new SQLDataTypeImpl(sqlType.getName());
+                SQLDataTypeImpl charDataType = new SQLDataTypeImpl(dbSQLType.getName());
                 charDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
                 return charDataType;
         }
