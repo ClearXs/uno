@@ -1,7 +1,10 @@
 package cc.allio.uno.data.orm.dsl.ddl.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch.core.SearchRequest;
 import cc.allio.uno.data.orm.dsl.ddl.ExistTableOperator;
 
@@ -17,13 +20,15 @@ import java.util.List;
 @AutoService(ExistTableOperator.class)
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchExistIndexOperator implements ExistTableOperator {
+    private DBType dbType;
     SearchRequest.Builder builder;
     private SearchRequest searchRequest;
     private Table table;
     private static final String ERROR_MSG = "elasticsearch drop operator not support that operator";
 
     public ElasticSearchExistIndexOperator() {
-        builder = new SearchRequest.Builder();
+        this.dbType = DBType.ELASTIC_SEARCH;
+        this.builder = new SearchRequest.Builder();
     }
 
     @Override
@@ -38,8 +43,18 @@ public class ElasticSearchExistIndexOperator implements ExistTableOperator {
 
     @Override
     public void reset() {
-        searchRequest = null;
-        builder = new SearchRequest.Builder();
+        this.searchRequest = null;
+        this.builder = new SearchRequest.Builder();
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 
     @Override
@@ -60,7 +75,7 @@ public class ElasticSearchExistIndexOperator implements ExistTableOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

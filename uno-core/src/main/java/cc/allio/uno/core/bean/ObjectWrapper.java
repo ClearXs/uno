@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bean;
 
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.CollectionUtils;
 import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
@@ -12,7 +13,7 @@ import java.beans.PropertyDescriptor;
 import java.util.*;
 
 /**
- * POJO对象包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
+ * Object包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
  *
  * @author jiangwei
  * @date 2022/5/21 10:17
@@ -24,7 +25,6 @@ public class ObjectWrapper implements ValueWrapper {
      * 解析的目标对象
      */
     private final Object instance;
-
     private final BeanInfoWrapper<Object> wrapper;
 
     public ObjectWrapper(Object instance) {
@@ -34,8 +34,8 @@ public class ObjectWrapper implements ValueWrapper {
         try {
             this.wrapper = new BeanInfoWrapper<>((Class<Object>) instance.getClass());
             this.instance = instance;
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 
@@ -46,8 +46,8 @@ public class ObjectWrapper implements ValueWrapper {
         try {
             this.wrapper = new BeanInfoWrapper<>(instanceClass);
             this.instance = null;
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 

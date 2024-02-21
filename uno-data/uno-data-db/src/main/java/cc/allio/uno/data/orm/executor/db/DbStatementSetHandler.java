@@ -54,6 +54,7 @@ public class DbStatementSetHandler extends DefaultResultSetHandler implements Re
                 ResultRow.ResultRowBuilder resultRowBuilder = ResultRow.builder();
                 resultRowBuilder.index(i);
                 String columnName = columnNames.get(i);
+                // 字段名称自动为驼峰
                 resultRowBuilder.column(DSLName.of(columnName, DSLName.HUMP_FEATURE));
                 JdbcType mybatisJdbcType = rsw.getJdbcType(columnName);
                 JDBCType jdbcType = JDBCType.valueOf(mybatisJdbcType.TYPE_CODE);

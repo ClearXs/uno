@@ -41,6 +41,16 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+
+    }
+
+    @Override
+    public DBType getDBType() {
+        return null;
+    }
+
+    @Override
     public void setQueryWrapper(QueryWrapper queryWrapper) {
         this.queryWrapper = queryWrapper;
     }
@@ -66,8 +76,8 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public Table getTables() {
-        return queryOperator.getTables();
+    public Table getTable() {
+        return queryOperator.getTable();
     }
 
     @Override
@@ -116,6 +126,11 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
+    public QueryOperator notIn(DSLName sqlName, Object... values) {
+        return queryOperator.notIn(sqlName, values);
+    }
+
+    @Override
     public QueryOperator between(DSLName sqlName, Object withValue, Object endValue) {
         return queryOperator.between(sqlName, withValue, endValue);
     }
@@ -143,6 +158,26 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     @Override
     public QueryOperator $like$(DSLName sqlName, Object value) {
         return queryOperator.$like$(sqlName, value);
+    }
+
+    @Override
+    public QueryOperator notLike(DSLName sqlName, Object value) {
+        return queryOperator.notLike(sqlName, value);
+    }
+
+    @Override
+    public QueryOperator $notLike(DSLName sqlName, Object value) {
+        return queryOperator.$notLike(sqlName, value);
+    }
+
+    @Override
+    public QueryOperator notLike$(DSLName sqlName, Object value) {
+        return queryOperator.notLike$(sqlName, value);
+    }
+
+    @Override
+    public QueryOperator $notLike$(DSLName sqlName, Object value) {
+        return queryOperator.$notLike$(sqlName, value);
     }
 
     @Override

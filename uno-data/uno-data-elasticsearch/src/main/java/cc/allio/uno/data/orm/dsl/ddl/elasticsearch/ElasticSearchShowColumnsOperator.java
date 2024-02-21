@@ -1,8 +1,11 @@
 package cc.allio.uno.data.orm.dsl.ddl.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch.indices.GetMappingRequest;
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import com.google.common.collect.Lists;
@@ -19,11 +22,14 @@ import java.util.List;
 @AutoService(ShowColumnsOperator.class)
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchShowColumnsOperator implements ShowColumnsOperator {
+
+    private DBType dbType;
     private GetMappingRequest.Builder builder;
     private GetMappingRequest getMappingRequest;
     private Table table;
 
     public ElasticSearchShowColumnsOperator() {
+        this.dbType = DBType.ELASTIC_SEARCH;
         this.builder = new GetMappingRequest.Builder();
     }
 
@@ -44,6 +50,16 @@ public class ElasticSearchShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public String getPrepareDSL() {
         throw new DSLException(String.format("%s This operation is not supported", this.getClass().getName()));
     }
@@ -61,7 +77,7 @@ public class ElasticSearchShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -80,5 +96,10 @@ public class ElasticSearchShowColumnsOperator implements ShowColumnsOperator {
             getMappingRequest = builder.build();
         }
         return getMappingRequest;
+    }
+
+    @Override
+    public ShowColumnsOperator database(Database database) {
+        return null;
     }
 }

@@ -1,7 +1,10 @@
 package cc.allio.uno.data.orm.dsl.ddl.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch._types.mapping.Property;
 import co.elastic.clients.elasticsearch._types.mapping.TypeMapping;
 import co.elastic.clients.elasticsearch.indices.CreateIndexRequest;
@@ -27,10 +30,12 @@ public class ElasticSearchCreateIndexOperator implements CreateTableOperator {
     private CreateIndexRequest request;
     private CreateIndexRequest.Builder builder;
     private Table table;
+    private DBType dbType;
 
     private static final String ERROR_MSG = "elasticsearch registry operator not support that operator";
 
     public ElasticSearchCreateIndexOperator() {
+        this.dbType = DBType.ELASTIC_SEARCH;
         this.builder = new CreateIndexRequest.Builder();
         this.elasticSearchPropertyAdapter = new ElasticSearchPropertyAdapter();
         this.settingsBuilder = new IndexSettings.Builder();
@@ -62,6 +67,16 @@ public class ElasticSearchCreateIndexOperator implements CreateTableOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public ElasticSearchCreateIndexOperator from(Table table) {
         this.table = table;
         builder.index(table.getName().format());
@@ -69,7 +84,7 @@ public class ElasticSearchCreateIndexOperator implements CreateTableOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

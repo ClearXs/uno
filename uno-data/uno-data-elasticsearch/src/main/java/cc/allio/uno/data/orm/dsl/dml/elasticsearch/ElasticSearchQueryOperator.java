@@ -1,9 +1,12 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.Operator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import co.elastic.clients.elasticsearch._types.SortOptions;
 import co.elastic.clients.elasticsearch._types.SortOrder;
@@ -29,6 +32,8 @@ import java.util.List;
 @AutoService(QueryOperator.class)
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperator<QueryOperator> implements QueryOperator {
+
+    private DBType dbType;
     private SearchRequest searchRequest;
     private SearchRequest.Builder searchBuilder;
     private Table table;
@@ -37,9 +42,10 @@ public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperato
 
     public ElasticSearchQueryOperator() {
         super();
-        searchBuilder = new SearchRequest.Builder();
+        this.dbType = DBType.ELASTIC_SEARCH;
+        this.searchBuilder = new SearchRequest.Builder();
         // 默认查询所有数据
-        searchBuilder.size(Integer.MAX_VALUE);
+        this.searchBuilder.size(Integer.MAX_VALUE);
     }
 
     @Override
@@ -65,6 +71,16 @@ public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperato
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public String getPrepareDSL() {
         throw new DSLException(ERROR_MSG);
     }
@@ -82,7 +98,7 @@ public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperato
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -209,6 +225,31 @@ public class ElasticSearchQueryOperator extends ElasticSearchGenericWhereOperato
 
     @Override
     public QueryOperator neq(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public QueryOperator notIn(DSLName sqlName, Object... values) {
+        return null;
+    }
+
+    @Override
+    public QueryOperator notLike(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public QueryOperator $notLike(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public QueryOperator notLike$(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public QueryOperator $notLike$(DSLName sqlName, Object value) {
         return null;
     }
 }

@@ -5,7 +5,6 @@ import cc.allio.uno.core.chain.Node;
 
 import java.util.List;
 
-
 public class InterceptorChainImpl extends DefaultChain<InterceptorAttributes, InterceptorAttributes> implements InterceptorChain {
 
     public InterceptorChainImpl(List<? extends Node<InterceptorAttributes, InterceptorAttributes>> nodes) {

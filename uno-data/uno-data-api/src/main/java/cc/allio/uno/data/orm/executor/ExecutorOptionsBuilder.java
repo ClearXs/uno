@@ -3,9 +3,12 @@ package cc.allio.uno.data.orm.executor;
 import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.Self;
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import jakarta.validation.constraints.NotNull;
@@ -15,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * {@link ExecutorOptions}构建
+ * {@link ExecutorOptionsImpl}构建
  *
  * @author jiangwei
  * @date 2024/1/25 17:52
@@ -185,13 +188,13 @@ public class ExecutorOptionsBuilder implements Self<ExecutorOptionsBuilder> {
         if (dbType == null || executorKey == null || operatorKey == null) {
             throw new IllegalArgumentException("dbType or executorKey or operatorKey is null");
         }
-        ExecutorOptions executorOptions = new ExecutorOptions(key, dbType, executorKey, operatorKey);
+        ExecutorOptions executorOptions = new ExecutorOptionsImpl(key, dbType, executorKey, operatorKey);
         executorOptions.setSystemDefault(systemDefault);
         executorOptions.setAddress(address);
         executorOptions.setUsername(username);
         executorOptions.setPassword(password);
         executorOptions.setDatabase(database);
-        executorOptions.setProperties(properties);
+        executorOptions.putAll(properties);
         executorOptions.addInterceptors(interceptors);
         return executorOptions;
     }

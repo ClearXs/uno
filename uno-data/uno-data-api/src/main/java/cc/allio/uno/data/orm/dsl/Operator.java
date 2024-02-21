@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 import java.util.Objects;
 
 /**
- * SQL操作
+ * DSL操作
  *
  * @author jiangwei
  * @date 2023/4/12 19:44
@@ -16,14 +16,14 @@ import java.util.Objects;
 public interface Operator<T extends Operator<T>> {
 
     /**
-     * 获取SQL字符串
+     * 获取DSL字符串
      *
-     * @return SQL字符串
+     * @return DSL字符串
      */
     String getDSL();
 
     /**
-     * 解析SQL
+     * 解析DSL
      *
      * @param dsl dsl
      * @return SQLOperator
@@ -36,11 +36,16 @@ public interface Operator<T extends Operator<T>> {
     void reset();
 
     /**
+     * set db type
+     *
+     * @param dbType dbType
+     */
+    void setDBType(DBType dbType);
+
+    /**
      * 获取DBType
      */
-    default DBType getDBType() {
-        return DBType.getSystemDbType();
-    }
+    DBType getDBType();
 
     /**
      * 如果给定原始为null，则返回{@link ValueWrapper#EMPTY_VALUE}
@@ -53,7 +58,7 @@ public interface Operator<T extends Operator<T>> {
     }
 
     /**
-     * SQLOperator 分组注解
+     * Operator 分组注解
      */
     @Documented
     @Retention(RetentionPolicy.RUNTIME)

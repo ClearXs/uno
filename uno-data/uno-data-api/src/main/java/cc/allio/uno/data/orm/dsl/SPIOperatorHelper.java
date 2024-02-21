@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.dsl;
 import cc.allio.uno.core.function.SupplierAction;
 import cc.allio.uno.core.function.VoidConsumer;
 import cc.allio.uno.core.util.ClassUtils;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;

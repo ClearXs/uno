@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor.db;
 
+import cc.allio.uno.core.bean.BeanInfoWrapper;
 import org.apache.ibatis.binding.MapperRegistry;
 import org.apache.ibatis.builder.CacheRefResolver;
 import org.apache.ibatis.builder.ResultMapResolver;
@@ -17,6 +18,7 @@ import org.apache.ibatis.logging.Log;
 import org.apache.ibatis.mapping.*;
 import org.apache.ibatis.parsing.XNode;
 import org.apache.ibatis.plugin.Interceptor;
+import org.apache.ibatis.plugin.InterceptorChain;
 import org.apache.ibatis.reflection.MetaObject;
 import org.apache.ibatis.reflection.ReflectorFactory;
 import org.apache.ibatis.reflection.factory.ObjectFactory;
@@ -49,6 +51,8 @@ public class MybatisConfiguration extends Configuration {
 
     public MybatisConfiguration(Configuration configuration) {
         this.configuration = configuration;
+        BeanInfoWrapper<MybatisConfiguration> beanInfoWrapper = BeanInfoWrapper.of(MybatisConfiguration.class);
+        beanInfoWrapper.setForce(this, "interceptorChain", new InterceptorChain());
     }
 
     @Override
@@ -437,7 +441,8 @@ public class MybatisConfiguration extends Configuration {
 
     @Override
     public List<Interceptor> getInterceptors() {
-        return configuration.getInterceptors();
+        // 避免走到第三方Interceptor
+        return Collections.emptyList();
     }
 
     @Override
@@ -672,7 +677,7 @@ public class MybatisConfiguration extends Configuration {
 
     @Override
     public void addInterceptor(Interceptor interceptor) {
-        configuration.addInterceptor(interceptor);
+        // 去除mybatis 内置拦截器
     }
 
     @Override
@@ -740,5 +745,6 @@ public class MybatisConfiguration extends Configuration {
      */
     public MybatisConfiguration copy() {
         return new MybatisConfiguration(this.configuration);
+
     }
 }

@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bean;
 
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.FieldUtils;
@@ -297,6 +298,6 @@ public interface ValueWrapper {
         } else if (Types.isMap(o.getClass())) {
             return new MapWrapper((Map<String, Object>) o);
         }
-        throw new UnsupportedOperationException(String.format("unsupport %s value wrapper", o.getClass()));
+        throw Exceptions.unOperate(String.format("unsupport %s value wrapper", o.getClass()));
     }
 }

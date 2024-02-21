@@ -4,10 +4,17 @@ import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.api.Adapter;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
+import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
+import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
+import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.SimpleExecutor;
@@ -47,7 +54,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
     private static final String PACKAGE_NAME = DbCommandExecutor.class.getPackage().getName();
 
     public DbCommandExecutor(MybatisConfiguration configuration) {
-        this(new ExecutorOptions(
+        this(new ExecutorOptionsImpl(
                 DataSourceHelper.getDbType(configuration.getEnvironment().getDataSource()),
                 ExecutorKey.DB,
                 OperatorKey.SQL), configuration);
@@ -86,9 +93,10 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
             sqlSource = languageDriver.createSqlSource(configuration, printSQL, null);
         }
         ParameterMap parameterMap = getParameterMap(operator);
+        String cacheId = getCacheId();
         MappedStatement.Builder statementBuilder =
                 new MappedStatement
-                        .Builder(configuration, PACKAGE_NAME + StringPool.SLASH + getOptions().getKey(), sqlSource, sqlCommandType)
+                        .Builder(configuration, cacheId, sqlSource, sqlCommandType)
                         .parameterMap(parameterMap);
         // 验证连接是否正常，如果异常则重新建立连接
         checkAndReset();
@@ -99,7 +107,8 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
                                 configuration,
                                 IdGenerator.defaultGenerator().getNextIdAsString(),
                                 ResultGroup.class,
-                                Collections.emptyList()).build();
+                                Collections.emptyList())
+                                .build();
                 MappedStatement statement = statementBuilder.resultMaps(Collections.singletonList(resultMap)).build();
                 List<ResultGroup> resultGroups = executor.query(statement, parameter, RowBounds.DEFAULT, null);
                 return resultGroups.stream().anyMatch(resultSetHandler::apply);
@@ -149,8 +158,9 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
                         ResultGroup.class,
                         Collections.emptyList()).build();
         ParameterMap parameterMap = getParameterMap(queryOperator);
+        String cacheId = getCacheId();
         MappedStatement statement =
-                new MappedStatement.Builder(configuration, PACKAGE_NAME + StringPool.SLASH + getOptions().getKey(), sqlSource, SqlCommandType.SELECT)
+                new MappedStatement.Builder(configuration, cacheId, sqlSource, SqlCommandType.SELECT)
                         .resultMaps(Collections.singletonList(resultMap))
                         .parameterMap(parameterMap)
                         .lang(languageDriver)
@@ -281,5 +291,9 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
                 case UNKNOWN -> CommandType.UNKNOWN;
             };
         }
+    }
+
+    private String getCacheId() {
+        return PACKAGE_NAME + StringPool.SLASH + getOptions().getKey() + StringPool.SLASH + IdGenerator.defaultGenerator().getNextIdAsString();
     }
 }

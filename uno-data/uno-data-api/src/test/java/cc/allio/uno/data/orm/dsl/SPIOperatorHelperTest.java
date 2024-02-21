@@ -4,6 +4,7 @@ import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
 

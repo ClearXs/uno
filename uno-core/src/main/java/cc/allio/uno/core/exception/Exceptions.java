@@ -10,7 +10,10 @@ import java.lang.reflect.UndeclaredThrowableException;
  *
  * @author jiangwei
  */
-public class Exceptions {
+public abstract class Exceptions {
+
+    private Exceptions() {
+    }
 
     /**
      * 将CheckedException转换为UncheckedException.
@@ -105,12 +108,22 @@ public class Exceptions {
     }
 
     /**
-     * 抛出{@link UnsupportedOperationException}移除
+     * 创建{@link NullPointerException}异常
      *
      * @param message 异常消息
      * @return message
      */
-    public static UnsupportedOperationException unoperate(String message) {
+    public static NullPointerException unNull(String message) {
+        return new NullPointerException(message);
+    }
+
+    /**
+     * 创建{@link UnsupportedOperationException}异常
+     *
+     * @param message 异常消息
+     * @return message
+     */
+    public static UnsupportedOperationException unOperate(String message) {
         return new UnsupportedOperationException(message);
     }
 }

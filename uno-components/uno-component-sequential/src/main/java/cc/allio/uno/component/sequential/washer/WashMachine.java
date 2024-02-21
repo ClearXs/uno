@@ -5,7 +5,7 @@ import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.core.reactive.BufferRate;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandExecutorFactory;
-import cc.allio.uno.data.orm.executor.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import com.google.common.collect.Lists;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;

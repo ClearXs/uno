@@ -1,11 +1,13 @@
 package cc.allio.uno.core.util;
 
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.convert.UnoConverter;
 import cc.allio.uno.core.bean.BeanCopier;
 import cc.allio.uno.core.bean.BeanMap;
 import cc.allio.uno.core.bean.BeanProperty;
 import cc.allio.uno.core.type.Types;
 import com.google.common.collect.Maps;
+import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanWrapper;
 import org.springframework.beans.BeansException;
@@ -28,9 +30,12 @@ import java.util.Collections;
  * @since 1.0
  */
 @Slf4j
-public class BeanUtils extends org.springframework.beans.BeanUtils implements ApplicationContextAware {
+public final class BeanUtils extends org.springframework.beans.BeanUtils implements ApplicationContextAware {
 
     private static ApplicationContext context;
+
+    public BeanUtils() {
+    }
 
     @Override
     public void setApplicationContext(ApplicationContext context) throws BeansException {
@@ -58,7 +63,7 @@ public class BeanUtils extends org.springframework.beans.BeanUtils implements Ap
         if (clazz == null) {
             return null;
         }
-        return (T) context.getBean(beanName, clazz);
+        return context.getBean(beanName, clazz);
     }
 
     public static <T> T getBeanOrDefault(Class<T> clazz, T defaultValue) {
@@ -155,8 +160,8 @@ public class BeanUtils extends org.springframework.beans.BeanUtils implements Ap
      * @param expectType 期望类型的Class对象
      * @param <T>        期望的类型
      * @return 获取的期望类型的配置
-     * @see org.springframework.core.env.Environment#getProperty(String, Class)
      * @throws NullPointerException {@link ApplicationContext}对象为null抛出
+     * @see org.springframework.core.env.Environment#getProperty(String, Class)
      */
     public static <T> T getProperties(String name, Class<T> expectType) {
         return getProperties(name, expectType, null);
@@ -241,14 +246,15 @@ public class BeanUtils extends org.springframework.beans.BeanUtils implements Ap
      * @param clazz  类名
      * @param <T>    泛型标记
      * @return T
+     * @throws NullPointerException 当source为null时抛出
      */
     @Nullable
     public static <T> T copy(@Nullable Object source, Class<T> clazz) {
         if (source == null) {
-            return null;
+            throw Exceptions.unNull("source is empty");
         }
         if (Types.isMap(clazz)) {
-            return (T) Maps.newHashMap((Map)source);
+            return (T) Maps.newHashMap((Map) source);
         }
         return BeanUtils.copy(source, source.getClass(), clazz);
     }
@@ -265,11 +271,12 @@ public class BeanUtils extends org.springframework.beans.BeanUtils implements Ap
      * @param targetClazz 转换成的类型
      * @param <T>         泛型标记
      * @return T
+     * @throws NullPointerException 当source为null时抛出
      */
     @Nullable
-    public static <T> T copy(@Nullable Object source, Class sourceClazz, Class<T> targetClazz) {
+    public static <T> @NonNull T copy(@Nullable Object source, Class sourceClazz, Class<T> targetClazz) {
         if (source == null) {
-            return null;
+            throw Exceptions.unNull("source is empty");
         }
         BeanCopier copier = BeanCopier.create(sourceClazz, targetClazz, false);
         T to = newInstance(targetClazz);

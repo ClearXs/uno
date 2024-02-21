@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl.dialect;
 
-import cc.allio.uno.data.orm.dsl.DSLException;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Maps;
 

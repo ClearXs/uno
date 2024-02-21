@@ -3,8 +3,10 @@ package cc.allio.uno.data.orm.dsl.ddl.elasticsearch;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.Operator;
+import cc.allio.uno.data.orm.dsl.exception.DDLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch.indices.DeleteIndexRequest;
-import cc.allio.uno.data.orm.dsl.DSLException;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 
@@ -18,13 +20,16 @@ import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 @AutoService(DropTableOperator.class)
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchDropIndexOperator implements DropTableOperator {
+
+    private DBType dbType;
     private DeleteIndexRequest deleteIndexRequest;
     private DeleteIndexRequest.Builder builder;
     private Table table;
     private static final String ERROR_MSG = "elasticsearch drop operator not support that operator";
 
     public ElasticSearchDropIndexOperator() {
-        builder = new DeleteIndexRequest.Builder();
+        this.dbType = DBType.ELASTIC_SEARCH;
+        this.builder = new DeleteIndexRequest.Builder();
     }
 
     @Override
@@ -44,6 +49,16 @@ public class ElasticSearchDropIndexOperator implements DropTableOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        throw new DDLException("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public DropTableOperator from(Table table) {
         this.table = table;
         builder.index(table.getName().format());
@@ -51,7 +66,7 @@ public class ElasticSearchDropIndexOperator implements DropTableOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

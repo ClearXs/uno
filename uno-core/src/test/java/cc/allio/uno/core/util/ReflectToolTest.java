@@ -24,6 +24,8 @@ public class ReflectToolTest extends BaseTestCase {
         Class<?> genericType4 = ReflectTool.getGenericType(new CImpl(), C.class);
         assertEquals(String.class, genericType4);
 
+        Class<?> genericType5 = ReflectTool.getGenericType(new AAPenetrateImpl(), A.class);
+        assertEquals(String.class, genericType5);
     }
 
 
@@ -44,5 +46,15 @@ public class ReflectToolTest extends BaseTestCase {
     }
 
     static class CImpl extends C<String> {
+    }
+
+
+    interface APenetrate<T> extends A<T> {
+    }
+
+    abstract class APenetrateImpl<T> implements APenetrate<T> {
+    }
+
+    class AAPenetrateImpl extends APenetrateImpl<String> {
     }
 }

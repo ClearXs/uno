@@ -32,7 +32,7 @@ public abstract class PrepareOperatorImpl<T extends PrepareOperator<T>> implemen
         // ensure数组容量
         ensureExplicitCapacity(prepareValues.length + 1);
         try {
-            prepareValues[prepareIndex] = PrepareValue.of(prepareIndex, column, value);
+            prepareValues[prepareIndex] = PrepareValue.of(prepareIndex, column, getRealityValue(value));
         } finally {
             incrementPrepareIndex();
         }
@@ -49,7 +49,7 @@ public abstract class PrepareOperatorImpl<T extends PrepareOperator<T>> implemen
         if (index > prepareValues.length - 1) {
             ensureExplicitCapacity(index + 1);
         }
-        prepareValues[index] = PrepareValue.of(index, column, value);
+        prepareValues[index] = PrepareValue.of(index, column, getRealityValue(value));
     }
 
     @Override
@@ -70,7 +70,7 @@ public abstract class PrepareOperatorImpl<T extends PrepareOperator<T>> implemen
     /**
      * 数组从某个index开始，向后移动length位数
      *
-     * @param index  index
+     * @param index index
      * @param digit digit
      */
     protected void backward(int index, int digit) {

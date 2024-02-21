@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.dsl.dml;
 
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
@@ -110,7 +111,7 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @return SQLUpdateOperator
      */
     default UpdateOperator updatePojo(Object pojo) {
-        PojoWrapper<Object> pojoWrapper = new PojoWrapper<>(pojo);
+        PojoWrapper<Object> pojoWrapper = PojoWrapper.getInstance(pojo);
         List<ColumnDef> notPkColumns = pojoWrapper.getNotPkColumns();
         Map<DSLName, Object> values = Maps.newLinkedHashMap();
         for (ColumnDef notPkColumn : notPkColumns) {

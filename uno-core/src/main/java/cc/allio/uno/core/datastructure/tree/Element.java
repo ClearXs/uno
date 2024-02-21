@@ -97,6 +97,22 @@ public interface Element<T extends Element<T>> extends Serializable {
     boolean isLeaf();
 
     /**
+     * 根据指定的id获取某个子结点
+     *
+     * @param id id
+     * @return element or null
+     */
+    T findChildren(Serializable id);
+
+    /**
+     * 根据指定的id移除某个子结点
+     *
+     * @param id id
+     * @return true if success
+     */
+    boolean removeChildren(Serializable id);
+
+    /**
      * 获取子节点
      *
      * @return element list

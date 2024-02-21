@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import org.springframework.beans.factory.FactoryBean;
 
 /**

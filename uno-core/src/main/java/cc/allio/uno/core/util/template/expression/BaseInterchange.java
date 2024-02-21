@@ -30,8 +30,7 @@ public abstract class BaseInterchange implements Interchange {
      */
     protected Object reValue(Object value, boolean langsym) {
         // 如果值类型为语言值则其判断的优先级大于参数langsym
-        if (value instanceof LangValue) {
-            LangValue langValue = (LangValue) value;
+        if (value instanceof LangValue langValue) {
             Object or = langValue.getValue();
             if (langValue.isLangsym()) {
                 return getTypeValue(or);

@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -34,7 +35,11 @@ public final class CommandExecutorFactory {
      * @return DSLExecutor or null
      */
     public static <T extends CommandExecutor> T getDSLExecutor() {
-        return getDSLExecutor(ExecutorKey.getSystemExecutorKey());
+        T defaultExecutor = getDSLExecutor(CommandExecutor.getDefaultKey());
+        if (defaultExecutor == null) {
+            return getDSLExecutor(ExecutorKey.getSystemExecutorKey());
+        }
+        return defaultExecutor;
     }
 
     /**

@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.executor.db;
 
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.data.orm.executor.CommandExecutorFactory;
-import cc.allio.uno.data.orm.executor.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.springframework.aop.aspectj.annotation.AspectJProxyFactory;
 import org.springframework.aop.support.DefaultPointcutAdvisor;

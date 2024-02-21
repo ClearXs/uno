@@ -2,13 +2,14 @@ package cc.allio.uno.data.orm.dsl.dml.sql;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
+import cc.allio.uno.core.util.Values;
 import cc.allio.uno.data.orm.dsl.*;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.SQLObject;
 import com.alibaba.druid.sql.ast.expr.*;
 
-import java.util.Arrays;
+import java.util.Collection;
 import java.util.function.Consumer;
 
 /**
@@ -24,6 +25,10 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
 
     private SQLExpr where = null;
     private LogicMode mode = LogicMode.AND;
+
+    protected SQLWhereOperatorImpl() {
+        super();
+    }
 
     @Override
     public T gt(DSLName sqlName, Object value) {
@@ -124,13 +129,26 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
     }
 
     @Override
-    public T in(DSLName sqlName, Object... values) {
+    public <V> T in(DSLName sqlName, V... values) {
         SQLInListExpr sqlInListExpr = new SQLInListExpr(new SQLIdentifierExpr(sqlName.format()));
-        Arrays.stream(values)
-                .forEach(value -> {
-                    sqlInListExpr.addTarget(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
-                    addPrepareValue(sqlName.getName(), value);
-                });
+        Collection<V> vs = Values.collectionExpand(values);
+        for (V v : vs) {
+            sqlInListExpr.addTarget(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
+            addPrepareValue(sqlName.getName(), v);
+        }
+        appendAndSetWhere(sqlInListExpr);
+        return self();
+    }
+
+    @Override
+    public <V> T notIn(DSLName sqlName, V... values) {
+        SQLInListExpr sqlInListExpr = new SQLInListExpr(new SQLIdentifierExpr(sqlName.format()));
+        sqlInListExpr.setNot(true);
+        Collection<V> vs = Values.collectionExpand(values);
+        for (V v : vs) {
+            sqlInListExpr.addTarget(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
+            addPrepareValue(sqlName.getName(), v);
+        }
         appendAndSetWhere(sqlInListExpr);
         return self();
     }
@@ -184,7 +202,7 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
                         new SQLVariantRefExpr(StringPool.QUESTION_MARK),
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus + Types.toString(value));
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
         return self();
     }
 
@@ -197,7 +215,7 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
                         new SQLVariantRefExpr(StringPool.QUESTION_MARK),
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus);
+        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 
@@ -210,7 +228,59 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
                         new SQLVariantRefExpr(StringPool.QUESTION_MARK),
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus + Types.toString(value) + SQLBinaryOperator.Modulus);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        return self();
+    }
+
+    @Override
+    public T notLike(DSLName sqlName, Object value) {
+        SQLBinaryOpExpr expr =
+                new SQLBinaryOpExpr(
+                        new SQLIdentifierExpr(sqlName.format()),
+                        SQLBinaryOperator.NotLike,
+                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        getDruidType());
+        appendAndSetWhere(expr);
+        addPrepareValue(sqlName.getName(), value);
+        return self();
+    }
+
+    @Override
+    public T $notLike(DSLName sqlName, Object value) {
+        SQLBinaryOpExpr expr =
+                new SQLBinaryOpExpr(
+                        new SQLIdentifierExpr(sqlName.format()),
+                        SQLBinaryOperator.NotLike,
+                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        getDruidType());
+        appendAndSetWhere(expr);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
+        return self();
+    }
+
+    @Override
+    public T notLike$(DSLName sqlName, Object value) {
+        SQLBinaryOpExpr expr =
+                new SQLBinaryOpExpr(
+                        new SQLIdentifierExpr(sqlName.format()),
+                        SQLBinaryOperator.NotLike,
+                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        getDruidType());
+        appendAndSetWhere(expr);
+        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        return self();
+    }
+
+    @Override
+    public T $notLike$(DSLName sqlName, Object value) {
+        SQLBinaryOpExpr expr =
+                new SQLBinaryOpExpr(
+                        new SQLIdentifierExpr(sqlName.format()),
+                        SQLBinaryOperator.NotLike,
+                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        getDruidType());
+        appendAndSetWhere(expr);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 
@@ -261,4 +331,11 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
      * @return 非null
      */
     protected abstract Consumer<SQLExpr> getSetWhere();
+
+    @Override
+    public void reset() {
+        super.reset();
+        this.where = null;
+        this.mode = LogicMode.AND;
+    }
 }

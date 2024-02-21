@@ -1,13 +1,19 @@
 package cc.allio.uno.data.tx;
 
-import cc.allio.uno.core.function.VoidConsumer;
-
 /**
- * 事物动作
+ * 定义事物动作
  *
  * @author jiangwei
- * @date 2024/2/1 18:10
+ * @date 2024/2/11 12:34
  * @since 1.1.6
  */
-public interface TransactionAction extends VoidConsumer {
+public interface TransactionAction<R> {
+
+    /**
+     * 将带着事物执行的代码块
+     *
+     * @return 动作执行结果
+     * @throws Exception 代码块存在异常时抛出
+     */
+    R around() throws Exception;
 }

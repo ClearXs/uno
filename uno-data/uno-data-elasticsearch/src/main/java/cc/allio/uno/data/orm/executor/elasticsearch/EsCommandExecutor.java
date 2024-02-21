@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor.elasticsearch;
 
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
@@ -10,6 +11,11 @@ import cc.allio.uno.data.orm.dsl.dml.elasticsearch.ElasticSearchQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.data.orm.dsl.type.JavaType;
 import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
+import cc.allio.uno.data.orm.executor.handler.ColumnDefListResultSetHandler;
+import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
+import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.aggregations.Aggregate;
 import co.elastic.clients.elasticsearch._types.mapping.Property;
@@ -135,7 +141,7 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
                                         .map(field -> {
                                             ResultGroup resultGroup = new ResultGroup();
                                             ResultRow.ResultRowBuilder builder = ResultRow.builder();
-                                            builder.column(DSLName.of(DSLColumnDefListResultSetHandler.ROW_FIELD_NAME));
+//                                            builder.column(DSLName.of(ColumnDefListResultSetHandler.ROW_FIELD_NAME));
                                             Property fieldProperty = field.getValue();
                                             DataType dataType = propertyAdapter.reverse(fieldProperty);
                                             builder.jdbcType(JDBCType.valueOf(dataType.getDslType().getJdbcType()));
@@ -148,7 +154,7 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Comman
                             .toList();
             ResultSet resultSet = new ResultSet();
             resultSet.setResultGroups(resultGroups);
-            return new DSLColumnDefListResultSetHandler().apply(resultSet);
+            return new ColumnDefListResultSetHandler().apply(resultSet);
         } catch (IOException ex) {
             log.error("Show columns has err", ex);
             return Collections.emptyList();

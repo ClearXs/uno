@@ -3,7 +3,7 @@ package cc.allio.uno.data.query.stream;
 import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.DateUtil;
 import cc.allio.uno.data.orm.dsl.OrderCondition;
-import cc.allio.uno.data.orm.dsl.DSLException;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 
 import java.beans.PropertyDescriptor;
 import java.util.Date;

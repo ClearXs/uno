@@ -14,12 +14,17 @@ import java.util.Comparator;
 @Slf4j
 public class ObjectComparator implements Comparator<Object> {
 
+    private static final Comparator<Object> EQUALS_COMPARATOR = new EqualsComparator();
+
     @Override
     public int compare(Object o1, Object o2) {
+        if (o1 == null || o2 == null) {
+            return -1;
+        }
         // 两者类型不一致，返回-1
         if (!o1.getClass().isAssignableFrom(o2.getClass())) {
             return -1;
         }
-        return new EqualsComparator().compare(o1, o2);
+        return EQUALS_COMPARATOR.compare(o1, o2);
     }
 }

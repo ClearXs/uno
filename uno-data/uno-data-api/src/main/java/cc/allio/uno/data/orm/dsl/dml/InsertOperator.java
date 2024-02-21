@@ -1,19 +1,18 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
+import cc.allio.uno.core.util.id.IdGenerator;
+import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.function.Supplier;
 
 /**
@@ -117,10 +116,14 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @return SQLInsertOperator
      */
     default <T> InsertOperator insertPojo(T pojo) {
-        ObjectWrapper wrapper = new ObjectWrapper(pojo);
-        List<String> columns = wrapper.findNamesForce();
-        List<Object> values = wrapper.findValuesForce();
-        return columns(columns.toArray(String[]::new)).values(values);
+        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojo);
+        String pkName = pojoWrapper.getPkColumn().getDslName().format(DSLName.HUMP_FEATURE);
+        ColumnDef pkColumn = pojoWrapper.getPkColumn();
+        Object pkValue = pkColumn.castValue(IdGenerator.defaultGenerator().getNextId());
+        pojoWrapper.setForceCoverage(pkName, false, pkValue);
+        Collection<DSLName> columns = pojoWrapper.getColumnDSLName();
+        List<Object> values = pojoWrapper.getColumnValues();
+        return columns(columns).values(values);
     }
 
     /**
@@ -230,7 +233,7 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @param columns columns
      * @return SQLInsertOperator
      */
-    InsertOperator columns(List<DSLName> columns);
+    InsertOperator columns(Collection<DSLName> columns);
 
     /**
      * @see #values(List)

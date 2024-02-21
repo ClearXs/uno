@@ -3,8 +3,8 @@ package cc.allio.uno.data.orm.dsl.ddl.sql;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
 import com.alibaba.druid.DbType;
 import cc.allio.uno.data.orm.dsl.ddl.ExistTableOperator;
 
@@ -21,16 +21,18 @@ import java.util.List;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperator> implements ExistTableOperator {
 
-    private final DbType druidDbType;
-    private final QueryOperator queryOperator;
+    private DBType dbType;
+    private DbType druidDbType;
     private Table table;
+    private final QueryOperator queryOperator;
 
     public SQLExistTableOperator() {
         this(DBType.getSystemDbType());
     }
 
     public SQLExistTableOperator(DBType dbType) {
-        this.druidDbType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
         this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, dbType);
     }
 
@@ -66,7 +68,7 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -84,5 +86,17 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     public void reset() {
         super.reset();
         queryOperator.reset();
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.queryOperator.setDBType(dbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 }

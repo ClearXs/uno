@@ -1,7 +1,10 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch._types.query_dsl.Query;
 import co.elastic.clients.elasticsearch.core.UpdateByQueryRequest;
 import co.elastic.clients.json.JsonData;
@@ -25,6 +28,8 @@ import java.util.stream.Collectors;
 @AutoService(UpdateOperator.class)
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchUpdateOperator extends ElasticSearchGenericWhereOperator<UpdateOperator> implements UpdateOperator {
+
+    private DBType dbType;
     private UpdateByQueryRequest updateRequest;
     private UpdateByQueryRequest.Builder updateBuilder;
     private Table table;
@@ -32,6 +37,7 @@ public class ElasticSearchUpdateOperator extends ElasticSearchGenericWhereOperat
 
     public ElasticSearchUpdateOperator() {
         super();
+        this.dbType = DBType.ELASTIC_SEARCH;
         this.updateBuilder = new UpdateByQueryRequest.Builder();
     }
 
@@ -50,8 +56,17 @@ public class ElasticSearchUpdateOperator extends ElasticSearchGenericWhereOperat
     @Override
     public void reset() {
         super.reset();
-        updateRequest = null;
-        updateBuilder = new UpdateByQueryRequest.Builder();
+        this.updateBuilder = new UpdateByQueryRequest.Builder();
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 
     @Override
@@ -72,7 +87,7 @@ public class ElasticSearchUpdateOperator extends ElasticSearchGenericWhereOperat
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -103,5 +118,30 @@ public class ElasticSearchUpdateOperator extends ElasticSearchGenericWhereOperat
             updateRequest = updateBuilder.build();
         }
         return updateRequest;
+    }
+
+    @Override
+    public UpdateOperator notIn(DSLName sqlName, Object... values) {
+        return null;
+    }
+
+    @Override
+    public UpdateOperator notLike(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public UpdateOperator $notLike(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public UpdateOperator notLike$(DSLName sqlName, Object value) {
+        return null;
+    }
+
+    @Override
+    public UpdateOperator $notLike$(DSLName sqlName, Object value) {
+        return null;
     }
 }

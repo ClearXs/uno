@@ -10,12 +10,14 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
  * @date 2024/1/4 16:56
  * @since 1.1.6
  */
-public interface ShowTablesOperator extends TableOperator<ShowTablesOperator>, PrepareOperator<ShowTablesOperator>, Self<ShowTablesOperator> {
+public interface ShowTablesOperator
+        extends TableOperator<ShowTablesOperator>,
+        PrepareOperator<ShowTablesOperator>, DataBaseOperator<ShowTablesOperator> {
 
-    String CATALOG_FILED = "CATALOG";
-    String SCHEMA_FILED = "SCHEMA";
-    String NAME_FILED = "NAME";
-    String TYPE_FILED = "TYPE";
+    String TABLE_CATALOG_FILED = "TABLE_CATALOG";
+    String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
+    String TABLE_NAME_FILED = "TABLE_NAME";
+    String TABLE_TYPE_FILED = "TABLE_TYPE";
 
     /**
      * 转换为{@link QueryOperator}
@@ -23,24 +25,6 @@ public interface ShowTablesOperator extends TableOperator<ShowTablesOperator>, P
      * @return SQLQueryOperator for instance
      */
     QueryOperator toQueryOperator();
-
-    /**
-     * database
-     *
-     * @param database database
-     * @return ShowTablesOperator
-     */
-    default ShowTablesOperator database(String database) {
-        return database(Database.of(DSLName.of(database)));
-    }
-
-    /**
-     * database
-     *
-     * @param database database
-     * @return ShowTablesOperator
-     */
-    ShowTablesOperator database(Database database);
 
     /**
      * schema

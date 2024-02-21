@@ -27,7 +27,8 @@ import java.util.function.Consumer;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> implements DeleteOperator {
 
-    private final DbType druidDbType;
+    private DBType dbType;
+    private DbType druidDbType;
     private Table table;
     private SQLDeleteStatement deleteStatement;
 
@@ -37,6 +38,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
 
     public SQLDeleteOperator(DBType dbType) {
         super();
+        this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
         this.deleteStatement = new SQLDeleteStatement();
         deleteStatement.setDbType(druidDbType);
@@ -78,6 +80,18 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.deleteStatement.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public String getPrepareDSL() {
         return SQLUtils.toSQLString(deleteStatement);
     }
@@ -94,7 +108,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

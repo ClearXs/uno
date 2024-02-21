@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.dsl.dml.sql;
 
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
@@ -102,14 +103,46 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testLimit() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
-        String sql = operator.select("z")
-                .from("dual")
-                .page(1L, 10L)
-                .getDSL();
-        assertEquals("SELECT z\n" +
-                "FROM PUBLIC.dual\n" +
-                "LIMIT 10, 0", sql);
+        Operators.thenRest(() -> {
+            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+            String sql = operator.select("z")
+                    .from("dual")
+                    .page(1L, 10L)
+                    .getDSL();
+            assertEquals("SELECT z\n" +
+                    "FROM PUBLIC.dual\n" +
+                    "LIMIT 0, 10", sql);
+            return operator;
+        });
+
+        // test pg
+        Operators.thenRest(() -> {
+            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+            String sql = operator.select("z")
+                    .from("dual")
+                    .page(1L, 10L)
+                    .getDSL();
+            assertEquals("SELECT z\n" +
+                    "FROM PUBLIC.dual\n" +
+                    "LIMIT 10 OFFSET 0", sql);
+            return operator;
+        });
+    }
+
+    @Test
+    void testIn() {
+        Operators.thenRest(() -> {
+            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+            String sql = operator.select("z")
+                    .from("dual")
+                    .in("t1", "2", "2")
+                    .getDSL();
+            assertEquals("SELECT z\n" +
+                    "FROM PUBLIC.dual\n" +
+                    "WHERE t1 IN ('2', '2')", sql);
+            return operator;
+        });
+
     }
 
     @Test

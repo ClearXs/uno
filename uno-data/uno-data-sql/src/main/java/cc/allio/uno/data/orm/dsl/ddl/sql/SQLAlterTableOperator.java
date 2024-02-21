@@ -1,14 +1,19 @@
 package cc.allio.uno.data.orm.dsl.ddl.sql;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.Operator;
+import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DDLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
+import cc.allio.uno.data.orm.dsl.type.DruidDataTypeAdapter;
 import com.alibaba.druid.DbType;
-import com.alibaba.druid.sql.ast.statement.SQLAlterTableStatement;
-import cc.allio.uno.data.orm.dsl.Table;
+import com.alibaba.druid.sql.SQLUtils;
+import com.alibaba.druid.sql.ast.SQLDataType;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
+import com.alibaba.druid.sql.ast.expr.SQLValuableExpr;
+import com.alibaba.druid.sql.ast.statement.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
+
+import java.util.Collection;
 
 /**
  * druid for modify xxxx structure
@@ -21,40 +26,132 @@ import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLAlterTableOperator implements AlterTableOperator {
 
-    private final SQLAlterTableStatement alterTableStatement;
-    private final DbType druidDbType;
+    private SQLAlterTableStatement alterTableStatement;
+    private DBType dbType;
+    private DbType druidDbType;
+    private Table from;
 
     public SQLAlterTableOperator() {
         this(DBType.getSystemDbType());
     }
 
     public SQLAlterTableOperator(DBType dbType) {
-        this.druidDbType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
         this.alterTableStatement = new SQLAlterTableStatement(druidDbType);
     }
 
+    /**
+     * {@link com.alibaba.druid.sql.visitor.SQLASTOutputVisitor#visit(SQLAlterTableAlterColumn)}
+     */
     @Override
     public String getDSL() {
-        return null;
+        if (from == null) {
+            throw new DDLException("alter table rename requirement 'from table', you can through #from invoke support 'from table'");
+        }
+        String sql = SQLUtils.toSQLString(alterTableStatement);
+        if (DBType.POSTGRESQL == dbType) {
+            // 特殊处理，去除SQLASTOutputVisitor#visit(SQLAlterTableAlterColumn)的DATA TYPE，替换为TYPE
+            return sql.replace("SET DATA TYPE", "TYPE");
+        }
+        return sql;
     }
 
     @Override
     public AlterTableOperator parse(String dsl) {
-        return null;
+        this.alterTableStatement = (SQLAlterTableStatement) SQLUtils.parseSingleStatement(dsl, druidDbType);
+        return self();
     }
 
     @Override
     public void reset() {
+        this.alterTableStatement = new SQLAlterTableStatement(druidDbType);
+        this.from = null;
+    }
 
+    @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.alterTableStatement.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
+    public AlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
+        for (ColumnDef columnDef : columnDefs) {
+            SQLColumnDefinition columnDefinition = new SQLColumnDefinition();
+            columnDefinition.setComment(columnDef.getComment());
+            columnDefinition.setName(columnDef.getDslName().format());
+            columnDefinition.setDbType(druidDbType);
+            if (columnDef.getDataType() != null) {
+                SQLAlterTableAlterColumn alterTableAlterColumn = new SQLAlterTableAlterColumn();
+                SQLDataType druidDataType = DruidDataTypeAdapter.getInstance(dbType).adapt(columnDef.getDataType());
+                alterTableAlterColumn.setDataType(druidDataType);
+                alterTableAlterColumn.setColumn(columnDefinition);
+                this.alterTableStatement.addItem(alterTableAlterColumn);
+            }
+            if (columnDef.isNonNull()) {
+                SQLAlterTableAlterColumn alterTableAlterColumn = new SQLAlterTableAlterColumn();
+                alterTableAlterColumn.setSetNotNull(true);
+                alterTableAlterColumn.setColumn(columnDefinition);
+                this.alterTableStatement.addItem(alterTableAlterColumn);
+            }
+            if (columnDef.getDefaultValue() != null && columnDef.getDataType() != null) {
+                SQLValuableExpr defaultValueExpr = SQLSupport.newSQLValue(columnDef.getDataType(), columnDef.getDefaultValue());
+                SQLAlterTableAlterColumn alterTableAlterColumn = new SQLAlterTableAlterColumn();
+                alterTableAlterColumn.setSetDefault(defaultValueExpr);
+                alterTableAlterColumn.setColumn(columnDefinition);
+                this.alterTableStatement.addItem(alterTableAlterColumn);
+            }
+        }
+        return self();
+    }
+
+    @Override
+    public AlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
+        for (ColumnDef columnDef : columnDefs) {
+            SQLAlterTableAddColumn alterTableAddColumn = new SQLAlterTableAddColumn();
+            alterTableAddColumn.toString();
+            SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
+            alterTableAddColumn.addColumn(columnDefinition);
+            this.alterTableStatement.addItem(alterTableAddColumn);
+        }
+        return self();
+    }
+
+    @Override
+    public AlterTableOperator deleteColumns(Collection<DSLName> columns) {
+        SQLAlterTableDropColumnItem dropColumnItem = new SQLAlterTableDropColumnItem();
+        for (DSLName column : columns) {
+            dropColumnItem.addColumn(new SQLIdentifierExpr(column.format()));
+        }
+        this.alterTableStatement.addItem(dropColumnItem);
+        return self();
+    }
+
+    @Override
+    public AlterTableOperator rename(Table to) {
+        SQLAlterTableRename alterTableRename = new SQLAlterTableRename();
+        alterTableRename.setTo(new SQLIdentifierExpr(to.getName().format()));
+        this.alterTableStatement.addItem(alterTableRename);
+        return self();
     }
 
     @Override
     public AlterTableOperator from(Table table) {
-        return null;
+        this.from = table;
+        SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
+        this.alterTableStatement.setTableSource(tableSource);
+        return self();
     }
 
     @Override
-    public Table getTables() {
-        return null;
+    public Table getTable() {
+        return from;
     }
 }

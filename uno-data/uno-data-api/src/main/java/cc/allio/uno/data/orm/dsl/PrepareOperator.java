@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.CollectionUtils;
 import com.google.common.collect.Maps;
 
@@ -63,5 +64,18 @@ public interface PrepareOperator<T extends PrepareOperator<T>> extends Operator<
 
         }
         return Collections.emptyList();
+    }
+
+    /**
+     * 获取真实值，给定的参数可能由某一些对象进行报装生成，该方法拆分该包装，还原真实的值
+     *
+     * @param fake fake
+     * @return real value
+     */
+    default Object getRealityValue(Object fake) {
+        if (ValueWrapper.EMPTY_VALUE.equals(fake)) {
+            return null;
+        }
+        return fake;
     }
 }

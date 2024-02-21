@@ -6,6 +6,7 @@ import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.DSLName;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
@@ -36,7 +37,8 @@ import java.util.function.Consumer;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implements QueryOperator {
 
-    private final DbType druidDbType;
+    private DBType dbType;
+    private DbType druidDbType;
     private final DruidTokenOperatorAdapter tokenOperatorAdapter;
 
     private SQLSelectQueryBlock selectQuery;
@@ -59,8 +61,9 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
 
     public SQLQueryOperator(DBType dbType) {
         super();
-        this.tokenOperatorAdapter = new DruidTokenOperatorAdapter();
+        this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
+        this.tokenOperatorAdapter = new DruidTokenOperatorAdapter();
         this.selectQuery = new SQLSelectQueryBlock();
         selectQuery.setDbType(druidDbType);
     }
@@ -111,6 +114,19 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
         this.orderBy = null;
         this.groupBy = null;
         this.sqlLimit = null;
+        this.columns.clear();
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.selectQuery.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 
     @Override
@@ -172,7 +188,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -230,8 +246,8 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
 
     @Override
     public QueryOperator limit(Long limit, Long offset) {
-        getLimit().setOffset(Math.toIntExact(offset));
         getLimit().setRowCount(Math.toIntExact(limit));
+        getLimit().setOffset(Math.toIntExact(offset));
         return self();
     }
 
@@ -291,7 +307,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
             selectQuery.setLimit(sqlLimit);
         }
         selectQuery.setFrom(tableSource);
-        return SQLUtils.toSQLString(selectQuery);
+        return SQLUtils.toSQLString(selectQuery, druidDbType);
     }
 
     @Override

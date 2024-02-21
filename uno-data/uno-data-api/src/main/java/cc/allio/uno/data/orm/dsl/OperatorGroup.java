@@ -94,7 +94,7 @@ public interface OperatorGroup {
     /**
      * registry table操作
      *
-     * @return SQLCreateTableOperator
+     * @return CreateTableOperator
      */
     default CreateTableOperator createTable() {
         return createTable(DBType.getSystemDbType());
@@ -104,14 +104,14 @@ public interface OperatorGroup {
      * registry table操作
      *
      * @param dbType dbType
-     * @return SQLCreateTableOperator
+     * @return CreateTableOperator
      */
     CreateTableOperator createTable(DBType dbType);
 
     /**
      * drop xxxx
      *
-     * @return SQLDropTableOperator
+     * @return DropTableOperator
      */
     default DropTableOperator dropTable() {
         return dropTable(DBType.getSystemDbType());
@@ -121,14 +121,14 @@ public interface OperatorGroup {
      * drop xxxx
      *
      * @param dbType dbType
-     * @return SQLDropTableOperator
+     * @return DropTableOperator
      */
     DropTableOperator dropTable(DBType dbType);
 
     /**
      * exist xxxx
      *
-     * @return SQLExistTableOperator
+     * @return ExistTableOperator
      */
     default ExistTableOperator existTable() {
         return existTable(DBType.getSystemDbType());
@@ -138,14 +138,14 @@ public interface OperatorGroup {
      * exist xxxx
      *
      * @param dbType dbType
-     * @return SQLExistTableOperator
+     * @return ExistTableOperator
      */
     ExistTableOperator existTable(DBType dbType);
 
     /**
      * show columns for xxxx
      *
-     * @return SQLShowColumnsOperator
+     * @return ShowColumnsOperator
      */
     default ShowColumnsOperator showColumns() {
         return showColumns(DBType.getSystemDbType());
@@ -155,14 +155,14 @@ public interface OperatorGroup {
      * show columns for xxxx
      *
      * @param dbType dbType
-     * @return SQLShowColumnsOperator
+     * @return ShowColumnsOperator
      */
     ShowColumnsOperator showColumns(DBType dbType);
 
     /**
      * show tables
      *
-     * @return SQLShowTablesOperator
+     * @return ShowTablesOperator
      */
     default ShowTablesOperator showTables() {
         return showTables(DBType.getSystemDbType());
@@ -172,9 +172,24 @@ public interface OperatorGroup {
      * show tables
      *
      * @param dbType dbType
-     * @return SQLShowTablesOperator
+     * @return ShowTablesOperator
      */
     ShowTablesOperator showTables(DBType dbType);
+
+    /**
+     * @see #alterTables(DBType)
+     */
+    default AlterTableOperator alterTables() {
+        return alterTables(DBType.getSystemDbType());
+    }
+
+    /**
+     * alert tables
+     *
+     * @param dbType dbType
+     * @return AlterTableOperator
+     */
+    AlterTableOperator alterTables(DBType dbType);
 
     /**
      * 获取当前系统的SQL Operator
@@ -315,6 +330,11 @@ public interface OperatorGroup {
         @Override
         public ShowTablesOperator showTables(DBType dbType) {
             return SPIOperatorHelper.lazyGet(ShowTablesOperator.class, key, dbType);
+        }
+
+        @Override
+        public AlterTableOperator alterTables(DBType dbType) {
+            return SPIOperatorHelper.lazyGet(AlterTableOperator.class, key, dbType);
         }
     }
 }

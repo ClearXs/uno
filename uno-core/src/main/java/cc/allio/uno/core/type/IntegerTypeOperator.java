@@ -11,11 +11,12 @@ public class IntegerTypeOperator implements TypeOperator<Integer> {
 
     @Override
     public Integer convert(Object target, Class<?> maybeType) {
-        Object tryToNumeric = Types.tryToNumeric(target);
-        if (Types.isDouble(tryToNumeric.getClass())) {
-            return ((Double) tryToNumeric).intValue();
-        } else if (Types.isInteger(tryToNumeric.getClass())) {
-            return (Integer) tryToNumeric;
+        if (target instanceof Integer i) {
+            return i;
+        } else if (target instanceof Double d) {
+            return d.intValue();
+        } else if (target instanceof Float f) {
+            return f.intValue();
         }
         throw new IllegalArgumentException(String.format("target %s can't cast type %s", target, maybeType));
     }

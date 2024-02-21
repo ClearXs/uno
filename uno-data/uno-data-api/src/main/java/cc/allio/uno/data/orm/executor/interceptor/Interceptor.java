@@ -5,7 +5,7 @@ import cc.allio.uno.core.chain.ChainContext;
 import cc.allio.uno.core.chain.Node;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandType;
-import cc.allio.uno.data.orm.executor.ListResultSetHandler;
+import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
@@ -91,7 +91,7 @@ public interface Interceptor extends Node<InterceptorAttributes, InterceptorAttr
     }
 
     /**
-     * 在查询之前的回掉，允许用户动态更爱查询内容
+     * 在查询之前的回掉，允许用户动态更改查询内容
      * <p>关联方法集是{@link cc.allio.uno.data.orm.executor.CommandExecutor#queryList(QueryOperator)}</p>
      *
      * @param commandExecutor commandExecutor
@@ -115,7 +115,7 @@ public interface Interceptor extends Node<InterceptorAttributes, InterceptorAttr
      * 执行不明确命令的回调
      *
      * @param commandExecutor commandExecutor
-     * @param commandType commandType
+     * @param commandType     commandType
      * @param operator        operator
      */
     default void onUnknownCommand(CommandExecutor commandExecutor, CommandType commandType, Operator<?> operator) {

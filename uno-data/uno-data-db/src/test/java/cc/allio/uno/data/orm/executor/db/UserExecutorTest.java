@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor.db;
 
+import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.test.model.User;
 import cc.allio.uno.test.BaseTestCase;
 import cc.allio.uno.test.Inject;
@@ -21,15 +22,15 @@ public class UserExecutorTest extends BaseTestCase {
     @Inject
     private SqlSessionFactory sqlSessionFactory;
 
-    DbCommandExecutor mybatisCommandExecutor;
+    DbCommandExecutor dbCommandExecutor;
 
     @BeforeEach
     void init() {
-        mybatisCommandExecutor = new DbCommandExecutor(new MybatisConfiguration(sqlSessionFactory.getConfiguration()));
-        mybatisCommandExecutor.getOptions().addInterceptor(new AuditInterceptor());
-        mybatisCommandExecutor.getOptions().addInterceptor(new PrintInterceptor());
-        mybatisCommandExecutor.getOptions().addInterceptor(new LogicInterceptor());
-        mybatisCommandExecutor.createTable(User.class);
+        dbCommandExecutor = new DbCommandExecutor(new MybatisConfiguration(sqlSessionFactory.getConfiguration()));
+        dbCommandExecutor.getOptions().addInterceptor(new AuditInterceptor());
+        dbCommandExecutor.getOptions().addInterceptor(new PrintInterceptor());
+        dbCommandExecutor.getOptions().addInterceptor(new LogicInterceptor());
+        dbCommandExecutor.createTable(User.class);
     }
 
     @Test
@@ -40,8 +41,8 @@ public class UserExecutorTest extends BaseTestCase {
             user.setName(String.valueOf(i));
             users.add(user);
         }
-        mybatisCommandExecutor.batchInsertPojos(users);
-        List<User> users1 = mybatisCommandExecutor.queryList(User.class);
+        dbCommandExecutor.batchInsertPojos(users);
+        List<User> users1 = dbCommandExecutor.queryList(User.class);
         assertEquals(2, users1.size());
     }
 
@@ -54,15 +55,15 @@ public class UserExecutorTest extends BaseTestCase {
             users.add(user);
         }
 
-        mybatisCommandExecutor.batchInsertPojos(users);
+        dbCommandExecutor.batchInsertPojos(users);
 
-        User dbUser = mybatisCommandExecutor.queryOne(User.class);
+        User dbUser = dbCommandExecutor.queryOne(User.class);
         assertNotNull(dbUser.getName());
 
         User user = new User();
-        mybatisCommandExecutor.updatePojo(user);
+        dbCommandExecutor.updatePojo(user);
 
-        dbUser = mybatisCommandExecutor.queryOne(User.class);
+        dbUser = dbCommandExecutor.queryOne(User.class);
         assertNull(dbUser.getName());
     }
 
@@ -71,14 +72,14 @@ public class UserExecutorTest extends BaseTestCase {
         User user = new User();
         user.setName("1");
 
-        mybatisCommandExecutor.saveOrUpdate(user);
+        dbCommandExecutor.saveOrUpdate(user);
 
-        user = mybatisCommandExecutor.queryOne(User.class);
+        user = dbCommandExecutor.queryOne(User.class);
         user.setName("2");
-        mybatisCommandExecutor.saveOrUpdate(user);
+        dbCommandExecutor.saveOrUpdate(user);
 
 
-        List<User> users = mybatisCommandExecutor.queryList(User.class);
+        List<User> users = dbCommandExecutor.queryList(User.class);
         assertEquals(1, users.size());
         User dbUser = users.get(0);
 
@@ -90,18 +91,26 @@ public class UserExecutorTest extends BaseTestCase {
         User user = new User();
         user.setName("1");
 
-        mybatisCommandExecutor.saveOrUpdate(user);
-        user = mybatisCommandExecutor.queryOne(User.class);
-        mybatisCommandExecutor.delete(user);
+        dbCommandExecutor.saveOrUpdate(user);
+        user = dbCommandExecutor.queryOne(User.class);
+        dbCommandExecutor.delete(user);
 
-        List<User> users = mybatisCommandExecutor.queryList(User.class);
+        List<User> users = dbCommandExecutor.queryList(User.class);
 
         assertEquals(0, users.size());
     }
 
+    @Test
+    void testAlertTables() {
+        dbCommandExecutor.alertTable(User.class, o -> o.rename("T_USERS_1"));
+        Table table = dbCommandExecutor.showOneTable("T_USERS_1");
+        assertNotNull(table);
+
+        assertEquals("T_USERS_1", table.getName().format());
+    }
 
     @AfterEach
     void destroy() {
-        mybatisCommandExecutor.dropTable(User.class);
+        dbCommandExecutor.dropTable(User.class);
     }
 }

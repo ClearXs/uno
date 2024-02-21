@@ -652,13 +652,13 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @return Limit
      */
     default QueryOperator page(Long current, Long pageSize) {
-        return limit((current - 1) * pageSize, pageSize);
+        return limit(pageSize, (current - 1) * pageSize);
     }
 
     /**
      * LIMIT { number | ALL }
      *
-     * @param limit  起始行数
+     * @param limit  限制查询的数量
      * @param offset 偏移数
      * @return Limit
      */

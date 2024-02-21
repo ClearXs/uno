@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 
 import java.util.List;
 

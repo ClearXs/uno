@@ -36,7 +36,7 @@ public abstract class InternalInterceptor implements Interceptor, Ordered {
         CommandType commandType = attributes.getCommandType();
         Object result = attributes.getResult();
         if (log.isDebugEnabled()) {
-            log.debug("Internal Interceptor [{}] intercept Real Interceptor [{}] the command [{}]", getClass().getSimpleName(), interceptor.getClass().getSimpleName(), commandType);
+            log.debug("Internal Interceptor [{}] intercept actual Interceptor [{}] the command [{}]", getClass().getSimpleName(), interceptor.getClass().getSimpleName(), commandType);
         }
         switch (commandType) {
             case INSERT -> this.onSave(commandExecutor, operator, result);

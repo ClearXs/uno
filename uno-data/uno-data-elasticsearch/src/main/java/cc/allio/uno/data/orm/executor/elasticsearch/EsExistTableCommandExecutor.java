@@ -5,6 +5,8 @@ import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.ddl.elasticsearch.ElasticSearchExistIndexOperator;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
+import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
+import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import co.elastic.clients.elasticsearch.ElasticsearchClient;
 import co.elastic.clients.elasticsearch._types.ElasticsearchException;
 

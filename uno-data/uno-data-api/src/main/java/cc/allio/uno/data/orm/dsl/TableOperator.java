@@ -1,5 +1,8 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.api.Self;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+
 import java.util.function.UnaryOperator;
 
 /**
@@ -75,5 +78,5 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      *
      * @return Table
      */
-    Table getTables();
+    Table getTable();
 }

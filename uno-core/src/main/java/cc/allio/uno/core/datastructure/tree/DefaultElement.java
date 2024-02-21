@@ -63,6 +63,48 @@ public class DefaultElement<T extends DefaultElement<T>> extends TraversalElemen
         return children.isEmpty();
     }
 
+    /**
+     * 根据指定的id获取某个子结点
+     *
+     * @param id id
+     * @return element or null
+     */
+    @Override
+    public T findChildren(Serializable id) {
+        for (T child : children) {
+            if (id.equals(child.getId())) {
+                return child;
+            }
+            T findChild = child.findChildren(id);
+            if (findChild != null) {
+                return findChild;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * 根据指定的id移除某个子结点
+     *
+     * @param id id
+     * @return true if success
+     */
+    @Override
+    public boolean removeChildren(Serializable id) {
+        boolean removed = children.removeIf(child -> id.equals(child.getId()));
+        if (removed) {
+            return true;
+        }
+        // 没有移除尝试在从字节中再次移除
+        for (T child : children) {
+            removed = child.removeChildren(id);
+            if (removed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     @Override
     public void setChildren(List<T> children) {
         this.children = children;

@@ -1,9 +1,16 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.api.EqualsTo;
+import cc.allio.uno.core.type.TypeOperatorFactory;
 import cc.allio.uno.data.orm.dsl.type.DataType;
+import cc.allio.uno.data.orm.dsl.type.JavaType;
+import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import java.util.Objects;
+import java.util.Optional;
 
 /**
  * SQL字段定义
@@ -14,7 +21,9 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class ColumnDef {
+@EqualsAndHashCode(of = {"dslName", "dataType"})
+public class ColumnDef implements EqualsTo<ColumnDef> {
+
     // 字段名称
     private DSLName dslName;
     // 字段注释
@@ -33,4 +42,35 @@ public class ColumnDef {
     private boolean isNull;
     // 是否唯一
     private boolean isUnique;
+    // 是否是删除标识字段
+    private boolean isDeleted;
+    // 未删除值
+    private Object undeleted;
+    // 已删除值
+    private Object deleted;
+
+    @Override
+    public boolean equalsTo(ColumnDef other) {
+        return Objects.equals(this.getDslName(), other.getDslName())
+                && dataType.equalsTo(other.getDataType());
+    }
+
+    /**
+     * 给定字段值按照当前{@link DataType}进行转换
+     *
+     * @param ori ori
+     * @return 转换后的值
+     */
+    public Object castValue(Object ori) {
+        return Optional.ofNullable(dataType)
+                .map(DataType::getDslType)
+                .flatMap(dslType -> {
+                    int jdbcType = dslType.getJdbcType();
+                    JavaType<?> javaType = TypeRegistry.getInstance().findJavaType(jdbcType);
+                    return Optional.ofNullable(javaType);
+                })
+                .map(j -> TypeOperatorFactory.translator(j.getJavaType()))
+                .map(typeOperator -> typeOperator.convert(ori))
+                .orElse(null);
+    }
 }

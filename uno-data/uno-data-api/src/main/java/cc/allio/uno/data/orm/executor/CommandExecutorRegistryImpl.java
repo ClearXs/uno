@@ -2,9 +2,10 @@ package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.core.util.JsonUtils;
 import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.data.orm.dsl.type.DBType;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import jakarta.validation.constraints.NotNull;
@@ -79,7 +80,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         try {
             String key = executorOptions.getKey();
             if (log.isDebugEnabled()) {
-                log.debug("register command executor key: {}, executorOptions: {}", key, JsonUtils.toJson(executorOptions));
+                log.debug("register command executor key: {}, executorOptions: {}", key, executorOptions.getKey());
             }
             T commandExecutor;
             if (ifPresent) {
@@ -91,7 +92,8 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
             }
             boolean systemDefault = executorOptions.isSystemDefault();
             if (systemDefault) {
-                Envs.setProperty(ExecutorKey.DSL_EXECUTOR_TYPE_KEY, key);
+                Envs.setProperty(ExecutorKey.DSL_EXECUTOR_TYPE_KEY, executorOptions.getExecutorKey().key());
+                Envs.setProperty(CommandExecutor.DEFAULT_KEY, key);
             }
             return commandExecutor;
         } finally {
@@ -101,6 +103,9 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
 
     @Override
     public <T extends CommandExecutor> T getCommandExecutor(ExecutorKey executorKey) {
+        if (executorKey == null) {
+            return null;
+        }
         Lock readLock = lock.readLock();
         readLock.lock();
         try {
@@ -224,7 +229,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     private ExecutorOptions match(ExecutorKey executorKey) {
         Set<ExecutorOptions> executorOptions = optionsKeyMap.keySet();
         for (ExecutorOptions executorOption : executorOptions) {
-            // 基于 Executor name进行比较
+            // 基于 key 进行比较
             if (executorOption.getExecutorKey().equals(executorKey)) {
                 return executorOption;
             }

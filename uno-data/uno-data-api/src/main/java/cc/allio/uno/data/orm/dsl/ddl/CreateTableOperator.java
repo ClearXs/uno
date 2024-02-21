@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.data.orm.dsl.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
@@ -25,8 +25,8 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      * @return SQLCreateTableOperator
      */
     default <T> CreateTableOperator fromPojo(Class<T> pojoClass) {
-        PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojoClass);
-        List<ColumnDef> columnDefs = pojoWrapper.getColumnDef();
+        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojoClass);
+        List<ColumnDef> columnDefs = pojoWrapper.getColumnDefs();
         return from(pojoWrapper.getTable()).columns(columnDefs);
     }
 

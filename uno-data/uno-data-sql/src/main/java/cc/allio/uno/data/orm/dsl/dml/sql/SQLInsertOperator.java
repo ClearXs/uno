@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.dsl.dml.sql;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
@@ -29,8 +30,10 @@ import java.util.stream.Collectors;
 @AutoService(InsertOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> implements InsertOperator {
+
+    private DBType dbType;
+    private DbType druidDbType;
     private SQLInsertStatement insertStatement;
-    private final DbType druidDbType;
     // 暂存于已经添加过的column
     private final ArrayList<String> columns;
     private Table table;
@@ -41,9 +44,10 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
 
     public SQLInsertOperator(DBType dbType) {
         super();
+        this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
         this.insertStatement = new SQLInsertStatement();
-        insertStatement.setDbType(druidDbType);
+        this.insertStatement.setDbType(druidDbType);
         this.columns = new ArrayList<>();
     }
 
@@ -89,6 +93,18 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.insertStatement.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public InsertOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
@@ -100,7 +116,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -111,7 +127,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
-    public InsertOperator columns(List<DSLName> columns) {
+    public InsertOperator columns(Collection<DSLName> columns) {
         List<SQLInsertStatement.ValuesClause> valuesList = insertStatement.getValuesList();
         if (valuesList.isEmpty()) {
             for (DSLName column : columns) {

@@ -225,6 +225,16 @@ public class Types {
     }
 
     /**
+     * 判断给定的class是否是{@link java.util.Collection}
+     *
+     * @param clazz class对象实例
+     * @return true Queue false not Queue
+     */
+    public static boolean isCollection(Class<?> clazz) {
+        return Collection.class.isAssignableFrom(clazz);
+    }
+
+    /**
      * 判断给定的class是否是{@link java.util.Queue}
      *
      * @param clazz class对象实例

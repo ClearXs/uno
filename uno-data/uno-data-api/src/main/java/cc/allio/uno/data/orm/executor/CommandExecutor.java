@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
@@ -9,12 +10,19 @@ import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.executor.handler.*;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.net.SocketTimeoutException;
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
@@ -29,14 +37,63 @@ import java.util.function.UnaryOperator;
 public interface CommandExecutor {
 
     /**
+     * 设置作为command executor key
+     */
+    String DEFAULT_KEY = "key";
+
+    /**
+     * 获取{@link ExecutorOptions#isSystemDefault()}时的默认key
+     *
+     * @return default key
+     */
+    static String getDefaultKey() {
+        return Envs.getProperty(DEFAULT_KEY);
+    }
+
+
+    /**
+     * 基于某个实体作为alter table
+     *
+     * @see #alertTable(AlterTableOperator)
+     */
+    default <R> boolean alertTable(Class<R> entityType, UnaryOperator<AlterTableOperator> func) {
+        return alertTable(func.apply(getOperatorGroup().alterTables().from(entityType)));
+    }
+
+    /**
+     * @see #alertTable(AlterTableOperator)
+     */
+    default boolean alertTable(UnaryOperator<AlterTableOperator> func) {
+        return alertTable(func.apply(getOperatorGroup().alterTables()));
+    }
+
+    /**
+     * @see #bool(Operator, CommandType)
+     */
+    default boolean alertTable(AlterTableOperator alterTableOperator) {
+        return bool(alterTableOperator, CommandType.ALERT_TABLE);
+    }
+
+    /**
+     * alert table
+     *
+     * @param alterTableOperator alterTableOperator
+     * @param resultSetHandler   resultSetHandler
+     * @return true 成功 false 失败
+     */
+    default boolean alertTable(AlterTableOperator alterTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
+        return bool(alterTableOperator, CommandType.ALERT_TABLE, resultSetHandler);
+    }
+
+    /**
      * 根据pojo class创建表
      *
      * @param pojoClass the pojoClass
      * @return true 成功 false 失败
      */
     default <P> boolean createTable(Class<P> pojoClass) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojoClass);
-        return createTable(o -> o.from(pojoWrapper.getTable()).columns(pojoWrapper.getColumnDef()));
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojoClass);
+        return createTable(o -> o.from(pojoWrapper.getTable()).columns(pojoWrapper.getColumnDefs()));
     }
 
     /**
@@ -107,7 +164,7 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P> boolean dropTable(Class<P> pojoClass) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojoClass);
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojoClass);
         return dropTable(o -> o.from(pojoWrapper.getTable()));
     }
 
@@ -169,7 +226,7 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P> boolean existTable(Class<P> pojoClass) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojoClass);
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojoClass);
         return existTable(o -> o.from(pojoWrapper.getTable()));
     }
 
@@ -211,7 +268,7 @@ public interface CommandExecutor {
      * @return ColumnDef
      */
     default <T> List<ColumnDef> showColumns(Class<T> pojoClass) {
-        PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojoClass);
+        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojoClass);
         return showColumns(pojoWrapper.getTable());
     }
 
@@ -252,7 +309,7 @@ public interface CommandExecutor {
      * @return ColumnDef
      */
     default List<ColumnDef> showColumns(ShowColumnsOperator showColumnsOperator) {
-        return queryList(showColumnsOperator.toQueryOperator(), CommandType.SHOW_COLUMNS, new DSLColumnDefListResultSetHandler());
+        return queryList(showColumnsOperator.toQueryOperator(), CommandType.SHOW_COLUMNS, getOptions().obtainColumnDefListResultSetHandler());
     }
 
     /**
@@ -301,7 +358,25 @@ public interface CommandExecutor {
      * @return List<Table>
      */
     default List<Table> showTables(ShowTablesOperator showTablesOperator) {
-        return queryList(showTablesOperator.toQueryOperator(), CommandType.SHOW_TABLES, new DSLTableListResultSetHandler());
+        return queryList(showTablesOperator.toQueryOperator(), CommandType.SHOW_TABLES, getOptions().obtainTableListResultSetHandler());
+    }
+
+    /**
+     * @see #showOneTable(DSLName)
+     */
+    default Table showOneTable(String tableName) {
+        return showOneTable(DSLName.of(tableName));
+    }
+
+    /**
+     * 基于某个具体的表明获取唯一表的信息
+     *
+     * @param tableName tableName
+     * @return table instance or null
+     */
+    default Table showOneTable(DSLName tableName) {
+        List<Table> tables = showTables(o -> o.from(tableName));
+        return checkCollectionIsOneAndGet(tables);
     }
 
     /**
@@ -311,8 +386,8 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P> boolean insertPojo(P pojo) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
-        return insert(o -> o.from(pojoWrapper.getTable()).insertPojo(pojoWrapper.getPojoValue()));
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
+        return insert(o -> o.from(pojoWrapper.getTable()).insertPojo(pojoWrapper.getPojo()));
     }
 
     /**
@@ -326,7 +401,7 @@ public interface CommandExecutor {
             return false;
         }
         P thePojo = pojos.get(0);
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(thePojo);
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(thePojo);
         return insert(o -> o.from(pojoWrapper.getTable()).batchInsertPojos(pojos));
     }
 
@@ -378,8 +453,8 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P, ID extends Serializable> boolean updatePojoById(P pojo, ID id) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
-        ColumnDef theId = pojoWrapper.getPKColumn();
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
+        ColumnDef theId = pojoWrapper.getPkColumn();
         return updatePojoByCondition(pojo, condition -> condition.eq(theId.getDslName(), id));
     }
 
@@ -391,7 +466,7 @@ public interface CommandExecutor {
      */
     default <P> boolean updatePojoByCondition(P pojo, UnaryOperator<WhereOperator<UpdateOperator>> condition) {
         return update(o -> {
-            PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
+            PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
             UpdateOperator updateOperator = o.from(pojoWrapper.getTable()).updatePojo(pojo);
             condition.apply(updateOperator);
             return updateOperator;
@@ -438,7 +513,7 @@ public interface CommandExecutor {
      * @see #deleteById(Class, Serializable)
      */
     default <T> boolean delete(T pojo) {
-        PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojo);
+        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojo);
         Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
         return deleteById(pojo.getClass(), (Serializable) pkValue);
     }
@@ -489,7 +564,7 @@ public interface CommandExecutor {
                 Lists.newArrayList(pojos)
                         .stream()
                         .map(pojo -> {
-                            PojoWrapper<T> pojoWrapper = new PojoWrapper<>(pojo);
+                            PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojo);
                             Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
                             return (Serializable) pkValue;
                         })
@@ -552,7 +627,7 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default boolean bool(Operator<?> operator, CommandType command) {
-        return bool(operator, command, new BoolResultHandler());
+        return bool(operator, command, getOptions().obtainBoolResultHandler());
     }
 
     /**
@@ -572,7 +647,7 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P> boolean saveOrUpdate(P pojo) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
         return saveOrUpdate(pojo, () -> {
             Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
             return pkValue != null;
@@ -599,7 +674,7 @@ public interface CommandExecutor {
      * @return true 成功 false 失败
      */
     default <P> boolean saveOrUpdate(P pojo, BooleanSupplier dataExist, MethodReferenceColumn<P> eqUpdate) {
-        PojoWrapper<P> pojoWrapper = new PojoWrapper<>(pojo);
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
         return saveOrUpdate(
                 dataExist,
                 () -> {
@@ -611,14 +686,14 @@ public interface CommandExecutor {
                     if (eqValue != null) {
                         updateOperator.eq(column, eqValue);
                     }
-                    // 不调用pojoWrapper.getPojoValue()，原因可能id会被赋值上，违反唯一约束，应该采用拦截器实现
+                    // 不调用pojoWrapper.getPojo()，原因可能id会被赋值上，违反唯一约束，应该采用拦截器实现
                     updateOperator.updatePojo(pojo);
                     return updateOperator;
                 },
                 () -> {
                     InsertOperator insertOperator = getOperatorGroup().insert(getOptions().getDbType());
                     insertOperator.from(pojoWrapper.getTable());
-                    insertOperator.insertPojo(pojoWrapper.getPojoValue());
+                    insertOperator.insertPojo(pojoWrapper.getPojo());
                     return insertOperator;
                 });
     }
@@ -672,11 +747,11 @@ public interface CommandExecutor {
      * @return 实体 or null
      */
     default <T, ID extends Serializable> T queryOneById(Class<T> entityClass, ID id) {
-        PojoWrapper<T> pojoWrapper = new PojoWrapper<>(entityClass);
+        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(entityClass);
         return queryOne(entityClass, o ->
-                o.selects(PojoWrapper.findColumns(entityClass))
+                o.selects(pojoWrapper.getColumnDSLName())
                         .from(pojoWrapper.getTable())
-                        .eq(pojoWrapper.getPKColumn().getDslName(), id));
+                        .eq(pojoWrapper.getPkColumn().getDslName(), id));
     }
 
     /**
@@ -699,7 +774,7 @@ public interface CommandExecutor {
      * @return 实体 or null
      */
     default <T> T queryOne(Class<T> entityClass, UnaryOperator<QueryOperator> func) {
-        return queryOne(func.apply(getOperatorGroup().query(getOptions().getDbType())), new BeanResultSetHandler<>(entityClass));
+        return queryOne(func.apply(getOperatorGroup().query(getOptions().getDbType())), getOptions().obtainBeanResultSetHandler(entityClass));
     }
 
     /**
@@ -711,7 +786,7 @@ public interface CommandExecutor {
      * @return 实体 or null
      */
     default <T> T queryOne(Class<T> entityClass, QueryOperator queryOperator) {
-        return queryOne(queryOperator, new BeanResultSetHandler<>(entityClass));
+        return queryOne(queryOperator, getOptions().obtainBeanResultSetHandler(entityClass));
     }
 
     /**
@@ -741,7 +816,7 @@ public interface CommandExecutor {
      * @return map
      */
     default Map<String, Object> queryMap(QueryOperator queryOperator) {
-        return queryOne(queryOperator, new MapResultSetHandler());
+        return queryOne(queryOperator, getOptions().obtainMapResultSetHandler());
     }
 
     /**
@@ -751,7 +826,7 @@ public interface CommandExecutor {
      * @return ResultGroup
      */
     default ResultGroup queryOne(QueryOperator queryOperator) {
-        return queryOne(queryOperator, new DefaultResultSetHandler());
+        return queryOne(queryOperator, getOptions().obtainDefaultResultSetHandler());
     }
 
     /**
@@ -771,20 +846,12 @@ public interface CommandExecutor {
      * @param queryOperator queryOperator
      * @param <R>           结果集对象
      * @return ResultGroup
+     * @throws DSLException 当结果集大于1时抛出
      */
     default <R> R queryOne(QueryOperator queryOperator, ResultSetHandler<R> resultSetHandler) {
         List<ResultGroup> resultGroups = queryList(queryOperator);
-        if (CollectionUtils.isNotEmpty(resultGroups)) {
-            int size = resultGroups.size();
-            if (size == 1) {
-                return resultSetHandler.apply(resultGroups.get(0));
-            } else if (size > 1) {
-                throw new DSLException("Expected one result (or null) to be returned by queryOne(), but found: " + size);
-            } else {
-                return null;
-            }
-        }
-        return null;
+        ResultGroup resultGroup = checkCollectionIsOneAndGet(resultGroups);
+        return Optional.ofNullable(resultGroup).map(resultSetHandler).orElse(null);
     }
 
     /**
@@ -823,11 +890,15 @@ public interface CommandExecutor {
      * @return list
      */
     default <T> List<T> queryList(Class<T> entityClass, UnaryOperator<QueryOperator> func) {
-        return queryList(entityClass, func.apply(
-                getOperatorGroup()
-                        .query(getOptions().getDbType())
-                        .selects(PojoWrapper.findColumns(entityClass))
-                        .from(entityClass)));
+        return queryList(
+                entityClass,
+                func.apply(
+                        getOperatorGroup()
+                                .query(getOptions().getDbType())
+                                .selects(PojoWrapper.findColumns(entityClass))
+                                .from(entityClass)
+                )
+        );
     }
 
     /**
@@ -839,7 +910,7 @@ public interface CommandExecutor {
      * @return list
      */
     default <T> List<T> queryList(Class<T> entityClass, QueryOperator queryOperator) {
-        return queryList(queryOperator, new ListBeanResultSetHandler<>(entityClass));
+        return queryList(queryOperator, getOptions().obtainListBeanResultSetHandler(entityClass));
     }
 
     /**
@@ -859,7 +930,7 @@ public interface CommandExecutor {
      * @return list map
      */
     default List<Map<String, Object>> queryListMap(QueryOperator queryOperator) {
-        return queryList(queryOperator, new ListMapResultHandler());
+        return queryList(queryOperator, getOptions().obtainListMapResultHandler());
     }
 
     /**
@@ -881,7 +952,7 @@ public interface CommandExecutor {
      * @throws DSLException query failed throw
      */
     default List<ResultGroup> queryList(QueryOperator queryOperator) {
-        return queryList(queryOperator, new DefaultListResultSetHandler());
+        return queryList(queryOperator, getOptions().obtainDefaultListResultSetHandler());
     }
 
     /**
@@ -932,7 +1003,14 @@ public interface CommandExecutor {
      * @throws DSLException query failed throw
      */
     default <R> IPage<R> queryPage(IPage<?> page, UnaryOperator<QueryOperator> func, Class<R> entityClass) {
-        return queryPage(page, func.apply(getOperatorGroup().query(getOptions().getDbType())), entityClass);
+        PojoWrapper<R> pojoWrapper = PojoWrapper.getInstance(entityClass);
+        return queryPage(
+                page,
+                func.apply(getOperatorGroup()
+                        .query(getOptions().getDbType())
+                        .selects(pojoWrapper.getColumnDSLName())
+                        .from(pojoWrapper.getTable())),
+                entityClass);
     }
 
     /**
@@ -945,7 +1023,7 @@ public interface CommandExecutor {
      * @throws DSLException query failed throw
      */
     default <R> IPage<R> queryPage(IPage<?> page, QueryOperator queryOperator, Class<R> entityClass) {
-        return queryPage(page, queryOperator, new ListBeanResultSetHandler<>(entityClass));
+        return queryPage(page, queryOperator, getOptions().obtainListBeanResultSetHandler(entityClass));
     }
 
     /**
@@ -969,7 +1047,7 @@ public interface CommandExecutor {
      * @throws DSLException query failed throw
      */
     default IPage<Map<String, Object>> queryPageMap(IPage<?> page, QueryOperator queryOperator) {
-        return queryPage(page, queryOperator, new ListMapResultHandler());
+        return queryPage(page, queryOperator, getOptions().obtainListMapResultHandler());
     }
 
     /**
@@ -993,7 +1071,7 @@ public interface CommandExecutor {
      * @throws DSLException query failed throw
      */
     default IPage<ResultGroup> queryPage(IPage<?> page, QueryOperator queryOperator) {
-        return queryPage(page, queryOperator, new DefaultListResultSetHandler());
+        return queryPage(page, queryOperator, getOptions().obtainDefaultListResultSetHandler());
     }
 
     /**
@@ -1029,6 +1107,27 @@ public interface CommandExecutor {
         rPage.setTotal(r.size());
         rPage.setRecords(r);
         return rPage;
+    }
+
+    /**
+     * 检查给定的集合是否只有一个元素
+     *
+     * @param collection 集合
+     * @param <T>        集合类型
+     * @throws DSLException 当给定的集合大于一时抛出
+     */
+    default <T> T checkCollectionIsOneAndGet(Collection<T> collection) {
+        if (CollectionUtils.isNotEmpty(collection)) {
+            int size = collection.size();
+            if (size == 1) {
+                return collection.stream().findFirst().orElse(null);
+            } else if (size > 1) {
+                throw new DSLException("Expected one result (or null) to be returned by queryOne(), but found: " + size);
+            } else {
+                return null;
+            }
+        }
+        return null;
     }
 
     /**

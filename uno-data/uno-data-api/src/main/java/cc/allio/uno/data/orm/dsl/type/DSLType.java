@@ -1,10 +1,9 @@
 package cc.allio.uno.data.orm.dsl.type;
 
+import cc.allio.uno.core.api.EqualsTo;
 import cc.allio.uno.data.orm.dsl.dialect.TypeTranslatorHolder;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
+import com.google.common.base.Objects;
+import lombok.*;
 
 import java.sql.Types;
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.Optional;
  * @see DataType
  * @since 1.1.4
  */
-public interface DSLType {
+public interface DSLType extends EqualsTo<DSLType> {
 
     DSLType BIGINT = DefaultDSLType.BIGINT;
 
@@ -110,6 +109,40 @@ public interface DSLType {
     }
 
     /**
+     * 比较其他的{@link DSLType}对象
+     * <ol>
+     * <li>比较名称</li>
+     * <li>比较类型</li>
+     * <li>比较precision</li>
+     * <li>比较scale</li>
+     * </ol>
+     */
+    @Override
+    default boolean equalsTo(DSLType other) {
+        return java.util.Objects.equals(this.getName(), other.getName());
+    }
+
+    /**
+     * 从给定的SQLType创建一个SQLType，该方法将会一个{@link DSLType}实例
+     *
+     * @param dslType   dslType
+     * @param precision precision
+     * @param scale     scale
+     * @return DSLTypeImpl
+     * @see DSLTypeImpl
+     */
+    static DSLTypeImpl create(DSLType dslType, Integer precision, Integer scale) {
+        DSLTypeImpl.DSLTypeImplBuilder builder = DSLTypeImpl.builder()
+                .name(dslType.getName())
+                .jdbcType(dslType.getJdbcType());
+        Integer definitePrecision = Optional.ofNullable(precision).orElse(dslType.getPrecision());
+        builder.precision(definitePrecision);
+        Integer definiteScale = Optional.ofNullable(scale).orElse(dslType.getScale());
+        builder.scale(definiteScale);
+        return builder.build();
+    }
+
+    /**
      * 关联于某一个SQLType
      */
     interface DSLLinkType extends DSLType {
@@ -124,24 +157,26 @@ public interface DSLType {
 
     @Data
     @Builder
+    @EqualsAndHashCode(of = {"name", "jdbcType"})
     class DSLTypeImpl implements DSLType {
         private final String name;
         private final int jdbcType;
         private final Integer precision;
         private final Integer scale;
 
-        public static DSLTypeImpl createBy(DSLType dslType, Integer precision, Integer scale) {
-            DSLTypeImpl.DSLTypeImplBuilder builder = DSLTypeImpl.builder()
-                    .name(dslType.getName())
-                    .jdbcType(dslType.getJdbcType());
-            Integer definitePrecision = Optional.ofNullable(precision).orElse(dslType.getPrecision());
-            builder.precision(definitePrecision);
-            Integer definiteScale = Optional.ofNullable(scale).orElse(dslType.getScale());
-            builder.scale(definiteScale);
-            return builder.build();
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) return true;
+            if (o == null || getClass() != o.getClass()) return false;
+            DSLTypeImpl dslType = (DSLTypeImpl) o;
+            return jdbcType == dslType.jdbcType && Objects.equal(name, dslType.name) && Objects.equal(precision, dslType.precision) && Objects.equal(scale, dslType.scale);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hashCode(name, jdbcType, precision, scale);
         }
     }
-
 
     @Getter
     @AllArgsConstructor
@@ -164,6 +199,7 @@ public interface DSLType {
 
         // ====================== 字符型 ======================
         CHAR("char", Types.CHAR, 64, null),
+        CHARACTER("character", Types.CHAR, 64, null),
         VARCHAR("varchar", Types.VARCHAR, 64, null),
         NVARCHAR("nvarchar", Types.NVARCHAR, 64, null),
         LONGVARCHAR("longvarchar", Types.LONGVARCHAR, 1024, null),

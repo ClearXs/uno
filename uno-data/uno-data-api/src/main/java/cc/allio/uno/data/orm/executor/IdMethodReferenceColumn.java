@@ -1,7 +1,11 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
-import cc.allio.uno.data.orm.dsl.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.ColumnDef;
+import cc.allio.uno.data.orm.dsl.DSLName;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+
+import java.util.Optional;
 
 /**
  * pojo的id方法
@@ -15,12 +19,15 @@ public class IdMethodReferenceColumn<P> implements MethodReferenceColumn<P> {
     private final PojoWrapper<P> wrapper;
 
     public IdMethodReferenceColumn(P pojo) {
-        this.wrapper = new PojoWrapper<>(pojo);
+        this.wrapper = PojoWrapper.getInstance(pojo);
     }
 
     @Override
     public String getColumn() {
-        return wrapper.getPKColumn().getDslName().getName();
+        return Optional.ofNullable(wrapper.getPkColumn())
+                .map(ColumnDef::getDslName)
+                .map(DSLName::getName)
+                .orElse(null);
     }
 
     @Override

@@ -4,6 +4,8 @@ import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;

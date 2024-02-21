@@ -215,4 +215,48 @@ public interface IPage<T> extends Serializable {
         return key.toString();
     }
 
+    /**
+     * 创建{@link IPage}实例
+     *
+     * @see Page#Page(IPage)
+     */
+    static <T> IPage<T> create(IPage<?> page) {
+        return new Page<>(page);
+    }
+
+    /**
+     * 创建{@link IPage}实例
+     *
+     * @see Page#Page(long, long)
+     */
+    static <T> IPage<T> create(long current, long size) {
+        return new Page<>(current, size);
+    }
+
+    /**
+     * 创建{@link IPage}实例
+     *
+     * @see Page#Page(long, long, long)
+     */
+    static <T> IPage<T> create(long current, long size, long total) {
+        return new Page<>(current, size, total);
+    }
+
+    /**
+     * 创建{@link IPage}实例
+     *
+     * @see Page#Page(long, long, boolean)
+     */
+    static <T> IPage<T> create(long current, long size, boolean isSearchCount) {
+        return new Page<>(current, size, isSearchCount);
+    }
+
+    /**
+     * 创建{@link IPage}实例
+     *
+     * @see Page#Page(long, long, long, boolean)
+     */
+    static <T> IPage<T> create(long current, long size, long total, boolean isSearchCount) {
+        return new Page<>(current, size, total, isSearchCount);
+    }
 }

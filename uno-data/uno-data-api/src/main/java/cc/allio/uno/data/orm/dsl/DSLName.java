@@ -26,7 +26,7 @@ public class DSLName implements Comparable<DSLName> {
     private static final String HUMP_REGULAR = "^[a-z]+(?:[A-Z][a-z]*)*$";
     private static final Pattern HUMP_PATTERN = Pattern.compile(HUMP_REGULAR);
 
-    private static final String UNDERLINE_REGULAR = "^[a-z]+(?:_[a-z]+)*$";
+    private static final String UNDERLINE_REGULAR = "^[a-zA-Z]+(?:_[a-zA-Z]+)*$";
     private static final Pattern UNDERLINE_PATTERN = Pattern.compile(UNDERLINE_REGULAR);
 
     /**
@@ -44,31 +44,11 @@ public class DSLName implements Comparable<DSLName> {
     // 名称以大写
     private static final String NAME_FORM_UPPER_CASE = "upper-case";
 
-    public static final NameFeature UNDERLINE_FEATURE =
-            ori -> {
-                if (UNDERLINE_PATTERN.matcher(ori).matches()) {
-                    return ori;
-                }
-                if (HUMP_PATTERN.matcher(ori).matches()) {
-                    return StringUtils.camelToUnderline(ori);
-                }
-                return ori;
-            };
-
-    public static final NameFeature HUMP_FEATURE =
-            ori -> {
-                if (HUMP_PATTERN.matcher(ori).matches()) {
-                    return ori;
-                }
-                if (UNDERLINE_PATTERN.matcher(ori).matches()) {
-                    return StringUtils.underlineToCamel(ori);
-                }
-                return ori;
-            };
-
-    public static final NameFeature PLAIN_FEATURE = ori -> ori;
-    public static final NameFeature LOWER_CASE_FEATURE = String::toLowerCase;
-    public static final NameFeature UPPER_CASE_FEATURE = String::toUpperCase;
+    public static final NameFeature UNDERLINE_FEATURE = new UnderlineFeature();
+    public static final NameFeature HUMP_FEATURE = new HumpFeature();
+    public static final NameFeature PLAIN_FEATURE = new PlainFeature();
+    public static final NameFeature LOWER_CASE_FEATURE = new LowerCaseFeature();
+    public static final NameFeature UPPER_CASE_FEATURE = new UpperCaseFeature();
 
     /**
      * 获取name feature
@@ -129,6 +109,26 @@ public class DSLName implements Comparable<DSLName> {
         return newName;
     }
 
+    /**
+     * 下划线转驼峰
+     *
+     * @param underline underline
+     * @return hump string
+     */
+    public static String toHump(String underline) {
+        return DSLName.of(underline, HUMP_FEATURE).format();
+    }
+
+    /**
+     * 驼峰转下划线
+     *
+     * @param hump hump
+     * @return underline string
+     */
+    public static String toUnderline(String hump) {
+        return DSLName.of(hump, UNDERLINE_FEATURE).format();
+    }
+
     private void setFeature(NameFeature... features) {
         this.feature = new AggregateNameFeature(features);
     }
@@ -172,6 +172,16 @@ public class DSLName implements Comparable<DSLName> {
          * @return 格式化后的名称
          */
         String format(String o);
+
+        /**
+         * 集合于{@link NameFeature}
+         *
+         * @param nameFeatures nameFeatures
+         * @return NameFeature
+         */
+        static NameFeature aggregate(NameFeature... nameFeatures) {
+            return new AggregateNameFeature(nameFeatures);
+        }
     }
 
     static class AggregateNameFeature implements NameFeature {
@@ -188,6 +198,58 @@ public class DSLName implements Comparable<DSLName> {
                 o = feature.format(o);
             }
             return o;
+        }
+    }
+
+    static class UnderlineFeature implements NameFeature {
+
+        @Override
+        public String format(String ori) {
+            if (UNDERLINE_PATTERN.matcher(ori).matches()) {
+                return ori;
+            }
+            if (HUMP_PATTERN.matcher(ori).matches()) {
+                return StringUtils.camelToUnderline(ori);
+            }
+            return ori;
+        }
+    }
+
+    static class HumpFeature implements NameFeature {
+
+        @Override
+        public String format(String ori) {
+            if (HUMP_PATTERN.matcher(ori).matches()) {
+                return ori;
+            }
+            if (UNDERLINE_PATTERN.matcher(ori).matches()) {
+                return StringUtils.underlineToCamel(ori);
+            }
+            return ori;
+        }
+    }
+
+    static class LowerCaseFeature implements NameFeature {
+
+        @Override
+        public String format(String o) {
+            return o.toLowerCase();
+        }
+    }
+
+    static class PlainFeature implements NameFeature {
+
+        @Override
+        public String format(String o) {
+            return o;
+        }
+    }
+
+    static class UpperCaseFeature implements NameFeature {
+
+        @Override
+        public String format(String o) {
+            return o.toUpperCase();
         }
     }
 }

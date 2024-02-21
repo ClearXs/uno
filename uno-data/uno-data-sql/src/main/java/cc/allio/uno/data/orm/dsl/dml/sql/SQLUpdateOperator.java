@@ -1,9 +1,9 @@
 package cc.allio.uno.data.orm.dsl.dml.sql;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
@@ -35,7 +35,8 @@ import java.util.function.Supplier;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> implements UpdateOperator {
 
-    private final DbType druidDbType;
+    private DBType dbType;
+    private DbType druidDbType;
     private Table table;
     private SQLUpdateStatement updateStatement;
 
@@ -55,6 +56,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
 
     public SQLUpdateOperator(DBType dbType) {
         super();
+        this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
         this.updateStatement = new SQLUpdateStatement();
         updateStatement.setDbType(druidDbType);
@@ -114,6 +116,18 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.updateStatement.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public UpdateOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
@@ -126,7 +140,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -157,11 +171,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
             updateSetItem.setColumn(new SQLIdentifierExpr(column));
             updateSetItem.setValue(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
             updateStatement.addItem(updateSetItem);
-            if (ValueWrapper.EMPTY_VALUE.equals(value)) {
-                addPrepareValue(columnValue.getKey().getName(), null, false);
-            } else {
-                addPrepareValue(columnValue.getKey().getName(), value, false);
-            }
+            addPrepareValue(columnValue.getKey().getName(), value, false);
         }
         return self();
     }
@@ -208,7 +218,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
         } else {
             ensureExplicitCapacity(prepareValues.length + 1);
             PrepareValue[] updateReplace = ArrayUtils.subarray(prepareValues, wherePrepareIndex, wherePrepareIndex + whereSize);
-            prepareValues[wherePrepareIndex] = PrepareValue.of(prepareIndex++, column, value);
+            prepareValues[wherePrepareIndex] = PrepareValue.of(prepareIndex++, column, getRealityValue(value));
             // update数据进行替换
             for (int i = 0; i < updateReplace.length; i++) {
                 prepareValues[wherePrepareIndex + i + 1] = updateReplace[i];

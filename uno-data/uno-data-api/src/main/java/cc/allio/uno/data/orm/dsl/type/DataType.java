@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl.type;
 
+import cc.allio.uno.core.api.EqualsTo;
 import lombok.Data;
 
 /**
@@ -10,7 +11,7 @@ import lombok.Data;
  * @since 1.1.4
  */
 @Data
-public class DataType {
+public class DataType implements EqualsTo<DataType> {
 
     // SQL类型
     private DSLType dslType;
@@ -18,6 +19,20 @@ public class DataType {
     private Integer precision;
     // 范围
     private Integer scale;
+
+    @Override
+    public boolean equalsTo(DataType other) {
+        if (other == null) {
+            return false;
+        }
+        if (this == other) {
+            return true;
+        }
+        if (this.getDslType() == null) {
+            return false;
+        }
+        return dslType.equalsTo(other.getDslType());
+    }
 
     /**
      * 创建Data type
@@ -85,5 +100,4 @@ public class DataType {
         dataType.setDslType(sqlType);
         return dataType;
     }
-
 }

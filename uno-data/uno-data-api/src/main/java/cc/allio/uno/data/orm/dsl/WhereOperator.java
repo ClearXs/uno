@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 
 /**
@@ -226,20 +227,14 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     T notNull(DSLName sqlName);
 
     /**
-     * is null condition
-     *
-     * @param reference 方法引用
-     * @return where
+     * @see #isNull(DSLName)
      */
     default <R> T isNull(MethodReferenceColumn<R> reference) {
         return isNull(reference.getColumn());
     }
 
     /**
-     * is null condition
-     *
-     * @param fieldName java variable name
-     * @return where
+     * @see #isNull(DSLName)
      */
     default T isNull(String fieldName) {
         return isNull(DSLName.of(fieldName));
@@ -254,24 +249,16 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     T isNull(DSLName sqlName);
 
     /**
-     * 'in'条件
-     *
-     * @param reference 方法引用
-     * @param values    数值数据
-     * @return SQLWhereOperator
+     * @see #in(DSLName, Object...)
      */
-    default <R> T in(MethodReferenceColumn<R> reference, Object... values) {
+    default <R, V> T in(MethodReferenceColumn<R> reference, V... values) {
         return in(reference.getColumn(), values);
     }
 
     /**
-     * 'in'条件
-     *
-     * @param fieldName java variable name
-     * @param values    数值数据
-     * @return SQLWhereOperator
+     * @see #in(DSLName, Object...)
      */
-    default T in(String fieldName, Object... values) {
+    default <V> T in(String fieldName, V... values) {
         return in(DSLName.of(fieldName), values);
     }
 
@@ -282,7 +269,30 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param values  数值数据
      * @return SQLWhereOperator
      */
-    T in(DSLName sqlName, Object... values);
+    <V> T in(DSLName sqlName, V... values);
+
+    /**
+     * @see #notIn(DSLName, Object...)
+     */
+    default <R, V> T notIn(MethodReferenceColumn<R> reference, V... values) {
+        return notIn(reference.getColumn(), values);
+    }
+
+    /**
+     * @see #notIn(DSLName, Object...)
+     */
+    default <V> T notIn(String fieldName, V... values) {
+        return notIn(DSLName.of(fieldName), values);
+    }
+
+    /**
+     * 'not in'条件
+     *
+     * @param sqlName sqlName
+     * @param values  数值数据
+     * @return SQLWhereOperator
+     */
+    <V> T notIn(DSLName sqlName, V... values);
 
     /**
      * between condition
@@ -476,6 +486,98 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @return SQLWhereOperator
      */
     T $like$(DSLName sqlName, Object value);
+
+    /**
+     * @see #notLike(DSLName, Object)
+     */
+    default <R> T notLike(MethodReferenceColumn<R> reference, Object value) {
+        return notLike(reference.getColumn(), value);
+    }
+
+    /**
+     * @see #notLike(DSLName, Object)
+     */
+    default T notLike(String fieldName, Object value) {
+        return notLike(DSLName.of(fieldName), value);
+    }
+
+    /**
+     * 'not field'
+     *
+     * @param sqlName sqlName
+     * @param value   like值
+     * @return SQLWhereOperator
+     */
+    T notLike(DSLName sqlName, Object value);
+
+    /**
+     * @see #$notLike(DSLName, Object)
+     */
+    default <R> T $notLike(MethodReferenceColumn<R> reference, Object value) {
+        return $notLike(reference.getColumn(), value);
+    }
+
+    /**
+     * @see #$notLike(DSLName, Object)
+     */
+    default T $notLike(String fieldName, Object value) {
+        return $notLike(DSLName.of(fieldName), value);
+    }
+
+    /**
+     * 'not %field'
+     *
+     * @param sqlName sqlName
+     * @param value   like值
+     * @return SQLWhereOperator
+     */
+    T $notLike(DSLName sqlName, Object value);
+
+    /**
+     * @see #notLike$(DSLName, Object)
+     */
+    default <R> T notLike$(MethodReferenceColumn<R> reference, Object value) {
+        return notLike$(reference.getColumn(), value);
+    }
+
+    /**
+     * @see #notLike$(DSLName, Object)
+     */
+    default T notLike$(String fieldName, Object value) {
+        return notLike$(DSLName.of(fieldName), value);
+    }
+
+    /**
+     * 'not field%'
+     *
+     * @param sqlName sqlName
+     * @param value   like值
+     * @return SQLWhereOperator
+     */
+    T notLike$(DSLName sqlName, Object value);
+
+    /**
+     * @see #$notLike$(DSLName, Object)
+     */
+    default <R> T $notLike$(MethodReferenceColumn<R> reference, Object value) {
+        return $notLike$(reference.getColumn(), value);
+    }
+
+    /**
+     * @see #$notLike$(DSLName, Object)
+     */
+    default T $notLike$(String fieldName, Object value) {
+        return $notLike$(DSLName.of(fieldName), value);
+    }
+
+    /**
+     * '%not like%'
+     *
+     * @param sqlName sqlName
+     * @param value   like值
+     * @return SQLWhereOperator
+     */
+    T $notLike$(DSLName sqlName, Object value);
 
     /**
      * logic predicate 'or'

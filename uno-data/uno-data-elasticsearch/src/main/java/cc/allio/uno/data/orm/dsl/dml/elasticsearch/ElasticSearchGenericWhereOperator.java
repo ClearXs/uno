@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.WhereOperator;
 import co.elastic.clients.elasticsearch._types.FieldValue;
@@ -8,7 +9,6 @@ import co.elastic.clients.json.JsonData;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.data.orm.dsl.Self;
 import com.google.common.collect.Lists;
 
 import java.util.Arrays;

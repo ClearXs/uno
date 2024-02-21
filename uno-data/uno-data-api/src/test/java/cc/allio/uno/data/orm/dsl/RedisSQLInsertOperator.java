@@ -2,7 +2,9 @@ package cc.allio.uno.data.orm.dsl;
 
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
 
@@ -25,6 +27,16 @@ public class RedisSQLInsertOperator implements InsertOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+
+    }
+
+    @Override
+    public DBType getDBType() {
+        return null;
+    }
+
+    @Override
     public String getPrepareDSL() {
         return null;
     }
@@ -40,7 +52,7 @@ public class RedisSQLInsertOperator implements InsertOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return null;
     }
 
@@ -50,7 +62,7 @@ public class RedisSQLInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator columns(List<DSLName> columns) {
+    public InsertOperator columns(Collection<DSLName> columns) {
         return null;
     }
 

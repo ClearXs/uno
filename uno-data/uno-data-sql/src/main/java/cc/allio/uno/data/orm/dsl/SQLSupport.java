@@ -1,11 +1,13 @@
 package cc.allio.uno.data.orm.dsl;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.function.ConsumerAction;
 import cc.allio.uno.core.function.SupplierAction;
 import cc.allio.uno.core.function.TernaryConsumer;
 import cc.allio.uno.core.function.VoidConsumer;
 import cc.allio.uno.core.type.Types;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.dsl.type.DSLType;
 import cc.allio.uno.data.orm.dsl.type.DataType;
@@ -29,7 +31,7 @@ import java.util.TimeZone;
  * @date 2024/1/4 17:06
  * @since 1.1.6
  */
-public final class SQLSupport implements Self<SQLSupport> {
+public class  SQLSupport implements Self<SQLSupport> {
 
     private static final List<DbType> CURRENT_SUPPORT_DB = List.of(DbType.mysql, DbType.postgresql, DbType.db2, DbType.h2);
     private static final Object EMPTY = new Object();
@@ -55,7 +57,7 @@ public final class SQLSupport implements Self<SQLSupport> {
 
     private VoidConsumer exAction;
 
-    private SQLSupport(Operator<?> druidOperator) {
+    public SQLSupport(Operator<?> druidOperator) {
         this.druidOperator = druidOperator;
         this.internalActions = Lists.newArrayList();
     }

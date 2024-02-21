@@ -180,4 +180,14 @@ public interface ExpressionTemplate {
     static ExpressionTemplate createTemplate(Tokenizer tokenizer, boolean langsym) {
         return new PlaceholderExpressionTemplate(tokenizer, langsym);
     }
+
+    /**
+     * 根据指定的{@link Tokenizer}创建{@link TokenParser}实例
+     *
+     * @param tokenizer tokenizer
+     * @return TokenParser
+     */
+    static TokenParser createParse(Tokenizer tokenizer) {
+        return new GenericTokenParser(tokenizer);
+    }
 }

@@ -1,16 +1,12 @@
 package cc.allio.uno.data.orm.dsl.ddl.sql;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.Operator;
-import cc.allio.uno.data.orm.dsl.UnoSQLExprTableSource;
+import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.SQLUtils;
 import com.alibaba.druid.sql.ast.statement.SQLDropTableStatement;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
-import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 
 /**
@@ -23,18 +19,21 @@ import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 @AutoService(DropTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLDropTableOperator implements DropTableOperator {
-    private final DbType druidDbType;
-    private SQLDropTableStatement dropTableStatement;
+
+    private DBType dbType;
+    private DbType druidDbType;
     private Table table;
+    private SQLDropTableStatement dropTableStatement;
 
     public SQLDropTableOperator() {
         this(DBType.getSystemDbType());
     }
 
     public SQLDropTableOperator(DBType dbType) {
-        this.druidDbType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
         this.dropTableStatement = new SQLDropTableStatement();
-        dropTableStatement.setDbType(druidDbType);
+        this.dropTableStatement.setDbType(druidDbType);
     }
 
     @Override
@@ -51,7 +50,19 @@ public class SQLDropTableOperator implements DropTableOperator {
     public void reset() {
         // eachReset
         this.dropTableStatement = new SQLDropTableStatement();
-        dropTableStatement.setDbType(druidDbType);
+        this.dropTableStatement.setDbType(druidDbType);
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.dropTableStatement.setDbType(this.druidDbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 
     @Override
@@ -66,7 +77,7 @@ public class SQLDropTableOperator implements DropTableOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 

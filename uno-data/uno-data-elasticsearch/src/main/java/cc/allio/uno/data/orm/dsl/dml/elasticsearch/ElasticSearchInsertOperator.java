@@ -1,7 +1,10 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import co.elastic.clients.elasticsearch.core.BulkRequest;
 import co.elastic.clients.elasticsearch.core.bulk.BulkOperation;
 import co.elastic.clients.json.JsonpUtils;
@@ -13,6 +16,7 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Streams;
 import reactor.util.function.Tuples;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -29,6 +33,7 @@ import java.util.function.Supplier;
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class ElasticSearchInsertOperator implements InsertOperator {
 
+    private DBType dbType;
     private BulkRequest bulkRequest;
     private BulkRequest.Builder batchBuilder;
     private final List<BulkOperation> bkps;
@@ -37,6 +42,7 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     private static final String ERROR_MSG = "elasticsearch insert operator not support that operator";
 
     public ElasticSearchInsertOperator() {
+        this.dbType = DBType.ELASTIC_SEARCH;
         this.batchBuilder = new BulkRequest.Builder();
         this.bkps = Lists.newArrayList();
     }
@@ -62,6 +68,16 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     }
 
     @Override
+    public void setDBType(DBType dbType) {
+        throw Exceptions.unOperate("setDBType");
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
+    }
+
+    @Override
     public String getPrepareDSL() {
         return null;
     }
@@ -78,7 +94,7 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     }
 
     @Override
-    public Table getTables() {
+    public Table getTable() {
         return table;
     }
 
@@ -124,7 +140,7 @@ public class ElasticSearchInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator columns(List<DSLName> columns) {
+    public InsertOperator columns(Collection<DSLName> columns) {
         return null;
     }
 

@@ -5,8 +5,8 @@ import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
 import com.alibaba.druid.DbType;
 import com.google.common.collect.Lists;
 
@@ -16,18 +16,20 @@ import java.util.List;
 @Operator.Group(OperatorKey.SQL_LITERAL)
 public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperator> implements ShowTablesOperator {
 
-    private final DbType druidDbType;
-    private QueryOperator queryOperator;
+    private DBType dbType;
+    private DbType druidDbType;
     private String schema;
     private Database database;
     private List<Table> tables;
+    private QueryOperator queryOperator;
 
     public SQLShowTablesOperator() {
         this(DBType.getSystemDbType());
     }
 
     public SQLShowTablesOperator(DBType dbType) {
-        this.druidDbType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
         this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, dbType);
         this.schema = "PUBLIC";
         this.tables = Lists.newArrayList();
@@ -43,6 +45,18 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     public ShowTablesOperator parse(String dsl) {
         this.queryOperator = queryOperator.parse(dsl);
         return self();
+    }
+
+    @Override
+    public void setDBType(DBType dbType) {
+        this.dbType = dbType;
+        this.druidDbType = SQLSupport.translateDb(dbType);
+        this.queryOperator.setDBType(this.dbType);
+    }
+
+    @Override
+    public DBType getDBType() {
+        return dbType;
     }
 
     @Override
@@ -75,30 +89,34 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
                 .then(() -> {
                     switch (druidDbType) {
                         case DbType.mysql ->
-                                queryOperator.select(DSLName.of("TABLE_CATALOG", DSLName.PLAIN_FEATURE), ShowTablesOperator.CATALOG_FILED)
-                                        .select(DSLName.of("TABLE_SCHEMA", DSLName.PLAIN_FEATURE), ShowTablesOperator.SCHEMA_FILED)
-                                        .select(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), ShowTablesOperator.NAME_FILED)
-                                        .select(DSLName.of("TABLE_TYPE", DSLName.PLAIN_FEATURE), ShowTablesOperator.TYPE_FILED)
+                                queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
                                         .from(formTable)
-                                        .eq(DSLName.of("TABLE_SCHEMA", DSLName.PLAIN_FEATURE), database.getName().format())
+                                        .eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName().format())
                                         .and()
-                                        .eq(DSLName.of("TABLE_TYPE", DSLName.PLAIN_FEATURE), "BASE TABLE");
-                        case DbType.h2, DbType.postgresql ->
-                                queryOperator.select(DSLName.of("TABLE_CATALOG", DSLName.PLAIN_FEATURE), ShowTablesOperator.CATALOG_FILED)
-                                        .select(DSLName.of("TABLE_SCHEMA", DSLName.PLAIN_FEATURE), ShowTablesOperator.SCHEMA_FILED)
-                                        .select(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), ShowTablesOperator.NAME_FILED)
-                                        .select(DSLName.of("TABLE_TYPE", DSLName.PLAIN_FEATURE), ShowTablesOperator.TYPE_FILED)
-                                        .from(formTable)
-                                        .eq(DSLName.of("TABLE_SCHEMA", DSLName.PLAIN_FEATURE), schema.toLowerCase())
-                                        .and()
-                                        .eq(DSLName.of("TABLE_TYPE", DSLName.PLAIN_FEATURE), "BASE TABLE");
+                                        .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
+                        case DbType.h2, DbType.postgresql -> {
+                            queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
+                                    .from(formTable)
+                                    .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
+                            if (DbType.h2 == druidDbType) {
+                                queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema);
+                            } else if (DbType.postgresql == druidDbType) {
+                                queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema.toLowerCase());
+                            }
+                        }
                     }
                     if (CollectionUtils.isNotEmpty(tables)) {
                         if (tables.size() == 1) {
-                            queryOperator.eq(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), tables.get(0).getName().format());
+                            queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE), tables.get(0).getName().format());
                         } else {
                             List<String> tableNames = tables.stream().map(Table::getName).map(DSLName::format).toList();
-                            queryOperator.in(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), tableNames);
+                            queryOperator.in(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE), tableNames);
                         }
                     }
                 })
@@ -115,7 +133,8 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     }
 
     @Override
-    public Table getTables() {
-        throw SQLSupport.nonsupportOperate(this, "getTables");
+    public Table getTable() {
+        throw SQLSupport.nonsupportOperate(this, "getTable");
     }
+
 }

@@ -9,6 +9,7 @@ package cc.allio.uno.data.orm.executor;
  */
 public enum CommandType {
     UNKNOWN,
+    ALERT_TABLE,
     CREATE_TABLE,
     DELETE_TABLE,
     EXIST_TABLE,
