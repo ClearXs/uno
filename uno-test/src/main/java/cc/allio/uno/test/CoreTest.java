@@ -39,11 +39,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     public CoreTest(Class<?> testClass) {
-        if (testClass == null) {
-            this.testClass = getClass();
-        } else {
-            this.testClass = testClass;
-        }
+        this.testClass = Objects.requireNonNullElseGet(testClass, this::getClass);
     }
 
     // ----------------- lifecycle -----------------
@@ -99,7 +95,7 @@ public class CoreTest extends BaseSpringTest {
         return new RunTestAttributes(getTestClass());
     }
 
-    // ----------------- get/set -----------------
+    // ----------------- getValue/setValue -----------------
 
     public void setEnv(EnvironmentFacade env) {
         this.env = env;
@@ -115,7 +111,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     /**
-     * set CoreRunner
+     * setValue CoreRunner
      *
      * @param coreRunner coreRunner
      */
@@ -124,7 +120,7 @@ public class CoreTest extends BaseSpringTest {
     }
 
     /**
-     * get coreRunner
+     * getValue coreRunner
      *
      * @return coreRunner
      */

@@ -58,6 +58,9 @@ public abstract class BaseEventBus<C extends EventContext> implements EventBus<C
                         topics.lookup(path)
                                 .publishOn(Schedulers.boundedElastic())
                                 .doOnNext(topic -> {
+                                    if (log.isDebugEnabled()) {
+                                        log.debug("Topic path {} is finder, now publish", path);
+                                    }
                                     // 存入 上下文数据
                                     context.putAttribute(EventContext.TOPIC_PATH_KEY, path);
                                     context.putAttribute(EventContext.TOPIC_KEY, topic);

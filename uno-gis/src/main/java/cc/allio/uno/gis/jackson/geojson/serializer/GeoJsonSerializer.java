@@ -52,7 +52,7 @@ public class GeoJsonSerializer extends StdSerializer<Object> {
             throw new IllegalArgumentException("Annotation @GeoJson is not present.");
         }
 
-        // get document factory from annotation
+        // getValue document factory from annotation
         Class<? extends DocumentFactory> factory = geoJsonTypeAnnotation.factory();
         DocumentFactory documentFactory;
         try {
@@ -61,7 +61,7 @@ public class GeoJsonSerializer extends StdSerializer<Object> {
             throw new IllegalStateException("Factory instantiation failed for " + factory, e);
         }
 
-        // call document factory to get a document representation of the annotations
+        // call document factory to getValue a document representation of the annotations
         Document document;
         try {
             document = documentFactory.from(object);

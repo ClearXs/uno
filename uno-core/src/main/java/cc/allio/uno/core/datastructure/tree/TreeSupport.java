@@ -24,17 +24,11 @@ public final class TreeSupport {
      * @see #treeify(List, Function)
      */
     public static <T extends Expand> List<DefaultElement> treeify(List<T> expandTrees) {
-        return treeify(expandTrees, e -> new DefaultElement(e.getId()));
+        return treeify(expandTrees, e -> new DefaultElement<>(e.getId()));
     }
 
     /**
      * 把平展的树转换为具有层次性的树。
-     * <p>算法明细如下：</p>
-     * <ol>
-     *     <li>构建已{@link Element#getId()}为key的散列表结构</li>
-     *     <li>循环{@link Expand}列表,每一次循环根据散列表结构找到对应父与当前{@link Element}的结构,然后进行添加</li>
-     * </ol>
-     * <p>时间复杂度将会是O(n)</p>
      *
      * @param expandTrees 平展的树
      * @param treeFunc    平展结构转换为树结构
@@ -42,18 +36,45 @@ public final class TreeSupport {
      * @param <R>         继承于{@link Element}的泛型
      * @return hierarchy filter expand tree depth == 0的结点
      */
-    public static synchronized <T extends Expand, R extends Element> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
+    public static synchronized <T extends Expand, R extends Element<R>> List<R> treeify(List<T> expandTrees, Function<T, R> treeFunc) {
         if (CollectionUtils.isEmpty(expandTrees)) {
             return Collections.emptyList();
         }
-        // transfer expand id must not null
-        Map<Serializable, R> idElement =
+        return adjust(
                 expandTrees.stream()
-                        .map(treeFunc)
-                        .collect(Collectors.toMap(Element::getId, e -> e));
+                        .map(expand -> {
+                            R element = treeFunc.apply(expand);
+                            if (element != null && element.getParentId() == null) {
+                                element.setParentId(expand.getParentId());
+                            }
+                            return element;
+                        })
+                        .toList()
+        );
+    }
+
+    /**
+     * 对给定的Tree Element进行调整，使得可以进行树化
+     * <p>算法明细如下：</p>
+     * <ol>
+     *     <li>构建已{@link Element#getId()}为key的散列表结构</li>
+     *     <li>循环{@link Element}列表,每一次循环根据散列表结构找到对应父与当前{@link Element}的结构,然后进行添加</li>
+     * </ol>
+     * <p>时间复杂度将会是O(n)</p>
+     *
+     * @param elements elements
+     * @param <R>      Tree Element
+     * @return 调整完成的树
+     */
+    public static <R extends Element<R>> List<R> adjust(List<R> elements) {
+        if (CollectionUtils.isEmpty(elements)) {
+            return elements;
+        }
+        // transfer expand id must not null
+        Map<Serializable, R> idElement = elements.stream().collect(Collectors.toMap(Element::getId, e -> e));
 
         // 已散列表为基础循环设置添加子结点
-        for (T e : expandTrees) {
+        for (R e : elements) {
             Serializable parentId = e.getParentId();
             R parent = idElement.get(parentId);
             if (parent != null) {
@@ -64,9 +85,7 @@ public final class TreeSupport {
             }
         }
 
-        T fake = expandTrees.getFirst();
-
-        R sentinel = treeFunc.apply(fake);
+        Element sentinel = Element.getRootSentinel();
         for (R virtual : idElement.values()) {
             if (virtual.getDepth() == Element.ROOT_NODE) {
                 // 触发Element添加结点的特性，如排序
@@ -80,7 +99,7 @@ public final class TreeSupport {
     /**
      * @see #expand(List, Function, Comparator)
      */
-    public static <R extends Element> List<DefaultExpand> expand(List<R> forest) {
+    public static <R extends Element<R>> List<DefaultExpand> expand(List<R> forest) {
         return expand(
                 forest,
                 r -> new DefaultExpand(r.getId(), r.getParent() != null ? r.getParent().getId() : null),
@@ -98,7 +117,7 @@ public final class TreeSupport {
      * @param <R>        继承于{@link Element}的泛型
      * @return expand
      */
-    public static synchronized <T extends Expand, R extends Element> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
+    public static synchronized <T extends Expand, R extends Element<R>> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
         List<T> expands = Lists.newArrayList();
         try {
             Element.ROOT_SENTINEL.setChildren(Lists.newArrayList(forest));

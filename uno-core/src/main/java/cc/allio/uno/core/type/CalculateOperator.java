@@ -7,7 +7,7 @@ package cc.allio.uno.core.type;
  * @date 2022/10/10 22:19
  * @since 1.1.0
  */
-public interface CalculateOperator {
+public interface CalculateOperator<T> {
 
     /**
      * 加动作
@@ -15,7 +15,7 @@ public interface CalculateOperator {
      * @param origin  原始数据
      * @param passive 被加数
      */
-    Object add(Object origin, Object passive);
+    T add(T origin, T passive);
 
     /**
      * 减动作
@@ -23,7 +23,7 @@ public interface CalculateOperator {
      * @param origin  原始数据
      * @param passive 被减数
      */
-    Object subtract(Object origin, Object passive);
+    T subtract(T origin, T passive);
 
     /**
      * 乘动作
@@ -31,7 +31,7 @@ public interface CalculateOperator {
      * @param origin  原始数据
      * @param passive 被乘数
      */
-    Object multiply(Object origin, Object passive);
+    T multiply(T origin, T passive);
 
     /**
      * 除动作
@@ -39,5 +39,5 @@ public interface CalculateOperator {
      * @param origin  原始数据
      * @param passive 被除数
      */
-    Object divide(Object origin, Object passive);
+    T divide(T origin, T passive);
 }

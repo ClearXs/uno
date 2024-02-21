@@ -20,7 +20,7 @@ import reactor.core.publisher.Mono;
  * @author jiangwei
  * @date 2022/8/22 18:46
  * @see org.springframework.core.annotation.Order
- * @see javax.annotation.Priority
+ * @see jakarta.annotation.Priority
  * @see org.springframework.core.Ordered
  * @since 1.0
  */

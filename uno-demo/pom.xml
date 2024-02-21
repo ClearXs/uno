@@ -5,20 +5,14 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-demo</artifactId>
     <packaging>pom</packaging>
     <modules>
-        <module>uno-liquibase-demo</module>
         <module>uno-websocket-demo</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
 </project>

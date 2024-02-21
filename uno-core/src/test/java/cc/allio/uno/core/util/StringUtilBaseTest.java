@@ -237,7 +237,7 @@ class StringUtilBaseTest extends BaseTestCase {
 
         templateUrl = "https://blog.csdn.net:8081/gerald2008/article/details/107116526/get?id=1&name=2";
         StepVerifier.create(StringUtils.getApiUrl(templateUrl))
-                .expectNext("/gerald2008/article/details/107116526/get?id=1&name=2")
+                .expectNext("/gerald2008/article/details/107116526/getValue?id=1&name=2")
                 .verifyComplete();
 
         templateUrl = "";
@@ -246,9 +246,9 @@ class StringUtilBaseTest extends BaseTestCase {
                 .verifyComplete();
 
         // 如果不是http、https等存在的将返回
-        templateUrl = "wasd://blog.csdn.net:8081/gerald2008/article/details/107116526/get?id=1&name=2";
+        templateUrl = "wasd://blog.csdn.net:8081/gerald2008/article/details/107116526/getValue?id=1&name=2";
         StepVerifier.create(StringUtils.getApiUrl(templateUrl))
-                .expectNext("//blog.csdn.net:8081/gerald2008/article/details/107116526/get?id=1&name=2")
+                .expectNext("//blog.csdn.net:8081/gerald2008/article/details/107116526/getValue?id=1&name=2")
                 .verifyComplete();
     }
 

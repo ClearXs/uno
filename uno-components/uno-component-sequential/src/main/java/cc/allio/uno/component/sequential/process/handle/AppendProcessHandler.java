@@ -32,7 +32,7 @@ public interface AppendProcessHandler extends Comparable<AppendProcessHandler> {
      * is less than, equal to, or greater than the specified object.
      * @throws NullPointerException if the specified object is null
      * @throws ClassCastException   if the specified object's type prevents it
-     *                              from being compared to this object.
+     *                              xxxx being compared to this object.
      * @see Comparable#compareTo(Object)
      */
     @Override

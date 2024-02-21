@@ -6,17 +6,11 @@
     <parent>
         <groupId>cc.allio</groupId>
         <artifactId>uno</artifactId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6-beta.1</version>
     </parent>
 
     <artifactId>uno-rule</artifactId>
     <description>构建简易API，提供规则引擎的计算服务</description>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 
     <dependencies>
         <dependency>

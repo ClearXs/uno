@@ -17,7 +17,7 @@ import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
- * Class的一些操作
+ * 与{@link Class}有关的工具集
  *
  * @author jw
  * @date 2021/12/5 11:00
@@ -100,13 +100,14 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      */
     public static Class<?> getSingleActualGenericType(Class<?> clazz) throws ClassNotFoundException {
         String expectClassname = getSingleGenericClassName(clazz);
-        Object exceptType = AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-            try {
-                return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
-            } catch (ClassNotFoundException e) {
-                return e;
-            }
-        });
+        Object exceptType = AccessController.doPrivileged(
+                (PrivilegedAction<Object>) () -> {
+                    try {
+                        return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
+                    } catch (ClassNotFoundException e) {
+                        return e;
+                    }
+                });
         if (exceptType instanceof ClassNotFoundException notfound) {
             throw new ClassNotFoundException(notfound.getMessage());
         }
@@ -151,7 +152,6 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         }
         return new Type[]{};
     }
-
 
     /**
      * {@code Object}类型的参数转为Class对象
@@ -371,25 +371,20 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
     }
 
     /**
-     * 根据class对象创建新实例
-     *
-     * @param clazz                 clazz，非空
-     * @param constructorParameters 创建实例传递的构造参数
-     * @param <T>                   参数类型
-     * @return 实例结果 or null
+     * @see #newInstanceIfErrorDefault(Class, Object[], Supplier)
      */
     public static <T> T newInstance(@NonNull Class<T> clazz, Object... constructorParameters) {
         return newInstanceIfErrorDefault(clazz, constructorParameters, () -> null);
     }
 
     /**
-     * 根据class对象创建新实例，当实例化时产生错误，则根据给定参数的值返回结果
+     * 根据class对象创建新实例，当实例化时产生错误，则根据给定参数的值返回结果。<b>该方法创建实例不会抛出任何异常</b>
      *
      * @param clazz                 class，非空
      * @param constructorParameters 创建实例传递的构造参数
      * @param errorDefault          错误时给的默认值
      * @param <T>                   参数类型
-     * @return 实例
+     * @return instance or null
      */
     public static <T> T newInstanceIfErrorDefault(@NonNull Class<? extends T> clazz, Object[] constructorParameters, Supplier<T> errorDefault) {
         InstantiationBuilder<T> instantiationBuilder = instantiationBuilder();
@@ -694,9 +689,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         @Override
         public void execute(Instantiation<I> instantiation) {
             Class<? extends I>[] waitForInstanceClasses = instantiation.getWaitForInstanceClasses();
-            instantiation.rewriteInstanceClasses(
-                    Stream.of(waitForInstanceClasses).distinct().toArray(Class[]::new)
-            );
+            instantiation.rewriteInstanceClasses(Stream.of(waitForInstanceClasses).distinct().toArray(Class[]::new));
         }
     }
 }

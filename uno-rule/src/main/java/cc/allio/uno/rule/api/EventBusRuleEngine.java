@@ -40,7 +40,7 @@ public abstract class EventBusRuleEngine implements RuleEngine {
                 fact,
                 context,
                 timer);
-        // set context value
+        // setValue context value
         context.putCurrentRule(rule);
         context.putCurrentFact(fact);
         context.putResultRule(ruleResult);

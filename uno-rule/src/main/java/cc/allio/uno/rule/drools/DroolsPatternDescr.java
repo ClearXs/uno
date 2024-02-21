@@ -179,7 +179,7 @@ public class DroolsPatternDescr extends PatternDescr {
     }
 
     /**
-     * @param leftParentCharacter the leftParentCharacter to set
+     * @param leftParentCharacter the leftParentCharacter to setValue
      */
     public void setLeftParentCharacter(final int leftParentCharacter) {
         this.leftParentCharacter = leftParentCharacter;
@@ -193,7 +193,7 @@ public class DroolsPatternDescr extends PatternDescr {
     }
 
     /**
-     * @param rightParentCharacter the rightParentCharacter to set
+     * @param rightParentCharacter the rightParentCharacter to setValue
      */
     public void setRightParentCharacter(final int rightParentCharacter) {
         this.rightParentCharacter = rightParentCharacter;
@@ -224,7 +224,7 @@ public class DroolsPatternDescr extends PatternDescr {
     }
 
     /**
-     * @param behaviors the behaviors to set
+     * @param behaviors the behaviors to setValue
      */
     public void setBehaviors(List<BehaviorDescr> behaviors) {
         this.behaviors = behaviors;
@@ -245,7 +245,7 @@ public class DroolsPatternDescr extends PatternDescr {
     }
 
     /**
-     * @param unification the unification to set
+     * @param unification the unification to setValue
      */
     public void setUnification(boolean unification) {
         this.unification = unification;

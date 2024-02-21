@@ -2,9 +2,11 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.StringPool;
 import com.google.common.collect.Sets;
+import jakarta.annotation.Nonnull;
 
 import java.math.BigDecimal;
 import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * 类型公共方法集
@@ -25,7 +27,6 @@ public class Types {
     public static final Float FLOAT_EMPTY = 0f;
     public static final Short SHORT_EMPTY = 0;
     public static final String STRING_EMPTY = StringPool.EMPTY;
-
 
     public static final Class<Long> LONG = Long.class;
     public static final Class<Boolean> BOOLEAN = Boolean.class;
@@ -50,7 +51,7 @@ public class Types {
     private static final Set<Class<?>> COLLECTION_TYPES = Sets.newHashSet(
             LIST, SET, MAP, STACK, QUEUE);
 
-    // ==================== is operator ====================
+    // ==================== is operate ====================
 
     /**
      * 判断放给定的class是否是{@link Long}
@@ -163,6 +164,17 @@ public class Types {
     }
 
     /**
+     * 判断放给定的class是否是{@link BigDecimal}
+     *
+     * @param clazz class对象实例
+     * @return true BigDecimal false not BigDecimal
+     */
+    public static boolean isBigDecimal(Class<?> clazz) {
+        return BIG_DECIMAL.isAssignableFrom(clazz);
+    }
+
+
+    /**
      * 判断给定的class是否是{@link java.util.Map}
      *
      * @param clazz class对象实例
@@ -213,6 +225,16 @@ public class Types {
     }
 
     /**
+     * 判断给定的class是否是{@link java.util.Collection}
+     *
+     * @param clazz class对象实例
+     * @return true Queue false not Queue
+     */
+    public static boolean isCollection(Class<?> clazz) {
+        return Collection.class.isAssignableFrom(clazz);
+    }
+
+    /**
      * 判断给定的class是否是{@link java.util.Queue}
      *
      * @param clazz class对象实例
@@ -255,7 +277,7 @@ public class Types {
         return typeOperator.signum(value);
     }
 
-    // ==================== to operator ====================
+    // ==================== to operate ====================
 
     /**
      * 返回给定对象字符串数据
@@ -288,8 +310,26 @@ public class Types {
         }
     }
 
+    // ==================== parse operate ====================
+
     /**
-     * 整形数据转换为bool
+     * 解析为long
+     *
+     * @param o o
+     * @return null or long
+     */
+    public static Long parseLong(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isLong(o.getClass())) {
+            return (Long) o;
+        }
+        return Long.parseLong(toString(o));
+    }
+
+    /**
+     * 解析为bool
      *
      * @param o o
      * @return i为null 则返回 false > 1 -> true 、0 = false or false
@@ -319,6 +359,150 @@ public class Types {
     }
 
     /**
+     * 解析为char
+     *
+     * @param o o
+     * @return null or char
+     */
+    public static Character parseChar(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isChar(o.getClass())) {
+            return (Character) o;
+        }
+        return toString(o).toCharArray()[0];
+    }
+
+    /**
+     * 解析为byte
+     *
+     * @param o o
+     * @return null or byte
+     */
+    public static Byte parseByte(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isByte(o.getClass())) {
+            return (Byte) o;
+        }
+        return Byte.parseByte(toString(o));
+    }
+
+    /**
+     * 解析为short
+     *
+     * @param o o
+     * @return null or short
+     */
+    public static Short parseShort(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isShort(o.getClass())) {
+            return (Short) o;
+        }
+        return Short.parseShort(toString(o));
+    }
+
+    /**
+     * 解析为Float
+     *
+     * @param o o
+     * @return null or float
+     */
+    public static Float parseFloat(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isFloat(o.getClass())) {
+            return (Float) o;
+        }
+        return Float.parseFloat(toString(o));
+    }
+
+    /**
+     * 解析为String
+     *
+     * @param o o
+     * @return null or string
+     */
+    public static String parseString(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isString(o.getClass())) {
+            return (String) o;
+        }
+        return toString(o);
+    }
+
+    /**
+     * 解析为Integer
+     *
+     * @param o o
+     * @return null or integer
+     */
+    public static Integer parseInteger(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isInteger(o.getClass())) {
+            return (Integer) o;
+        }
+        return Integer.parseInt(toString(o));
+    }
+
+    /**
+     * 解析为Double
+     *
+     * @param o o
+     * @return null or double
+     */
+    public static Double parseDouble(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isDouble(o.getClass())) {
+            return (Double) o;
+        }
+        return Double.parseDouble(toString(o));
+    }
+
+    /**
+     * 解析为Double
+     *
+     * @param o o
+     * @return null or double
+     */
+    public static BigDecimal parseBigDecimal(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isBigDecimal(o.getClass())) {
+            return (BigDecimal) o;
+        }
+        return new BigDecimal(toString(o));
+    }
+
+    /**
+     * 解析为Date
+     *
+     * @param o o
+     * @return null or double
+     */
+    public static Date parseDate(Object o) {
+        if (o == null) {
+            return null;
+        }
+        if (Types.isDate(o.getClass())) {
+            return (Date) o;
+        }
+        return TypeOperatorFactory.translator(DATE).convert(o);
+    }
+
+    /**
      * 判断给定的值是否为类型空值
      *
      * @param value 值
@@ -340,7 +524,7 @@ public class Types {
             return true;
         } else if (value instanceof Short && Types.SHORT_EMPTY.equals(value)) {
             return true;
-        } else if (value instanceof String && Types.STRING_EMPTY.equals(value)) {
+        } else if (Types.STRING_EMPTY.equals(value)) {
             return true;
         } else if (value.getClass().isArray()) {
             return ((Object[]) value).length > 0;
@@ -358,7 +542,7 @@ public class Types {
         return !isEmpty(value);
     }
 
-    // ==================== get operator ====================
+    // ==================== getValue operate ====================
 
     /**
      * 获取Integer类型的数据
@@ -428,7 +612,7 @@ public class Types {
         if (isBoolean(value.getClass())) {
             return (Boolean) value;
         }
-        return null;
+        return Boolean.TRUE.equals(value);
     }
 
     /**
@@ -493,7 +677,7 @@ public class Types {
         Object tryToValue = null;
         // 尝试转换为数字类型
         try {
-            tryToValue = new Integer(toString(o));
+            tryToValue = Integer.parseInt(toString(o));
         } catch (NumberFormatException err) {
             // ignore
         }
@@ -501,7 +685,7 @@ public class Types {
             return tryToValue;
         }
         try {
-            tryToValue = new Double(toString(o));
+            tryToValue = Double.parseDouble(toString(o));
         } catch (NumberFormatException err) {
             // ignore
         }
@@ -509,5 +693,19 @@ public class Types {
             return tryToValue;
         }
         return o;
+    }
+
+    /**
+     * 类型转换并通过调用acceptor消费转换后的数据
+     *
+     * @param obj      obj
+     * @param clazz    clazz
+     * @param acceptor acceptor
+     * @param <T>      转换的类型
+     */
+    public static <T> void cast(@Nonnull Object obj, @Nonnull Class<T> clazz, @Nonnull Consumer<T> acceptor) {
+        if (clazz.isAssignableFrom(obj.getClass())) {
+            acceptor.accept(clazz.cast(obj));
+        }
     }
 }

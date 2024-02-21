@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.template;
 
-import cc.allio.uno.core.util.IoUtil;
+import cc.allio.uno.core.util.IoUtils;
 import com.google.common.collect.Maps;
 import org.springframework.core.io.UrlResource;
 import reactor.util.function.Tuple2;
@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collections;
 import java.util.Map;
- 
+
 /**
  * Express模版。基于模版文件解析内容<br/>
  *
@@ -137,7 +137,7 @@ public interface ExpressionTemplate {
         URL url = Thread.currentThread().getContextClassLoader().getResource(file);
         if (url != null) {
             UrlResource resource = new UrlResource(url);
-            String template = IoUtil.readToString(resource.getInputStream());
+            String template = IoUtils.readToString(resource.getInputStream());
             return parseTemplate(template, target);
         }
         throw new FileNotFoundException(String.format("%s file not found", file));
@@ -179,5 +179,15 @@ public interface ExpressionTemplate {
      */
     static ExpressionTemplate createTemplate(Tokenizer tokenizer, boolean langsym) {
         return new PlaceholderExpressionTemplate(tokenizer, langsym);
+    }
+
+    /**
+     * 根据指定的{@link Tokenizer}创建{@link TokenParser}实例
+     *
+     * @param tokenizer tokenizer
+     * @return TokenParser
+     */
+    static TokenParser createParse(Tokenizer tokenizer) {
+        return new GenericTokenParser(tokenizer);
     }
 }

@@ -121,7 +121,7 @@ public class UnoKafkaReceiver {
     /**
      * {@link org.apache.kafka.clients.consumer.Consumer#assignment()}
      *
-     * @return The set of partitions currently assigned to this consumer
+     * @return The setValue of partitions currently assigned to this consumer
      */
     public Flux<TopicPartition> assignment() {
         return receiver.doOnConsumer(org.apache.kafka.clients.consumer.Consumer::assignment)

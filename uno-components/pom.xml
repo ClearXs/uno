@@ -5,7 +5,7 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -19,11 +19,6 @@
         <module>uno-component-kafka</module>
         <module>uno-component-netty</module>
     </modules>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <dependency>

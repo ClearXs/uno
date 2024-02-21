@@ -3,7 +3,7 @@ package cc.allio.uno.component.sequential.dispatch;
 import cc.allio.uno.component.sequential.*;
 import cc.allio.uno.component.sequential.bus.SequentialEventBus;
 import cc.allio.uno.component.sequential.process.DefaultProcessor;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.core.util.BeanUtils;
 import cc.allio.uno.test.RunTest;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -12,7 +12,7 @@ import java.util.function.Predicate;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
-@RunTest(components = {DefaultProcessor.class, SequentialEventBus.class, CoreBeanUtil.class, SubscriptionProperties.class, SubscriptionPropertiesTypeManager.class})
+@RunTest(components = {DefaultProcessor.class, SequentialEventBus.class, BeanUtils.class, SubscriptionProperties.class, SubscriptionPropertiesTypeManager.class})
 @Slf4j
 class DispatchDispatcherTest {
 

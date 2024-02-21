@@ -4,7 +4,7 @@ import cc.allio.uno.core.env.Env;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.env.SpringEnv;
 import cc.allio.uno.core.env.SystemEnv;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.core.util.BeanUtils;
 import org.springframework.beans.BeansException;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.context.ApplicationContext;
@@ -26,16 +26,16 @@ import org.springframework.core.env.ConfigurableEnvironment;
 public class UnoCoreAutoConfiguration implements ApplicationContextAware {
 
     @Bean("unoBeanUtil")
-    public CoreBeanUtil coreBeanUtil() {
-        return new CoreBeanUtil();
+    public BeanUtils coreBeanUtil() {
+        return new BeanUtils();
     }
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ConfigurableEnvironment environment = (ConfigurableEnvironment) applicationContext.getEnvironment();
         Env currentEnv = Envs.getCurrentEnv();
-        if (currentEnv instanceof SystemEnv) {
-            Envs.reset(new SpringEnv((SystemEnv) currentEnv, environment));
+        if (currentEnv instanceof SystemEnv systemEnv) {
+            Envs.reset(new SpringEnv(systemEnv, environment));
         }
     }
 }

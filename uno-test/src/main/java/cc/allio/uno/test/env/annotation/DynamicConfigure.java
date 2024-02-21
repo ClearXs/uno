@@ -31,7 +31,7 @@ public abstract class DynamicConfigure implements EnvConfigure {
         try {
             URL resource = ClassLoader.getSystemResource("./");
             if (resource == null) {
-                throw new NullPointerException("the class can't get '/' resource");
+                throw new NullPointerException("the class can't getValue '/' resource");
             }
             String currentClassPath = resource.getPath();
             // 动态生成一个配置类

@@ -35,12 +35,12 @@ public class RuleEngineFactory {
     public static synchronized <T extends RuleEngine> T get() {
         String ruleEngineKey = Envs.getProperty(RULE_ENGINE_KEY);
         if (StringUtils.isEmpty(ruleEngineKey)) {
-            Envs.setProperty(RULE_ENGINE_KEY, DROOLS_KEY.getKey());
-            ruleEngineKey = DROOLS_KEY.getKey();
+            Envs.setProperty(RULE_ENGINE_KEY, DROOLS_KEY.key());
+            ruleEngineKey = DROOLS_KEY.key();
         }
-        if (DROOLS_KEY.getKey().equals(ruleEngineKey)) {
+        if (DROOLS_KEY.key().equals(ruleEngineKey)) {
             return get(DROOLS_KEY);
-        } else if (EASY_RULES_KEY.getKey().equals(ruleEngineKey)) {
+        } else if (EASY_RULES_KEY.key().equals(ruleEngineKey)) {
             return get(EASY_RULES_KEY);
         }
         // 默认为drools

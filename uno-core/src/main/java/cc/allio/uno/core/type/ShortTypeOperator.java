@@ -9,45 +9,45 @@ import cc.allio.uno.core.StringPool;
  * @date 2021/12/23 20:11
  * @since 1.0
  */
-public class ShortTypeOperator implements TypeOperator {
+public class ShortTypeOperator implements TypeOperator<Short> {
     @Override
-    public Object convert(Object target, Class<?> maybeType) {
-        return Short.parseShort(target.toString());
+    public Short convert(Object target, Class<?> maybeType) {
+        return Types.parseShort(target);
     }
 
     @Override
     public int signum(Object target) {
-        short aShort = Short.parseShort(target.toString());
-        return Short.compare(aShort, Short.parseShort(StringPool.ZERO));
+        short aShort = convert(target);
+        return Short.compare(aShort, defaultValue());
     }
 
     @Override
     public String fromString(Object target) {
-        return convert(target, Short.class).toString();
+        return convert(target).toString();
     }
 
     @Override
-    public Object add(Object origin, Object passive) {
-        return Short.parseShort(origin.toString());
+    public Short add(Short origin, Short passive) {
+        return (short) (origin + passive);
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
-        return null;
+    public Short subtract(Short origin, Short passive) {
+        return (short) (origin - passive);
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
-        return null;
+    public Short multiply(Short origin, Short passive) {
+        return (short) (origin * passive);
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
-        return null;
+    public Short divide(Short origin, Short passive) {
+        return (short) (origin / passive);
     }
 
     @Override
-    public Object defaultValue() {
+    public Short defaultValue() {
         return 0;
     }
 

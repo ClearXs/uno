@@ -5,16 +5,11 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.5.RELEASE</version>
+        <version>1.1.6-beta.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-test</artifactId>
-
-    <properties>
-        <maven.compiler.source>8</maven.compiler.source>
-        <maven.compiler.target>8</maven.compiler.target>
-    </properties>
 
     <dependencies>
         <!-- test框架类库 -->
@@ -64,6 +59,11 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
+            <groupId>com.baomidou</groupId>
+            <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
             <scope>provided</scope>
@@ -72,7 +72,6 @@
         <dependency>
             <groupId>cc.allio</groupId>
             <artifactId>uno-core</artifactId>
-            <scope>provided</scope>
         </dependency>
         <!-- Postgresql -->
         <dependency>

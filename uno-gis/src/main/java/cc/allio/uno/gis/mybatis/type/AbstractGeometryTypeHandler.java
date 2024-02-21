@@ -15,6 +15,12 @@ import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+/**
+ * <b>注意使用时候需要在Mybatis配置文件中配置typeHandlerPackage = cc/allio/uno/gis/mybatis/type...</b>
+ *
+ * @see org.mybatis.spring.boot.autoconfigure.MybatisProperties#typeHandlersPackage
+ */
 @Slf4j
 public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends BaseTypeHandler<T> {
 
@@ -76,7 +82,7 @@ public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends Ba
         }
     }
 
-    private T getRealResult(String s){
+    private T getRealResult(String s) {
         boolean right = false;
         T result = null;
         for (SRID srid : SRID.values()) {

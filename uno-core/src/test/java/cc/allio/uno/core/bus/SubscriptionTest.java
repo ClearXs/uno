@@ -44,8 +44,4 @@ class SubscriptionTest extends BaseTestCase {
         assertEquals(0, empty.size());
     }
 
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

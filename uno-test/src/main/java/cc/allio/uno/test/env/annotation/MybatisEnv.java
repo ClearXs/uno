@@ -124,7 +124,7 @@ public @interface MybatisEnv {
      * Default is {@code false}.
      * </p>
      *
-     * @return set {@code true} to enable lazy initialization
+     * @return setValue {@code true} to enable lazy initialization
      * @since 2.0.2
      */
     String lazyInitialization() default "";

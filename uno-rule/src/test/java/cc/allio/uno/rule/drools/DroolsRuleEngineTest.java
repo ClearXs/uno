@@ -254,9 +254,9 @@ public class DroolsRuleEngineTest extends BaseTestCase {
 
         Flux.merge(fireA.getOnReactive(),  fireC.getOnReactive())
                 .subscribe();
-//        Set<MatchIndex> matchIndices = fireD.get();
+//        Set<MatchIndex> matchIndices = fireD.getValue();
 //        System.out.println(matchIndices);
-//        Set<MatchIndex> matchIndices1 = fireC.get();
+//        Set<MatchIndex> matchIndices1 = fireC.getValue();
 
     }
 }

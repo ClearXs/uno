@@ -36,15 +36,15 @@ public class TreeSupportTest extends BaseTestCase {
 
     @Test
     void testComparatorTreeify() {
-        List<Element> treeify =
+        List<Role> treeify =
                 TreeSupport.treeify(
                         testData,
                         expand -> new Role(expand.getId(), Comparator.comparingInt(Role::getSort))
                 );
         assertEquals(3, treeify.size());
-        Element element = treeify.get(1);
+        Role element = treeify.get(1);
         assertNotNull(element);
-        Element sort = element.getChildren().get(0);
+        Role sort = element.getChildren().get(0);
         assertNotNull(sort);
         assertEquals(5, sort.getId());
     }

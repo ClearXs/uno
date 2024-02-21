@@ -1,21 +1,4 @@
-/*
- *      Copyright (c) 2018-2028, DreamLu All rights reserved.
- *
- *  Redistribution and use in source and binary forms, with or without
- *  modification, are permitted provided that the following conditions are met:
- *
- *  Redistributions of source code must retain the above copyright notice,
- *  this list of conditions and the following disclaimer.
- *  Redistributions in binary form must reproduce the above copyright
- *  notice, this list of conditions and the following disclaimer in the
- *  documentation and/or other materials provided with the distribution.
- *  Neither the name of the dreamlu.net developer nor the names of its
- *  contributors may be used to endorse or promote products derived from
- *  this software without specific prior written permission.
- *  Author: DreamLu 卢春梦 (596392912@qq.com)
- */
 package cc.allio.uno.auto.factories;
-
 
 import cc.allio.uno.auto.model.MultiSetMap;
 
@@ -34,48 +17,48 @@ import java.util.StringJoiner;
  * @author L.cm
  */
 class FactoriesFiles {
-	private static final Charset UTF_8 = StandardCharsets.UTF_8;
+    private static final Charset UTF_8 = StandardCharsets.UTF_8;
 
-	/**
-	 * 写出 spring.factories 文件
-	 * @param factories factories 信息
-	 * @param output 输出流
-	 * @throws IOException 异常信息
-	 */
-	static void writeFactoriesFile(MultiSetMap<String, String> factories,
-								   OutputStream output) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
-		Set<String> keySet = factories.keySet();
-		for (String key : keySet) {
-			Set<String> values = factories.get(key);
-			if (values == null || values.isEmpty()) {
-				continue;
-			}
-			writer.write(key);
-			writer.write("=\\\n  ");
-			StringJoiner joiner = new StringJoiner(",\\\n  ");
-			for (String value : values) {
-				joiner.add(value);
-			}
-			writer.write(joiner.toString());
-			writer.newLine();
-		}
-		writer.flush();
-		output.close();
-	}
+    /**
+     * 写出 spring.factories 文件
+     *
+     * @param factories factories 信息
+     * @param output    输出流
+     * @throws IOException 异常信息
+     */
+    static void writeFactoriesFile(MultiSetMap<String, String> factories,
+                                   OutputStream output) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
+        Set<String> keySet = factories.keySet();
+        for (String key : keySet) {
+            Set<String> values = factories.get(key);
+            if (values == null || values.isEmpty()) {
+                continue;
+            }
+            StringJoiner joiner = new StringJoiner("\n");
+            for (String value : values) {
+                joiner.add(value);
+            }
+            writer.write(joiner.toString());
+            writer.newLine();
+        }
+        writer.flush();
+        output.close();
+    }
 
-	/**
-	 * 写出 spring-devtools.properties
-	 * @param projectName 项目名
-	 * @param output 输出流
-	 * @throws IOException 异常信息
-	 */
-	static void writeDevToolsFile(String projectName,
-								  OutputStream output) throws IOException {
-		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
-		String format = "restart.include.%s=/%s[\\\\w-]+\\.jar";
-		writer.write(String.format(format, projectName, projectName));
-		writer.flush();
-		output.close();
-	}
+    /**
+     * 写出 spring-devtools.properties
+     *
+     * @param projectName 项目名
+     * @param output      输出流
+     * @throws IOException 异常信息
+     */
+    static void writeDevToolsFile(String projectName,
+                                  OutputStream output) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(output, UTF_8));
+        String format = "restart.include.%s=/%s[\\\\w-]+\\.jar";
+        writer.write(String.format(format, projectName, projectName));
+        writer.flush();
+        output.close();
+    }
 }

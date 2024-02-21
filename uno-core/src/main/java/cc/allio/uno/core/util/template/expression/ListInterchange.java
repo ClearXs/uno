@@ -22,7 +22,7 @@ public class ListInterchange extends BaseInterchange implements ListableIntercha
     @Override
     protected Object onChange(String text, Object value, boolean langsym) {
         List<?> listable = (List<?>) value;
-        // get index
+        // getValue index
         AtomicReference<Integer> indexRef = new AtomicReference<>();
         tokenParser.parse(text, content -> {
             indexRef.set(Integer.valueOf(content));

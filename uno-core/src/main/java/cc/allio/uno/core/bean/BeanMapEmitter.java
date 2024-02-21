@@ -20,7 +20,7 @@ class BeanMapEmitter extends ClassEmitter {
     private static final Type FIXED_KEY_SET = TypeUtils.parseType("org.springframework.cglib.beans.FixedKeySet");
     private static final Signature CSTRUCT_OBJECT = TypeUtils.parseConstructor("Object");
     private static final Signature CSTRUCT_STRING_ARRAY = TypeUtils.parseConstructor("String[]");
-    private static final Signature BEAN_MAP_GET = TypeUtils.parseSignature("Object get(Object, Object)");
+    private static final Signature BEAN_MAP_GET = TypeUtils.parseSignature("Object getValue(Object, Object)");
     private static final Signature BEAN_MAP_PUT = TypeUtils.parseSignature("Object put(Object, Object, Object)");
     private static final Signature KEY_SET = TypeUtils.parseSignature("java.util.Set keySet()");
     private static final Signature NEW_INSTANCE = new Signature("newInstance", BEAN_MAP, new Type[]{Constants.TYPE_OBJECT});

@@ -3,8 +3,9 @@ package cc.allio.uno.component.sequential.washer;
 import cc.allio.uno.component.sequential.context.SequentialContext;
 import cc.allio.uno.component.sequential.Sequential;
 import cc.allio.uno.core.reactive.BufferRate;
-import cc.allio.uno.data.orm.executor.SQLCommandExecutor;
-import cc.allio.uno.data.orm.executor.SQLCommandExecutorFactory;
+import cc.allio.uno.data.orm.executor.CommandExecutor;
+import cc.allio.uno.data.orm.executor.CommandExecutorFactory;
+import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import com.google.common.collect.Lists;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -42,7 +43,7 @@ public class WashMachine {
         this.recorderDisposable =
                 BufferRate.create(Flux.<WasherRecord>create(sink -> recorder = sink))
                         .doOnNext(records -> {
-                            SQLCommandExecutor sqlExecutor = SQLCommandExecutorFactory.getSQLExecutor(SQLCommandExecutor.ELASTICSEARCH_SQL_COMMAND_EXECUTOR_KEY);
+                            CommandExecutor sqlExecutor = CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
                             if (sqlExecutor != null) {
                                 sqlExecutor.batchInsertPojos(records);
                             }

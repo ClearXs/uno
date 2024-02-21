@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 public class StringUtils extends org.springframework.util.StringUtils {
 
     private StringUtils() {
-
     }
 
     public static boolean isNotEmpty(String s) {

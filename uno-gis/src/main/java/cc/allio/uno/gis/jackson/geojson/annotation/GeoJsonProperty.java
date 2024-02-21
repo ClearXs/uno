@@ -16,7 +16,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * getter or field and can be overwritten by {@link GeoJsonProperty#name()}. The attribute values
  * can be any JSON object.
  * <p>This annotation is mutually exclusive with {@link GeoJsonProperties}.
- * <p>The properties field will be set to JSON <code>null</code> if no property is available.
+ * <p>The properties field will be setValue to JSON <code>null</code> if no property is available.
  * <p>Getter annotations example with the {@link String}:
  * <pre>
  *    &#064;GeoJsonProperty
@@ -42,7 +42,7 @@ public @interface GeoJsonProperty {
 
 	/**
 	 * Returns the name of the property attribute. Allows to overwrite the default behaviour.
-	 * <p>If not set, the field name or getter name (without "get", lower case) wil be used.
+	 * <p>If not setValue, the field name or getter name (without "getValue", lower case) wil be used.
 	 *
 	 * @return the optional name of the property
 	 */

@@ -113,7 +113,7 @@ public class FeatureDocumentFactory extends IntrospectionDocumentFactory {
     /**
      * Returns the values of all annotated field or methods as a {@link Map}.
      * The key of the map is the name of the field or method as default. When the annotation's attribute
-     * {@link GeoJsonProperty#name()} is set, this name will be used as key.
+     * {@link GeoJsonProperty#name()} is setValue, this name will be used as key.
      *
      * @param object     the object to retrieve the values from
      * @param annotateds the fields or methods

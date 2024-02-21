@@ -8,12 +8,12 @@ package cc.allio.uno.core.datastructure.tree;
  * @since 1.1.4
  */
 @FunctionalInterface
-public interface Visitor {
+public interface Visitor<T extends Element<T>> {
 
     /**
      * visit the given element
      *
      * @param e element
      */
-    void visit(Element e);
+    void visit(T e);
 }

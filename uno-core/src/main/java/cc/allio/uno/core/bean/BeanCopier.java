@@ -2,7 +2,7 @@ package cc.allio.uno.core.bean;
 
 
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.core.util.CoreBeanUtil;
+import cc.allio.uno.core.util.BeanUtils;
 import cc.allio.uno.core.util.StringUtils;
 import org.springframework.asm.ClassVisitor;
 import org.springframework.asm.Label;
@@ -36,7 +36,7 @@ public abstract class BeanCopier {
     private static final Type BEAN_MAP = TypeUtils.parseType(Map.class.getName());
     private static final Signature COPY = new Signature("copy", Type.VOID_TYPE, new Type[]{Constants.TYPE_OBJECT, Constants.TYPE_OBJECT, CONVERTER});
     private static final Signature CONVERT = TypeUtils.parseSignature("Object convert(Object, Class, Object)");
-    private static final Signature BEAN_MAP_GET = TypeUtils.parseSignature("Object get(Object)");
+    private static final Signature BEAN_MAP_GET = TypeUtils.parseSignature("Object getValue(Object)");
     private static final Type CLASS_UTILS = TypeUtils.parseType(org.springframework.util.ClassUtils.class.getName());
     private static final Signature IS_ASSIGNABLE_VALUE = TypeUtils.parseSignature("boolean isAssignableValue(Class, Object)");
     /**
@@ -50,7 +50,7 @@ public abstract class BeanCopier {
 
     public static BeanCopier create(Class source, Class target, boolean useConverter, boolean nonNull) {
         BeanCopierKey copierKey = new BeanCopierKey(source, target, useConverter, nonNull);
-        // 利用 ConcurrentMap 缓存 提高性能，接近 直接 get set
+        // 利用 ConcurrentMap 缓存 提高性能，接近 直接 getValue setValue
         return BEAN_COPIER_MAP.computeIfAbsent(copierKey, key -> {
             Generator gen = new Generator();
             gen.setSource(key.getSource());
@@ -162,7 +162,7 @@ public abstract class BeanCopier {
                 String propName = setter.getName();
 
                 CopyProperty targetIgnoreCopy = cc.allio.uno.core.util.ReflectUtils.getAnnotation(target, propName, CopyProperty.class);
-                // set 上有忽略的 注解
+                // setValue 上有忽略的 注解
                 if (targetIgnoreCopy != null) {
                     if (targetIgnoreCopy.ignore()) {
                         continue;
@@ -173,9 +173,9 @@ public abstract class BeanCopier {
                         propName = aliasTargetPropName;
                     }
                 }
-                // 找到对应的 get
+                // 找到对应的 getValue
                 PropertyDescriptor getter = names.get(propName);
-                // 没有 get 跳出
+                // 没有 getValue 跳出
                 if (getter == null) {
                     continue;
                 }
@@ -188,7 +188,7 @@ public abstract class BeanCopier {
                 Class<?> getterPropertyType = getter.getPropertyType();
                 Class<?> setterPropertyType = setter.getPropertyType();
 
-                // L.cm 2019.01.12 优化逻辑，先判断类型，类型一致直接 set，不同再判断 是否 类型转换
+                // L.cm 2019.01.12 优化逻辑，先判断类型，类型一致直接 setValue，不同再判断 是否 类型转换
                 // nonNull Label
                 Label l0 = e.make_label();
                 // 判断类型是否一致，包括 包装类型
@@ -213,17 +213,17 @@ public abstract class BeanCopier {
                         // 需要落栈，强制拆箱
                         e.unbox_or_zero(setterType);
                     } else {
-                        // 如果 get 为原始类型，需要装箱
+                        // 如果 getValue 为原始类型，需要装箱
                         if (getterIsPrimitive && !setterIsPrimitive) {
                             e.box(returnType);
                         }
-                        // 如果 set 为原始类型，需要拆箱
+                        // 如果 setValue 为原始类型，需要拆箱
                         if (!getterIsPrimitive && setterIsPrimitive) {
                             e.unbox_or_zero(setterType);
                         }
                     }
 
-                    // 构造 set 方法
+                    // 构造 setValue 方法
                     invokeWrite(e, write, writeMethod, nonNull, l0);
                 } else if (useConverter) {
                     e.load_local(targetLocal);
@@ -243,12 +243,12 @@ public abstract class BeanCopier {
                     }
 
                     EmitUtils.load_class(e, setterType);
-                    // 更改成了属性名，之前是 set 方法名
+                    // 更改成了属性名，之前是 setValue 方法名
                     e.push(propName);
                     e.invoke_interface(CONVERTER, CONVERT);
                     e.unbox_or_zero(setterType);
 
-                    // 构造 set 方法
+                    // 构造 setValue 方法
                     invokeWrite(e, write, writeMethod, nonNull, l0);
                 }
             }
@@ -272,7 +272,7 @@ public abstract class BeanCopier {
 
         @Override
         protected Object firstInstance(Class type) {
-            return CoreBeanUtil.newInstance(type);
+            return BeanUtils.newInstance(type);
         }
 
         @Override
@@ -306,7 +306,7 @@ public abstract class BeanCopier {
             for (PropertyDescriptor setter : setters) {
                 String propName = setter.getName();
 
-                // set 上有忽略的 注解
+                // setValue 上有忽略的 注解
                 CopyProperty targetIgnoreCopy = cc.allio.uno.core.util.ReflectUtils.getAnnotation(target, propName, CopyProperty.class);
                 if (targetIgnoreCopy != null) {
                     if (targetIgnoreCopy.ignore()) {
@@ -327,7 +327,7 @@ public abstract class BeanCopier {
                 e.load_local(sourceLocal);
 
                 e.push(propName);
-                // 执行 map get
+                // 执行 map getValue
                 e.invoke_interface(BEAN_MAP, BEAN_MAP_GET);
                 // box 装箱，避免 array[] 数组问题
                 e.box(mapBox);

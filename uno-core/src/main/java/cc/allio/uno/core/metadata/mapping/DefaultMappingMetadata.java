@@ -38,7 +38,7 @@ public class DefaultMappingMetadata extends LinkedHashMap<MappingField, MappingF
     @Override
     public MappingField get(String sourceFieldName) {
         return Optional.ofNullable(get(MappingField.builder().name(sourceFieldName).build()))
-                .orElseThrow(() -> new NullPointerException(String.format("According to %s get Mapping relationship Failed, does not exist", sourceFieldName)));
+                .orElseThrow(() -> new NullPointerException(String.format("According to %s getValue Mapping relationship Failed, does not exist", sourceFieldName)));
     }
 
     @Override

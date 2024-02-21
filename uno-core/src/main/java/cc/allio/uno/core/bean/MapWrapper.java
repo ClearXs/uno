@@ -1,6 +1,7 @@
 package cc.allio.uno.core.bean;
 
 import cc.allio.uno.core.util.ObjectUtils;
+import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -9,7 +10,6 @@ import reactor.util.function.Tuples;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 /**
  * value = map的wrapper
@@ -21,6 +21,10 @@ import java.util.stream.Collectors;
 public class MapWrapper implements ValueWrapper {
 
     private final Map<String, Object> instance;
+
+    public MapWrapper() {
+        this.instance = Maps.newConcurrentMap();
+    }
 
     public MapWrapper(Map<String, Object> value) {
         this.instance = value;
@@ -78,10 +82,10 @@ public class MapWrapper implements ValueWrapper {
      *    <li>多值作为数组存入</li>
      * </ul>
      *
-     * @param name the key
+     * @param name   the key
      * @param values the values myabe array
      */
-    private void putMultiValues(String name,  Object... values) {
+    private void putMultiValues(String name, Object... values) {
         if (ObjectUtils.isNotEmpty(values)) {
             if (values.length == 1) {
                 instance.put(name, values[0]);
@@ -97,16 +101,15 @@ public class MapWrapper implements ValueWrapper {
                 instance.keySet()
                         .stream()
                         .map(this::find)
-                        .collect(Collectors.toList()));
+                        .toList());
     }
 
     @Override
-    public Flux<Tuple2<String, Object>> findAllValues() {
+    public Flux<Tuple2<String, Object>> findTupleValues() {
         return Flux.fromIterable(
                 instance.entrySet().stream()
                         .map(entry -> Tuples.of(entry.getKey(), entry.getValue()))
-                        .collect(Collectors.toList())
-        );
+                        .toList());
     }
 
     @Override

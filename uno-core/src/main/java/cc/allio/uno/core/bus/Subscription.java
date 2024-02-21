@@ -76,7 +76,7 @@ public class Subscription implements Serializable {
     }
 
     /**
-     * 基于{@link SubscriptionProperties#getCustomize()}构建订阅信息
+     * 构建订阅信息
      *
      * @param customize 多值Map，从配置文件中获取
      * @param except    期望获取的订阅分组key

@@ -8,9 +8,12 @@ import java.lang.reflect.UndeclaredThrowableException;
 /**
  * 异常处理工具类
  *
- * @author L.cm
+ * @author jiangwei
  */
-public class Exceptions {
+public abstract class Exceptions {
+
+    private Exceptions() {
+    }
 
     /**
      * 将CheckedException转换为UncheckedException.
@@ -104,4 +107,23 @@ public class Exceptions {
         }
     }
 
+    /**
+     * 创建{@link NullPointerException}异常
+     *
+     * @param message 异常消息
+     * @return message
+     */
+    public static NullPointerException unNull(String message) {
+        return new NullPointerException(message);
+    }
+
+    /**
+     * 创建{@link UnsupportedOperationException}异常
+     *
+     * @param message 异常消息
+     * @return message
+     */
+    public static UnsupportedOperationException unOperate(String message) {
+        return new UnsupportedOperationException(message);
+    }
 }

@@ -3,7 +3,8 @@ package cc.allio.uno.core.util.convert;
 import cc.allio.uno.core.function.CheckedFunction;
 import cc.allio.uno.core.function.Unchecked;
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.core.util.ConvertUtil;
+import cc.allio.uno.core.util.ConvertUtils;
+import cc.allio.uno.core.util.FieldUtils;
 import cc.allio.uno.core.util.ReflectUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,7 +34,7 @@ public class UnoConverter implements Converter {
 	 *
 	 * @param value     源对象属性
 	 * @param target    目标对象属性类
-	 * @param fieldName 目标的field名，原为 set 方法名，BladeBeanCopier 里做了更改
+	 * @param fieldName 目标的field名，原为 setValue 方法名，BladeBeanCopier 里做了更改
 	 * @return {Object}
 	 */
 	@Override
@@ -50,10 +51,10 @@ public class UnoConverter implements Converter {
 			TypeDescriptor targetDescriptor = UnoConverter.getTypeDescriptor(targetClazz, (String) fieldName);
 			// 1. 判断 sourceClazz 为 Map
 			if (Map.class.isAssignableFrom(sourceClazz)) {
-				return ConvertUtil.convert(value, targetDescriptor);
+				return ConvertUtils.convert(value, targetDescriptor);
 			} else {
 				TypeDescriptor sourceDescriptor = UnoConverter.getTypeDescriptor(sourceClazz, (String) fieldName);
-				return ConvertUtil.convert(value, sourceDescriptor, targetDescriptor);
+				return ConvertUtils.convert(value, sourceDescriptor, targetDescriptor);
 			}
 		} catch (Throwable e) {
 			log.warn("BladeConverter error", e);
@@ -66,7 +67,7 @@ public class UnoConverter implements Converter {
 		// 忽略抛出异常的函数，定义完整泛型，避免编译问题
 		CheckedFunction<String, TypeDescriptor> uncheckedFunction = (key) -> {
 			// 这里 property 理论上不会为 null
-			Field field = ReflectUtils.getField(clazz, fieldName);
+			Field field = FieldUtils.getField(clazz, fieldName);
 			if (field == null) {
 				throw new NoSuchFieldException(fieldName);
 			}

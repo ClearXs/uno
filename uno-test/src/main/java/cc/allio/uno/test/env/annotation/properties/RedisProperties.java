@@ -65,7 +65,7 @@ public @interface RedisProperties {
     long timeout() default 30000L;
 
     /**
-     * Client name to be set on connections with CLIENT SETNAME.
+     * Client name to be setValue on connections with CLIENT SETNAME.
      */
     String clientName() default "";
 

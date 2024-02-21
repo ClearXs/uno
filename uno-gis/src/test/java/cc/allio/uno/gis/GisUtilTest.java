@@ -1,8 +1,6 @@
 package cc.allio.uno.gis;
 
-import cc.allio.uno.core.util.ResourceUtil;
-import cc.allio.uno.gis.GisUtil;
-import cc.allio.uno.gis.SRID;
+import cc.allio.uno.core.util.ResourceUtils;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Point;
@@ -14,7 +12,7 @@ public class GisUtilTest extends BaseTestCase {
 
     @Test
     void testElevation() throws FileNotFoundException {
-        File file = ResourceUtil.getFile("classpath:高平市.tif");
+        File file = ResourceUtils.getFile("classpath:高平市.tif");
         String path = file.getAbsoluteFile().getPath();
         GisUtil.elevation(GisUtil.createPoint(2, 2), path);
 

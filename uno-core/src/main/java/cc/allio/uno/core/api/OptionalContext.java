@@ -1,9 +1,12 @@
 package cc.allio.uno.core.api;
 
+import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.util.id.IdGenerator;
+import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 定义Uno上下文模版方法
@@ -59,26 +62,6 @@ public interface OptionalContext {
     }
 
     /**
-     * 放入新的属性数据
-     *
-     * @param key 属性key
-     * @param obj 属性值
-     * @throws NullPointerException obj为空时抛出
-     */
-    void putAttribute(String key, Object obj);
-
-    /**
-     * 放入其他所有的属性数据
-     *
-     * @param otherAttributes 其他属性数据
-     */
-    default void putAll(Map<String, Object> otherAttributes) {
-        for (Map.Entry<String, Object> attribute : otherAttributes.entrySet()) {
-            putAttribute(attribute.getKey(), attribute.getValue());
-        }
-    }
-
-    /**
      * 获取Spring应用的上下文
      *
      * @return 返回Spring上下文实例
@@ -110,6 +93,51 @@ public interface OptionalContext {
     }
 
     /**
+     * 给定一个类型，获取第一个匹配的属性
+     *
+     * @param typeClass typeClass
+     * @param <T>       类型
+     * @return option
+     */
+    default <T> Optional<T> getTypeFirst(Class<T> typeClass) {
+        Map<String, Object> all = getAll();
+        Collection<Object> values = all.values();
+        return values.stream()
+                .filter(value -> typeClass.isAssignableFrom(value.getClass()))
+                .findFirst()
+                .map(typeClass::cast);
+    }
+
+    /**
+     * 如果没有获取到则返回null
+     *
+     * @see #getTypeFirst(Class)
+     */
+    default <T> T getTypeFirstForce(Class<T> typeClass) {
+        return getTypeFirst(typeClass).orElse(null);
+    }
+
+    /**
+     * 放入新的属性数据
+     *
+     * @param key 属性key
+     * @param obj 属性值
+     * @throws NullPointerException obj为空时抛出
+     */
+    void putAttribute(String key, Object obj);
+
+    /**
+     * 放入其他所有的属性数据
+     *
+     * @param otherAttributes 其他属性数据
+     */
+    default void putAll(Map<String, Object> otherAttributes) {
+        for (Map.Entry<String, Object> attribute : otherAttributes.entrySet()) {
+            putAttribute(attribute.getKey(), attribute.getValue());
+        }
+    }
+
+    /**
      * 判断是否包含key
      *
      * @param key 属性Key
@@ -117,5 +145,112 @@ public interface OptionalContext {
      */
     default boolean containsKey(String key) {
         return get(key).isPresent();
+    }
+
+    /**
+     * 返回基于给定的可变餐values参数创建一个{@link ImmutableOptionalContext}
+     *
+     * @param values values
+     * @return OptionalContext
+     */
+    static ImmutableOptionalContext immutable(Object... values) {
+        return new ImmutableOptionalContext(values);
+    }
+
+    /**
+     * 基于{@link OptionalContext}与给定的可变餐values参数创建一个{@link ImmutableOptionalContext}
+     *
+     * @param other  other optional context
+     * @param values values
+     * @return OptionalContext
+     */
+    static ImmutableOptionalContext immutable(OptionalContext other, Object... values) {
+        return new ImmutableOptionalContext(other, values);
+    }
+
+    /**
+     * 基于给定的values参数创建一个{@link ImmutableOptionalContext}
+     *
+     * @param values values
+     * @return OptionalContext
+     */
+    static ImmutableOptionalContext immutable(Map<String, Object> values) {
+        return new ImmutableOptionalContext(values);
+    }
+
+    /**
+     * 基于{@link OptionalContext}与给定的values参数创建一个{@link ImmutableOptionalContext}
+     *
+     * @param other  other optional context
+     * @param values values
+     * @return OptionalContext
+     */
+    static ImmutableOptionalContext immutable(OptionalContext other, Map<String, Object> values) {
+        return new ImmutableOptionalContext(other, values);
+    }
+
+    /**
+     * 不可变的{@link OptionalContext}
+     */
+    class ImmutableOptionalContext implements OptionalContext {
+
+        private final Map<String, Object> context;
+        private final AtomicInteger randomCounter = new AtomicInteger();
+
+        public ImmutableOptionalContext(Object[] values) {
+            if (values != null) {
+                this.context = new HashMap<>(values.length);
+                for (Object value : values) {
+                    putSingleValue(value);
+                }
+            } else {
+                this.context = Collections.emptyMap();
+            }
+        }
+
+        public ImmutableOptionalContext(Map<String, Object> values) {
+            this.context = new HashMap<>(values);
+        }
+
+        public ImmutableOptionalContext(OptionalContext other, Map<String, Object> values) {
+            this.context = new HashMap<>(other.getAll());
+            this.context.putAll(values);
+        }
+
+        public ImmutableOptionalContext(OptionalContext other, Object[] values) {
+            this.context = new HashMap<>(other.getAll());
+            if (values != null) {
+                for (Object value : values) {
+                    putSingleValue(value);
+                }
+            }
+        }
+
+        @Override
+        public Optional<Object> get(String key) {
+            return Optional.ofNullable(context.get(key));
+        }
+
+        @Override
+        public Optional<ApplicationContext> getApplicationContext() {
+            throw Exceptions.unOperate("getApplicationContext");
+        }
+
+        @Override
+        public Map<String, Object> getAll() {
+            return Collections.unmodifiableMap(context);
+        }
+
+        @Override
+        public void putAttribute(String key, Object obj) {
+            throw Exceptions.unOperate("putAttribute");
+        }
+
+        void putSingleValue(Object value) {
+            if (value != null) {
+                String name = value.getClass().getName();
+                this.context.put(name + randomCounter.getAndIncrement(), value);
+            }
+        }
     }
 }

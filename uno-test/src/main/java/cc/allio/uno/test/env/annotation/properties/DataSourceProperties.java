@@ -49,7 +49,7 @@ public @interface DataSourceProperties {
 
     /**
      * JNDI location of the datasource. Class, url, username and password are ignored when
-     * set.
+     * setValue.
      */
     String jndiName() default "";
 

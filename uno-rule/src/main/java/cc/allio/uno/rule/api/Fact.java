@@ -58,7 +58,7 @@ public interface Fact extends Map<String, Object>, Serializable {
      */
     static Fact from(Rule rule, Object pojo) {
         ObjectWrapper wrapper = new ObjectWrapper(pojo);
-        return from(rule, wrapper.findAllValuesForce());
+        return from(rule, wrapper.findMapValuesForce());
     }
 
     /**

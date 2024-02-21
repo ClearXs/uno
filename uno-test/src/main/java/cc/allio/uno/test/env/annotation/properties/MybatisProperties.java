@@ -64,12 +64,6 @@ public @interface MybatisProperties {
     Class<? extends LanguageDriver> defaultScriptingLanguageDriver() default XMLLanguageDriver.class;
 
     /**
-     * A Configuration object for customize default settings. If {@link #configLocation} is specified, this property is
-     * not used.
-     */
-    Configuration configuration();
-
-    /**
      * {@link org.apache.ibatis.session.Configuration}注解描述
      *
      * @author jiangwei

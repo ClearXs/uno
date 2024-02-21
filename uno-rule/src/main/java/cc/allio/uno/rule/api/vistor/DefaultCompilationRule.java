@@ -44,7 +44,7 @@ public class DefaultCompilationRule implements CompilationRule {
             } else if (p.getLogic() == LogicPredicate.OR) {
                 if (item.getLogic() == LogicPredicate.AND) {
                     // 放入 and group 中
-                    List<LiteralTraversalElement> attrElement = p.getAttrElement();
+                    List<LogicGroup> attrElement = p.getAttrElement();
                     p.clearAttrElement();
                     // 规则项重组为and节点
                     LogicGroup n = new LogicGroup(p, LogicPredicate.AND);

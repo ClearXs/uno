@@ -1,6 +1,8 @@
 package cc.allio.uno.core.bean;
 
+import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.CollectionUtils;
+import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
@@ -9,11 +11,9 @@ import reactor.util.function.Tuples;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.*;
-import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
- * POJO对象包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
+ * Object包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
  *
  * @author jiangwei
  * @date 2022/5/21 10:17
@@ -25,7 +25,6 @@ public class ObjectWrapper implements ValueWrapper {
      * 解析的目标对象
      */
     private final Object instance;
-
     private final BeanInfoWrapper<Object> wrapper;
 
     public ObjectWrapper(Object instance) {
@@ -35,8 +34,8 @@ public class ObjectWrapper implements ValueWrapper {
         try {
             this.wrapper = new BeanInfoWrapper<>((Class<Object>) instance.getClass());
             this.instance = instance;
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 
@@ -47,8 +46,8 @@ public class ObjectWrapper implements ValueWrapper {
         try {
             this.wrapper = new BeanInfoWrapper<>(instanceClass);
             this.instance = null;
-        } catch (IntrospectionException e) {
-            throw new RuntimeException(e);
+        } catch (IntrospectionException ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 
@@ -124,11 +123,10 @@ public class ObjectWrapper implements ValueWrapper {
      * @return tuple2
      */
     @Override
-    public Flux<Tuple2<String, Object>> findAllValues() {
+    public Flux<Tuple2<String, Object>> findTupleValues() {
         return findAll()
                 .flatMap(propertyDescriptor ->
-                        get(propertyDescriptor.getName())
-                                .map(value -> Tuples.of(propertyDescriptor.getName(), value)));
+                        get(propertyDescriptor.getName()).map(value -> Tuples.of(propertyDescriptor.getName(), value)));
     }
 
     /**
@@ -137,16 +135,21 @@ public class ObjectWrapper implements ValueWrapper {
      * @return Map
      */
     @Override
-    public Map<String, Object> findAllValuesForce() {
-        AtomicReference<List<Tuple2<String, Object>>> ref = new AtomicReference<>();
-        findAllValues().collectList().subscribe(ref::set);
-        List<Tuple2<String, Object>> allValues = ref.get();
+    public Map<String, Object> findMapValuesForce() {
+        List<Tuple2<String, Object>> allValues = findTupleValues().collectList().block();
         if (CollectionUtils.isEmpty(allValues)) {
             return Collections.emptyMap();
         }
-        return allValues
-                .stream()
-                .collect(Collectors.toMap(Tuple2::getT1, Tuple2::getT2));
+        Map<String, Object> result = Maps.newHashMap();
+        for (Tuple2<String, Object> allValue : allValues) {
+            String key = allValue.getT1();
+            Object value = allValue.getT2();
+            if (EMPTY_VALUE.equals(value)) {
+                value = null;
+            }
+            result.put(key, value);
+        }
+        return result;
     }
 
     /**
@@ -157,5 +160,49 @@ public class ObjectWrapper implements ValueWrapper {
     @Override
     public Object getTarget() {
         return instance;
+    }
+
+    /**
+     * 设置字段值，如果字段值不存在，则不抛出异常
+     *
+     * @param instance instance
+     * @param name     name
+     * @param value    value
+     */
+    public static void setValue(Object instance, String name, Object... value) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            wrapper.setForce(name, value);
+        }
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param instance instance
+     * @param name     name
+     * @return value or null
+     */
+    public static Object getValue(Object instance, String name) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            return wrapper.getForce(name);
+        }
+        return null;
+    }
+
+    /**
+     * 获取字段值
+     *
+     * @param instance instance
+     * @param name     name
+     * @return value or null
+     */
+    public static <T> T getValue(Object instance, String name, Class<T> fieldType) {
+        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        if (Boolean.TRUE.equals(wrapper.contains(name))) {
+            return wrapper.getForce(name, fieldType);
+        }
+        return null;
     }
 }

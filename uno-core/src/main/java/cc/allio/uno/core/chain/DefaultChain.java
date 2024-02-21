@@ -40,19 +40,28 @@ public class DefaultChain<IN, OUT> implements Chain<IN, OUT> {
     @Override
     public Mono<OUT> proceed(ChainContext<IN> context) {
         return Mono.defer(() -> {
-                    if (index < nodes.size()) {
-                        Node<IN, OUT> node = nodes.get(index);
-                        DefaultChain<IN, OUT> nextChain = new DefaultChain<>(this, this.index + 1);
-                        try {
-                            return node.execute(nextChain, context);
-                        } catch (Throwable e) {
-                            return Mono.error(e);
-                        }
-                    } else {
-                        return Mono.empty();
+            if (index < nodes.size()) {
+                Node<IN, OUT> node = nodes.get(index);
+                DefaultChain<IN, OUT> nextChain = new DefaultChain<>(this, this.index + 1);
+                Mono<OUT> out;
+                try {
+                    out = node.execute(nextChain, context);
+                } catch (Throwable ex) {
+                    if (log.isWarnEnabled()) {
+                        log.warn("execute node error", ex);
                     }
-                })
-                .onErrorContinue((err, obj) -> log.info("Chain Proceed error", err));
+                    // 避免后续结点不能执行
+                    out = nextChain.proceed(context);
+                }
+                return out.onErrorContinue((err, o) -> {
+                    if (log.isWarnEnabled()) {
+                        log.warn("Chain execute error", err);
+                    }
+                });
+            } else {
+                return Mono.empty();
+            }
+        });
     }
 
     @Override

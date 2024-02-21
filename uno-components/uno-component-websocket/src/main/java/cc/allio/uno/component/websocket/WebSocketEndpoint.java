@@ -69,10 +69,10 @@ public interface WebSocketEndpoint {
      *
      * @return WebSocketProperties实例对象
      * @throws NoSuchBeanDefinitionException 没有找到{@link WebSocketProperties}的定义抛出
-     * @throws NullPointerException          {@link CoreBeanUtil#getContext()}为空时抛出
+     * @throws NullPointerException          {@link BeanUtils#getContext()}为空时抛出
      */
     default WebSocketProperties getProperties() {
-        return CoreBeanUtil.getBean(WebSocketProperties.class);
+        return BeanUtils.getBean(WebSocketProperties.class);
     }
 
 

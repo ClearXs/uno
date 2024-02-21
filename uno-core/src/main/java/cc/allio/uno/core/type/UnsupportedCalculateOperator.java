@@ -7,25 +7,25 @@ package cc.allio.uno.core.type;
  * @date 2022/10/10 22:21
  * @since 1.1.0
  */
-public abstract class UnsupportedCalculateOperator implements TypeOperator {
+public abstract class UnsupportedCalculateOperator<T> implements TypeOperator<T> {
 
     @Override
-    public Object add(Object origin, Object passive) {
+    public T add(T origin, T passive) {
         throw new UnsupportedOperationException("Unsupported Operation 'add'");
     }
 
     @Override
-    public Object subtract(Object origin, Object passive) {
+    public T subtract(T origin, T passive) {
         throw new UnsupportedOperationException("Unsupported Operation 'subtract'");
     }
 
     @Override
-    public Object multiply(Object origin, Object passive) {
+    public T multiply(T origin, T passive) {
         throw new UnsupportedOperationException("Unsupported Operation 'multiply'");
     }
 
     @Override
-    public Object divide(Object origin, Object passive) {
+    public T divide(T origin, T passive) {
         throw new UnsupportedOperationException("Unsupported Operation 'divide'");
     }
 

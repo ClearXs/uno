@@ -1,14 +1,12 @@
 package cc.allio.uno.test.runner;
 
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.test.env.Environment;
 import cc.allio.uno.test.env.annotation.AnnoConfigure;
 import cc.allio.uno.test.env.annotation.Env;
 import cc.allio.uno.test.env.annotation.EnvConfigure;
 import cc.allio.uno.test.env.annotation.Extractor;
 import cc.allio.uno.test.CoreTest;
-import com.google.common.collect.Sets;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.context.support.GenericApplicationContext;
@@ -18,8 +16,6 @@ import org.springframework.core.annotation.MergedAnnotations;
 
 import java.lang.annotation.Annotation;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Stream;
 
 /**
  * 基于注解信息，构建环境配置信息。
@@ -36,9 +32,6 @@ import java.util.stream.Stream;
  */
 @Slf4j
 public class AnnoMetadataRunner implements RegisterRunner {
-
-    private final Set<Class<? extends Environment>> parsedEnvCaches = Sets.newConcurrentHashSet();
-    private final Set<Class<? extends EnvConfigure>> envConfigureCaches = Sets.newConcurrentHashSet();
 
     @Override
     public void onRegister(CoreTest coreTest) throws Throwable {
@@ -70,25 +63,21 @@ public class AnnoMetadataRunner implements RegisterRunner {
      *
      * @param env Environment
      */
-    public void resolveEnv(CoreTest coreTest, Env env) throws Throwable {
+    public void resolveEnv(CoreTest coreTest, Env env)  {
         Class<? extends Environment>[] envClasses = env.value();
-        // 能够被允许的环境
-        Class<? extends Environment>[] allowEnv = Stream.of(envClasses).filter(c -> !parsedEnvCaches.contains(c)).toArray(Class[]::new);
-        if (ObjectUtils.isNotEmpty(allowEnv)) {
-            ClassUtils.Instantiation<Environment> instantiation =
-                    ClassUtils.<Environment>instantiationBuilder().addMultiForInstanceClasses(allowEnv).setExcludeNull(true).build();
-            instantiation.addFeature(new ClassUtils.DeDuplicationFeature<>());
-            instantiation.addFeature(new ClassUtils.SortFeature<>());
-            List<Environment> environments = instantiation.create();
-            for (Environment environment : environments) {
-                Class<? extends Environment> envClass = environment.getClass();
-                try {
-                    environment.support(coreTest);
-                    // 构建的环境添加于缓存之中
-                    parsedEnvCaches.add(envClass);
-                } catch (Throwable ex) {
-                    log.error("support environment {} happened error", environment.getClass().getName(), ex);
-                }
+        ClassUtils.Instantiation<Environment> instantiation =
+                ClassUtils.<Environment>instantiationBuilder()
+                        .addMultiForInstanceClasses(envClasses)
+                        .setExcludeNull(true)
+                        .build();
+        instantiation.addFeature(new ClassUtils.DeDuplicationFeature<>());
+        instantiation.addFeature(new ClassUtils.SortFeature<>());
+        List<Environment> environments = instantiation.create();
+        for (Environment environment : environments) {
+            try {
+                environment.support(coreTest);
+            } catch (Throwable ex) {
+                log.error("support environment {} happened error", environment.getClass().getName(), ex);
             }
         }
     }
@@ -102,16 +91,13 @@ public class AnnoMetadataRunner implements RegisterRunner {
      */
     private void extractEnv(MergedAnnotation<Annotation> anno, Extractor extractor, CoreTest coreTest) {
         Class<? extends EnvConfigure> extractorClazz = extractor.value();
-        if (!envConfigureCaches.contains(extractorClazz)) {
-            EnvConfigure configureExtractor = ClassUtils.newInstanceIfErrorDefault(extractorClazz, null, null);
-            if (configureExtractor != null) {
-                // 动态生成bean 配置类
-                BeanDefinition beanDefinition = configureExtractor.extract(coreTest, anno);
-                GenericApplicationContext context = coreTest.getContext();
-                if (beanDefinition != null && context != null) {
-                    context.registerBeanDefinition(anno.getType().getName(), beanDefinition);
-                }
-                envConfigureCaches.add(extractorClazz);
+        EnvConfigure configureExtractor = ClassUtils.newInstanceIfErrorDefault(extractorClazz, null, null);
+        if (configureExtractor != null) {
+            // 动态生成bean 配置类
+            BeanDefinition beanDefinition = configureExtractor.extract(coreTest, anno);
+            GenericApplicationContext context = coreTest.getContext();
+            if (beanDefinition != null && context != null) {
+                context.registerBeanDefinition(anno.getType().getName(), beanDefinition);
             }
         }
     }

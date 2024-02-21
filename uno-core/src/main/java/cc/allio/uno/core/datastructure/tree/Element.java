@@ -16,9 +16,9 @@ import java.util.List;
  * @date 2023/4/26 11:31
  * @since 1.1.4
  */
-public interface Element extends Serializable {
+public interface Element<T extends Element<T>> extends Serializable {
 
-    Element ROOT_SENTINEL = new DefaultElement(-1, -1);
+    Element ROOT_SENTINEL = new DefaultElement<>(-1, -1);
 
     /**
      * 定义根节点
@@ -52,18 +52,33 @@ public interface Element extends Serializable {
     }
 
     /**
+     * 获取父节点Id
+     *
+     * @return Element
+     * @since 1.1.6
+     */
+    default Serializable getParentId() {
+        return getParent() != null ? getParent().getId() : null;
+    }
+
+    /**
+     * 设置父节点Id
+     */
+    void setParentId(Serializable parentId);
+
+    /**
      * 获取父节点
      *
      * @return Element
      */
-    <T extends Element> T getParent();
+    T getParent();
 
     /**
      * 设置父节点
      *
      * @param parent parent node
      */
-    <T extends Element> void setParent(T parent);
+    void setParent(T parent);
 
     /**
      * 是否为根节点
@@ -82,23 +97,39 @@ public interface Element extends Serializable {
     boolean isLeaf();
 
     /**
+     * 根据指定的id获取某个子结点
+     *
+     * @param id id
+     * @return element or null
+     */
+    T findChildren(Serializable id);
+
+    /**
+     * 根据指定的id移除某个子结点
+     *
+     * @param id id
+     * @return true if success
+     */
+    boolean removeChildren(Serializable id);
+
+    /**
      * 获取子节点
      *
      * @return element list
      */
-    <T extends Element> List<T> getChildren();
+    List<T> getChildren();
 
     /**
      * 添加子结点
      */
-   <T extends Element> void addChildren(T element);
+    void addChildren(T element);
 
     /**
      * 覆盖并设置子结点
      *
      * @param children children
      */
-    <T extends Element> void setChildren(List<T> children);
+    void setChildren(List<T> children);
 
     /**
      * 清除children数据
@@ -110,7 +141,7 @@ public interface Element extends Serializable {
      *
      * @param visitor visitor
      */
-    default void accept(Visitor visitor) {
+    default void accept(Visitor<T> visitor) {
         accept(visitor, Traversal.NONE);
     }
 
@@ -120,5 +151,12 @@ public interface Element extends Serializable {
      * @param visitor   visitor
      * @param traversal 遍历原则
      */
-    void accept(Visitor visitor, Traversal traversal);
+    void accept(Visitor<T> visitor, Traversal traversal);
+
+    /**
+     * 获取Sentinel结点
+     */
+    static Element getRootSentinel() {
+        return new DefaultElement<>(-1, -1);
+    }
 }

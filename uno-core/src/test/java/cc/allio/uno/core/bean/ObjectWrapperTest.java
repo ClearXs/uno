@@ -53,8 +53,13 @@ public class ObjectWrapperTest {
         user.setName("name");
         user.setType("type");
         ObjectWrapper wrapper = new ObjectWrapper(user);
-        Map<String, Object> allValuesForce = wrapper.findAllValuesForce();
+        Map<String, Object> allValuesForce = wrapper.findMapValuesForce();
         System.out.println(allValuesForce);
+
+        wrapper.get("id")
+                .as(StepVerifier::create)
+                .expectNext(ValueWrapper.EMPTY_VALUE)
+                .verifyComplete();
 
     }
 }
