@@ -5,7 +5,7 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.6-beta.1</version>
+        <version>1.1.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -18,8 +18,7 @@
         </dependency>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-data</artifactId>
-            <scope>provided</scope>
+            <artifactId>uno-data-api</artifactId>
         </dependency>
         <dependency>
             <groupId>cc.allio</groupId>

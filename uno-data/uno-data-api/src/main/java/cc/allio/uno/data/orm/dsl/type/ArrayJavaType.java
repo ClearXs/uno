@@ -24,4 +24,5 @@ public class ArrayJavaType extends JavaTypeImpl<Object> {
     public boolean equals(Object o) {
         return Objects.equals(this, o);
     }
+
 }

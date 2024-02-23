@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.config;
 import cc.allio.uno.data.orm.executor.ExecutorInitializerAutoConfiguration;
 import cc.allio.uno.data.orm.executor.db.DbCommandExecutorLoader;
 import cc.allio.uno.data.orm.executor.db.DbExecutorProcessor;
-import cc.allio.uno.data.orm.executor.db.MybatisConfiguration;
+import cc.allio.uno.data.orm.executor.db.DbMybatisConfiguration;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
@@ -28,7 +28,7 @@ public class DbAutoConfiguration {
     @ConditionalOnClass(MybatisSqlSessionFactoryBean.class)
     @ConditionalOnMissingBean
     public DbCommandExecutorLoader dbCommandExecutorLoader(SqlSessionFactory sqlSessionFactory) {
-        return new DbCommandExecutorLoader(new MybatisConfiguration(sqlSessionFactory.getConfiguration()));
+        return new DbCommandExecutorLoader(new DbMybatisConfiguration(sqlSessionFactory.getConfiguration()));
     }
 
     @Bean

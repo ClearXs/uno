@@ -5,6 +5,7 @@ import cc.allio.uno.core.api.Step;
 import cc.allio.uno.core.bean.MapWrapper;
 import cc.allio.uno.core.bean.ObjectWrapper;
 import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.core.type.TypeOperatorFactory;
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.*;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
@@ -44,6 +45,12 @@ import java.util.stream.Collectors;
  *     <li>获取{@link ColumnDef}</li>
  *     <li>获取主键的{@link ColumnDef}</li>
  *     <li>基于{@link ColumnDef}获取对应的值</li>
+ *     <li>增强所有get value方法，根据{@link ColumnDef#getDataType()}转换对应值类型</li>
+ * </ul>
+ * <p>注意：</p>
+ * <ul>
+ *     <li>该类所有getXX方法的字段名称全是驼峰命名，除了{@link #getValueByColumn(String)}、{@link #getValueByColumn(ColumnDef)}</li>
+ *     <li>所有setXX方法的字段名称全是驼峰命名</li>
  * </ul>
  *
  * @author jiangwei
@@ -72,6 +79,7 @@ public class PojoWrapper<T> implements ValueWrapper {
     // 非主键字段
     @Getter
     private List<ColumnDef> notPkColumns;
+    private Map<DSLName, ColumnDef> columnDefMap;
 
     // 内置ValueWrapper做装饰作用
     private final ValueWrapper valueWrapper;
@@ -96,12 +104,12 @@ public class PojoWrapper<T> implements ValueWrapper {
     }
 
     PojoWrapper(Class<?> pojoClass) {
-        init(pojoClass);
         if (Types.isMap(pojoClass)) {
             this.valueWrapper = new MapWrapper();
         } else {
             this.valueWrapper = new ObjectWrapper(pojoClass);
         }
+        init(pojoClass);
     }
 
     void init(Class<?> pojoClass) {
@@ -112,6 +120,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         this.pkColumn = columnDefs.stream().filter(ColumnDef::isPk).findFirst().orElse(null);
         this.deletedColumn = columnDefs.stream().filter(ColumnDef::isDeleted).findFirst().orElse(null);
         this.notPkColumns = columnDefs.stream().filter(columnDef -> !columnDef.isPk()).toList();
+        this.columnDefMap = columnDefs.stream().collect(Collectors.toMap(ColumnDef::getDslName, f -> f));
     }
 
     /**
@@ -129,7 +138,7 @@ public class PojoWrapper<T> implements ValueWrapper {
      * @return the value
      */
     public Object getValueByColumn(String column) {
-        return getForce(column);
+        return getForce(DSLName.of(column, DSLName.HUMP_FEATURE).format());
     }
 
     /**
@@ -363,7 +372,7 @@ public class PojoWrapper<T> implements ValueWrapper {
     }
 
     /**
-     * 获取columns values 集合
+     * 获取columns values 集合.
      *
      * @return Object
      */
@@ -385,7 +394,22 @@ public class PojoWrapper<T> implements ValueWrapper {
 
     @Override
     public <K> Mono<K> get(String name, Class<K> fieldType) {
-        return valueWrapper.get(name, fieldType);
+        return valueWrapper.get(name, fieldType)
+                .flatMap(value -> {
+                    DSLName dslName = DSLName.of(name, DSLName.UNDERLINE_FEATURE);
+                    Optional<DSLName> filterDslName = dslName.filter(columnDefMap.keySet());
+                    return Mono.justOrEmpty(filterDslName)
+                            .flatMap(columnDslName -> {
+                                ColumnDef columnDef = columnDefMap.get(columnDslName);
+                                return Mono.justOrEmpty(Optional.ofNullable(columnDef))
+                                        .map(ColumnDef::getDataType)
+                                        .map(DataType::getDslType)
+                                        .mapNotNull(dslType -> TypeRegistry.getInstance().findJavaType(dslType.getJdbcType()))
+                                        .map(javaType -> TypeOperatorFactory.translator(javaType.getJavaType()).convert(value));
+                            })
+                            .cast(fieldType)
+                            .defaultIfEmpty(value);
+                });
     }
 
     @Override

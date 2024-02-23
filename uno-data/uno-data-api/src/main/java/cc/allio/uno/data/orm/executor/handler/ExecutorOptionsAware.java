@@ -16,5 +16,6 @@ public interface ExecutorOptionsAware {
      *
      * @param executorOptions executorOptions
      */
-    void setExecutorOptions(ExecutorOptions executorOptions);
+    default void setExecutorOptions(ExecutorOptions executorOptions) {
+    }
 }
