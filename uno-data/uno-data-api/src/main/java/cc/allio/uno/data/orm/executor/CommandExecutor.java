@@ -1103,8 +1103,13 @@ public interface CommandExecutor {
     default <R> IPage<R> queryPage(IPage<?> page, QueryOperator queryOperator, ListResultSetHandler<R> resultSetHandler) {
         queryOperator.page(page.getCurrent(), page.getSize());
         List<R> r = queryList(queryOperator, resultSetHandler);
+        Long count = queryOne(
+                f -> f.count().from(queryOperator.getTable()),
+                resultGroup -> resultGroup.getLongValue("count"));
         Page<R> rPage = new Page<>(page);
-        rPage.setTotal(r.size());
+        rPage.setCurrent(page.getCurrent());
+        rPage.setSize(page.getSize());
+        rPage.setTotal(count);
         rPage.setRecords(r);
         return rPage;
     }

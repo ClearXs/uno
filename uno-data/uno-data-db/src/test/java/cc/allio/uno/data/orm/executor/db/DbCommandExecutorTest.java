@@ -25,7 +25,7 @@ public class DbCommandExecutorTest extends BaseTestCase {
 
     @BeforeEach
     void init() {
-        mybatisCommandExecutor = new DbCommandExecutor(new MybatisConfiguration(sqlSessionFactory.getConfiguration()));
+        mybatisCommandExecutor = new DbCommandExecutor(new DbMybatisConfiguration(sqlSessionFactory.getConfiguration()));
         mybatisCommandExecutor.getOptions().addInterceptor(new PrintInterceptor());
         mybatisCommandExecutor.getOptions().addInterceptor(new NothingInterceptor());
         String sql = "CREATE TABLE dual (\n" +

@@ -48,19 +48,19 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Comman
 
     private final Executor executor;
     private final LanguageDriver languageDriver;
-    private final MybatisConfiguration configuration;
+    private final DbMybatisConfiguration configuration;
     private final MybatisSQLCommandAdapter sqlCommandAdapter;
     private final OperatorGroup operatorGroup;
     private static final String PACKAGE_NAME = DbCommandExecutor.class.getPackage().getName();
 
-    public DbCommandExecutor(MybatisConfiguration configuration) {
+    public DbCommandExecutor(DbMybatisConfiguration configuration) {
         this(new ExecutorOptionsImpl(
                 DataSourceHelper.getDbType(configuration.getEnvironment().getDataSource()),
                 ExecutorKey.DB,
                 OperatorKey.SQL), configuration);
     }
 
-    public DbCommandExecutor(ExecutorOptions options, MybatisConfiguration configuration) {
+    public DbCommandExecutor(ExecutorOptions options, DbMybatisConfiguration configuration) {
         super(options);
         if (configuration == null) {
             throw new NullPointerException(String.format("expect %s but not found", Configuration.class.getName()));

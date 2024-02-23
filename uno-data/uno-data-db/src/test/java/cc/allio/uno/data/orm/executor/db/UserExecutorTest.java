@@ -26,7 +26,7 @@ public class UserExecutorTest extends BaseTestCase {
 
     @BeforeEach
     void init() {
-        dbCommandExecutor = new DbCommandExecutor(new MybatisConfiguration(sqlSessionFactory.getConfiguration()));
+        dbCommandExecutor = new DbCommandExecutor(new DbMybatisConfiguration(sqlSessionFactory.getConfiguration()));
         dbCommandExecutor.getOptions().addInterceptor(new AuditInterceptor());
         dbCommandExecutor.getOptions().addInterceptor(new PrintInterceptor());
         dbCommandExecutor.getOptions().addInterceptor(new LogicInterceptor());

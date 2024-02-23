@@ -7,11 +7,12 @@ import org.apache.ibatis.builder.ResultMapResolver;
 import org.apache.ibatis.builder.annotation.MethodResolver;
 import org.apache.ibatis.builder.xml.XMLStatementBuilder;
 import org.apache.ibatis.cache.Cache;
-import org.apache.ibatis.executor.Executor;
+import org.apache.ibatis.executor.*;
 import org.apache.ibatis.executor.keygen.KeyGenerator;
 import org.apache.ibatis.executor.loader.ProxyFactory;
 import org.apache.ibatis.executor.parameter.ParameterHandler;
 import org.apache.ibatis.executor.resultset.ResultSetHandler;
+import org.apache.ibatis.executor.statement.RoutingStatementHandler;
 import org.apache.ibatis.executor.statement.StatementHandler;
 import org.apache.ibatis.io.VFS;
 import org.apache.ibatis.logging.Log;
@@ -44,15 +45,15 @@ import java.util.*;
  * @see #newResultSetHandler(Executor, MappedStatement, RowBounds, ParameterHandler, ResultHandler, BoundSql)
  * @since 1.1.4
  */
-public class MybatisConfiguration extends Configuration {
+public class DbMybatisConfiguration extends Configuration {
 
     private final Configuration configuration;
     protected Environment environment;
 
-    public MybatisConfiguration(Configuration configuration) {
+    private final InterceptorChain immutableInterceptorChain = new InterceptorChain();
+
+    public DbMybatisConfiguration(Configuration configuration) {
         this.configuration = configuration;
-        BeanInfoWrapper<MybatisConfiguration> beanInfoWrapper = BeanInfoWrapper.of(MybatisConfiguration.class);
-        beanInfoWrapper.setForce(this, "interceptorChain", new InterceptorChain());
     }
 
     @Override
@@ -486,23 +487,39 @@ public class MybatisConfiguration extends Configuration {
     @Override
     public ResultSetHandler newResultSetHandler(Executor executor, MappedStatement mappedStatement, RowBounds rowBounds, ParameterHandler parameterHandler, ResultHandler resultHandler, BoundSql boundSql) {
         ResultSetHandler resultSetHandler = new DbStatementSetHandler(executor, mappedStatement, parameterHandler, resultHandler, boundSql, rowBounds);
-        resultSetHandler = (ResultSetHandler) interceptorChain.pluginAll(resultSetHandler);
+        // 重构不走interceptorChain
+        resultSetHandler = (ResultSetHandler) immutableInterceptorChain.pluginAll(resultSetHandler);
         return resultSetHandler;
     }
 
     @Override
     public StatementHandler newStatementHandler(Executor executor, MappedStatement mappedStatement, Object parameterObject, RowBounds rowBounds, ResultHandler resultHandler, BoundSql boundSql) {
-        return configuration.newStatementHandler(executor, mappedStatement, parameterObject, rowBounds, resultHandler, boundSql);
+        // 重构不使用interceptorChain
+        StatementHandler statementHandler = new RoutingStatementHandler(executor, mappedStatement, parameterObject,
+                rowBounds, resultHandler, boundSql);
+        return (StatementHandler) immutableInterceptorChain.pluginAll(statementHandler);
     }
 
     @Override
     public Executor newExecutor(Transaction transaction) {
-        return configuration.newExecutor(transaction);
+        return newExecutor(transaction, defaultExecutorType);
     }
 
     @Override
     public Executor newExecutor(Transaction transaction, ExecutorType executorType) {
-        return configuration.newExecutor(transaction, executorType);
+        executorType = executorType == null ? defaultExecutorType : executorType;
+        Executor executor;
+        if (ExecutorType.BATCH == executorType) {
+            executor = new BatchExecutor(this, transaction);
+        } else if (ExecutorType.REUSE == executorType) {
+            executor = new ReuseExecutor(this, transaction);
+        } else {
+            executor = new SimpleExecutor(this, transaction);
+        }
+        if (cacheEnabled) {
+            executor = new CachingExecutor(executor);
+        }
+        return (Executor) immutableInterceptorChain.pluginAll(executor);
     }
 
     @Override
@@ -743,8 +760,8 @@ public class MybatisConfiguration extends Configuration {
     /**
      * 新创建一个mybatis configuration实例
      */
-    public MybatisConfiguration copy() {
-        return new MybatisConfiguration(this.configuration);
+    public DbMybatisConfiguration copy() {
+        return new DbMybatisConfiguration(this.configuration);
 
     }
 }

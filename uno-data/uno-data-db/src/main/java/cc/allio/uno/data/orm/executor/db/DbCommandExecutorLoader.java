@@ -26,10 +26,10 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class DbCommandExecutorLoader implements ExecutorLoader {
 
-    private final MybatisConfiguration configuration;
+    private final DbMybatisConfiguration configuration;
     private final AtomicInteger createCount = new AtomicInteger(0);
 
-    public DbCommandExecutorLoader(MybatisConfiguration configuration) {
+    public DbCommandExecutorLoader(DbMybatisConfiguration configuration) {
         this.configuration = configuration;
     }
 
@@ -71,7 +71,7 @@ public class DbCommandExecutorLoader implements ExecutorLoader {
         dataSource.setConnectionTimeout(Duration.ofSeconds(10).toMillis());
         dataSource.setMaximumPoolSize(2);
         dataSource.setMaxLifetime(Duration.ofSeconds(30).toMillis());
-        MybatisConfiguration newConfiguration = configuration.copy();
+        DbMybatisConfiguration newConfiguration = configuration.copy();
         Environment environment = new Environment("DbCommandExecutorLoader" + createCount.getAndIncrement(), new SpringManagedTransactionFactory(), dataSource);
         newConfiguration.setEnvironment(environment);
         return new DbCommandExecutor(executorOptions, newConfiguration);

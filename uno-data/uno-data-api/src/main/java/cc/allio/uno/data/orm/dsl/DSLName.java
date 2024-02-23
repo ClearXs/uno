@@ -1,10 +1,12 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.api.EqualsTo;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 
+import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -16,7 +18,7 @@ import java.util.regex.Pattern;
  */
 @Getter
 @EqualsAndHashCode(of = "name")
-public class DSLName implements Comparable<DSLName> {
+public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
 
     // 当前存入的dsl name
     private String name;
@@ -26,7 +28,7 @@ public class DSLName implements Comparable<DSLName> {
     private static final String HUMP_REGULAR = "^[a-z]+(?:[A-Z][a-z]*)*$";
     private static final Pattern HUMP_PATTERN = Pattern.compile(HUMP_REGULAR);
 
-    private static final String UNDERLINE_REGULAR = "^[a-zA-Z]+(?:_[a-zA-Z]+)*$";
+    private static final String UNDERLINE_REGULAR = "^[a-z]+(?:_[a-z]+)*$";
     private static final Pattern UNDERLINE_PATTERN = Pattern.compile(UNDERLINE_REGULAR);
 
     /**
@@ -49,6 +51,46 @@ public class DSLName implements Comparable<DSLName> {
     public static final NameFeature PLAIN_FEATURE = new PlainFeature();
     public static final NameFeature LOWER_CASE_FEATURE = new LowerCaseFeature();
     public static final NameFeature UPPER_CASE_FEATURE = new UpperCaseFeature();
+
+    private void setFeature(NameFeature... features) {
+        this.feature = new AggregateNameFeature(features);
+    }
+
+    /**
+     * 把当前存入的sql name进行格式化
+     *
+     * @return 格式化后的name
+     */
+    public String format() {
+        return getFeature().format(getName());
+    }
+
+    /**
+     * 根据指定的名称特性
+     *
+     * @param feature the feature
+     * @return format the name
+     */
+    public String format(NameFeature feature) {
+        if (feature == null) {
+            throw new IllegalArgumentException("NameFeature is null");
+        }
+        return feature.format(getName());
+    }
+
+    @Override
+    public int compareTo(DSLName o) {
+        return this.name.compareTo(o.name);
+    }
+
+    @Override
+    public boolean equalsTo(DSLName other) {
+        // 如果名称不匹配，则尝试使用format
+        if (!this.name.equals(other.name)) {
+            return format().equals(other.name);
+        }
+        return true;
+    }
 
     /**
      * 获取name feature
@@ -127,37 +169,6 @@ public class DSLName implements Comparable<DSLName> {
      */
     public static String toUnderline(String hump) {
         return DSLName.of(hump, UNDERLINE_FEATURE).format();
-    }
-
-    private void setFeature(NameFeature... features) {
-        this.feature = new AggregateNameFeature(features);
-    }
-
-    /**
-     * 把当前存入的sql name进行格式化
-     *
-     * @return 格式化后的name
-     */
-    public String format() {
-        return getFeature().format(getName());
-    }
-
-    /**
-     * 根据指定的名称特性
-     *
-     * @param feature the feature
-     * @return format the name
-     */
-    public String format(NameFeature feature) {
-        if (feature == null) {
-            throw new IllegalArgumentException("NameFeature is null");
-        }
-        return feature.format(getName());
-    }
-
-    @Override
-    public int compareTo(DSLName o) {
-        return this.name.compareTo(o.name);
     }
 
     /**

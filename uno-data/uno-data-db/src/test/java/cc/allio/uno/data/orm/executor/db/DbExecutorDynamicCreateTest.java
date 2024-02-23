@@ -48,7 +48,7 @@ public class DbExecutorDynamicCreateTest extends BaseTestCase {
     private CommandExecutor getCommandExecutor(JdbcConnectionDetails connectionDetails) {
         HikariDataSource dataSource = getHakariDataSource(connectionDetails);
         Configuration configuration = sqlSessionFactory.getConfiguration();
-        MybatisConfiguration mybatisConfiguration = new MybatisConfiguration(configuration);
+        DbMybatisConfiguration mybatisConfiguration = new DbMybatisConfiguration(configuration);
         Environment environment = new Environment("h2", new SpringManagedTransactionFactory(), dataSource);
         mybatisConfiguration.setEnvironment(environment);
         DbCommandExecutorLoader loader = new DbCommandExecutorLoader(mybatisConfiguration);
