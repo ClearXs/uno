@@ -61,6 +61,36 @@ public class LogicGroup extends TraversalElement<LogicGroup> implements GroupEle
     }
 
     @Override
+    public LogicGroup findChildren(Serializable id) {
+        for (LogicGroup child : children) {
+            if (id.equals(child.getId())) {
+                return child;
+            }
+            LogicGroup findChild = child.findChildren(id);
+            if (findChild != null) {
+                return findChild;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public boolean removeChildren(Serializable id) {
+        boolean removed = children.removeIf(child -> id.equals(child.getId()));
+        if (removed) {
+            return true;
+        }
+        // 没有移除尝试在从字节中再次移除
+        for (LogicGroup child : children) {
+            removed = child.removeChildren(id);
+            if (removed) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
     public List<LogicGroup> getChildren() {
         return null;
     }

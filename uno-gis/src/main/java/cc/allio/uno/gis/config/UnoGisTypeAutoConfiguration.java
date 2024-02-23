@@ -1,8 +1,8 @@
 package cc.allio.uno.gis.config;
 
-import cc.allio.uno.data.orm.type.JdbcType;
-import cc.allio.uno.data.orm.type.JdbcTypeImpl;
-import cc.allio.uno.data.orm.type.TypeRegistry;
+import cc.allio.uno.data.orm.dsl.type.JdbcType;
+import cc.allio.uno.data.orm.dsl.type.JdbcTypeImpl;
+import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
 import cc.allio.uno.gis.GeometryTypes;
 import cc.allio.uno.gis.local.type.*;
 import org.springframework.beans.factory.InitializingBean;

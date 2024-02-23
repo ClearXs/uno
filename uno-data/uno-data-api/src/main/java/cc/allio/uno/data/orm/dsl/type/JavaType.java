@@ -1,5 +1,7 @@
 package cc.allio.uno.data.orm.dsl.type;
 
+import cc.allio.uno.core.api.EqualsTo;
+
 import java.io.Serializable;
 
 /**
@@ -10,7 +12,7 @@ import java.io.Serializable;
  * @see TypeRegistry
  * @since 1.1.4
  */
-public interface JavaType<T> extends Serializable {
+public interface JavaType<T> extends Serializable, EqualsTo<Class<?>> {
 
     /**
      * 获取Java类型对应 class 实例
@@ -18,14 +20,6 @@ public interface JavaType<T> extends Serializable {
      * @return class 实例
      */
     Class<T> getJavaType();
-
-    /**
-     * 比较类型是否属于当前Java类型
-     *
-     * @param otherJavaType otherJavaType
-     * @return ture ye or nor
-     */
-    boolean equalsTo(Class<?> otherJavaType);
 
     /**
      * 获取当前Java类型对应的SQL字段的默认长度
