@@ -5,7 +5,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.2.2</version>
+        <version>3.2.3</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
 
@@ -21,15 +21,21 @@
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
-        <auto-service.version>1.0.1</auto-service.version>
+        <auto-service.version>1.1.0</auto-service.version>
         <!-- 代理相关 -->
         <byte-buddy.version>1.12.2</byte-buddy.version>
         <cglib.version>3.3.0</cglib.version>
         <lombok.version>1.18.22</lombok.version>
         <!-- 单元测试框架 -->
-        <junit-jupiter.version>5.6.2</junit-jupiter.version>
-        <mockito.version>5.6.0</mockito.version>
-        <guava.version>31.1-jre</guava.version>
+        <junit-jupiter.version>5.10.2</junit-jupiter.version>
+        <mockito.version>5.11.0</mockito.version>
+        <!-- 多线程单元测试 -->
+        <concurrentunit.version>0.4.6</concurrentunit.version>
+        <guava.version>33.0.0-jre</guava.version>
+        <!-- 状态机 -->
+        <spring-statemachine.version>4.0.0</spring-statemachine.version>
+        <!-- jakarta规范 -->
+        <jakarta.version>2.0.1</jakarta.version>
         <!-- swagger -->
         <swagger-v3.version>2.2.17</swagger-v3.version>
         <swagger-v2.version>1.6.2</swagger-v2.version>
@@ -44,23 +50,21 @@
         <sqlserver-connector.version>8.4.1.jre8</sqlserver-connector.version>
         <mybatis-plus-dynamic.version>4.3.0</mybatis-plus-dynamic.version>
         <!-- 空间数据处理 -->
-        <geotools.version>27.0</geotools.version>
-        <gdal.version>3.7.0</gdal.version>
+        <geotools.version>30.2</geotools.version>
+        <gdal.version>3.8.0</gdal.version>
         <postgis-jdbc.version>2.5.1</postgis-jdbc.version>
         <!-- elasticsearch -->
-        <elasticsearch-client.version>8.7.1</elasticsearch-client.version>
+        <elasticsearch-client.version>8.12.2</elasticsearch-client.version>
         <!-- influxdb -->
         <influxdb-client.version>6.7.0</influxdb-client.version>
-        <shardingsphere.version>5.3.1</shardingsphere.version>
         <!-- tdengine -->
         <tdengine.version>3.2.4</tdengine.version>
-        <!-- 状态机 -->
-        <spring-statemachine.version>3.2.1</spring-statemachine.version>
-        <!-- jakarta规范 -->
-        <jakarta.version>2.0.1</jakarta.version>
-        <!-- 多线程单元测试 -->
-        <concurrentunit.version>0.4.6</concurrentunit.version>
+        <!-- mongodb -->
         <mongodb.version>5.0.0</mongodb.version>
+        <!-- neo4j -->
+        <neo4j.version>5.17.0</neo4j.version>
+        <!-- redisson -->
+        <redisson.version>3.27.1</redisson.version>
     </properties>
 
     <dependencyManagement>
@@ -82,25 +86,29 @@
                 <version>${uno.version}</version>
                 <scope>test</scope>
             </dependency>
-            <!-- uno-components -->
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-component-http</artifactId>
+                <artifactId>uno-http</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-component-websocket</artifactId>
+                <artifactId>uno-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-component-sequential</artifactId>
+                <artifactId>uno-sequential</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-component-kafka</artifactId>
+                <artifactId>uno-kafka</artifactId>
+                <version>${uno.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>cc.allio</groupId>
+                <artifactId>uno-netty</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- uno-starters -->
@@ -122,11 +130,6 @@
             <dependency>
                 <groupId>cc.allio</groupId>
                 <artifactId>uno-starter-sequential</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-starter-redis</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- UNO feature -->
@@ -368,27 +371,6 @@
                 <artifactId>gdal</artifactId>
                 <version>${gdal.version}</version>
             </dependency>
-            <!-- SQL Parser -->
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-sql-parser-mysql</artifactId>
-                <version>${shardingsphere.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-sql-parser-postgresql</artifactId>
-                <version>${shardingsphere.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-sql-parser-sqlserver</artifactId>
-                <version>${shardingsphere.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.apache.shardingsphere</groupId>
-                <artifactId>shardingsphere-sql-parser-oracle</artifactId>
-                <version>${shardingsphere.version}</version>
-            </dependency>
             <dependency>
                 <groupId>jakarta.json</groupId>
                 <artifactId>jakarta.json-api</artifactId>
@@ -403,6 +385,16 @@
                 <groupId>org.mongodb</groupId>
                 <artifactId>mongodb-driver-sync</artifactId>
                 <version>${mongodb.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.neo4j.driver</groupId>
+                <artifactId>neo4j-java-driver</artifactId>
+                <version>${neo4j.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.redisson</groupId>
+                <artifactId>redisson</artifactId>
+                <version>${redisson.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

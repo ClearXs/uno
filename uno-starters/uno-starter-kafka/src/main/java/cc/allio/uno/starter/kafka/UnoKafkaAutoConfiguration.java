@@ -1,7 +1,7 @@
 package cc.allio.uno.starter.kafka;
 
-import cc.allio.uno.component.kafka.UnoKafkaManagement;
-import cc.allio.uno.component.kafka.UnoKafkaProperties;
+import cc.allio.uno.kafka.UnoKafkaManagement;
+import cc.allio.uno.kafka.UnoKafkaProperties;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;

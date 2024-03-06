@@ -22,11 +22,6 @@ import reactor.util.function.Tuple2;
  */
 class StringUtilBaseTest extends BaseTestCase {
 
-    @Override
-    protected void onInit() throws Throwable {
-
-    }
-
     /**
      * 测试裁剪普通的url地址
      */
@@ -275,10 +270,5 @@ class StringUtilBaseTest extends BaseTestCase {
         StepVerifier.create(StringUtils.getPort(templateUrl))
                 .expectNext(0)
                 .verifyComplete();
-    }
-
-    @Override
-    protected void onDown() throws Throwable {
-
     }
 }

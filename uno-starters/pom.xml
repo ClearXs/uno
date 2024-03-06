@@ -17,7 +17,6 @@
         <module>uno-starter-kafka</module>
         <module>uno-starter-websocket</module>
         <module>uno-starter-sequential</module>
-        <module>uno-starter-redis</module>
     </modules>
 
     <dependencies>

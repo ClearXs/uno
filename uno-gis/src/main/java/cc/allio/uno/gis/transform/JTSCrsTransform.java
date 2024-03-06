@@ -2,11 +2,11 @@ package cc.allio.uno.gis.transform;
 
 import cc.allio.uno.gis.SRID;
 import lombok.extern.slf4j.Slf4j;
+import org.geotools.api.referencing.FactoryException;
+import org.geotools.api.referencing.operation.MathTransform;
 import org.geotools.geometry.jts.JTS;
 import org.geotools.referencing.CRS;
 import org.locationtech.jts.geom.Geometry;
-import org.opengis.referencing.FactoryException;
-import org.opengis.referencing.operation.MathTransform;
 
 /**
  * JTS坐标系转换

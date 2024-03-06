@@ -1,11 +1,11 @@
 package cc.allio.uno.starter.sequential;
 
-import cc.allio.uno.component.sequential.SubscriptionProperties;
-import cc.allio.uno.component.sequential.process.Processor;
 import cc.allio.uno.core.bus.EventBusFactory;
 import cc.allio.uno.core.type.TypeManager;
-import cc.allio.uno.component.sequential.bus.SequentialEventBus;
-import cc.allio.uno.component.sequential.process.DefaultProcessor;
+import cc.allio.uno.sequnetial.SubscriptionProperties;
+import cc.allio.uno.sequnetial.bus.SequentialEventBus;
+import cc.allio.uno.sequnetial.process.DefaultProcessor;
+import cc.allio.uno.sequnetial.process.Processor;
 import org.springframework.boot.autoconfigure.AutoConfigureOrder;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

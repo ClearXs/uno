@@ -18,7 +18,7 @@
         </dependency>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-component-websocket</artifactId>
+            <artifactId>uno-websocket</artifactId>
         </dependency>
         <dependency>
             <groupId>cc.allio</groupId>

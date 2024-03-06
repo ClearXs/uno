@@ -12,12 +12,13 @@ public class LockContextTest extends BaseTestCase {
                 .unchecked();
         assertEquals("1", numOfOne);
 
-        Integer except = LockContext.lock()
-                .lockReturn(() -> 1 / 0)
-                .except(ArithmeticException.class);
-        assertNull(except);
+        assertThrows(
+                ArithmeticException.class,
+                () -> LockContext.lock()
+                        .lockReturn(() -> 1 / 0)
+                        .except(ArithmeticException.class));
 
-        except = LockContext.lock()
+        var except = LockContext.lock()
                 .lockReturn(() -> 1 / 0)
                 .unwrapOrElse(err -> {
                     assertEquals(1, err.size());

@@ -34,9 +34,4 @@ class InitializationCacheTest extends BaseTestCase {
             assertEquals(mock, buffer.get(0));
         });
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

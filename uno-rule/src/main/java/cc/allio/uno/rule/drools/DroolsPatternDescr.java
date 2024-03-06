@@ -1,29 +1,30 @@
 package cc.allio.uno.rule.drools;
 
+import lombok.Getter;
 import lombok.Setter;
-import org.drools.compiler.lang.descr.*;
+import org.drools.base.rule.Declaration;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.core.factmodel.GenericTypeDefinition;
-import org.drools.core.rule.Declaration;
+import org.drools.drl.ast.descr.*;
+import org.kie.internal.definition.GenericTypeDefinition;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.Function;
 
-import static org.drools.core.factmodel.GenericTypeDefinition.parseType;
-
 public class DroolsPatternDescr extends PatternDescr {
 
-    private static final long serialVersionUID = 510l;
     private String objectType;
     private String identifier;
     private boolean unification;
+    @Getter
     @Setter
     private ConditionalElementDescr constraint = new AndDescr();
     private int leftParentCharacter = -1;
     private int rightParentCharacter = -1;
+    @Setter
     private PatternSourceDescr source;
+    @Setter
     private List<BehaviorDescr> behaviors;
     private boolean query;
     private Declaration xpathStartDeclaration;
@@ -53,37 +54,44 @@ public class DroolsPatternDescr extends PatternDescr {
         this.query = isQuery;
     }
 
+    @Override
     public void setIdentifier(final String identifier) {
         this.identifier = identifier;
     }
 
+    @Override
     public void setObjectType(final String objectType) {
         this.objectType = objectType;
     }
 
+    @Override
     public void setQuery(boolean query) {
         this.query = query;
     }
 
+    @Override
     public String getObjectType() {
         return this.objectType;
     }
 
     public boolean resolveObjectType(Function<String, String> resolver) {
         if (genericType == null) {
-            genericType = parseType(objectType, resolver);
+            genericType = GenericTypeDefinition.parseType(objectType, resolver);
         }
         return genericType != null;
     }
 
+    @Override
     public GenericTypeDefinition getGenericType() {
         return genericType == null ? new GenericTypeDefinition(objectType) : genericType;
     }
 
+    @Override
     public String getIdentifier() {
         return this.identifier;
     }
 
+    @Override
     public List<String> getAllBoundIdentifiers() {
         List<String> identifiers = new ArrayList<>();
         if (this.identifier != null) {
@@ -99,6 +107,7 @@ public class DroolsPatternDescr extends PatternDescr {
         return identifiers;
     }
 
+    @Override
     public boolean isQuery() {
         return query;
     }
@@ -108,35 +117,38 @@ public class DroolsPatternDescr extends PatternDescr {
         return query || (source instanceof FromDescr && !context.getEntryPointId(((FromDescr) source).getDataSource().getText()).isPresent());
     }
 
+    @Override
     public List<? extends BaseDescr> getDescrs() {
         return this.constraint.getDescrs();
     }
 
+    @Override
     public void addConstraint(BaseDescr base) {
         this.constraint.addDescr(base);
     }
 
+    @Override
     public void removeAllConstraint() {
         constraint = new AndDescr();
     }
 
+    @Override
     public boolean removeConstraint(BaseDescr base) {
         return this.constraint.removeDescr(base);
     }
 
-    public ConditionalElementDescr getConstraint() {
-        return this.constraint;
-    }
-
+    @Override
     public DroolsPatternDescr negateConstraint() {
         this.constraint = (ConditionalElementDescr) ((BaseDescr) this.constraint).negate();
         return this;
     }
 
+    @Override
     public List<? extends BaseDescr> getPositionalConstraints() {
         return this.doGetConstraints(ExprConstraintDescr.Type.POSITIONAL);
     }
 
+    @Override
     public List<? extends BaseDescr> getSlottedConstraints() {
         return this.doGetConstraints(ExprConstraintDescr.Type.NAMED);
     }
@@ -146,8 +158,7 @@ public class DroolsPatternDescr extends PatternDescr {
         for (BaseDescr descr : this.constraint.getDescrs()) {
 
             // if it is a ExprConstraintDescr - check the type
-            if (descr instanceof ExprConstraintDescr) {
-                ExprConstraintDescr desc = (ExprConstraintDescr) descr;
+            if (descr instanceof ExprConstraintDescr desc) {
                 if (desc.getType().equals(type)) {
                     returnList.add(desc);
                 }
@@ -164,9 +175,10 @@ public class DroolsPatternDescr extends PatternDescr {
 
     public boolean isInternalFact(RuleBuildContext context) {
         return !(source == null || source instanceof EntryPointDescr ||
-                (source instanceof FromDescr) && context.getEntryPointId(((FromDescr) source).getExpression()).isPresent());
+                (source instanceof FromDescr fromDescr) && context.getEntryPointId(fromDescr.getExpression()).isPresent());
     }
 
+    @Override
     public String toString() {
         return "[Pattern: id=" + this.identifier + "; objectType=" + this.objectType + "]";
     }
@@ -174,6 +186,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @return the leftParentCharacter
      */
+    @Override
     public int getLeftParentCharacter() {
         return this.leftParentCharacter;
     }
@@ -181,6 +194,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @param leftParentCharacter the leftParentCharacter to setValue
      */
+    @Override
     public void setLeftParentCharacter(final int leftParentCharacter) {
         this.leftParentCharacter = leftParentCharacter;
     }
@@ -188,6 +202,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @return the rightParentCharacter
      */
+    @Override
     public int getRightParentCharacter() {
         return this.rightParentCharacter;
     }
@@ -195,16 +210,14 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @param rightParentCharacter the rightParentCharacter to setValue
      */
+    @Override
     public void setRightParentCharacter(final int rightParentCharacter) {
         this.rightParentCharacter = rightParentCharacter;
     }
 
+    @Override
     public PatternSourceDescr getSource() {
         return source;
-    }
-
-    public void setSource(PatternSourceDescr source) {
-        this.source = source;
     }
 
     @Override
@@ -216,6 +229,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @return the behaviors
      */
+    @Override
     public List<BehaviorDescr> getBehaviors() {
         if (behaviors == null) {
             return Collections.emptyList();
@@ -223,13 +237,7 @@ public class DroolsPatternDescr extends PatternDescr {
         return behaviors;
     }
 
-    /**
-     * @param behaviors the behaviors to setValue
-     */
-    public void setBehaviors(List<BehaviorDescr> behaviors) {
-        this.behaviors = behaviors;
-    }
-
+    @Override
     public void addBehavior(BehaviorDescr behavior) {
         if (this.behaviors == null) {
             this.behaviors = new ArrayList<>();
@@ -240,6 +248,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @return the unification
      */
+    @Override
     public boolean isUnification() {
         return unification;
     }
@@ -247,6 +256,7 @@ public class DroolsPatternDescr extends PatternDescr {
     /**
      * @param unification the unification to setValue
      */
+    @Override
     public void setUnification(boolean unification) {
         this.unification = unification;
     }
@@ -259,6 +269,7 @@ public class DroolsPatternDescr extends PatternDescr {
         this.xpathStartDeclaration = xpathStartDeclaration;
     }
 
+    @Override
     public DroolsPatternDescr clone() {
         DroolsPatternDescr clone = new DroolsPatternDescr(this.objectType,
                 this.identifier);
@@ -286,6 +297,7 @@ public class DroolsPatternDescr extends PatternDescr {
         return clone;
     }
 
+    @Override
     public void accept(DescrVisitor visitor) {
         visitor.visit(this);
     }

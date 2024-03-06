@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-component-sequential</artifactId>
+            <artifactId>uno-sequential</artifactId>
         </dependency>
     </dependencies>
 </project>

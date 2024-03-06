@@ -20,7 +20,6 @@
         <dependency>
             <groupId>com.influxdb</groupId>
             <artifactId>influxdb-client-java</artifactId>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>

@@ -13,15 +13,16 @@ uno（'u:no，读wu no）提供基础的组件，来构建大型复杂应用的�
 - auto：自动生成spi文件、还包括spring.factories。
 - bom：项目包依赖集。
 - plugins（未实现）：通用的插件工具，包含微内核模式接口声明、jar包等第三方插件包加载与执行。
-- components: 组件集合。
-    - <a href="./docs/components/http.md">http</a>: 构建openapi工具，响应式的http请求响应框架。
-    - kafka：基于响应式背压封装的kafka。
-    - media：多媒体组件，基于命令模式提供通用api。
-    - netty：封装netty，构建无集群模式的RPC框架。
-    - sequential：时序数据的处理，包含数据接收、转换、处理，基于响应式，背压特性高性能的数据处理。
-    - websocket：封装websocket，具有数据批推，发布订阅模式，客户端可以使用Topic的路径树化。
-
+- <a href="./docs/components/http.md">http</a>: 构建openapi工具，响应式的http请求响应框架。
+- kafka：基于响应式背压封装的kafka。
+- netty：封装netty，构建无集群模式的RPC框架。
+- sequential：时序数据的处理，包含数据接收、转换、处理，基于响应式，背压特性高性能的数据处理。
+- websocket：封装websocket，具有数据批推，发布订阅模式，客户端可以使用Topic的路径树化。
 - <a href="./docs/starter.md">starter</a>：为各个组件编写spring-starter包。
+  - core
+  - kafka
+  - sequential
+  - websocket
 
 
 

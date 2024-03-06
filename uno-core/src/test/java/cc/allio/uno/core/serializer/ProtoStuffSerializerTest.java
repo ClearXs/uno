@@ -25,9 +25,4 @@ class ProtoStuffSerializerTest extends BaseTestCase {
         String deserialize = serializer.deserialize(bytes, String.class);
         assertEquals("serializer", deserialize);
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

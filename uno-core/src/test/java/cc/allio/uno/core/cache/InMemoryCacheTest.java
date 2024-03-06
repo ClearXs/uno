@@ -33,9 +33,4 @@ class InMemoryCacheTest extends BaseTestCase {
     void testPutWithNull() {
         assertNull(cache.put(null));
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

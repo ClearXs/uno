@@ -31,9 +31,4 @@ class SerializerHolderTest extends BaseTestCase {
         assertNotNull(serializer);
         assertEquals(JacksonSerializer.class.getName(),serializer.getClass().getName());
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

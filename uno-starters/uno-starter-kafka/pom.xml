@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-component-kafka</artifactId>
+            <artifactId>uno-kafka</artifactId>
         </dependency>
     </dependencies>
 
