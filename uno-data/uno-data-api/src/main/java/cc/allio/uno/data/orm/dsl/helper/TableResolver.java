@@ -8,7 +8,7 @@ import cc.allio.uno.data.orm.dsl.Table;
  * @author jiangwei
  * @date 2024/2/6 20:05
  * @see TableResolve
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface TableResolver {
 

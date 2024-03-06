@@ -7,7 +7,7 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
  *
  * @author jiangwei
  * @date 2024/2/14 16:21
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorOptionsAware {
 

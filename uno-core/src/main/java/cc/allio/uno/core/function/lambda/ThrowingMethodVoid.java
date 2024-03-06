@@ -8,10 +8,13 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 16:03
  * @see MethodVoid
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodVoid extends Serializable, LambdaMethod {
 
+    /**
+     * accept, potentially throwing an exception.
+     */
     void accept() throws Throwable;
 }

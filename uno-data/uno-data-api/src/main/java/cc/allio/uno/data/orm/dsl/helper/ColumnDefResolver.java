@@ -10,7 +10,7 @@ import java.lang.reflect.Field;
  * @author jiangwei
  * @date 2024/2/6 20:08
  * @see ColumnDefResolve
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ColumnDefResolver {
 

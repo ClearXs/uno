@@ -7,7 +7,7 @@ import java.util.function.Consumer;
  *
  * @author jiangwei
  * @date 2024/1/9 15:57
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface VoidConsumer extends Consumer<Object>, Action<Object> {

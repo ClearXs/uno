@@ -22,7 +22,7 @@ import java.util.function.Supplier;
  *
  * @author jiangwei
  * @date 2024/1/25 17:07
- * @since 1.1.6
+ * @since 1.1.7
  */
 @Slf4j
 public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {

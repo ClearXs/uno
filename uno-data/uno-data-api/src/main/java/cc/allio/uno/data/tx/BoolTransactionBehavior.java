@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  *
  * @author jiangwei
  * @date 2024/2/11 12:42
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class BoolTransactionBehavior extends BaseTransactionBehavior<BoolTransactionBehavior> {
 

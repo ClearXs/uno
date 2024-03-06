@@ -5,7 +5,7 @@ package cc.allio.uno.data.tx;
  *
  * @author jiangwei
  * @date 2024/2/11 11:14
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface VoidTransactionAction {

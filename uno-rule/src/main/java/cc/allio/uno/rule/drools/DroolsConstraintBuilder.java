@@ -2,16 +2,16 @@ package cc.allio.uno.rule.drools;
 
 import cc.allio.uno.rule.api.Rule;
 import cc.allio.uno.rule.api.RuleAttr;
+import org.drools.base.base.ClassObjectType;
+import org.drools.base.rule.Declaration;
+import org.drools.base.rule.Pattern;
+import org.drools.base.rule.constraint.Constraint;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.DescrBuildError;
-import org.drools.compiler.lang.descr.PredicateDescr;
+import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.core.base.ClassObjectType;
-import org.drools.core.base.EvaluatorWrapper;
-import org.drools.core.rule.Declaration;
-import org.drools.core.rule.Pattern;
-import org.drools.core.spi.Constraint;
-import org.drools.core.spi.KnowledgeHelper;
+import org.drools.core.rule.consequence.KnowledgeHelper;
+import org.drools.drl.ast.descr.PredicateDescr;
 import org.drools.mvel.MVELConstraintBuilder;
 import org.drools.mvel.builder.MVELAnalysisResult;
 import org.drools.mvel.builder.MVELDialect;
@@ -25,6 +25,7 @@ public class DroolsConstraintBuilder extends MVELConstraintBuilder {
 
     static final DroolsConstraintBuilder DROOLS_CONSTRAINT_BUILDER = new DroolsConstraintBuilder();
 
+    @Override
     public Constraint buildMvelConstraint(String packageName,
                                           String expression,
                                           Declaration[] declarations,
@@ -69,12 +70,12 @@ public class DroolsConstraintBuilder extends MVELConstraintBuilder {
             Map<String, Class<?>> declIds = context.getDeclarationResolver().getDeclarationClasses(context.getRule());
 
             Pattern p = (Pattern) context.getDeclarationResolver().peekBuildStack();
-            if (p.getObjectType() instanceof ClassObjectType) {
+            if (p.getObjectType() instanceof ClassObjectType c) {
                 declIds.put("this",
-                        p.getObjectType().getClassType());
+                        c.getClassType());
             }
 
-            unit = dialect.getMVELCompilationUnit((String) predicateDescr.getContent(),
+            unit = MVELDialect.getMVELCompilationUnit((String) predicateDescr.getContent(),
                     analysis,
                     previousDeclarations,
                     localDeclarations,

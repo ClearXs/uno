@@ -32,9 +32,4 @@ class TimerSegmentTaskBaseTest extends BaseTestCase {
             Thread.sleep(30000);
         });
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

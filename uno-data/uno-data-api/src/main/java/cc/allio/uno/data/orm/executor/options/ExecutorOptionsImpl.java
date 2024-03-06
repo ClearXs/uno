@@ -20,7 +20,7 @@ import java.util.Optional;
  *
  * @author jiangwei
  * @date 2024/1/8 10:30
- * @since 1.1.6
+ * @since 1.1.7
  */
 public final class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet implements ExecutorOptions {
 

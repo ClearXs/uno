@@ -22,7 +22,7 @@ import java.util.Map;
  *
  * @author jiangwei
  * @date 2024/1/25 17:52
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class ExecutorOptionsBuilder implements Self<ExecutorOptionsBuilder> {
 

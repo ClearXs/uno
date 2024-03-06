@@ -8,10 +8,16 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 15:54
  * @see MethodConsumer
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodConsumer<T> extends Serializable, LambdaMethod {
 
+    /**
+     * accept, potentially throwing an exception
+     *
+     * @param t the input
+     */
     void accept(T t) throws Throwable;
+
 }

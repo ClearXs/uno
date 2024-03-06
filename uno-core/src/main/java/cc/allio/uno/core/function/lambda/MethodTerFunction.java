@@ -7,7 +7,7 @@ import java.io.Serializable;
  * <p>该接口包含能够获取Lambda方法名、字段名、Lambda方法的序列化信息等。</p>
  * @author jiangwei
  * @date 2024/1/26 18:40
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodTerFunction<T, U, L, R> extends Serializable, LambdaMethod {

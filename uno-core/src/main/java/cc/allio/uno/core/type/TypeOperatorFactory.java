@@ -12,7 +12,7 @@ import java.util.function.Function;
  * @author jiangwei
  * @date 2021/12/23 20:35
  * @modifyDate 2024/01/13 18:32
- * @since 1.1.6
+ * @since 1.1.0
  */
 public class TypeOperatorFactory {
 
@@ -32,7 +32,6 @@ public class TypeOperatorFactory {
     private static final TypeOperator<Date> DATE_TYPE_OPERATOR = new DateCalculateOperator();
     private static final TypeOperator<Long> LONG_TYPE_OPERATOR = new LongTypeOperator();
     private static final TypeOperator<Float> FLOAT_TYPE_OPERATOR = new FloatTypeOperator();
-
 
     static {
         addTypeOperator(Types.BIG_DECIMAL, type -> BIG_DECIMAL_TYPE_OPERATOR);

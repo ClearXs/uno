@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @author jiangwei
  * @date 2024/2/1 19:56
- * @since 1.1.6
+ * @since 1.1.7
  */
 public abstract class DSLTypeDelegate implements DSLType {
 

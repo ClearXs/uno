@@ -83,9 +83,4 @@ class JacksonSerializerTest extends BaseTestCase {
             return new Item(id, itemName);
         }
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

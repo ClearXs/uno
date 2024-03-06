@@ -9,11 +9,11 @@ import cc.allio.uno.rule.api.event.RuleContext;
 import cc.allio.uno.rule.api.vistor.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import org.drools.base.definitions.InternalKnowledgePackage;
+import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.Dialect;
-import org.drools.compiler.lang.descr.*;
-import org.drools.core.definitions.InternalKnowledgePackage;
-import org.drools.core.definitions.rule.impl.RuleImpl;
+import org.drools.drl.ast.descr.*;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
@@ -204,7 +204,6 @@ public class DroolsRuleManager {
             }
             // 构建drools conditions需要明确当前parent，做映射.
             // 已知group一定是parent节点
-            // 基于广度遍历的实现
             if (e instanceof LogicGroup) {
                 ConditionalElementDescr p = parentrMap.get(e.getParent());
                 LogicPredicate logic = ((LogicGroup) e).getLogic();
@@ -220,7 +219,6 @@ public class DroolsRuleManager {
                 node.addConstraint(new ExprConstraintDescr(((AttrElement) e).getRuleAttr().getExpr()));
                 p.addDescr(node);
             }
-
         }
 
         private BaseDescr createLogicDescr(LogicPredicate logicPredicate) {

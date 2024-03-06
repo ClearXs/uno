@@ -9,7 +9,7 @@ import java.util.Optional;
  *
  * @author jiangwei
  * @date 2024/2/16 20:17
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface EqualsTo<T> {
 

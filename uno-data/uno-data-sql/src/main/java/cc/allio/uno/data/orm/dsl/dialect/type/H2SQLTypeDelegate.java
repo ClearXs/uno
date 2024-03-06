@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author jiangwei
  * @date 2024/1/8 19:42
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class H2SQLTypeDelegate extends DSLTypeDelegate {
 

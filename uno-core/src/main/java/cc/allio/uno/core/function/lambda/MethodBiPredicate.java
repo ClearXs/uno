@@ -9,7 +9,7 @@ import java.util.function.BiPredicate;
  * @author jiangwei
  * @date 2024/2/11 10:48
  * @see BiPredicate
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodBiPredicate<T, U> extends BiPredicate<T, U>, LambdaMethod {

@@ -12,7 +12,7 @@ import java.util.function.Supplier;
  *
  * @author jiangwei
  * @date 2024/1/29 13:04
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface CommandExecutorRegistry {
 

@@ -5,7 +5,7 @@ package cc.allio.uno.core.function;
  *
  * @author jiangwei
  * @date 2024/1/9 15:51
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface TernaryConsumer<T, Q, P> {

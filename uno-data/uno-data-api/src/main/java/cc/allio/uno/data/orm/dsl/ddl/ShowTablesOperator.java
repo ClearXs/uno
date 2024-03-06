@@ -8,7 +8,7 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
  *
  * @author jiangwei
  * @date 2024/1/4 16:56
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ShowTablesOperator
         extends TableOperator<ShowTablesOperator>,

@@ -7,7 +7,7 @@ import cc.allio.uno.data.orm.executor.ExecutorAware;
  *
  * @author jiangwei
  * @date 2024/1/10 18:18
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface EsExecutorAware extends ExecutorAware {
 }

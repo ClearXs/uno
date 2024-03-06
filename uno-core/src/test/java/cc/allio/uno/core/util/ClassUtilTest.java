@@ -14,10 +14,6 @@ import java.util.Map;
 
 @Slf4j
 class ClassUtilTest extends BaseTestCase {
-    @Override
-    protected void onInit() throws Throwable {
-
-    }
 
     /**
      * Test Case: 测试方法上泛形
@@ -29,11 +25,6 @@ class ClassUtilTest extends BaseTestCase {
         Class<?> returnType = returnMap.getReturnType();
         Map<String, String> stringStringMap = generic.returnMap();
         log.info(returnType.getSimpleName());
-    }
-
-    @Override
-    protected void onDown() throws Throwable {
-
     }
 
     static class Generic<T> {

@@ -8,10 +8,17 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 15:53
  * @see MethodBiPredicate
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodBiPredicate<T, U> extends Serializable, LambdaMethod {
 
+    /**
+     * test predicate, potentially throwing an exception.
+     *
+     * @param t first argument
+     * @param u second argument
+     * @return predicate result
+     */
     boolean test(T t, U u) throws Throwable;
 }

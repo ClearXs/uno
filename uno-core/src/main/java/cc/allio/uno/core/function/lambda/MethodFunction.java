@@ -1,6 +1,6 @@
 package cc.allio.uno.core.function.lambda;
 
-import cc.allio.uno.core.util.ReflectTool;
+import cc.allio.uno.core.util.ReflectTools;
 
 import java.io.Serializable;
 
@@ -9,7 +9,7 @@ import java.io.Serializable;
  * <p>该接口包含能够获取Lambda方法名、字段名、Lambda方法的序列化信息等。</p>
  * @author jiangwei
  * @date 2024/1/26 18:31
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodFunction<T, K> extends Serializable, LambdaMethod {
@@ -20,13 +20,13 @@ public interface MethodFunction<T, K> extends Serializable, LambdaMethod {
      * 获取参数值的类型
      */
     default Class<T> getParameterType() {
-        return (Class<T>) ReflectTool.getGenericType(this, MethodFunction.class, 0);
+        return (Class<T>) ReflectTools.getGenericType(this, MethodFunction.class, 0);
     }
 
     /**
      * 获取返回值的类型
      */
     default Class<K> getReturnType() {
-        return (Class<K>) ReflectTool.getGenericType(this, MethodFunction.class, 1);
+        return (Class<K>) ReflectTools.getGenericType(this, MethodFunction.class, 1);
     }
 }

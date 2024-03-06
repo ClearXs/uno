@@ -7,7 +7,7 @@ import cc.allio.uno.core.chain.ChainContext;
  *
  * @author jiangwei
  * @date 2024/1/8 10:59
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class InterceptorChainContext implements ChainContext<InterceptorAttributes> {
 

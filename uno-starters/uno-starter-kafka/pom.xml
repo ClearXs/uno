@@ -5,7 +5,7 @@
     <parent>
         <artifactId>uno-starters</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.6</version>
+        <version>1.1.7-beta.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
     <dependencies>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-component-kafka</artifactId>
+            <artifactId>uno-kafka</artifactId>
         </dependency>
     </dependencies>
 

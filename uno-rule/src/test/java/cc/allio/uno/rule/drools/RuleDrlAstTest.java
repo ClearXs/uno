@@ -2,7 +2,7 @@ package cc.allio.uno.rule.drools;
 
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.PackageBuilderErrors;
-import org.drools.compiler.lang.descr.*;
+import org.drools.drl.ast.descr.*;
 import org.junit.jupiter.api.Test;
 import org.kie.api.KieBase;
 import org.kie.api.definition.rule.Rule;

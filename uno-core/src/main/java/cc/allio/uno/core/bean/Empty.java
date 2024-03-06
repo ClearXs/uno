@@ -5,7 +5,7 @@ package cc.allio.uno.core.bean;
  *
  * @author jiangwei
  * @date 2024/1/9 18:56
- * @since 1.1.6
+ * @since 1.1.7
  */
 public final class Empty {
 }

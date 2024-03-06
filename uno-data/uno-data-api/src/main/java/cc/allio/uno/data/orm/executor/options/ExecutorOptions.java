@@ -13,7 +13,7 @@ import java.util.List;
  *
  * @author jiangwei
  * @date 2024/2/14 21:07
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorOptions extends ExecutorResultHandlerSet, OptionalContext {
 

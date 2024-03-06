@@ -8,10 +8,16 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 15:57
  * @see MethodPredicate
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodPredicate<T> extends Serializable, LambdaMethod {
 
+    /**
+     * test, potentially throwing an exception
+     *
+     * @param t the test object
+     * @return true if the test object is valid
+     */
     boolean test(T t) throws Throwable;
 }

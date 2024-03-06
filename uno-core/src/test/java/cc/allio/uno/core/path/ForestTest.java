@@ -31,9 +31,4 @@ public class ForestTest extends BaseTestCase {
 
 
     }
-
-
-    @Override
-    protected void onDown() throws Throwable {
-    }
 }

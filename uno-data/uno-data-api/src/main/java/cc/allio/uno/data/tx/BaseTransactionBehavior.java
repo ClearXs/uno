@@ -9,7 +9,7 @@ import org.springframework.transaction.TransactionDefinition;
  *
  * @author jiangwei
  * @date 2024/2/11 12:39
- * @since 1.1.6
+ * @since 1.1.7
  */
 public abstract class BaseTransactionBehavior<T extends BaseTransactionBehavior<T>> implements TxDefinition<T> {
 

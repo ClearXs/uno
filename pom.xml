@@ -7,7 +7,7 @@
     <groupId>cc.allio</groupId>
     <artifactId>uno</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.6</version>
+    <version>1.1.7-beta.0</version>
     <description>构建大型应用需要的基本能力 --- all in one</description>
     <url>https://github.com/b6688c/uno</url>
 
@@ -23,7 +23,6 @@
         <module>uno-core</module>
         <module>uno-plugins</module>
         <module>uno-test</module>
-        <module>uno-components</module>
         <module>uno-starters</module>
         <module>uno-demo</module>
         <module>uno-auto</module>
@@ -31,18 +30,23 @@
         <module>uno-data</module>
         <module>uno-gis</module>
         <module>uno-rule</module>
+        <module>uno-http</module>
+        <module>uno-kafka</module>
+        <module>uno-netty</module>
+        <module>uno-sequential</module>
+        <module>uno-websocket</module>
     </modules>
 
     <properties>
         <java.version>21</java.version>
-        <reactor-bom>2020.0.12</reactor-bom>
-        <spring.boot.version>3.2.1</spring.boot.version>
+        <reactor-bom>2023.0.3</reactor-bom>
+        <spring.boot.version>3.2.3</spring.boot.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-plugin.version>3.8.1</maven-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <test-containers.version>1.14.2</test-containers.version>
-        <drools.version>7.63.0.Final</drools.version>
+        <drools.version>9.44.0.Final</drools.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencies>
@@ -199,5 +203,4 @@
             <url>https://packages.aliyun.com/maven/repository/2300285-snapshot-JAW5GT/</url>
         </snapshotRepository>
     </distributionManagement>
-
 </project>

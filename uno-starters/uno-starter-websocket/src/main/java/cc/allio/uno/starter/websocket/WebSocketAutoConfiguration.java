@@ -1,6 +1,6 @@
 package cc.allio.uno.starter.websocket;
 
-import cc.allio.uno.component.websocket.WebSocketProperties;
+import cc.allio.uno.websocket.WebSocketProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

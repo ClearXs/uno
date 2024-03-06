@@ -14,7 +14,7 @@ package cc.allio.uno.data.orm.executor;
  *
  * @author jiangwei
  * @date 2024/1/10 18:00
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorAware {
 

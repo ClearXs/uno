@@ -3,6 +3,7 @@ package cc.allio.uno.core.bean;
 import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.User;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 import reactor.test.StepVerifier;
@@ -19,11 +20,6 @@ import java.util.Set;
  * @since 1.0
  */
 class BeanInfoWrapperTest extends BaseTestCase {
-
-    @Override
-    protected void onInit() throws Throwable {
-
-    }
 
     @Test
     void testGetUserNull() throws IntrospectionException {
@@ -88,7 +84,7 @@ class BeanInfoWrapperTest extends BaseTestCase {
     void testSetSet() throws IntrospectionException {
         TestComplex testComplex = new TestComplex();
         BeanInfoWrapper<TestComplex> infoWrapper = new BeanInfoWrapper<>(TestComplex.class);
-        infoWrapper.set(testComplex, "setValue", Lists.newArrayList("2", "2")).subscribe();
+        infoWrapper.set(testComplex, "set", Sets.newHashSet("2")).subscribe();
 
         assertEquals(1, testComplex.getSet().size());
     }

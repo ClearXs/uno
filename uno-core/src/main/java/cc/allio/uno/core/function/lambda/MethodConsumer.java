@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/1/26 18:26
  * @see java.util.function.Consumer
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodConsumer<T> extends Serializable, LambdaMethod {

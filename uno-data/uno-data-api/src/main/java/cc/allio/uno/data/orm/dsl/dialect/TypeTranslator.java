@@ -8,7 +8,7 @@ import cc.allio.uno.data.orm.dsl.type.DSLType;
  *
  * @author jiangwei
  * @date 2024/1/8 19:33
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface TypeTranslator {
 

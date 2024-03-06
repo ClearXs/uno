@@ -8,7 +8,7 @@ import cc.allio.uno.data.orm.executor.handler.ColumnDefListResultSetHandler;
  *
  * @author jiangwei
  * @date 2024/2/14 23:18
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class MySQLColumnDefListResultHandler extends ColumnDefListResultSetHandler {
 }

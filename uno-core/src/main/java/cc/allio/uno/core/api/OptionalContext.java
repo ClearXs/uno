@@ -1,8 +1,8 @@
 package cc.allio.uno.core.api;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.id.IdGenerator;
-import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
@@ -118,13 +118,17 @@ public interface OptionalContext {
     }
 
     /**
-     * 放入新的属性数据
+     * 随机生成Key进行放入
      *
-     * @param key 属性key
      * @param obj 属性值
      * @throws NullPointerException obj为空时抛出
      */
-    void putAttribute(String key, Object obj);
+    default void put(Object obj) {
+        String objName = obj.getClass().getName();
+        int objHashCode = obj.hashCode();
+        String objKey = objName + StringPool.UNDERSCORE + objHashCode + StringPool.UNDERSCORE + IdGenerator.defaultGenerator().getNextIdAsString();
+        putAttribute(objKey, obj);
+    }
 
     /**
      * 放入其他所有的属性数据
@@ -136,6 +140,15 @@ public interface OptionalContext {
             putAttribute(attribute.getKey(), attribute.getValue());
         }
     }
+
+    /**
+     * 放入新的属性数据
+     *
+     * @param key 属性key
+     * @param obj 属性值
+     * @throws NullPointerException obj为空时抛出
+     */
+    void putAttribute(String key, Object obj);
 
     /**
      * 判断是否包含key

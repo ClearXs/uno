@@ -8,7 +8,7 @@ import org.springframework.transaction.TransactionDefinition;
  *
  * @author jiangwei
  * @date 2024/2/11 11:17
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface TxDefinition<T extends TxDefinition<T>> extends Self<T> {
 

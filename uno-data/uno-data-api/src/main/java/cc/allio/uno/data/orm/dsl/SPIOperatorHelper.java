@@ -24,7 +24,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  *
  * @author jiangwei
  * @date 2024/1/3 22:25
- * @since 1.1.6
+ * @since 1.1.7
  */
 @Slf4j
 public final class SPIOperatorHelper {

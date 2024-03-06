@@ -15,14 +15,4 @@ public class JsonNodeEnhancerTest extends BaseTestCase {
         assertTrue(enhancer.has("test"));
 
     }
-
-    @Override
-    protected void onInit() throws Throwable {
-
-    }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }

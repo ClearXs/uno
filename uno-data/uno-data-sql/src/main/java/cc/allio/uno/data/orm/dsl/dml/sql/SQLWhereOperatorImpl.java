@@ -17,7 +17,7 @@ import java.util.function.Consumer;
  *
  * @author jiangwei
  * @date 2024/1/5 20:28
- * @since 1.1.6
+ * @since 1.1.7
  */
 public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareOperator<T>>
         extends PrepareOperatorImpl<T>

@@ -5,7 +5,7 @@ package cc.allio.uno.core.function.lambda;
  *
  * @author jiangwei
  * @date 2024/1/26 18:26
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface LambdaMethod {
 

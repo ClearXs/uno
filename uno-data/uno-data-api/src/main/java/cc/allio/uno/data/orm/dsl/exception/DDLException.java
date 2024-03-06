@@ -5,7 +5,7 @@ package cc.allio.uno.data.orm.dsl.exception;
  *
  * @author jiangwei
  * @date 2024/2/8 13:57
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class DDLException extends RuntimeException {
 

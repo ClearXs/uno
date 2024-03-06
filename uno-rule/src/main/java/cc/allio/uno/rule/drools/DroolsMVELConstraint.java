@@ -7,21 +7,21 @@ import cc.allio.uno.rule.api.MatchIndex;
 import com.google.common.collect.Lists;
 import lombok.Getter;
 import lombok.Setter;
-import org.drools.core.base.EvaluatorWrapper;
-import org.drools.core.common.InternalFactHandle;
-import org.drools.core.common.InternalWorkingMemory;
-import org.drools.core.rule.Declaration;
+import org.drools.base.base.ValueResolver;
+import org.drools.base.rule.Declaration;
+import org.drools.compiler.rule.builder.EvaluatorWrapper;
 import org.drools.mvel.MVELConstraint;
 import org.drools.mvel.expr.MVELCompilationUnit;
+import org.kie.api.runtime.rule.FactHandle;
 
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+@Setter
+@Getter
 public class DroolsMVELConstraint extends MVELConstraint {
 
-    @Getter
-    @Setter
     private RuleAttr ruleAttr;
 
     public DroolsMVELConstraint() {
@@ -46,16 +46,17 @@ public class DroolsMVELConstraint extends MVELConstraint {
     }
 
     @Override
-    public boolean isAllowed(InternalFactHandle handle, InternalWorkingMemory workingMemory) {
-        RuleContext context = (RuleContext) workingMemory.getGlobal(DroolsRuleManager.GLOBAL_CONTEXT_NAME);
+    public boolean isAllowed(FactHandle handle, ValueResolver valueResolver) {
+        RuleContext context = (RuleContext) valueResolver.getGlobal(DroolsRuleManager.GLOBAL_CONTEXT_NAME);
         // 匹配结果
         Fact fact = context.getCurrentFact();
-        boolean allowed = super.isAllowed(handle, workingMemory);
+        boolean allowed = super.isAllowed(handle, valueResolver);
         // 验证成功并且属性当前rule drools的rate算法会匹配所有节点，避免不属于当前rule的判断放入
         if (allowed && context.getCurrentRule().equals(ruleAttr.getRule())) {
             context.putMatchIndex(new MatchIndex(ruleAttr, fact.get(ruleAttr.getKey())));
         }
         return allowed;
+
     }
 
     @Override
@@ -77,6 +78,4 @@ public class DroolsMVELConstraint extends MVELConstraint {
         super.writeExternal(out);
         out.writeObject(ruleAttr);
     }
-
-
 }

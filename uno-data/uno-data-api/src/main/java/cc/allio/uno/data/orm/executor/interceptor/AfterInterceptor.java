@@ -9,7 +9,7 @@ import cc.allio.uno.data.orm.dsl.Operator;
  *
  * @author jiangwei
  * @date 2024/1/8 12:11
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class AfterInterceptor extends InternalInterceptor {
 

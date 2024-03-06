@@ -50,9 +50,4 @@ class FactoriesLoaderTest extends BaseTestCase {
             assertEquals(1, demo2Class.size());
         });
     }
-
-    @Override
-    protected void onDown() throws Throwable {
-
-    }
 }
