@@ -8,7 +8,7 @@ import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
  *
  * @author jiangwei
  * @date 2024/1/5 16:15
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class UnoSQLExprTableSource extends SQLExprTableSource {
 

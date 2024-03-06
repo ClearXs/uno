@@ -5,7 +5,7 @@ package cc.allio.uno.data.orm.executor.handler;
  *
  * @author jiangwei
  * @date 2024/2/16 23:41
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ListBeanResultHandler<R> extends BeanResultHandler<R> {
 }

@@ -5,7 +5,7 @@ package cc.allio.uno.data.orm.executor.handler;
  *
  * @author jiangwei
  * @date 2024/2/14 16:02
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorResultHandlerSet {
 

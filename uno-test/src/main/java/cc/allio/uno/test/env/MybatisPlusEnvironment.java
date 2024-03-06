@@ -17,7 +17,6 @@ import java.lang.annotation.Annotation;
 @Priority(Integer.MAX_VALUE)
 public class MybatisPlusEnvironment extends VisitorEnvironment {
 
-
     @Override
     protected void onSupport(CoreTest coreTest) throws Throwable {
         coreTest.registerAutoConfiguration(MybatisPlusAutoConfiguration.class);

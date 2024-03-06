@@ -1,6 +1,6 @@
 package cc.allio.uno.core.function.lambda;
 
-import cc.allio.uno.core.util.ReflectTool;
+import cc.allio.uno.core.util.ReflectTools;
 
 import java.io.Serializable;
 
@@ -10,7 +10,7 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/1/26 18:29
  * @see java.util.function.Supplier
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodSupplier<T> extends Serializable, LambdaMethod {
@@ -21,6 +21,6 @@ public interface MethodSupplier<T> extends Serializable, LambdaMethod {
      * 获取类型
      */
     default Class<T> getType() {
-        return (Class<T>) ReflectTool.getGenericType(this, MethodSupplier.class);
+        return (Class<T>) ReflectTools.getGenericType(this, MethodSupplier.class);
     }
 }

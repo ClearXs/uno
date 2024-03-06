@@ -8,7 +8,7 @@ import org.springframework.beans.factory.FactoryBean;
  *
  * @author jiangwei
  * @date 2024/1/10 18:10
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class ExecutorFactoryBean implements FactoryBean<CommandExecutor> {
 

@@ -14,7 +14,7 @@ import com.alibaba.druid.sql.ast.statement.*;
  *
  * @author jiangwei
  * @date 2024/2/8 13:46
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class DDLSQLSupport extends SQLSupport {
 

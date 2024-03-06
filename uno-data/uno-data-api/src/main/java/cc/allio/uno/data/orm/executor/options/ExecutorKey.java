@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
  *
  * @author jiangwei
  * @date 2024/1/3 22:59
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorKey extends Key {
 

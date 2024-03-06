@@ -19,7 +19,7 @@ import java.util.Map;
  *
  * @author jiangwei
  * @date 2024/2/14 22:58
- * @since 1.1.6
+ * @since 1.1.7
  */
 @AutoService(ColumnDefListResultSetHandler.class)
 public class ColumnDefListResultHandlerDelegate extends ColumnDefListResultSetHandler {

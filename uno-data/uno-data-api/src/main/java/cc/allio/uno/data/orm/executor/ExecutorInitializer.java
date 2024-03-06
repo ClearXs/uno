@@ -10,7 +10,7 @@ import java.util.List;
  *
  * @author jiangwei
  * @date 2024/1/10 16:04
- * @since 1.1.6
+ * @since 1.1.7
  */
 public final class ExecutorInitializer implements InitializingBean {
 

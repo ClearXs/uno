@@ -11,7 +11,7 @@ import java.util.Comparator;
  *
  * @author jiangwei
  * @date 2024/2/13 14:54
- * @since 1.1.6
+ * @since 1.1.7
  */
 public final class Comparators extends org.springframework.util.comparator.Comparators {
 

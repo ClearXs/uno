@@ -17,7 +17,7 @@ import java.lang.reflect.AnnotatedElement;
  *
  * @author jiangwei
  * @date 2024/1/8 10:51
- * @since 1.1.6
+ * @since 1.1.7
  */
 @Slf4j
 public abstract class InternalInterceptor implements Interceptor, Ordered {

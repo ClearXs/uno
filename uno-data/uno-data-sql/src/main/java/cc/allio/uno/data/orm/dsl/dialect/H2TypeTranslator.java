@@ -10,7 +10,7 @@ import cc.allio.uno.data.orm.dsl.type.DSLType;
  *
  * @author jiangwei
  * @date 2024/1/8 19:50
- * @since 1.1.6
+ * @since 1.1.7
  */
 @AutoService(TypeTranslator.class)
 public class H2TypeTranslator implements TypeTranslator {

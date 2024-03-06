@@ -6,11 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 节点类型分为两种：
- * <ul>
- *     <li>group 节点</li>
- *     <li>attr 节点</li>
- * </ul>
+ * 抽象树结点定义
  *
  * @author jiangwei
  * @date 2023/4/26 11:31
@@ -55,7 +51,7 @@ public interface Element<T extends Element<T>> extends Serializable {
      * 获取父节点Id
      *
      * @return Element
-     * @since 1.1.6
+     * @since 1.1.7
      */
     default Serializable getParentId() {
         return getParent() != null ? getParent().getId() : null;
@@ -137,16 +133,16 @@ public interface Element<T extends Element<T>> extends Serializable {
     void clearChildren();
 
     /**
-     * 访问器模式访问每一个节点。默认实现为深度优先原则
+     * 默认实现为深度优先原则
      *
      * @param visitor visitor
      */
     default void accept(Visitor<T> visitor) {
-        accept(visitor, Traversal.NONE);
+        accept(visitor, Traversal.DEEP);
     }
 
     /**
-     * 访问器模式访问每一个节点。默认实现为深度优先原则
+     * 树的访问
      *
      * @param visitor   visitor
      * @param traversal 遍历原则

@@ -9,7 +9,7 @@ import java.util.function.Predicate;
  * @author jiangwei
  * @date 2024/2/11 10:44
  * @see Predicate
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodPredicate<T> extends Predicate<T>, LambdaMethod {

@@ -1,4 +1,4 @@
-package cc.allio.uno.test.annotation;
+package cc.allio.uno.test.annotation.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 

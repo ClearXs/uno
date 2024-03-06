@@ -8,10 +8,16 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 15:46
  * @see MethodBiConsumer
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodBiConsumer<T, K> extends Serializable, LambdaMethod {
 
+    /**
+     * accept method, potentially throwing an exception.
+     *
+     * @param t the first argument
+     * @param k the second argument
+     */
     void accept(T t, K k) throws Throwable;
 }

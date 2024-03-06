@@ -19,6 +19,7 @@ import java.lang.annotation.*;
  *         <li>{@link MybatisPlusProperties}</li>
  *     </ul>
  * </p>
+ * <b>值的注意的是，mapper的扫描目前是当前测试类所在的类路径 + mapper. example: cc.allio.uno.test.annotation.mapper</b>
  *
  * @author jiangwei
  * @date 2023/3/6 16:26

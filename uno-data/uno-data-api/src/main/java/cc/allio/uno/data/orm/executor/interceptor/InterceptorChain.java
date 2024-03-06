@@ -7,7 +7,7 @@ import cc.allio.uno.core.chain.Chain;
  *
  * @author jiangwei
  * @date 2024/1/8 10:22
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface InterceptorChain extends Chain<InterceptorAttributes, InterceptorAttributes> {
 }

@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.core.util.ReflectTool;
+import cc.allio.uno.core.util.ReflectTools;
 
 /**
  * marked bean handler interface
@@ -8,7 +8,7 @@ import cc.allio.uno.core.util.ReflectTool;
  * @param <R> bean type
  * @author jiangwei
  * @date 2024/2/14 16:52
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface BeanResultHandler<R> extends ResultHandler {
 
@@ -18,6 +18,6 @@ public interface BeanResultHandler<R> extends ResultHandler {
      * @return Class
      */
     default Class<R> getBeanType() {
-        return (Class<R>) ReflectTool.getGenericType(this, BeanResultHandler.class);
+        return (Class<R>) ReflectTools.getGenericType(this, BeanResultHandler.class);
     }
 }

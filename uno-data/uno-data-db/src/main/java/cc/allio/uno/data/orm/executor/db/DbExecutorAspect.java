@@ -8,7 +8,7 @@ import org.aspectj.lang.annotation.Aspect;
  * @author jiangwei
  * @date 2024/1/10 18:21
  * @see DbExecutorAware
- * @since 1.1.6
+ * @since 1.1.7
  */
 @Aspect
 public class DbExecutorAspect {

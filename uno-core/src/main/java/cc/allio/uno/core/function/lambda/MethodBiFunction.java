@@ -8,7 +8,7 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/1/26 18:39
  * @see java.util.function.BiFunction
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodBiFunction<T, U, R> extends Serializable, LambdaMethod {

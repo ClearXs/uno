@@ -29,7 +29,7 @@ import java.util.TimeZone;
  *
  * @author jiangwei
  * @date 2024/1/4 17:06
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class  SQLSupport implements Self<SQLSupport> {
 

@@ -8,7 +8,7 @@ import lombok.Data;
  *
  * @author jiangwei
  * @date 2024/1/4 18:32
- * @since 1.1.6
+ * @since 1.1.7
  */
 @Data
 @AllArgsConstructor(staticName = "of")

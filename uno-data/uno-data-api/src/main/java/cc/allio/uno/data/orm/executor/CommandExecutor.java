@@ -407,6 +407,19 @@ public interface CommandExecutor {
 
     /**
      * 插入数据
+     * <p>根据指定的{@link InsertOperator}插入数据</p>
+     *
+     * @param pojoClass pojoClass
+     * @param func      the func
+     * @return true 成功 false 失败
+     */
+    default <T> boolean insert(Class<T> pojoClass, UnaryOperator<InsertOperator> func) {
+        InsertOperator insertOperator = getOperatorGroup().insert(getOptions().getDbType());
+        return insert(func.apply(insertOperator.from(pojoClass)));
+    }
+
+    /**
+     * 插入数据
      *
      * @param func the func
      * @return true 成功 false 失败
@@ -471,6 +484,19 @@ public interface CommandExecutor {
             condition.apply(updateOperator);
             return updateOperator;
         });
+    }
+
+    /**
+     * 更新数据
+     * <p>根据给定{@link UpdateOperator}更新数据</p>
+     *
+     * @param pojoClass pojoClass
+     * @param func      the func
+     * @return true 成功 false 失败
+     */
+    default <T> boolean update(Class<T> pojoClass, UnaryOperator<UpdateOperator> func) {
+        UpdateOperator updateOperator = getOperatorGroup().update(getOptions().getDbType());
+        return update(func.apply(updateOperator.from(pojoClass)));
     }
 
     /**
@@ -586,6 +612,18 @@ public interface CommandExecutor {
         }
         UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
         return bool(update.from(pojoClass).in(pkColumn.getDslName(), ids), CommandType.DELETE);
+    }
+
+    /**
+     * 删除数据
+     * <p>根据给定的条件删除数据</p>
+     *
+     * @param pojoClass pojoClass
+     * @return true 成功 false 失败
+     */
+    default <T> boolean delete(Class<T> pojoClass, UnaryOperator<DeleteOperator> func) {
+        DeleteOperator deleteOperator = getOperatorGroup().delete(getOptions().getDbType());
+        return delete(func.apply(deleteOperator.from(pojoClass)));
     }
 
     /**

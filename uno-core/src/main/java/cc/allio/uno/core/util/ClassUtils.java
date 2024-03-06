@@ -31,7 +31,10 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @param <T>   对象范型
      * @return 返回一个泛型对象或者空字符串
      * @throws NullPointerException 当class对象没有泛型时抛出异常
+     * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
+     * @deprecated
      */
+    @Deprecated(since = "1.1.7")
     public static <T> String getSingleGenericClassName(@NonNull Class<? extends T> clazz) {
         Type type = clazz.getGenericSuperclass();
         if (type instanceof ParameterizedType pt) {
@@ -49,7 +52,10 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      *
      * @param clazz clazz
      * @return 返回多个范型classname
+     * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
+     * @deprecated
      */
+    @Deprecated(since = "1.1.7")
     public static String[] getMultiGenericClassName(Class<?> clazz) {
         if (clazz == null) {
             return new String[0];
@@ -63,6 +69,76 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             return Arrays.stream(typeArguments).map(Type::getTypeName).toArray(String[]::new);
         }
         return new String[0];
+    }
+
+    /**
+     * 获取真实泛型类型（获取存在的第一个）
+     *
+     * @return 实体的Class对象，当实体类型不存在时默认返回Object类型
+     * @throws ClassNotFoundException 当指定的全限定类名没有找到时抛出
+     * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
+     * @deprecated
+     */
+    @Deprecated(since = "1.1.7")
+    public static Class<?> getSingleActualGenericType(Class<?> clazz) throws ClassNotFoundException {
+        String expectClassname = getSingleGenericClassName(clazz);
+        Object exceptType = AccessController.doPrivileged(
+                (PrivilegedAction<Object>) () -> {
+                    try {
+                        return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
+                    } catch (ClassNotFoundException e) {
+                        return e;
+                    }
+                });
+        if (exceptType instanceof ClassNotFoundException notfound) {
+            throw new ClassNotFoundException(notfound.getMessage());
+        }
+        return (Class<?>) exceptType;
+    }
+
+    /**
+     * 获取真实泛型类型
+     *
+     * @param clazz 类型
+     * @return 实体的Class对象，当实体类型不存在时默认返回Object类型
+     * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
+     * @deprecated
+     */
+    @Deprecated(since = "1.1.7")
+    public static Class<?>[] getMultiActualGenericType(Class<?> clazz) throws ClassNotFoundException {
+        List<Class<?>> actualTypes = Lists.newArrayList();
+        String[] multiGenericClassName = getMultiGenericClassName(clazz);
+        for (String gClassName : multiGenericClassName) {
+            Object exceptType = AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
+                try {
+                    return Class.forName(gClassName, false, Thread.currentThread().getContextClassLoader());
+                } catch (ClassNotFoundException e) {
+                    return e;
+                }
+            });
+            if (exceptType instanceof ClassNotFoundException notfound) {
+                throw new ClassNotFoundException(notfound.getMessage());
+            }
+            actualTypes.add((Class<?>) exceptType);
+        }
+        return actualTypes.toArray(new Class[0]);
+    }
+
+    /**
+     * 获取指定字段上的泛型类型
+     *
+     * @param field 某个字段实例
+     * @return 泛型数组
+     * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
+     * @deprecated
+     */
+    @Deprecated(since = "1.1.7")
+    public static Type[] getFieldGenericType(Field field) {
+        Type maybeType = field.getGenericType();
+        if (maybeType instanceof ParameterizedType) {
+            return ((ParameterizedType) maybeType).getActualTypeArguments();
+        }
+        return new Type[]{};
     }
 
     /**
@@ -90,67 +166,6 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             return (Class<?>) exceptType;
         }
         return null;
-    }
-
-    /**
-     * 获取真实泛型类型（获取存在的第一个）
-     *
-     * @return 实体的Class对象，当实体类型不存在时默认返回Object类型
-     * @throws ClassNotFoundException 当指定的全限定类名没有找到时抛出
-     */
-    public static Class<?> getSingleActualGenericType(Class<?> clazz) throws ClassNotFoundException {
-        String expectClassname = getSingleGenericClassName(clazz);
-        Object exceptType = AccessController.doPrivileged(
-                (PrivilegedAction<Object>) () -> {
-                    try {
-                        return Class.forName(expectClassname, false, Thread.currentThread().getContextClassLoader());
-                    } catch (ClassNotFoundException e) {
-                        return e;
-                    }
-                });
-        if (exceptType instanceof ClassNotFoundException notfound) {
-            throw new ClassNotFoundException(notfound.getMessage());
-        }
-        return (Class<?>) exceptType;
-    }
-
-    /**
-     * 获取真实泛型类型
-     *
-     * @param clazz 类型
-     * @return 实体的Class对象，当实体类型不存在时默认返回Object类型
-     */
-    public static Class<?>[] getMultiActualGenericType(Class<?> clazz) throws ClassNotFoundException {
-        List<Class<?>> actualTypes = Lists.newArrayList();
-        String[] multiGenericClassName = getMultiGenericClassName(clazz);
-        for (String gClassName : multiGenericClassName) {
-            Object exceptType = AccessController.doPrivileged((PrivilegedAction<Object>) () -> {
-                try {
-                    return Class.forName(gClassName, false, Thread.currentThread().getContextClassLoader());
-                } catch (ClassNotFoundException e) {
-                    return e;
-                }
-            });
-            if (exceptType instanceof ClassNotFoundException notfound) {
-                throw new ClassNotFoundException(notfound.getMessage());
-            }
-            actualTypes.add((Class<?>) exceptType);
-        }
-        return actualTypes.toArray(new Class[0]);
-    }
-
-    /**
-     * 获取指定字段上的泛型类型
-     *
-     * @param field 某个字段实例
-     * @return 泛型数组
-     */
-    public static Type[] getFieldGenericType(Field field) {
-        Type maybeType = field.getGenericType();
-        if (maybeType instanceof ParameterizedType) {
-            return ((ParameterizedType) maybeType).getActualTypeArguments();
-        }
-        return new Type[]{};
     }
 
     /**

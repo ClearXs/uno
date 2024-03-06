@@ -11,7 +11,7 @@ import java.util.List;
  *
  * @author jiangwei
  * @date 2024/1/10 16:02
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface ExecutorLoader {
 

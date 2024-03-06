@@ -8,7 +8,7 @@ import cc.allio.uno.core.function.VoidConsumer;
  *
  * @author jiangwei
  * @date 2024/2/11 10:46
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface MethodVoid extends VoidConsumer, LambdaMethod {

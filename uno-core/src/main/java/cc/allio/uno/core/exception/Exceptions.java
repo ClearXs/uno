@@ -126,4 +126,13 @@ public abstract class Exceptions {
     public static UnsupportedOperationException unOperate(String message) {
         return new UnsupportedOperationException(message);
     }
+
+    /**
+     * 判断给定的异常类型是否是未受检查的类型
+     *
+     * @return true if exception is unchecked
+     */
+    public static boolean isUnchecked(Class<? extends Throwable> exClass) {
+        return exClass != null && RuntimeException.class.isAssignableFrom(exClass);
+    }
 }

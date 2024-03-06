@@ -9,22 +9,22 @@ public class ReflectToolTest extends BaseTestCase {
     void testGenericType() {
 
         // 接口测试
-        Class<?> genericType1 = ReflectTool.getGenericType(new AImpl(), A.class);
+        Class<?> genericType1 = ReflectTools.getGenericType(new AImpl(), A.class);
 
         assertEquals(String.class, genericType1);
 
-        Class<?> genericType2 = ReflectTool.getGenericType(new Object(), Object.class);
+        Class<?> genericType2 = ReflectTools.getGenericType(new Object(), Object.class);
         assertNull(genericType2);
 
 
-        Class<?> genericType3 = ReflectTool.getGenericType(new BImpl(), B.class, 1);
+        Class<?> genericType3 = ReflectTools.getGenericType(new BImpl(), B.class, 1);
         assertEquals(Integer.class, genericType3);
 
         // 类测试
-        Class<?> genericType4 = ReflectTool.getGenericType(new CImpl(), C.class);
+        Class<?> genericType4 = ReflectTools.getGenericType(new CImpl(), C.class);
         assertEquals(String.class, genericType4);
 
-        Class<?> genericType5 = ReflectTool.getGenericType(new AAPenetrateImpl(), A.class);
+        Class<?> genericType5 = ReflectTools.getGenericType(new AAPenetrateImpl(), A.class);
         assertEquals(String.class, genericType5);
     }
 

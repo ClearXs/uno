@@ -6,7 +6,7 @@ package cc.allio.uno.core.function.lambda;
  *
  * @author jiangwei
  * @date 2024/2/11 10:48
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface MethodTerPredicate<T, U, P> extends LambdaMethod {
 

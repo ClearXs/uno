@@ -15,7 +15,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  *
  * @author jiangwei
  * @date 2024/1/10 18:35
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class DbExecutorProcessor implements BeanPostProcessor {
 

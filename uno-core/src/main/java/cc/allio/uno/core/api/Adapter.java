@@ -5,7 +5,7 @@ package cc.allio.uno.core.api;
  *
  * @author jiangwei
  * @date 2024/1/9 16:04
- * @since 1.1.6
+ * @since 1.1.7
  */
 public interface Adapter<R, O> {
 

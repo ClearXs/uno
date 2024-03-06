@@ -22,7 +22,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  *
  * @author jiangwei
  * @date 2024/1/10 18:27
- * @since 1.1.6
+ * @since 1.1.7
  */
 public class DbCommandExecutorLoader implements ExecutorLoader {
 

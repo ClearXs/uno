@@ -8,10 +8,17 @@ import java.io.Serializable;
  * @author jiangwei
  * @date 2024/2/18 15:49
  * @see MethodBiFunction
- * @since 1.1.6
+ * @since 1.1.7
  */
 @FunctionalInterface
 public interface ThrowingMethodBiFunction<T, U, R> extends Serializable, LambdaMethod {
 
+    /**
+     * apply method, potentially throwing an exception.
+     *
+     * @param t first argument
+     * @param u second argument
+     * @return result
+     */
     R apply(T t, U u) throws Throwable;
 }
