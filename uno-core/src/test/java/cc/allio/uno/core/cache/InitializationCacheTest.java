@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 测试进行初始化设置的缓存
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/10 13:06
  * @since 1.0
  */

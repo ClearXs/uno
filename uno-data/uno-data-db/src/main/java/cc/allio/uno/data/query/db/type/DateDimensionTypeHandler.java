@@ -12,7 +12,7 @@ import java.util.Date;
  * {@link DateDimension}类型处理器
  * <b>注意使用时候需要在Mybatis配置文件中配置typeHandlerPackage = cc/allio/uno/data/query/db/type...</b>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/30 17:01
  * @since 1.1.0
  */

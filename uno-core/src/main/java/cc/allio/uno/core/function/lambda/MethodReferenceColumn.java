@@ -11,7 +11,7 @@ import java.lang.reflect.Field;
  *     select(User::getName).eq(User::getAge, 2)...
  * </pre>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/5 15:36
  * @since 1.1.4
  */

@@ -13,7 +13,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 定义Rule Result
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 13:40
  * @since 1.1.4
  */

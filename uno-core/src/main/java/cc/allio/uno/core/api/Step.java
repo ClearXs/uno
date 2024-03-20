@@ -8,7 +8,7 @@ import java.util.function.Supplier;
 /**
  * 执行步骤。步骤将会按照{@link #then(Supplier)}一步一步执行下去，直到获取的值不为null或者走完步骤。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/6 23:38
  * @since 1.1.7
  */

@@ -5,13 +5,13 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.7-beta.0</version>
+        <version>1.1.7</version>
     </parent>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-data</artifactId>
-    <version>1.1.7-beta.0</version>
+    <version>1.1.7</version>
     <description>
         summary: uno数据层操作，包含于数据源、mybatis-plus、reactive-jpa、elasticsearch、influxdb等
         features: 提供数据聚合等操作
@@ -39,12 +39,6 @@
             <groupId>cc.allio</groupId>
             <artifactId>uno-auto</artifactId>
             <scope>provided</scope>
-        </dependency>
-        <!-- test -->
-        <dependency>
-            <groupId>cc.allio</groupId>
-            <artifactId>uno-test</artifactId>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

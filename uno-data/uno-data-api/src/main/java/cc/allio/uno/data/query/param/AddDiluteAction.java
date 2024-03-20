@@ -8,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 数据求和
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/10 16:54
  * @since 1.1.0
  */

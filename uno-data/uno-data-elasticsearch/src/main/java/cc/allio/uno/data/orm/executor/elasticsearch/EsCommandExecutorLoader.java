@@ -2,17 +2,25 @@ package cc.allio.uno.data.orm.executor.elasticsearch;
 
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
-import cc.allio.uno.data.orm.executor.ExecutorLoader;
+import cc.allio.uno.data.orm.executor.CommandExecutorLoader;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import com.google.auto.service.AutoService;
 import org.elasticsearch.client.RestClientBuilder;
 
 import java.util.List;
 
-public class EsCommandExecutorLoader implements ExecutorLoader {
+/**
+ * impl for elasticsearch command loader
+ *
+ * @author j.x
+ * @date 2024/3/21 00:07
+ * @since 1.1.7
+ */
+@AutoService(CommandExecutorLoader.class)
+public class EsCommandExecutorLoader implements CommandExecutorLoader<EsCommandExecutor> {
 
     private final RestClientBuilder restClientBuilder;
 
@@ -21,14 +29,14 @@ public class EsCommandExecutorLoader implements ExecutorLoader {
     }
 
     @Override
-    public CommandExecutor load(List<Interceptor> interceptors) {
+    public EsCommandExecutor load(List<Interceptor> interceptors) {
         ExecutorOptions executorOptions = new ExecutorOptionsImpl(DBType.ELASTIC_SEARCH, ExecutorKey.ELASTICSEARCH, OperatorKey.ELASTICSEARCH);
         executorOptions.addInterceptors(interceptors);
         return load(executorOptions);
     }
 
     @Override
-    public CommandExecutor load(ExecutorOptions executorOptions) {
+    public EsCommandExecutor load(ExecutorOptions executorOptions) {
         return new EsCommandExecutor(executorOptions, restClientBuilder);
     }
 

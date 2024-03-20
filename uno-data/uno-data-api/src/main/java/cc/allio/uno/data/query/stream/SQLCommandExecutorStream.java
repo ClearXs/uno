@@ -1,5 +1,6 @@
 package cc.allio.uno.data.query.stream;
 
+import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.query.QueryFilter;
@@ -10,15 +11,15 @@ import java.util.Map;
 /**
  * 基于{@link CommandExecutor}的流
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/21 13:21
  * @since 1.1.4
  */
 public class SQLCommandExecutorStream implements CollectionTimeStream<Map<String, Object>> {
 
-    private final CommandExecutor commandExecutor;
+    private final AggregateCommandExecutor commandExecutor;
 
-    public SQLCommandExecutorStream(CommandExecutor commandExecutor) {
+    public SQLCommandExecutorStream(AggregateCommandExecutor commandExecutor) {
         this.commandExecutor = commandExecutor;
     }
 

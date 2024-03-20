@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * 请求参数
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/24 18:08
  * @since 1.0
  */

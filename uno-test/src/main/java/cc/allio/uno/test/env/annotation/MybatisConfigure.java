@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 /**
  * {@link MybatisEnv}注解抽取器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/2 18:05
  * @since 1.1.4
  */
@@ -40,5 +40,4 @@ public class MybatisConfigure extends DynamicConfigure {
                 .define("defaultScope", annotation.getString("defaultScope"));
         return new AnnotationDescription[]{annoBuilder.build()};
     }
-
 }

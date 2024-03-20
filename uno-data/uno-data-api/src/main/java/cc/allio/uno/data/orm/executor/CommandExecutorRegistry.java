@@ -10,29 +10,29 @@ import java.util.function.Supplier;
 /**
  * command executor registry，参考自{@link org.springframework.beans.factory.BeanFactory}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/29 13:04
  * @since 1.1.7
  */
 public interface CommandExecutorRegistry {
 
     /**
-     * 基于给定的{@link ExecutorOptions}从{@link ExecutorLoader}
+     * 基于给定的{@link ExecutorOptions}从{@link CommandExecutorLoader}
      *
      * @param executorOptions executorOptions
      * @param <T>             command executor type
-     * @return CommandExecutor instance or null
+     * @return AggregateCommandExecutor instance or null
      */
-    <T extends CommandExecutor> T crate(@NotNull ExecutorOptions executorOptions);
+    <T extends AggregateCommandExecutor> T crate(@NotNull ExecutorOptions executorOptions);
 
     /**
-     * 基于给定的{@link ExecutorOptions}从{@link ExecutorLoader}中创建{@link CommandExecutor}并进行注册
+     * 基于给定的{@link ExecutorOptions}从{@link CommandExecutorLoader}中创建{@link AggregateCommandExecutor}并进行注册
      *
      * @param executorOptions executorOptions
      * @param <T>             command executor type
-     * @return CommandExecutor instance or null
+     * @return AggregateCommandExecutor instance or null
      */
-    <T extends CommandExecutor> T createAndRegister(@NotNull ExecutorOptions executorOptions);
+    <T extends AggregateCommandExecutor> T createAndRegister(@NotNull ExecutorOptions executorOptions);
 
     /**
      * 注册 command executor，如果存在则不在进行设置
@@ -41,26 +41,26 @@ public interface CommandExecutorRegistry {
      * @param commandExecutorSupplier commandExecutorSupplier
      * @param ifPresent               if true 如果已经存在则进行覆盖 否则不进行覆盖
      */
-    <T extends CommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent);
+    <T extends AggregateCommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent);
 
     /**
-     * 基于最佳匹配原则获取最可能存在的{@link ExecutorOptions}，在基于此获取{@link CommandExecutor}实例
+     * 基于最佳匹配原则获取最可能存在的{@link ExecutorOptions}，在基于此获取{@link AggregateCommandExecutor}实例
      *
      * @param executorKey executorKey
-     * @return CommandExecutor or null
+     * @return AggregateCommandExecutor or null
      */
-    <T extends CommandExecutor> T getCommandExecutor(ExecutorKey executorKey);
+    <T extends AggregateCommandExecutor> T getCommandExecutor(ExecutorKey executorKey);
 
     /**
-     * 获取{@link CommandExecutor}实例
+     * 获取{@link AggregateCommandExecutor}实例
      *
      * @param key key
-     * @return CommandExecutor
+     * @return AggregateCommandExecutor
      */
-    <T extends CommandExecutor> T getCommandExecutor(String key);
+    <T extends AggregateCommandExecutor> T getCommandExecutor(String key);
 
     /**
-     * 基于{@link ExecutorKey}批量移除找到{@link CommandExecutor}实例
+     * 基于{@link ExecutorKey}批量移除找到{@link AggregateCommandExecutor}实例
      *
      * @param executorKey executorKey
      * @return if ture removed
@@ -68,7 +68,7 @@ public interface CommandExecutorRegistry {
     boolean remove(ExecutorKey executorKey);
 
     /**
-     * 基于唯一标识移除{@link CommandExecutor}实例
+     * 基于唯一标识移除{@link AggregateCommandExecutor}实例
      *
      * @param key key
      * @return if ture removed
@@ -76,7 +76,7 @@ public interface CommandExecutorRegistry {
     boolean remove(String key);
 
     /**
-     * 根据给定的key判断是否有{@link CommandExecutor}存在
+     * 根据给定的key判断是否有{@link AggregateCommandExecutor}存在
      *
      * @param key key
      * @return if true life
@@ -84,7 +84,7 @@ public interface CommandExecutorRegistry {
     boolean has(String key);
 
     /**
-     * 根据给定的{@link ExecutorKey}判断是否有{@link CommandExecutor}存在
+     * 根据给定的{@link ExecutorKey}判断是否有{@link AggregateCommandExecutor}存在
      *
      * @param executorKey executorKey
      * @return if true life
@@ -92,18 +92,18 @@ public interface CommandExecutorRegistry {
     boolean has(ExecutorKey executorKey);
 
     /**
-     * 获取所有默认的{@link CommandExecutor}
+     * 获取所有默认的{@link AggregateCommandExecutor}
      *
      * @return all default or empty list
      */
-    List<CommandExecutor> getAllDefault();
+    List<AggregateCommandExecutor> getAllDefault();
 
     /**
      * 获取所有的CommandExecutor
      *
      * @return all or empty list
      */
-    List<CommandExecutor> getAll();
+    List<AggregateCommandExecutor> getAll();
 
     /**
      * 情空当前注册表里面所有的内容

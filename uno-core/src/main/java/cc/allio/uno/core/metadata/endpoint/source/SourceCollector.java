@@ -5,7 +5,7 @@ import cc.allio.uno.core.metadata.Metadata;
 /**
  * 数据源收集器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/27 15:18
  * @since 1.1.0
  */

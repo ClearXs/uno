@@ -5,7 +5,7 @@ import cc.allio.uno.core.api.Adapter;
 /**
  * 适用于不同框架的类型定义
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 20:01
  * @since 1.1.4
  */

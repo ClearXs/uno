@@ -14,7 +14,7 @@ import java.util.Optional;
 /**
  * 事件总线上下文对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/29 14:41
  * @modify 1.0.6
  * @since 1.0

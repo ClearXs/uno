@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * exception for supplier get method
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/18 15:59
  * @see MethodSupplier
  * @since 1.1.7

@@ -25,7 +25,7 @@ import java.util.Collections;
 /**
  * Bean实用的工具方法
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/29 16:05
  * @since 1.0
  */

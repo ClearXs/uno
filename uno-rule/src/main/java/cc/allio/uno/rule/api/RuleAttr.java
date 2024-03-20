@@ -8,7 +8,7 @@ import java.io.Serializable;
 /**
  * 规则属性，包含属性key，关系符号（>、<、==..），逻辑关系，以及生成的表达式 a > 5..
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 09:31
  * @see RuleAttrBuilder
  * @since 1.1.4

@@ -1,12 +1,12 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.core.util.ReflectTools;
+import cc.allio.uno.core.reflect.ReflectTools;
 
 /**
  * marked bean handler interface
  *
  * @param <R> bean type
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/14 16:52
  * @since 1.1.7
  */

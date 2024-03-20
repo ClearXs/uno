@@ -12,7 +12,7 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 /**
  * mybatis 数据库坐标转换，用于实体上。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/8 20:46
  * @since 1.1.2
  */

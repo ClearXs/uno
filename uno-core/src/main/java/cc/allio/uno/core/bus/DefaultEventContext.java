@@ -12,7 +12,7 @@ import java.util.Optional;
 /**
  * EventBus上下文对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/12 16:27
  * @since 1.1.2
  */

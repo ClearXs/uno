@@ -13,7 +13,7 @@ import java.util.Optional;
  * DSL 类型定义，基于{@link DBType#MYSQL}作基础类型进行定义
  * <p><b>建议通过{@link TypeTranslatorHolder#getTypeTranslator()}在进行包装，否则获取的{@link DSLType}实例无法满足指定数据库方言</b></p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 20:03
  * @see DataType
  * @since 1.1.4
@@ -21,48 +21,31 @@ import java.util.Optional;
 public interface DSLType extends EqualsTo<DSLType> {
 
     DSLType BIGINT = DefaultDSLType.BIGINT;
-
     DSLType SMALLINT = DefaultDSLType.SMALLINT;
-
     DSLType INTEGER = DefaultDSLType.INTEGER;
-
     DSLType BIT = DefaultDSLType.BIT;
-
     DSLType TINYINT = DefaultDSLType.TINYINT;
-
     DSLType NUMBER = DefaultDSLType.NUMBER;
-
     DSLType DOUBLE = DefaultDSLType.DOUBLE;
-
     DSLType FLOAT = DefaultDSLType.FLOAT;
 
     // ====================== 时间型 ======================
     DSLType TIME = DefaultDSLType.TIME;
-
     DSLType TIMESTAMP = DefaultDSLType.TIMESTAMP;
-
     DSLType DATE = DefaultDSLType.DATE;
-
     DSLType DECIMAL = DefaultDSLType.DECIMAL;
 
     // ====================== 字符型 ======================
     DSLType CHAR = DefaultDSLType.CHAR;
-
     DSLType VARCHAR = DefaultDSLType.VARCHAR;
-
     DSLType NVARCHAR = DefaultDSLType.NVARCHAR;
-
     DSLType LONGVARCHAR = DefaultDSLType.LONGVARCHAR;
-
     DSLType LONGNVARCHAR = DefaultDSLType.LONGNVARCHAR;
-
     DSLType VARBINARY = DefaultDSLType.VARBINARY;
-
     DSLType LONGVARBINARY = DefaultDSLType.LONGVARBINARY;
 
     // ====================== 高级类型 ======================
     DSLType OBJECT = DefaultDSLType.OBJECT;
-
     DSLType ARRAY = DefaultDSLType.ARRAY;
 
     /**

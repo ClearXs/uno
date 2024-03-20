@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * Object包装器，作用是反射设置获取该对象的字段值，并可以获取这个类中所有方法等
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/21 10:17
  * @since 1.0
  */

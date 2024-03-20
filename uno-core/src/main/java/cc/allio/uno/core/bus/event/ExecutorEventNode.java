@@ -13,7 +13,7 @@ import java.util.Queue;
 /**
  * 基于{@link EventExecutor}的事件回调处理
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/19 13:23
  * @since 1.1.4
  */

@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * uno rule api
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/22 11:48
  * @since 1.1.4
  */

@@ -11,9 +11,10 @@ import java.util.function.UnaryOperator;
 /**
  * DSL修改表以及相关字段操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/6/8 19:21
  * @since 1.1.4
+ * @see OperatorGroup
  */
 public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<AlterTableOperator>, TableOperator<AlterTableOperator> {
 

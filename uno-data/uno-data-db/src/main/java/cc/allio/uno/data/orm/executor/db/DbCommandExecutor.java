@@ -38,13 +38,13 @@ import java.util.List;
 /**
  * 基于MybatisSQL执行器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 13:45
  * @see CommandExecutorFactory
  * @since 1.1.4
  */
 @Slf4j
-public class DbCommandExecutor extends AbstractCommandExecutor implements CommandExecutor {
+public class DbCommandExecutor extends AbstractCommandExecutor implements AggregateCommandExecutor {
 
     private final Executor executor;
     private final LanguageDriver languageDriver;

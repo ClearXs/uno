@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.exception;
 /**
  * SQL相关操作时抛出的异常，他是一个运行时异常
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/30 10:44
  * @since 1.1.0
  */

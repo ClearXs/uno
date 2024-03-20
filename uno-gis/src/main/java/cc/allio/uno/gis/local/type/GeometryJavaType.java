@@ -7,7 +7,7 @@ import org.locationtech.jts.geom.Geometry;
 /**
  * Geometry
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/18 16:08
  * @since 1.1.4
  */

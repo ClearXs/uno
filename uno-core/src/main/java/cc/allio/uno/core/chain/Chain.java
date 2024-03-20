@@ -9,7 +9,7 @@ import java.util.List;
  *
  * @param <IN>  进入链中元素的范型
  * @param <OUT> 出链元素的范型
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/22 18:47
  * @since 1.0
  */

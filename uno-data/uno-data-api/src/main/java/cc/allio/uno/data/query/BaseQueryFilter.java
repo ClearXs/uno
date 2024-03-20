@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * 基于{@link QueryOperator}实现的{@link QueryFilter}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 18:21
  * @since 1.1.4
  */
@@ -188,6 +188,11 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     @Override
     public QueryOperator and() {
         return queryOperator.and();
+    }
+
+    @Override
+    public QueryOperator nor() {
+        return queryOperator.nor();
     }
 
     @Override

@@ -3,7 +3,7 @@ package cc.allio.uno.core.util.template;
 /**
  * 按照指定的Token标识符号（如#{}、{{}}）等等TOKEN来对文本内容进行解析
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/3 13:34
  * @see GenericTokenParser
  * @since 2.9.0-RELEASE

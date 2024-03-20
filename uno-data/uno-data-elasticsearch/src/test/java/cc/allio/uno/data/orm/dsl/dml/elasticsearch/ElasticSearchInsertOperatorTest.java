@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class ElasticSearchInsertOperatorTest extends BaseTestCase {
 
-    ElasticSearchInsertOperator operator = new ElasticSearchInsertOperator();
+    EsInsertOperator operator = new EsInsertOperator();
 
     @Test
     void testSingeInsert() {

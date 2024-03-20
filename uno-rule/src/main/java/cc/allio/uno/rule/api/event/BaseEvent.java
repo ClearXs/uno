@@ -8,7 +8,7 @@ import lombok.Getter;
 /**
  * rule event on base
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/28 14:11
  * @since 1.1.4
  */

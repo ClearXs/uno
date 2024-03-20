@@ -11,7 +11,7 @@ import java.util.Set;
 /**
  * 基于注解的Properties
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/3 11:59
  * @since 1.1.4
  */

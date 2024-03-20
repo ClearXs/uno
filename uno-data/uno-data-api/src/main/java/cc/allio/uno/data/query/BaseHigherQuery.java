@@ -1,5 +1,6 @@
 package cc.allio.uno.data.query;
 
+import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.query.stream.*;
 
@@ -9,15 +10,15 @@ import java.util.Map;
 /**
  * 高阶查询Impl
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 18:19
  * @since 1.1.4
  */
 public class BaseHigherQuery implements HigherQuery {
 
-    private final CommandExecutor sqlExecutor;
+    private final AggregateCommandExecutor sqlExecutor;
 
-    public BaseHigherQuery(CommandExecutor sqlExecutor) {
+    public BaseHigherQuery(AggregateCommandExecutor sqlExecutor) {
         this.sqlExecutor = sqlExecutor;
     }
 

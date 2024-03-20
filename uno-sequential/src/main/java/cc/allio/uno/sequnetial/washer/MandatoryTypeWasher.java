@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * 不跳过类型检测
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/20 15:36
  * @since 1.0
  */

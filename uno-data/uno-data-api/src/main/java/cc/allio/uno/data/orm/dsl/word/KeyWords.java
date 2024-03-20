@@ -8,7 +8,7 @@ import java.util.TreeMap;
 /**
  * SQL 相关关键字存储
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/12 16:43
  * @since 1.1.4
  */

@@ -5,7 +5,7 @@ import org.locationtech.jts.geom.Geometry;
 /**
  * 可读（序列化）写（反序列化）的坐标转换
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/8 18:27
  * @since 1.1.2
  */

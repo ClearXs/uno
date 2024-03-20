@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 /**
  * SQL prepare operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 15:47
  * @see PreparedStatement
  * @since 1.1.4

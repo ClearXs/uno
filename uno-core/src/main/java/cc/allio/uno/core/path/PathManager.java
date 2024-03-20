@@ -3,7 +3,7 @@ package cc.allio.uno.core.path;
 /**
  * WebSocket推送路径管理器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/6/27 15:52
  * @since 1.0
  */

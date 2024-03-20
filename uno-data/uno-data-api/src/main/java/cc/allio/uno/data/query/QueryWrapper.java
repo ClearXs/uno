@@ -9,7 +9,7 @@ import java.io.Serializable;
 /**
  * 查询领域对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/29 12:52
  * @since 1.1.0
  */

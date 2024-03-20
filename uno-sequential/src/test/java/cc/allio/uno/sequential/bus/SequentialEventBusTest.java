@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 /**
  * 测试时序事件总线
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/7 11:18
  * @see SequentialEventBus
  * @since 1.0

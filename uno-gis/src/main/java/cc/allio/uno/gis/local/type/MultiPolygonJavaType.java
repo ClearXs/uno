@@ -7,7 +7,7 @@ import org.locationtech.jts.geom.MultiPolygon;
 /**
  * MultiPolygon
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/18 16:01
  * @since 1.1.4
  */

@@ -2,7 +2,9 @@ package cc.allio.uno.core.api;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.util.Values;
 import cc.allio.uno.core.util.id.IdGenerator;
+import com.google.common.collect.Lists;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
@@ -11,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 定义Uno上下文模版方法
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/3/30 14:08
  * @since 1.0.6
  */
@@ -118,6 +120,25 @@ public interface OptionalContext {
     }
 
     /**
+     * according to types get corresponding obj.
+     * <b>you should invoke before invoke {@link #matchAll(Class[])}</b>
+     *
+     * @return obj
+     * @throws IllegalArgumentException not find any one type obj throws
+     */
+    default Object[] getAllType(Class<?>[] types) {
+        List<Object> objs = Lists.newArrayList();
+        for (Class<?> type : types) {
+            Object obj = getTypeFirstForce(type);
+            if (obj == null) {
+                throw new IllegalArgumentException(String.format("given type %s not found obj", type.getName()));
+            }
+            objs.add(obj);
+        }
+        return objs.toArray(Object[]::new);
+    }
+
+    /**
      * 随机生成Key进行放入
      *
      * @param obj 属性值
@@ -158,6 +179,26 @@ public interface OptionalContext {
      */
     default boolean containsKey(String key) {
         return get(key).isPresent();
+    }
+
+    /**
+     * given a type decide whether match
+     *
+     * @param type the type
+     * @return match if true
+     */
+    default boolean match(Class<?> type) {
+        return getTypeFirst(type).isPresent();
+    }
+
+    /**
+     * given type array decide whether match all
+     *
+     * @param types the array type
+     * @return match if true
+     */
+    default boolean matchAll(Class<?>[] types) {
+        return Arrays.stream(types).allMatch(this::match);
     }
 
     /**
@@ -212,7 +253,7 @@ public interface OptionalContext {
 
         public ImmutableOptionalContext(Object[] values) {
             if (values != null) {
-                this.context = new HashMap<>(values.length);
+                this.context = HashMap.newHashMap(values.length);
                 for (Object value : values) {
                     putSingleValue(value);
                 }

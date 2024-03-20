@@ -5,7 +5,7 @@ import cc.allio.uno.data.orm.dsl.Table;
 /**
  * 根据指定的实体类，解析出表名
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/6 20:05
  * @see TableResolve
  * @since 1.1.7

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * exception for function apply method
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/18 15:56
  * @see MethodFunction
  * @since 1.1.7

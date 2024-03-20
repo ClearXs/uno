@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.db;
 
-import cc.allio.uno.data.orm.executor.CommandExecutor;
+import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.test.BaseTestCase;
 import cc.allio.uno.test.Inject;
 import cc.allio.uno.test.RunTest;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 @RunTest
 @MybatisEnv
-public class DbExecutorDynamicCreateTest extends BaseTestCase {
+class DbExecutorDynamicCreateTest extends BaseTestCase {
 
     @Inject
     private SqlSessionFactory sqlSessionFactory;
@@ -28,7 +28,7 @@ public class DbExecutorDynamicCreateTest extends BaseTestCase {
     @Test
     void testCreateByH2DataSource() {
         JdbcConnectionDetails connectionDetails = new JdbcConnectionDetailsImpl(null, null, "jdbc:h2:mem:test-db;IGNORECASE=TRUE");
-        CommandExecutor commandExecutor = getCommandExecutor(connectionDetails);
+        AggregateCommandExecutor commandExecutor = getCommandExecutor(connectionDetails);
         List<Map<String, Object>> maps = commandExecutor.queryListMap(o -> o.select("1"));
         assertNotNull(maps);
     }
@@ -45,7 +45,7 @@ public class DbExecutorDynamicCreateTest extends BaseTestCase {
         return dataSource;
     }
 
-    private CommandExecutor getCommandExecutor(JdbcConnectionDetails connectionDetails) {
+    private AggregateCommandExecutor getCommandExecutor(JdbcConnectionDetails connectionDetails) {
         HikariDataSource dataSource = getHakariDataSource(connectionDetails);
         Configuration configuration = sqlSessionFactory.getConfiguration();
         DbMybatisConfiguration mybatisConfiguration = new DbMybatisConfiguration(configuration);

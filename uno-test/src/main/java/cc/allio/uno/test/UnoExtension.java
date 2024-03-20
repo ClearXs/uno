@@ -11,7 +11,7 @@ import java.lang.reflect.Parameter;
  * <p>生命周期：</p>
  * <i>beforeAll -> postProcessTestInstance -> beforeEach -> beforeTestExecution -> afterTestExecution -> afterEach -> afterAll</i>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/2 18:56
  * @see SpringExtension
  * @since 1.1.4

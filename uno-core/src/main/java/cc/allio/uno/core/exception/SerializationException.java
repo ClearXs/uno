@@ -3,7 +3,7 @@ package cc.allio.uno.core.exception;
 /**
  * 序列化时产生异常
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/1 12:36
  * @since 1.0
  */

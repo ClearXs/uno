@@ -2,10 +2,7 @@ package cc.allio.uno.data.orm.dsl.dml;
 
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.core.util.id.IdGenerator;
-import cc.allio.uno.data.orm.dsl.ColumnDef;
-import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.dsl.PrepareOperator;
-import cc.allio.uno.data.orm.dsl.TableOperator;
+import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -16,11 +13,12 @@ import java.util.*;
 import java.util.function.Supplier;
 
 /**
- * SQL INSERT。
+ * INSERT Operator。
  * <p><b>值得注意的是每调用一次{@link #insert(String, Object)}API，都会生成一个VALUES。建议调用{@link #batchInserts(List, List)}API批量生成</b></p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/13 15:25
+ * @see OperatorGroup
  * @since 1.1.4
  */
 public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOperator<InsertOperator> {
@@ -44,7 +42,7 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @return InsertOperator
      */
     default InsertOperator insert(String fieldName, Object value) {
-        return insert(Map.of(fieldName, getValueIfNullThenNullValue(value)));
+        return insert(Map.of(fieldName, getValueIfNull(value)));
     }
 
     /**
@@ -55,7 +53,7 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @return InsertOperator
      */
     default InsertOperator insert(String f1, Object v1, String f2, Object v2) {
-        return insert(Tuples.of(f1, getValueIfNullThenNullValue(v1)), Tuples.of(f2, getValueIfNullThenNullValue(v2)));
+        return insert(Tuples.of(f1, getValueIfNull(v1)), Tuples.of(f2, getValueIfNull(v2)));
     }
 
     /**
@@ -69,9 +67,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      */
     default InsertOperator insert(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
         return insert(
-                Tuples.of(f1, getValueIfNullThenNullValue(v1)),
-                Tuples.of(f2, getValueIfNullThenNullValue(v2)),
-                Tuples.of(f3, getValueIfNullThenNullValue(v3)));
+                Tuples.of(f1, getValueIfNull(v1)),
+                Tuples.of(f2, getValueIfNull(v2)),
+                Tuples.of(f3, getValueIfNull(v3)));
     }
 
     /**
@@ -89,10 +87,10 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      */
     default InsertOperator insert(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
         return insert(
-                Tuples.of(f1, getValueIfNullThenNullValue(v1)),
-                Tuples.of(f2, getValueIfNullThenNullValue(v2)),
-                Tuples.of(f3, getValueIfNullThenNullValue(v3)),
-                Tuples.of(f4, getValueIfNullThenNullValue(v4)));
+                Tuples.of(f1, getValueIfNull(v1)),
+                Tuples.of(f2, getValueIfNull(v2)),
+                Tuples.of(f3, getValueIfNull(v3)),
+                Tuples.of(f4, getValueIfNull(v4)));
     }
 
     /**
@@ -135,7 +133,7 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
     default InsertOperator insert(Map<String, Object> values) {
         Map<DSLName, Object> inserts = Maps.newLinkedHashMap();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
-            inserts.put(DSLName.of(entry.getKey()), getValueIfNullThenNullValue(entry.getValue()));
+            inserts.put(DSLName.of(entry.getKey()), getValueIfNull(entry.getValue()));
         }
         return inserts(inserts);
     }

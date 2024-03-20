@@ -6,7 +6,7 @@ import cc.allio.uno.core.type.Types;
 /**
  * 处理JDBC相关类型
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/5 19:59
  * @since 1.1.4
  */

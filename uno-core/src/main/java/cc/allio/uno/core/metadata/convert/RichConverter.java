@@ -5,7 +5,7 @@ import cc.allio.uno.core.metadata.Metadata;
 /**
  * rich Converter操作.
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/13 11:28
  * @since 1.1.0
  */

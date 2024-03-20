@@ -5,7 +5,7 @@ import lombok.Data;
 /**
  * 数据抽稀维度
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/16 11:40
  * @since 1.1.0
  */

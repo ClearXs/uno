@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.exception;
 /**
  * DML exception 是一个运行时异常
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/8 13:58
  * @since 1.1.7
  */

@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 事实对象默认实现
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 17:22
  * @since 1.1.4
  */

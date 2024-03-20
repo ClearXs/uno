@@ -17,9 +17,9 @@ public class ExecutorInitializerAutoConfiguration {
     }
 
     @Bean
-    public ExecutorInitializer executorInitializer(ObjectProvider<List<ExecutorLoader>> loaderProvider,
+    public ExecutorInitializer executorInitializer(ObjectProvider<List<CommandExecutorLoader<? extends AggregateCommandExecutor>>> loaderProvider,
                                                    ObjectProvider<List<Interceptor>> interceptorProvider) {
-        List<ExecutorLoader> executorLoaders = loaderProvider.getIfAvailable(Collections::emptyList);
+        List<CommandExecutorLoader<? extends AggregateCommandExecutor>> executorLoaders = loaderProvider.getIfAvailable(Collections::emptyList);
         List<Interceptor> interceptors = interceptorProvider.getIfAvailable(Collections::emptyList);
         return new ExecutorInitializer(executorLoaders, interceptors);
     }

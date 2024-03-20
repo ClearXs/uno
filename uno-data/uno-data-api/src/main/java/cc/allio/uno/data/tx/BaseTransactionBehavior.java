@@ -7,7 +7,7 @@ import org.springframework.transaction.TransactionDefinition;
 /**
  * 基于{@link InternalTransactionBehavior}实现
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/11 12:39
  * @since 1.1.7
  */

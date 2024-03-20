@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 /**
  * Mybatis-plus测试环境类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/14 14:36
  * @since 1.0
  */

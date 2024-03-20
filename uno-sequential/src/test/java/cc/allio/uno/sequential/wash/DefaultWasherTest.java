@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 /**
  * 测试默认清洗器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/19 16:54
  * @since 1.0
  */

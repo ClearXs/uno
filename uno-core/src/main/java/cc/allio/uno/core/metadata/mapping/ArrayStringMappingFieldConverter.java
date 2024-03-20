@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * 进行转换的数据可能是否Collection、可能是[{...}]的json形式。通过处理这两种形式，使最终返回一个String数据
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/14 13:36
  * @since 1.1.3
  */

@@ -1,12 +1,19 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.core.api.Self;
+import cc.allio.uno.core.reflect.InstantiationFeature;
+import cc.allio.uno.core.spi.ClassPathServiceLoader;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
+import cc.allio.uno.test.env.PropertiesVisitor;
 import cc.allio.uno.test.env.Visitor;
-import cc.allio.uno.test.runner.CoreRunner;
-import cc.allio.uno.test.runner.Runner;
-import cc.allio.uno.test.runner.RunnerCenter;
+import cc.allio.uno.test.listener.CoreTestListener;
+import cc.allio.uno.test.listener.Listener;
+import cc.allio.uno.test.listener.WebListener;
+import cc.allio.uno.test.runner.*;
+import cc.allio.uno.test.testcontainers.SetupContainer;
+import cc.allio.uno.test.testcontainers.ShutdownContainer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
@@ -17,13 +24,14 @@ import org.springframework.core.annotation.MergedAnnotation;
 import org.springframework.core.annotation.MergedAnnotations;
 
 import java.util.*;
-import java.util.stream.Collectors;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
  * {@link RunTest}的属性描述。支持能够在其上拓展增加能力
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/10 09:25
  * @since 1.1.4
  */
@@ -48,7 +56,7 @@ public class RunTestAttributes {
     private RunTest.WebEnvironment webEnvironment = RunTest.WebEnvironment.NONE;
     private final Set<Class<? extends Runner>> runnerClasses = Sets.newHashSet();
     private final Set<Class<? extends Visitor>> visitorClasses = Sets.newHashSet();
-    private final Set<Class<? extends TestListener>> listenersClasses = Sets.newHashSet();
+    private final Set<Class<? extends Listener>> listenersClasses = Sets.newHashSet();
     private final List<Applicator> applicators = Lists.newArrayList(new InlinePropertiesApplicator(), new ComponentApplicator(), new ProfileApplicator());
 
     // 实例化
@@ -57,42 +65,70 @@ public class RunTestAttributes {
     @Getter
     private final Set<Visitor> visitors = new ClassesHashSet<>(visitorClasses);
     @Getter
-    private final Set<TestListener> testListeners = new ClassesHashSet<>(listenersClasses);
+    private final Set<Listener> listeners = new ClassesHashSet<>(listenersClasses);
     private final RunnerCenter runnerCenter = new RunnerCenter();
 
-    private final Object lock = new Object();
-
-    public RunTestAttributes() {
-
-    }
+    private static final String AUTO_CONFIGURATION_SUFFIX = "AutoConfiguration";
 
     public RunTestAttributes(Class<?> testClass) {
-        RunTest runTest = MergedAnnotations.from(testClass, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY)
-                .get(RunTest.class)
-                .synthesize(MergedAnnotation::isPresent)
-                .orElse(null);
+        RunTest runTest =
+                MergedAnnotations.from(testClass, MergedAnnotations.SearchStrategy.TYPE_HIERARCHY)
+                        .get(RunTest.class)
+                        .synthesize(MergedAnnotation::isPresent)
+                        .orElse(null);
         if (runTest != null) {
             this.profile = runTest.profile();
             this.active = runTest.active();
             this.webEnvironment = runTest.webEnvironment();
             addComponents(runTest.components());
             addInlineProperties(runTest.properties());
-            addRunnerClasses(runTest.runner());
-            addVisitorClasses(runTest.visitor());
-            addListenerClasses(runTest.listeners());
-            initInstance();
         }
+        initial(runTest);
+    }
+
+    private void initial(RunTest runTest) {
+        ExtensionInitialization<Visitor> visitorInitialization
+                = new ExtensionInitializationImpl<>(Visitor.class)
+                .initialDefaultExtension(PropertiesVisitor.class)
+                .initialExtensionBySPI();
+
+        ExtensionInitialization<Runner> runnerInitialization
+                = new ExtensionInitializationImpl<>(Runner.class)
+                .initialDefaultExtension(InjectRunner.class, AnnoMetadataRunner.class, SetupContainer.class, ShutdownContainer.class)
+                .initialExtensionBySPI();
+
+        ExtensionInitialization<Listener> listenerInitialization
+                = new ExtensionInitializationImpl<>(Listener.class)
+                .initialDefaultExtension(CoreTestListener.class, PrintTimingListener.class, WebListener.class)
+                .initialExtensionBySPI();
+
+        if (runTest != null) {
+            visitorInitialization.initialAnnoExtension(runTest::visitor);
+            runnerInitialization.initialAnnoExtension(runTest::runner);
+            listenerInitialization.initialAnnoExtension(runTest::listeners);
+        }
+
+        visitorInitialization.initial((classes, v) -> {
+            this.visitorClasses.addAll(classes);
+            this.visitors.addAll(v);
+        });
+
+        runnerInitialization.initial((classes, v) -> {
+            this.runnerClasses.addAll(classes);
+            this.runners.addAll(v);
+        });
+
+        listenerInitialization.initial((classes, v) -> {
+            this.listenersClasses.addAll(classes);
+            this.listeners.addAll(v);
+        });
     }
 
     /**
-     * 初始化{@link Runner}、{@link Visitor}、{@link TestListener}
+     * add component class to {@link #componentsClasses}
+     *
+     * @param componentClasses the componentClasses
      */
-    private void initInstance() {
-        this.runners.addAll(create(runnerClasses));
-        this.visitors.addAll(create(visitorClasses));
-        this.testListeners.addAll(create(listenersClasses));
-    }
-
     public void addComponents(Class<?>... componentClasses) {
         this.componentsClasses.addAll(Lists.newArrayList(componentClasses));
         addAutoConfigurationClasses(componentClasses);
@@ -123,56 +159,13 @@ public class RunTestAttributes {
     }
 
     /**
-     * 添加Runner class对象，并同时进行实例化。
-     *
-     * @param runner runner
-     */
-    @SafeVarargs
-    public final void addRunnerClasses(Class<? extends Runner>... runner) {
-        List<Class<? extends Runner>> prepareClasses = Lists.newArrayList(runner);
-        synchronized (lock) {
-            this.runnerClasses.addAll(prepareClasses);
-            this.runners.addAll(create(prepareClasses));
-        }
-    }
-
-    @SafeVarargs
-    public final void addVisitorClasses(Class<? extends Visitor>... visitor) {
-        List<Class<? extends Visitor>> prepareClasses = Lists.newArrayList(visitor);
-        synchronized (lock) {
-            this.visitorClasses.addAll(prepareClasses);
-            this.visitors.addAll(create(prepareClasses));
-        }
-    }
-
-    @SafeVarargs
-    public final void addListenerClasses(Class<? extends TestListener>... listener) {
-        List<Class<? extends TestListener>> prepareClasses = Lists.newArrayList(listener);
-        synchronized (lock) {
-            this.listenersClasses.addAll(prepareClasses);
-            this.testListeners.addAll(create(prepareClasses));
-        }
-    }
-
-    /**
-     * 基于给定的class对象创建实例
-     *
-     * @param classes classes
-     * @param <T>     类型
-     * @return Collection
-     */
-    public <T> Collection<T> create(Collection<Class<? extends T>> classes) {
-        return ClassUtils.newInstanceList(Lists.newArrayList(classes), new ClassUtils.SortFeature<T>(), new ClassUtils.DeDuplicationFeature<T>());
-    }
-
-    /**
      * 构建 CoreRunner
      *
      * @return CoreRunner
      */
     public CoreRunner getCoreRunner() {
         try {
-            runnerCenter.register(getRunners());
+            runnerCenter.register(runners);
             return runnerCenter.getRunner();
         } finally {
             runnerCenter.clear();
@@ -193,9 +186,6 @@ public class RunTestAttributes {
     public void apply(BaseSpringTest coreTest) {
         applicators.forEach(applicator -> applicator.apply(coreTest, this));
     }
-
-
-    private static final String AUTO_CONFIGURATION_SUFFIX = "AutoConfiguration";
 
     /**
      * 检查是否是Auto Configuration
@@ -274,7 +264,8 @@ public class RunTestAttributes {
         public void apply(BaseSpringTest coreTest, RunTestAttributes testAttributes) {
             TestComponentScanner scanner = new TestComponentScanner(coreTest.getContext());
             Set<Class<?>> registryComps = Sets.newHashSet(testAttributes.getComponentsClasses());
-            List<Class<?>> loadComps = registryComps.stream().filter(com -> AnnotationUtils.isCandidateClass(com, TestComponentScan.class))
+            List<Class<?>> loadComps = registryComps.stream()
+                    .filter(com -> AnnotationUtils.isCandidateClass(com, TestComponentScan.class))
                     .flatMap(com -> {
                         TestComponentScan annotation = AnnotationUtils.findAnnotation(com, TestComponentScan.class);
                         if (annotation == null) {
@@ -285,21 +276,22 @@ public class RunTestAttributes {
                         // 扫描包
                         String[] packages = annotation.basePackages();
                         if (ObjectUtils.isNotEmpty(packages)) {
-                            List<? extends Class<?>> scansComps = scanner.doScan(annotation.basePackages())
-                                    .stream()
-                                    .map(bh -> {
-                                        try {
-                                            return Class.forName(bh.getBeanDefinition().getBeanClassName());
-                                        } catch (ClassNotFoundException e) {
-                                            throw new RuntimeException(e);
-                                        }
-                                    })
-                                    .collect(Collectors.toList());
-                            testAttributes.addComponents(scansComps.toArray(new Class[0]));
+                            Class<?>[] scansComps =
+                                    scanner.doScan(annotation.basePackages())
+                                            .stream()
+                                            .map(bh -> {
+                                                try {
+                                                    return Class.forName(bh.getBeanDefinition().getBeanClassName());
+                                                } catch (ClassNotFoundException ex) {
+                                                    throw new RuntimeException(ex);
+                                                }
+                                            })
+                                            .toArray(Class[]::new);
+                            testAttributes.addComponents(scansComps);
                         }
                         return Stream.of(value);
                     })
-                    .collect(Collectors.toList());
+                    .toList();
             registryComps.addAll(loadComps);
             coreTest.registerComponent(ClassUtils.toClassArray(registryComps));
         }
@@ -312,6 +304,7 @@ public class RunTestAttributes {
      * @param <E>
      */
     private static class ClassesHashSet<E> extends HashSet<E> {
+
         private final Set<Class<? extends E>> classes;
 
         public ClassesHashSet(Set<Class<? extends E>> classes) {
@@ -357,5 +350,104 @@ public class RunTestAttributes {
                 throw new IllegalArgumentException(String.format("instance size is %s, but classes size is %s", this.size(), classes.size()));
             }
         }
+    }
+
+    interface ExtensionInitialization<E> extends Self<ExtensionInitialization<E>> {
+
+        /**
+         * initiation built in generic type extension
+         *
+         * @param defaultExtensionClasses the default extension class
+         * @return self
+         */
+        ExtensionInitialization<E> initialDefaultExtension(Class<? extends E>... defaultExtensionClasses);
+
+        /**
+         * initiation extension by spi
+         *
+         * @return self
+         */
+        ExtensionInitialization<E> initialExtensionBySPI();
+
+        /**
+         * initiation by {@link RunTest} extension
+         *
+         * @param supplier supplier
+         * @return self
+         */
+        ExtensionInitialization<E> initialAnnoExtension(Supplier<Class<? extends E>[]> supplier);
+
+        /**
+         * start initiation
+         *
+         * @param acceptor accept initial result
+         */
+        void initial(BiConsumer<Set<Class<? extends E>>, Collection<E>> acceptor);
+
+        /**
+         * 基于给定的class对象创建实例
+         *
+         * @param classes classes
+         * @param <T>     类型
+         * @return Collection
+         */
+        default <T> Collection<T> creation(Collection<Class<? extends T>> classes) {
+            return ClassUtils.newInstanceList(Lists.newArrayList(classes), InstantiationFeature.sort(), InstantiationFeature.deduplicate());
+        }
+    }
+
+    static class ExtensionInitializationImpl<E> implements ExtensionInitialization<E> {
+
+        private final Class<E> extensionType;
+        private final Set<Class<? extends E>> classes;
+
+        public ExtensionInitializationImpl(Class<E> extensionType) {
+            this.extensionType = extensionType;
+            this.classes = Sets.newHashSet();
+        }
+
+        @Override
+        @SafeVarargs
+        public final ExtensionInitialization<E> initialDefaultExtension(Class<? extends E>... defaultExtensionClasses) {
+            if (ObjectUtils.isNotEmpty(defaultExtensionClasses)) {
+                List<Class<? extends E>> defaultExtensionList = Lists.newArrayList(defaultExtensionClasses);
+                this.classes.addAll(defaultExtensionList);
+            }
+            return self();
+        }
+
+        @Override
+        public ExtensionInitialization<E> initialExtensionBySPI() {
+            // visitor
+            ClassPathServiceLoader<E> load = ClassPathServiceLoader.load(extensionType);
+            Lists.newArrayList(load)
+                    .forEach(provider -> {
+                        Class<? extends E> extensionClass = provider.type();
+                        this.classes.add(extensionClass);
+                    });
+            return self();
+        }
+
+        @Override
+        public ExtensionInitialization<E> initialAnnoExtension(Supplier<Class<? extends E>[]> supplier) {
+            if (supplier != null) {
+                Class<? extends E>[] extensionClass = supplier.get();
+                if (extensionClass != null && extensionClass.length > 0) {
+                    List<Class<? extends E>> extensionClassList = Lists.newArrayList(extensionClass);
+                    this.classes.addAll(extensionClassList);
+                }
+            }
+            return self();
+        }
+
+        @Override
+        public void initial(BiConsumer<Set<Class<? extends E>>, Collection<E>> acceptor) {
+            if (acceptor != null) {
+                // create instance
+                Collection<E> extension = creation(classes);
+                acceptor.accept(classes, extension);
+            }
+        }
+
     }
 }

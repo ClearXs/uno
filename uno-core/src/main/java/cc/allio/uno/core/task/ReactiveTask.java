@@ -4,7 +4,7 @@ package cc.allio.uno.core.task;
  * reactive task
  *
  * @param <T> 类型参数
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/28 18:25
  * @since 1.1.4
  */

@@ -9,7 +9,7 @@ import java.util.function.Consumer;
 /**
  * 单元测试FactoriesLoader
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/4/1 10:10
  * @see FactoriesLoader
  * @since 1.0.6

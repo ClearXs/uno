@@ -14,7 +14,7 @@ import java.util.function.Supplier;
  * 对{@link LockContext#release()}返回的结果集对象，提供类似Rust的Result封装。
  * <p><b>非常重要的是，如果通过{@link LockContext#release()}不是立即释放值的话，只有调用终止操作（即获取值的操作）才能获取值</b></p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/29 23:45
  * @since 1.1.7
  */

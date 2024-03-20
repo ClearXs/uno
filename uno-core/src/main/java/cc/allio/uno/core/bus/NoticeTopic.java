@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 /**
  * 基于事件通知机制实现的Topic
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/26 11:37
  * @since 1.0
  */

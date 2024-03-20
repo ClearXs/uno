@@ -6,7 +6,7 @@ package cc.allio.uno.netty.event;
  *     参考自JDK{@link java.util.Observable}
  * </pre>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/29 13:44
  * @see ConnectionEvent
  * @see Observer

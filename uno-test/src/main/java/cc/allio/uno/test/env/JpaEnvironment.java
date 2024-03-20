@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 /**
  * Jpa环境测试类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/29 11:55
  * @since 1.1.2
  */

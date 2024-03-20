@@ -6,6 +6,7 @@ import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
+import com.google.auto.service.AutoService;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
@@ -20,11 +21,12 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 实例化{@link CommandExecutor}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/10 18:27
  * @since 1.1.7
  */
-public class DbCommandExecutorLoader implements ExecutorLoader {
+@AutoService(CommandExecutorLoader.class)
+public class DbCommandExecutorLoader implements CommandExecutorLoader<DbCommandExecutor> {
 
     private final DbMybatisConfiguration configuration;
     private final AtomicInteger createCount = new AtomicInteger(0);
@@ -34,7 +36,7 @@ public class DbCommandExecutorLoader implements ExecutorLoader {
     }
 
     @Override
-    public CommandExecutor load(List<Interceptor> interceptors) {
+    public DbCommandExecutor load(List<Interceptor> interceptors) {
         DataSource dataSource = configuration.getEnvironment().getDataSource();
         DBType dbType = DataSourceHelper.getDbType(dataSource);
         String username = DataSourceHelper.getUsername(dataSource);
@@ -56,7 +58,7 @@ public class DbCommandExecutorLoader implements ExecutorLoader {
     }
 
     @Override
-    public CommandExecutor load(ExecutorOptions executorOptions) {
+    public DbCommandExecutor load(ExecutorOptions executorOptions) {
         String jdbcUrl = executorOptions.getDbType().parseTemplate(executorOptions.getAddress(), executorOptions.getDatabase());
         JdbcConnectionDetails connectionDetails = new JdbcConnectionDetailsImpl(executorOptions.getUsername(), executorOptions.getUsername(), jdbcUrl);
         HikariDataSource dataSource =

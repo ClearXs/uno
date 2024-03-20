@@ -3,7 +3,7 @@ package cc.allio.uno.core.metadata.mapping;
 /**
  * 基础MappingField转换器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/14 13:13
  * @since 1.1.3
  */

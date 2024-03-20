@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.helper;
 /**
  * POJO相关的检查器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/16 20:42
  * @since 1.1.7
  */

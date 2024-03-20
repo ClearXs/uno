@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor.db;
 
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.data.orm.config.DbAutoConfiguration;
+import cc.allio.uno.data.orm.config.db.DbAutoConfiguration;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.ExecutorInitializerAutoConfiguration;
 import cc.allio.uno.test.BaseTestCase;

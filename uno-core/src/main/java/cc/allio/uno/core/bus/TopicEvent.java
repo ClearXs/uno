@@ -3,7 +3,7 @@ package cc.allio.uno.core.bus;
 /**
  * 主题事件
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 14:30
  * @since 1.1.4
  */

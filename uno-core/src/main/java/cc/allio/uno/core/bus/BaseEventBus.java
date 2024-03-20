@@ -11,7 +11,7 @@ import reactor.core.scheduler.Schedulers;
 /**
  * 基础EventBus，使用{@link Topic}作为消息传递。实现{@link #subscribe(Subscription)}、{@link #unSubscribe(Long, String)}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/12 16:03
  * @since 1.1.2
  */

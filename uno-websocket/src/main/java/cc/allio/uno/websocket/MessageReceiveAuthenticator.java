@@ -9,7 +9,7 @@ import java.util.function.Predicate;
  * 消息认证器，消息可能是一个对象或者集合，需要对这些消息进行进行认证，认证成功的消息才会调用{@link BaseWebsocketEndpoint#doOnMessage(Session, List)}
  *
  * @param <T> 消息实体
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/29 15:35
  * @since 1.0
  */

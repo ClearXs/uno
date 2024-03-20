@@ -10,7 +10,7 @@ import java.util.stream.Stream;
 /**
  * bool
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/11 12:42
  * @since 1.1.7
  */

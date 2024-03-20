@@ -10,10 +10,11 @@ import com.google.common.collect.Lists;
 import java.util.Collection;
 
 /**
- * SQL Query Operator
+ * Query Operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 23:02
+ * @see OperatorGroup
  * @since 1.1.4
  */
 public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOperator<QueryOperator>, WhereOperator<QueryOperator> {

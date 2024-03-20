@@ -1,22 +1,22 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.DataBaseOperator;
+import cc.allio.uno.data.orm.dsl.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
 import cc.allio.uno.data.query.stream.SQLCommandExecutorStream;
 
 /**
- * SQL表结构查询
+ * Show Columns
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/6/8 19:19
- * @since SWP-2.0.1
+ * @see OperatorGroup
+ * @since 1.1.4
  */
 public interface ShowColumnsOperator
-        extends PrepareOperator<ShowColumnsOperator>,
-        TableOperator<ShowColumnsOperator>,
-        DataBaseOperator<ShowColumnsOperator> {
+        extends PrepareOperator<ShowColumnsOperator>, TableOperator<ShowColumnsOperator>, DataBaseOperator<ShowColumnsOperator> {
 
     String TABLE_CATALOG_FIELD = "TABLE_CATALOG";
     String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
@@ -31,7 +31,6 @@ public interface ShowColumnsOperator
     String NUMERIC_PRECISION_FIELD = "NUMERIC_PRECISION";
     String NUMERIC_SCALE_FIELD = "NUMERIC_SCALE";
     String DATETIME_PRECISION_FIELD = "DATETIME_PRECISION";
-
 
     /**
      * 转换为{@link QueryOperator}

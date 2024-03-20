@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * {@link Table}结果集处理器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/4 18:56
  * @since 1.1.7
  */

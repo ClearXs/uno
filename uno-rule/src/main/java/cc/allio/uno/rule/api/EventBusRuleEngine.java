@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * 基于{@link EventBus}的规则引擎
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 13:07
  * @since 1.1.4
  */

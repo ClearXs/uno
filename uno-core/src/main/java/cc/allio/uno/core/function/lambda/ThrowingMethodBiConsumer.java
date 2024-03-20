@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * exception for bi consumer accept method
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/18 15:46
  * @see MethodBiConsumer
  * @since 1.1.7

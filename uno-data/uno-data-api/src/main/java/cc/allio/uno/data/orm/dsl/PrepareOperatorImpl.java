@@ -9,7 +9,7 @@ import java.util.List;
 /**
  * SQLPrepareOperatorImpl
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 18:19
  * @since 1.1.4
  */

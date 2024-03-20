@@ -11,7 +11,7 @@ import java.util.Objects;
 /**
  * default
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 19:22
  * @see RuleBuilder#get()
  * @since 1.1.4

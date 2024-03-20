@@ -19,7 +19,7 @@ import java.lang.annotation.*;
 /**
  * {@link com.baomidou.mybatisplus.autoconfigure.MybatisPlusProperties}注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/6 16:52
  * @since 1.1.4
  */

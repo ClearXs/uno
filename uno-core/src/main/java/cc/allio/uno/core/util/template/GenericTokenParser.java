@@ -5,7 +5,7 @@ import cc.allio.uno.core.StringPool;
 /**
  * 通用Token解析器，指定Token解析成指定的内容，比如说：#{token}替换成指定的内容
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/29 16:40
  * @see TokenHandler
  * @since 1.0

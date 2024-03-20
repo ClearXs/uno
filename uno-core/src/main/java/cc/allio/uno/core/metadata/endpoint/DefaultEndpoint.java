@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 默认实现端点
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/27 17:46
  * @since 1.1.0
  */

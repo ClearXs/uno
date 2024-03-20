@@ -5,7 +5,7 @@ import cc.allio.uno.core.type.Types;
 /**
  * short java type
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/13 18:00
  * @since 1.1.4
  */

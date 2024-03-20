@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * 根据跟定的对象把其汇编成规则树结果或者根据规则树反编译成规则项
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/26 12:07
  * @since 1.1.4
  */

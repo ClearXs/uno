@@ -16,7 +16,7 @@ import java.util.Arrays;
  * 使用{@link ComposeOrigin}注解标识某个方法时，如果调用的对象是经过{@link ComposableInvocationInterceptor}方法拦截的代理对象时
  * 将会追踪他的调用栈，获取调用栈的类Class对象，判断他的方法上是否有使用到这个注解，只要调用栈里有一个使用就判定调用原声对象的方法。<br/>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/28 12:32
  * @since 1.0
  */

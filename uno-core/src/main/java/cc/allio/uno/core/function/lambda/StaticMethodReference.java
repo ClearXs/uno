@@ -9,7 +9,7 @@ import java.util.function.Function;
  *     StaticMethodReference reference = User::getName;
  * </pre>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/5 15:06
  * @since 1.1.4
  */

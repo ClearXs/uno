@@ -13,7 +13,7 @@ import static cc.allio.uno.core.util.DateUtil.PATTERN_HOUR;
 /**
  * 标识当前为时间流数据，提供静态方法。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/17 11:11
  * @since 1.1.0
  */

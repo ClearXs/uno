@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 /**
  * 单播消息验证器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/2 15:48
  * @since 1.0
  */

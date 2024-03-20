@@ -5,7 +5,7 @@
     <parent>
         <groupId>cc.allio</groupId>
         <artifactId>uno-data</artifactId>
-        <version>1.1.7-beta.0</version>
+        <version>1.1.7</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <packaging>jar</packaging>
@@ -20,6 +20,11 @@
         <dependency>
             <groupId>org.redisson</groupId>
             <artifactId>redisson</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-data-test</artifactId>
+            <scope>test</scope>
         </dependency>
     </dependencies>
 </project>

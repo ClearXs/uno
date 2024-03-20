@@ -8,7 +8,7 @@ import java.util.Optional;
 /**
  * 使用指定的'symbol'如（',' '.'）对表达式进行切分，使其进行分层级构建{@link Interchange}对象，并调用其{@link Interchange#change(String, Object, boolean)}方法获取当前层级的Value值
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/3 20:13
  * @since 1.1.2
  */

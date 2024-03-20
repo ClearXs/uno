@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * 类型为type的时序数据
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/20 13:33
  * @since 1.0
  */

@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * 数据稀释剂，根据{@link DataDilute}配置项进行数据抽稀，
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/16 11:46
  * @since 1.1.0
  */

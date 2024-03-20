@@ -9,7 +9,7 @@ import java.util.function.Predicate;
  * <p>
  * 它将会构建一个责任链
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/26 22:48
  * @see org.springframework.core.Ordered
  * @see javax.annotation.Priority

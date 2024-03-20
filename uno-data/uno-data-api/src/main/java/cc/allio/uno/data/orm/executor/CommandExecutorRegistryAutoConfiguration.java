@@ -13,7 +13,7 @@ import java.util.List;
 public class CommandExecutorRegistryAutoConfiguration {
 
     @Bean
-    public CommandExecutorRegistry commandExecutorRegistry(ObjectProvider<List<ExecutorLoader>> loadProvider) {
+    public CommandExecutorRegistry commandExecutorRegistry(ObjectProvider<List<CommandExecutorLoader<? extends AggregateCommandExecutor>>> loadProvider) {
         CommandExecutorRegistryImpl commandExecutorRegistry = new CommandExecutorRegistryImpl(loadProvider.getIfAvailable(Collections::emptyList));
         CommandExecutorFactory.setRegistry(commandExecutorRegistry);
         return commandExecutorRegistry;

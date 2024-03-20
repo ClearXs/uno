@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * 测试组件扫描，操作自{@link ComponentScan}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/20 17:01
  * @see RunTestAttributes
  * @since 1.1.4

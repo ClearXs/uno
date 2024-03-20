@@ -1,6 +1,7 @@
 package cc.allio.uno.sequnetial.washer;
 
 import cc.allio.uno.core.reactive.BufferRate;
+import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandExecutorFactory;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
 /**
  * 清洗机器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/19 14:34
  * @since 1.0
  */
@@ -43,7 +44,7 @@ public class WashMachine {
         this.recorderDisposable =
                 BufferRate.create(Flux.<WasherRecord>create(sink -> recorder = sink))
                         .doOnNext(records -> {
-                            CommandExecutor sqlExecutor = CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
+                            AggregateCommandExecutor sqlExecutor = CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
                             if (sqlExecutor != null) {
                                 sqlExecutor.batchInsertPojos(records);
                             }

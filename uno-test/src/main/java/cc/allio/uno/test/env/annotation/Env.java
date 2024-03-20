@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * 标识为注解上，指定使用的环境
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/3 11:23
  * @since 1.1.4
  */

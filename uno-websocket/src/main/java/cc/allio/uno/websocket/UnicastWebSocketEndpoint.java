@@ -7,7 +7,7 @@ import lombok.Data;
 /**
  * 单播推送WebSocket
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/2 15:23
  * @since 1.0
  */

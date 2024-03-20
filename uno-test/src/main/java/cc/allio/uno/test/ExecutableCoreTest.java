@@ -1,7 +1,7 @@
 package cc.allio.uno.test;
 
 import cc.allio.uno.test.env.Visitor;
-import cc.allio.uno.test.runner.CoreRunner;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.Set;
@@ -9,7 +9,7 @@ import java.util.Set;
 /**
  * 不更改原先{@link CoreTest}的基础上，重写并增加具有{@link TestContext}等的相关方法
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/6 11:45
  * @since 1.1.4
  */
@@ -17,43 +17,17 @@ import java.util.Set;
 public class ExecutableCoreTest extends CoreTest {
 
     private final Class<?> testClass;
+    @Getter
     private final TestContext testContext;
+    @Getter
+    private final RunTestAttributes runTestAttributes;
 
-    public ExecutableCoreTest(Class<?> testClass, TestContext testContext) {
+    public ExecutableCoreTest(Class<?> testClass, TestContext testContext, RunTestAttributes runTestAttributes) {
         this.testClass = testClass;
         this.testContext = testContext;
-    }
-
-    /**
-     * setValue CoreRunner
-     *
-     * @param coreRunner coreRunner
-     * @see RunTestAttributes#getCoreRunner()
-     */
-    @Override
-    @Deprecated
-    public void setCoreRunner(CoreRunner coreRunner) {
-    }
-
-    /**
-     * getValue coreRunner
-     *
-     * @return coreRunner
-     */
-    @Override
-    public CoreRunner getCoreRunner() {
-        return getRunTestAttributes().getCoreRunner();
-    }
-
-    /**
-     * 设置Visitor
-     *
-     * @param visitors visitors
-     * @see RunTestAttributes#addVisitorClasses(Class[])
-     */
-    @Override
-    @Deprecated
-    public void setVisitors(Set<Visitor> visitors) {
+        this.runTestAttributes = runTestAttributes;
+        setCoreRunner(runTestAttributes.getCoreRunner());
+        setVisitors(runTestAttributes.getVisitors());
     }
 
     /**
@@ -76,22 +50,10 @@ public class ExecutableCoreTest extends CoreTest {
         return testClass;
     }
 
-    @Override
+    /**
+     * obtain test instance
+     */
     public Object getTestInstance() {
         return testContext.getTestInstance().orElse(this);
-    }
-
-    @Override
-    public RunTestAttributes getRunTestAttributes() {
-        return testContext.getRunTestAttributes();
-    }
-
-    /**
-     * 获取 TestContext
-     *
-     * @return TestContext实例
-     */
-    public TestContext getTestContext() {
-        return testContext;
     }
 }

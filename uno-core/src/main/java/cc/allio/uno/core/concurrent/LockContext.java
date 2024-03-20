@@ -27,7 +27,7 @@ import java.util.function.Supplier;
  * <p>其内部的的action返回的参数都会放在进行存放</p>
  * <p>值得注意的是：{@link #thenApply(ThrowingMethodSupplier)}返回的值优先级是最高的</p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/6 20:17
  * @since 1.1.7
  */

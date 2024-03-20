@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * WebSocket端点认证器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/29 17:00
  * @since 1.0
  */
