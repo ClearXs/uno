@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * 标识properties的真实类型
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/9 12:53
  * @since 1.1.4
  */

@@ -12,7 +12,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 /**
  * 组合的时序数据，时序数据的类型为组合的时序数据类型
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/20 14:04
  * @since 1.0
  */

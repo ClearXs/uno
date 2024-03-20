@@ -5,7 +5,7 @@ import java.util.function.Function;
 /**
  * Token处理器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/29 16:39
  * @see GenericTokenParser
  * @since 1.0

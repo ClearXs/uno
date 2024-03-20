@@ -9,7 +9,7 @@ import lombok.EqualsAndHashCode;
 /**
  * ExecutorKey
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/3 22:59
  * @since 1.1.7
  */
@@ -17,12 +17,23 @@ public interface ExecutorKey extends Key {
 
     String DSL_EXECUTOR_TYPE_KEY = "allio.uno.data.orm.executor.key";
 
-    ExecutorKey DB = returnKey("db");
-    ExecutorKey ELASTICSEARCH = returnKey(OperatorKey.ELASTICSEARCH);
-    ExecutorKey INFLUXDB = returnKey(OperatorKey.INFLUXDB);
-    ExecutorKey MONGODB = returnKey(OperatorKey.MONGODB);
-    ExecutorKey NEO4j = returnKey(OperatorKey.NEO4j);
-    ExecutorKey REDIS = returnKey(OperatorKey.REDIS);
+    String DB_LITERAL = "db";
+    ExecutorKey DB = returnKey(DB_LITERAL);
+
+    String ELASTICSEARCH_LITERAL = OperatorKey.ELASTICSEARCH_LITERAL;
+    ExecutorKey ELASTICSEARCH = returnKey(ELASTICSEARCH_LITERAL);
+
+    String INFLUXDB_LITERAL = OperatorKey.INFLUXDB_LITERAL;
+    ExecutorKey INFLUXDB = returnKey(INFLUXDB_LITERAL);
+
+    String MONGODB_LITERAL = OperatorKey.MONGODB_LITERAL;
+    ExecutorKey MONGODB = returnKey(MONGODB_LITERAL);
+
+    String NEO4J_LITERAL = OperatorKey.NEO4j_LITERAL;
+    ExecutorKey NEO4j = returnKey(NEO4J_LITERAL);
+
+    String REDIS_LITERAL = OperatorKey.REDIS_LITERAL;
+    ExecutorKey REDIS = returnKey(REDIS_LITERAL);
 
     @Override
     default String getProperties() {

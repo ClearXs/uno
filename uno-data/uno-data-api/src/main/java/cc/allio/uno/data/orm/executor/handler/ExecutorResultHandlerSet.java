@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.handler;
 /**
  * 定义{@link cc.allio.uno.data.orm.executor.CommandExecutor}结果处理器集合
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/14 16:02
  * @since 1.1.7
  */

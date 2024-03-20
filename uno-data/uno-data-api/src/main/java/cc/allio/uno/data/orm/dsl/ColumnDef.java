@@ -3,8 +3,6 @@ package cc.allio.uno.data.orm.dsl;
 import cc.allio.uno.core.api.EqualsTo;
 import cc.allio.uno.core.type.TypeOperatorFactory;
 import cc.allio.uno.data.orm.dsl.type.DataType;
-import cc.allio.uno.data.orm.dsl.type.JavaType;
-import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
 import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -15,7 +13,7 @@ import java.util.Optional;
 /**
  * SQL字段定义
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 19:35
  * @since 1.1.4
  */
@@ -29,7 +27,7 @@ public class ColumnDef implements EqualsTo<ColumnDef> {
     // 字段注释
     private String comment;
     // 数据类型
-    private DataType dataType;
+    private cc.allio.uno.data.orm.dsl.type.DataType dataType;
     // 默认值
     private Object defaultValue;
     // 是否为主键
@@ -56,7 +54,7 @@ public class ColumnDef implements EqualsTo<ColumnDef> {
     }
 
     /**
-     * 给定字段值按照当前{@link DataType}进行转换
+     * 给定字段值按照当前{@link cc.allio.uno.data.orm.dsl.type.DataType}进行转换
      *
      * @param ori ori
      * @return 转换后的值
@@ -66,7 +64,7 @@ public class ColumnDef implements EqualsTo<ColumnDef> {
                 .map(DataType::getDslType)
                 .flatMap(dslType -> {
                     int jdbcType = dslType.getJdbcType();
-                    JavaType<?> javaType = TypeRegistry.getInstance().findJavaType(jdbcType);
+                    cc.allio.uno.data.orm.dsl.type.JavaType<?> javaType = cc.allio.uno.data.orm.dsl.type.TypeRegistry.getInstance().findJavaType(jdbcType);
                     return Optional.ofNullable(javaType);
                 })
                 .map(j -> TypeOperatorFactory.translator(j.getJavaType()))

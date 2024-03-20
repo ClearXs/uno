@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * String Comparator，相等 = 1、不相等 = -1
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/10 14:58
  * @since 1.0
  */

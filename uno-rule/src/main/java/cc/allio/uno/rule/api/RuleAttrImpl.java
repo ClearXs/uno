@@ -14,7 +14,7 @@ import java.util.Objects;
 /**
  * default rule index
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 19:42
  * @see RuleAttrBuilder#get()
  * @since 1.1.4

@@ -3,7 +3,7 @@ package cc.allio.uno.core.api;
 /**
  * 通用适配器定义
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/9 16:04
  * @since 1.1.7
  */

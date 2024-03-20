@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 /**
  * {@link AutoService}与{@link Type}数据类型加载单例对象，提供的静态方法获取实例数据不做缓存
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/20 10:42
  * @since 1.0
  */

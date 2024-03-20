@@ -6,7 +6,7 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 /**
  * where eq1=eq2...
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 18:14
  * @since 1.1.4
  */
@@ -37,11 +37,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * > condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T gt(DSLName sqlName, Object value);
+    T gt(DSLName dslName, Object value);
 
     /**
      * >= condition
@@ -68,11 +68,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * >= condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T gte(DSLName sqlName, Object value);
+    T gte(DSLName dslName, Object value);
 
     /**
      * < condition
@@ -99,11 +99,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * < condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T lt(DSLName sqlName, Object value);
+    T lt(DSLName dslName, Object value);
 
     /**
      * <= condition
@@ -130,11 +130,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * <= condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T lte(DSLName sqlName, Object value);
+    T lte(DSLName dslName, Object value);
 
     /**
      * = condition
@@ -161,11 +161,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * = condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T eq(DSLName sqlName, Object value);
+    T eq(DSLName dslName, Object value);
 
     /**
      * != condition
@@ -192,11 +192,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * != condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   比较数据值
      * @return SQLWhereOperator
      */
-    T neq(DSLName sqlName, Object value);
+    T neq(DSLName dslName, Object value);
 
     /**
      * is not null condition
@@ -221,10 +221,10 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * is not null condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @return SQLWhereOperator
      */
-    T notNull(DSLName sqlName);
+    T notNull(DSLName dslName);
 
     /**
      * @see #isNull(DSLName)
@@ -243,10 +243,10 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * is null condition
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @return where
      */
-    T isNull(DSLName sqlName);
+    T isNull(DSLName dslName);
 
     /**
      * @see #in(DSLName, Object...)
@@ -265,11 +265,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'in'条件
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param values  数值数据
      * @return SQLWhereOperator
      */
-    <V> T in(DSLName sqlName, V... values);
+    <V> T in(DSLName dslName, V... values);
 
     /**
      * @see #notIn(DSLName, Object...)
@@ -288,11 +288,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'not in'条件
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param values  数值数据
      * @return SQLWhereOperator
      */
-    <V> T notIn(DSLName sqlName, V... values);
+    <V> T notIn(DSLName dslName, V... values);
 
     /**
      * between condition
@@ -321,12 +321,12 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * between condition
      *
-     * @param sqlName   sqlName
+     * @param dslName   dslName
      * @param withValue between起始值
      * @param endValue  between结束值
      * @return SQLWhereOperator
      */
-    T between(DSLName sqlName, Object withValue, Object endValue);
+    T between(DSLName dslName, Object withValue, Object endValue);
 
     /**
      * not between condition
@@ -355,12 +355,12 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * not between condition
      *
-     * @param sqlName   sqlName
+     * @param dslName   dslName
      * @param withValue between起始值
      * @param endValue  between结束值
      * @return SQLWhereOperator
      */
-    T notBetween(DSLName sqlName, Object withValue, Object endValue);
+    T notBetween(DSLName dslName, Object withValue, Object endValue);
 
     /**
      * 'field'
@@ -398,11 +398,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'field'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T like(DSLName sqlName, Object value);
+    T like(DSLName dslName, Object value);
 
     /**
      * '%field'
@@ -418,11 +418,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * '%field'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T $like(DSLName sqlName, Object value);
+    T $like(DSLName dslName, Object value);
 
     /**
      * 'field%'
@@ -449,11 +449,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'field%'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T like$(DSLName sqlName, Object value);
+    T like$(DSLName dslName, Object value);
 
 
     /**
@@ -481,11 +481,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * '%like%'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T $like$(DSLName sqlName, Object value);
+    T $like$(DSLName dslName, Object value);
 
     /**
      * @see #notLike(DSLName, Object)
@@ -504,11 +504,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'not field'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T notLike(DSLName sqlName, Object value);
+    T notLike(DSLName dslName, Object value);
 
     /**
      * @see #$notLike(DSLName, Object)
@@ -527,11 +527,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'not %field'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T $notLike(DSLName sqlName, Object value);
+    T $notLike(DSLName dslName, Object value);
 
     /**
      * @see #notLike$(DSLName, Object)
@@ -550,11 +550,11 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * 'not field%'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T notLike$(DSLName sqlName, Object value);
+    T notLike$(DSLName dslName, Object value);
 
     /**
      * @see #$notLike$(DSLName, Object)
@@ -573,23 +573,30 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
     /**
      * '%not like%'
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param value   like值
      * @return SQLWhereOperator
      */
-    T $notLike$(DSLName sqlName, Object value);
+    T $notLike$(DSLName dslName, Object value);
 
     /**
-     * logic predicate 'or'
+     * logical predicate 'or'
      *
-     * @return SQLWhereOperator
+     * @return self
      */
     T or();
 
     /**
-     * logic predicate 'and'
+     * logical predicate 'and'
      *
-     * @return SQLWhereOperator
+     * @return self
      */
     T and();
+
+    /**
+     * logical predicate 'nor'
+     *
+     * @return self
+     */
+    T nor();
 }

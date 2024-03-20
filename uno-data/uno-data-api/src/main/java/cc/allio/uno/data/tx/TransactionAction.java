@@ -3,7 +3,7 @@ package cc.allio.uno.data.tx;
 /**
  * 定义事物动作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/11 12:34
  * @since 1.1.7
  */

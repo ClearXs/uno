@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 /**
  * Media-Type = application/x-www-form-urlencoded
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/19 15:38
  * @since 1.1.0
  */

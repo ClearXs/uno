@@ -3,7 +3,7 @@ package cc.allio.uno.core.exception;
 /**
  * 定义需要可以捕获的异常皆转换为当前异常对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/31 14:12
  * @since 1.0
  */

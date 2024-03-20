@@ -3,7 +3,7 @@ package cc.allio.uno.data.query;
 /**
  * QueryFilter
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 18:11
  * @since 1.1.4
  */

@@ -29,7 +29,7 @@ import java.util.List;
 /**
  * 解决值无法映射到一个抽象对象上的问题
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 18:00
  * @since 1.1.4
  */

@@ -11,7 +11,7 @@ import cc.allio.uno.sequnetial.process.ProcessPipeline;
  * <i>2.没有使用{@link ProcessHandler}的责任链模式</i><br/>
  * 在{@link ProcessPipeline#active}执行
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/20 10:47
  * @since 1.0
  */

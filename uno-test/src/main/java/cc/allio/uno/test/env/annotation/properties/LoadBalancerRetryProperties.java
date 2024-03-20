@@ -9,7 +9,7 @@ import java.time.Duration;
 /**
  * {@link org.springframework.cloud.client.loadbalancer.LoadBalancerRetryProperties}的注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/9 12:42
  * @since 1.1.4
  */

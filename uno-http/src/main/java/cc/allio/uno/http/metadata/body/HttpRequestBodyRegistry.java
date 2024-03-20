@@ -13,7 +13,7 @@ import java.util.List;
 /**
  * Http-Request注册表，设计参考于{@link ReactiveAdapterRegistry}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/19 16:26
  * @since 1.1.0
  */

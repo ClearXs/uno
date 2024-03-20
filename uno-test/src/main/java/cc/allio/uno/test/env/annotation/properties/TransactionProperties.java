@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * {@link org.springframework.boot.autoconfigure.transaction.TransactionProperties}的注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/6 16:59
  * @since 1.1.4
  */

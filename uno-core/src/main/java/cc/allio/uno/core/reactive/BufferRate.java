@@ -20,7 +20,7 @@ import java.util.function.BiPredicate;
 /**
  * 缓冲速率控制
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/6 19:01
  * @since 1.1.4
  */

@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl;
 /**
  * SQL 相关字符
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/13 13:06
  * @since 1.1.4
  */

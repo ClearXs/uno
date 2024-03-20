@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 /**
  * Http响应适配
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/6/16 17:03
  * @since 1.0
  */

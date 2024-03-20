@@ -5,13 +5,14 @@ import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.handler.ExecutorResultHandlerSet;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 
 import java.util.List;
 
 /**
  * 执行器{@link cc.allio.uno.data.orm.executor.CommandExecutor}相关参数
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/14 21:07
  * @since 1.1.7
  */
@@ -162,4 +163,11 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, OptionalConte
      * 获取{@link Interceptor} list
      */
     List<Interceptor> getInterceptors();
+
+    /**
+     * get {@link SPIInnerCommandScanner} instance
+     *
+     * @return {@link SPIInnerCommandScanner} instance
+     */
+    SPIInnerCommandScanner getScanner();
 }

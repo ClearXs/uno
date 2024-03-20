@@ -4,7 +4,7 @@ package cc.allio.uno.core.type;
  * 类型操作
  *
  * @param <T> 具体操作的类型实体
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/23 20:06
  * @since 1.0
  */

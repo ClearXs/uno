@@ -7,7 +7,7 @@ import java.util.function.BiPredicate;
 /**
  * 委托{@link Cache}进行初始化的回调
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/9 15:51
  * @see CacheCallable
  * @since 1.0

@@ -10,7 +10,7 @@ import java.util.Set;
 /**
  * {@link ImportAutoConfiguration}的属性描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/7/5 14:35
  * @since 1.1.4
  */

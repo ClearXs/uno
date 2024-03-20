@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 /**
  * Object的实用方法，基于{@link org.springframework.util.ObjectUtils}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/29 16:02
  * @since 1.0
  */

@@ -20,7 +20,7 @@ import java.util.function.Supplier;
 /**
  * command executor registry
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/25 17:07
  * @since 1.1.7
  */
@@ -30,25 +30,25 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
     // 以唯一标识作为key的Map
-    private final Map<String, CommandExecutor> commandExecutorMap = Maps.newConcurrentMap();
+    private final Map<String, AggregateCommandExecutor> commandExecutorMap = Maps.newConcurrentMap();
     // 以option作为key，获取commandExecutor的的唯一标识
     // option的equals是根据 DBType ExecutorKey OperatorKey
     private final Map<ExecutorOptions, String> optionsKeyMap = Maps.newConcurrentMap();
 
-    private final List<ExecutorLoader> loaders;
+    private final List<CommandExecutorLoader<? extends AggregateCommandExecutor>> loaders;
 
     public CommandExecutorRegistryImpl() {
         this(Collections.emptyList());
     }
 
-    public CommandExecutorRegistryImpl(List<ExecutorLoader> loaders) {
+    public CommandExecutorRegistryImpl(List<CommandExecutorLoader<? extends AggregateCommandExecutor>> loaders) {
         this.loaders = loaders;
     }
 
     @Override
-    public <T extends CommandExecutor> T crate(@NotNull ExecutorOptions executorOptions) {
+    public <T extends AggregateCommandExecutor> T crate(@NotNull ExecutorOptions executorOptions) {
         DBType dbType = executorOptions.getDbType();
-        ExecutorLoader executorLoader =
+        CommandExecutorLoader executorLoader =
                 loaders.stream()
                         .filter(loader -> loader.match(dbType))
                         .findFirst()
@@ -60,9 +60,9 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public <T extends CommandExecutor> T createAndRegister(@NotNull ExecutorOptions executorOptions) {
+    public <T extends AggregateCommandExecutor> T createAndRegister(@NotNull ExecutorOptions executorOptions) {
         DBType dbType = executorOptions.getDbType();
-        ExecutorLoader executorLoader =
+        CommandExecutorLoader executorLoader =
                 loaders.stream()
                         .filter(loader -> loader.match(dbType))
                         .findFirst()
@@ -74,7 +74,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public <T extends CommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent) {
+    public <T extends AggregateCommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent) {
         Lock writeLock = lock.writeLock();
         writeLock.lock();
         try {
@@ -93,7 +93,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
             boolean systemDefault = executorOptions.isSystemDefault();
             if (systemDefault) {
                 Envs.setProperty(ExecutorKey.DSL_EXECUTOR_TYPE_KEY, executorOptions.getExecutorKey().key());
-                Envs.setProperty(CommandExecutor.DEFAULT_KEY, key);
+                Envs.setProperty(AggregateCommandExecutor.DEFAULT_KEY, key);
             }
             return commandExecutor;
         } finally {
@@ -102,7 +102,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public <T extends CommandExecutor> T getCommandExecutor(ExecutorKey executorKey) {
+    public <T extends AggregateCommandExecutor> T getCommandExecutor(ExecutorKey executorKey) {
         if (executorKey == null) {
             return null;
         }
@@ -124,7 +124,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public <T extends CommandExecutor> T getCommandExecutor(String key) {
+    public <T extends AggregateCommandExecutor> T getCommandExecutor(String key) {
         if (StringUtils.isBlank(key)) {
             return null;
         }
@@ -158,7 +158,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         Lock readLock = lock.readLock();
         readLock.lock();
         try {
-            CommandExecutor commandExecutor = commandExecutorMap.get(key);
+            AggregateCommandExecutor commandExecutor = commandExecutorMap.get(key);
             if (commandExecutor == null) {
                 return false;
             }
@@ -194,7 +194,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public List<CommandExecutor> getAllDefault() {
+    public List<AggregateCommandExecutor> getAllDefault() {
         return commandExecutorMap.values()
                 .stream()
                 .filter(commandExecutor -> commandExecutor.getOptions().isSystemDefault())
@@ -202,7 +202,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
-    public List<CommandExecutor> getAll() {
+    public List<AggregateCommandExecutor> getAll() {
         return Lists.newArrayList(commandExecutorMap.values());
     }
 
@@ -211,8 +211,8 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         Lock readLock = lock.readLock();
         readLock.lock();
         try {
-            Collection<CommandExecutor> values = commandExecutorMap.values();
-            for (CommandExecutor executor : values) {
+            Collection<AggregateCommandExecutor> values = commandExecutorMap.values();
+            for (AggregateCommandExecutor executor : values) {
                 remove(executor.getOptions().getKey());
             }
         } finally {

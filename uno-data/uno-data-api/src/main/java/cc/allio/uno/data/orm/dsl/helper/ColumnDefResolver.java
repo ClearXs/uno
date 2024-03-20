@@ -7,7 +7,7 @@ import java.lang.reflect.Field;
 /**
  * 根据指定的{@link java.lang.reflect.Field}解析出{@link cc.allio.uno.data.orm.dsl.ColumnDef}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/6 20:08
  * @see ColumnDefResolve
  * @since 1.1.7

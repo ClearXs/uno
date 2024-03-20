@@ -17,7 +17,7 @@ import java.util.Set;
  * update: 1.1.4版本后{@link Autowired}、{@link Resource}注解也可以用于bean对象注入
  * </p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/28 17:43
  * @since 1.1.0
  */

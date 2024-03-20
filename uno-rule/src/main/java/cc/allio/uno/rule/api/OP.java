@@ -8,7 +8,7 @@ import lombok.Getter;
 /**
  * 规则指标操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 09:34
  * @since 1.1.4
  */

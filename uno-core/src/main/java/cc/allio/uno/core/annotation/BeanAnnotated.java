@@ -23,7 +23,7 @@ import static java.util.stream.Collectors.joining;
 /**
  * 从给定的<code>annotationClasses</code>获取{@link Annotated}实体
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/9 15:34
  * @since 1.1.2
  */

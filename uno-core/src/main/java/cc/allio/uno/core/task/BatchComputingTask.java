@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * 使用{@link Computing}批量计算任务
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/21 13:44
  * @since 1.0
  */

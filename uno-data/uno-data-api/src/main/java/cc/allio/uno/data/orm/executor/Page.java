@@ -13,7 +13,7 @@ import java.util.function.Predicate;
 /**
  * 简单分页模型，借鉴与mybatis-plus
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/28 22:35
  * @since 1.1.4
  */

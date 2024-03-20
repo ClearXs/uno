@@ -3,7 +3,7 @@ package cc.allio.uno.data.query.db.query.interceptor;
 /**
  * 拦截器代理接口
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/30 17:00
  * @since 1.1.0
  */

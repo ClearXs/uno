@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.type;
 /**
  * enum java type
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/7/10 18:49
  * @since 1.1.4
  */

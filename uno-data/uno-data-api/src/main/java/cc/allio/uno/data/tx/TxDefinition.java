@@ -6,7 +6,7 @@ import org.springframework.transaction.TransactionDefinition;
 /**
  * 事物定义
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/11 11:17
  * @since 1.1.7
  */

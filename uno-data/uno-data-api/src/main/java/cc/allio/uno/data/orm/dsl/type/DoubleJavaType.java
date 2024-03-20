@@ -5,7 +5,7 @@ import cc.allio.uno.core.type.Types;
 /**
  * Double
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 18:48
  * @since 1.1.4
  */

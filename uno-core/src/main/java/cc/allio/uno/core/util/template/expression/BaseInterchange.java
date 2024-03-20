@@ -5,7 +5,7 @@ import cc.allio.uno.core.util.template.LangValue;
 /**
  * 抽象的交换
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/3 20:19
  * @since 1.1.2
  */

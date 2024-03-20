@@ -21,7 +21,7 @@ import java.lang.annotation.*;
  * </pre>
  * </blockquote>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/28 12:27
  * @see ComposeSharable
  * @see ComposableInvocationInterceptor

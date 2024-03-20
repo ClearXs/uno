@@ -3,7 +3,7 @@ package cc.allio.uno.sequnetial.exception;
 /**
  * 执行处理器异常
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/31 11:00
  * @since 1.0
  */

@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor.db;
 
 import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.data.orm.config.DbAutoConfiguration;
+import cc.allio.uno.data.orm.config.db.DbAutoConfiguration;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.ExecutorInitializerAutoConfiguration;
 import cc.allio.uno.test.BaseTestCase;
@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 @RunTest(components = {DbAutoConfiguration.class, ExecutorInitializerAutoConfiguration.class, DbExecutorAwareTest.UserRepository.class})
 @MybatisEnv
-public class DbExecutorAwareTest extends BaseTestCase {
+class DbExecutorAwareTest extends BaseTestCase {
 
     @Inject
     private UserRepository userRepository;
@@ -25,7 +25,7 @@ public class DbExecutorAwareTest extends BaseTestCase {
     }
 
 
-    static class UserRepository implements DbExecutorAware {
+    static class UserRepository implements DbCommandExecutorAware {
 
     }
 }

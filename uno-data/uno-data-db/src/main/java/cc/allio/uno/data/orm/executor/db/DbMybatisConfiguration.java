@@ -40,7 +40,7 @@ import java.util.*;
  * 替换一些mybatis{@link ResultSetHandler}的组件
  * <p>注意：{@link #environment}如果使用父类进行设置或获取，将会导致使用默认数据源查询时会被替换，相应的代码在{@link DefaultSqlSessionFactory#openSession()}</p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 17:51
  * @see #newResultSetHandler(Executor, MappedStatement, RowBounds, ParameterHandler, ResultHandler, BoundSql)
  * @since 1.1.4

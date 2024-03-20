@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * Long Comparator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/10 15:58
  * @since 1.0
  */

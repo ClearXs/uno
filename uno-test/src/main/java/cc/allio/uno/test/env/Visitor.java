@@ -8,7 +8,7 @@ import org.springframework.core.Ordered;
 /**
  * 拓展{@link Environment}的功能。 {@link RunTest#visitor()}指定的class上进行实例化 or 系统内默认的。与{@link Runner}逻辑一致。获取优先级
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/3 12:18
  * @since 1.1.4
  */

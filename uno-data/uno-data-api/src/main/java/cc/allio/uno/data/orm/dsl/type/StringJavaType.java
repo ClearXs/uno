@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.type;
 /**
  * string java type
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/17 18:02
  * @since 1.1.4
  */

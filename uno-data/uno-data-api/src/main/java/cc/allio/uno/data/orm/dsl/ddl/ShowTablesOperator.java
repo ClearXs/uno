@@ -4,11 +4,12 @@ import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 
 /**
- * 数据库表结构
+ * Show Tables Operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/4 16:56
  * @since 1.1.7
+ * @see OperatorGroup
  */
 public interface ShowTablesOperator
         extends TableOperator<ShowTablesOperator>,

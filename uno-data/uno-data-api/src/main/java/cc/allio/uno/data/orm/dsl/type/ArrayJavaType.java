@@ -5,7 +5,7 @@ import java.util.Objects;
 /**
  * java array
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 18:58
  * @since 1.1.4
  */

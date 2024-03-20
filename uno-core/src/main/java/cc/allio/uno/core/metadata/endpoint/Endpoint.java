@@ -15,7 +15,7 @@ import java.util.function.Consumer;
  * 使其称为Spring-Bean，在Bean初始化时调用{@link #open()}方法，对{@link AggregationSource#registerSources(Source[])} 注册的数据源进行注册
  * </p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/27 15:14
  * @since 1.1.0
  */

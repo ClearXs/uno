@@ -9,7 +9,7 @@ import lombok.Getter;
 /**
  * 抽稀动作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/11 10:59
  * @since 1.1.0
  */

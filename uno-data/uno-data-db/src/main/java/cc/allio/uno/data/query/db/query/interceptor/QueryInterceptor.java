@@ -14,7 +14,7 @@ import java.lang.reflect.Method;
 /**
  * 查询拦截器实现
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/30 16:46
  * @since 1.1.0
  */

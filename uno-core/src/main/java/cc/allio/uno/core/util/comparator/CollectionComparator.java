@@ -14,7 +14,7 @@ import java.util.Comparator;
  *     <li>基于{@link ObjectComparator}进行比较获取最后结果</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/10 16:01
  * @since 1.0
  */

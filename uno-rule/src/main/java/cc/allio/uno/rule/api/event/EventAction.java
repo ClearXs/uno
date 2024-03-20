@@ -7,7 +7,7 @@ import cc.allio.uno.rule.api.Action;
 /**
  * 基于事件的action
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 14:03
  * @since 1.1.4
  */

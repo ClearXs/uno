@@ -15,7 +15,7 @@ import java.util.Set;
 /**
  * BeanInfoWrapper 单元测试
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/3 00:12
  * @since 1.0
  */

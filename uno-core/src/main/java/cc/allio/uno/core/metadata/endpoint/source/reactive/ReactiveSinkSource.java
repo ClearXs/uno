@@ -6,7 +6,7 @@ import reactor.core.publisher.FluxSink;
 /**
  * reactive sink
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/27 17:50
  * @since 1.1.4
  */

@@ -7,7 +7,7 @@ import cc.allio.uno.rule.api.RuleResult;
 /**
  * 当发生错误时抛出
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 10:31
  * @since 1.1.4
  */

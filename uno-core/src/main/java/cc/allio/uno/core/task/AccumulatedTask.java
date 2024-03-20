@@ -18,7 +18,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 数据堆积于缓存中，当达到指定的阈值时弹出回调计算。类似于window
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/9 09:30
  * @see Cache
  * @see Computing

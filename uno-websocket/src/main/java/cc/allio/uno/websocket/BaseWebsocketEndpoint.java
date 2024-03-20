@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
  * <b>具有广播推送功能</b>
  *
  * @param <R> 数据接收范型
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/23 13:09
  * @since 1.0
  */

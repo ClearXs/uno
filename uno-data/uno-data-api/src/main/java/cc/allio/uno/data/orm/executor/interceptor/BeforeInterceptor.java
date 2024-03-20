@@ -6,7 +6,7 @@ import cc.allio.uno.data.orm.dsl.Operator;
 /**
  * 内置拦截器，在command操作之后进行拦截
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/8 12:14
  * @since 1.1.7
  */

@@ -6,7 +6,7 @@ import org.springframework.transaction.support.DefaultTransactionDefinition;
 /**
  * 基于{@link org.springframework.transaction.support.DefaultTransactionDefinition}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/11 11:35
  * @since 1.1.7
  */

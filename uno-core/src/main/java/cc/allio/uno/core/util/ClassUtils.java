@@ -2,19 +2,21 @@ package cc.allio.uno.core.util;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.reflect.Instantiation;
+import cc.allio.uno.core.reflect.InstantiationBuilder;
+import cc.allio.uno.core.reflect.InstantiationFeature;
+import cc.allio.uno.core.reflect.ReflectTools;
 import com.google.common.collect.Lists;
 import lombok.NonNull;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotatedElementUtils;
-import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.*;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
-import java.util.function.Consumer;
 import java.util.function.Supplier;
-import java.util.stream.Stream;
 
 /**
  * 与{@link Class}有关的工具集
@@ -22,6 +24,7 @@ import java.util.stream.Stream;
  * @author jw
  * @date 2021/12/5 11:00
  */
+@Slf4j
 public class ClassUtils extends org.springframework.util.ClassUtils {
 
     /**
@@ -340,7 +343,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         if (CollectionUtils.isEmpty(classes)) {
             return Collections.emptyList();
         }
-        InstantiationBuilder<E> instantiationBuilder = instantiationBuilder();
+        InstantiationBuilder<E> instantiationBuilder = InstantiationBuilder.builder();
         return instantiationBuilder.addMultiForInstanceClasses(classes.toArray(new Class[]{}))
                 .setExcludeNull(true)
                 .build()
@@ -358,7 +361,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
         if (CollectionUtils.isEmpty(classes)) {
             return Collections.emptyList();
         }
-        InstantiationBuilder<E> instantiationBuilder = instantiationBuilder();
+        InstantiationBuilder<E> instantiationBuilder = InstantiationBuilder.builder();
         return instantiationBuilder
                 .addMultiForInstanceClasses(classes.toArray(new Class[]{}))
                 .setIfErrorDefaultValue(errorDefault)
@@ -373,13 +376,13 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @param features 实例化特性
      * @return List
      */
-    public static <E> List<E> newInstanceList(Collection<Class<? extends E>> classes, Feature<E>... features) {
+    public static <E> List<E> newInstanceList(Collection<Class<? extends E>> classes, InstantiationFeature<E>... features) {
         if (CollectionUtils.isEmpty(classes)) {
             return Collections.emptyList();
         }
-        InstantiationBuilder<E> instantiationBuilder = instantiationBuilder();
+        InstantiationBuilder<E> instantiationBuilder = InstantiationBuilder.builder();
         Instantiation<E> build = instantiationBuilder.addMultiForInstanceClasses(classes.toArray(new Class[]{})).build();
-        for (Feature<E> feature : features) {
+        for (InstantiationFeature<E> feature : features) {
             build.addFeature(feature);
         }
         return build.create();
@@ -402,7 +405,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @return instance or null
      */
     public static <T> T newInstanceIfErrorDefault(@NonNull Class<? extends T> clazz, Object[] constructorParameters, Supplier<T> errorDefault) {
-        InstantiationBuilder<T> instantiationBuilder = instantiationBuilder();
+        InstantiationBuilder<T> instantiationBuilder = InstantiationBuilder.builder();
         return instantiationBuilder.addOneInstanceClass(clazz)
                 .setConstructorParameters(constructorParameters)
                 .setIfErrorDefaultValue(errorDefault)
@@ -410,301 +413,4 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
                 .createOne();
     }
 
-    /**
-     * 创建instantiationBuilder对象
-     *
-     * @param <I> 对象反省
-     * @return InstantiationBuilder实例
-     */
-    public static <I> InstantiationBuilder<I> instantiationBuilder() {
-        return new InstantiationBuilder<>();
-    }
-
-    /**
-     * Instantiation Builder
-     */
-    public static class InstantiationBuilder<I> {
-        private Class<? extends I>[] waitForInstanceClasses;
-        private Object[] constructorParameters;
-        private Supplier<? extends I> ifErrorDefaultValue;
-        private boolean isExcludeNull;
-
-        /**
-         * 添加一个待实例化的Class对象
-         *
-         * @param oneInstanceClass oneInstanceClass
-         * @return InstantiationBuilder
-         */
-        public InstantiationBuilder<I> addOneInstanceClass(Class<? extends I> oneInstanceClass) {
-            if (waitForInstanceClasses != null) {
-                Class<? extends I>[] newInstanceClasses = new Class[waitForInstanceClasses.length + 1];
-                System.arraycopy(waitForInstanceClasses, 0, newInstanceClasses, waitForInstanceClasses.length, waitForInstanceClasses.length);
-                newInstanceClasses[waitForInstanceClasses.length + 1] = oneInstanceClass;
-                this.waitForInstanceClasses = newInstanceClasses;
-            } else {
-                this.waitForInstanceClasses = new Class[]{oneInstanceClass};
-            }
-            return this;
-        }
-
-        /**
-         * 添加多个待实例化的Class对象
-         *
-         * @param multiInstanceClasses waitForInstanceClasses
-         * @return InstantiationBuilder
-         */
-        public InstantiationBuilder<I> addMultiForInstanceClasses(Class<? extends I>[] multiInstanceClasses) {
-            if (waitForInstanceClasses != null) {
-                Class<? extends I>[] newInstanceClasses = new Class[waitForInstanceClasses.length + multiInstanceClasses.length];
-                System.arraycopy(waitForInstanceClasses, 0, newInstanceClasses, waitForInstanceClasses.length, waitForInstanceClasses.length);
-                System.arraycopy(multiInstanceClasses, 0, newInstanceClasses, waitForInstanceClasses.length, multiInstanceClasses.length);
-                this.waitForInstanceClasses = newInstanceClasses;
-            } else {
-                this.waitForInstanceClasses = multiInstanceClasses;
-            }
-            return this;
-        }
-
-        public InstantiationBuilder<I> setConstructorParameters(Object[] constructorParameters) {
-            this.constructorParameters = constructorParameters;
-            return this;
-        }
-
-        public InstantiationBuilder<I> setIfErrorDefaultValue(Supplier<? extends I> ifErrorDefaultValue) {
-            this.ifErrorDefaultValue = ifErrorDefaultValue;
-            return this;
-        }
-
-        public InstantiationBuilder<I> setExcludeNull(boolean excludeNull) {
-            isExcludeNull = excludeNull;
-            return this;
-        }
-
-        public Instantiation<I> build() {
-            if (ObjectUtils.isEmpty(waitForInstanceClasses)) {
-                throw new UnsupportedOperationException("At least one classes");
-            }
-            return new Instantiation<>(waitForInstanceClasses, constructorParameters, ifErrorDefaultValue, isExcludeNull);
-        }
-    }
-
-    /**
-     * 实例化。
-     * <p>
-     * 允许实例化时：
-     *     <ul>
-     *         <li>对需要进行实例化的对象进行排序</li>
-     *         <li>实例化失败时提供的默认值</li>
-     *         <li>实例化时提供回调</li>
-     *         <li>去除重复</li>
-     *         <li>去除null</li>
-     *     </ul>
-     * </p>
-     * <p>
-     *     当实例化的class对象为<b>抽象类</b>、<b>接口</b>时它的结果一定为null
-     * </p>
-     *
-     * @see InstantiationBuilder
-     */
-    public static class Instantiation<I> {
-
-        // 进行实例化的Class对象
-        private Class<? extends I>[] waitForInstanceClasses;
-        // 构造器参数集合
-        private final Object[] constructorParameters;
-        // 发生错误时实例化异常值
-        private final Supplier<? extends I> ifErrorDefaultValue;
-        // 实例化后是否排序异常值
-        private final boolean excludeNull;
-        // 实例化时拓展的拓展
-        private final List<Feature<I>> features;
-        public final Supplier<? extends I> nullValue = () -> null;
-
-        Instantiation(Class<? extends I>[] waitForInstanceClasses,
-                      Object[] constructorParameters,
-                      Supplier<? extends I> ifErrorDefaultValue,
-                      boolean excludeNull) {
-            this.waitForInstanceClasses = waitForInstanceClasses;
-            this.constructorParameters = constructorParameters;
-            this.ifErrorDefaultValue = ifErrorDefaultValue;
-            this.excludeNull = excludeNull;
-            this.features = Lists.newArrayList();
-        }
-
-        public void rewriteInstanceClasses(Class<? extends I>[] waitForInstanceClasses) {
-            this.waitForInstanceClasses = waitForInstanceClasses;
-        }
-
-        public Class<? extends I>[] getWaitForInstanceClasses() {
-            return waitForInstanceClasses;
-        }
-
-        public Object[] getParameters() {
-            return constructorParameters;
-        }
-
-        public Supplier<? extends I> getIfErrorDefaultValue() {
-            return ifErrorDefaultValue;
-        }
-
-        public boolean isExcludeNull() {
-            return excludeNull;
-        }
-
-        /**
-         * 添加实例化特性
-         *
-         * @param feature feature
-         */
-        public void addFeature(Feature<I> feature) {
-            features.add(feature);
-        }
-
-        /**
-         * 只创建一个实例
-         *
-         * @return Object
-         */
-        public I createOne() {
-            List<I> objects = null;
-            try {
-                objects = create();
-            } catch (Throwable e) {
-                return nullValue.get();
-            }
-            if (ObjectUtils.isEmpty(objects)) {
-                return ifErrorDefaultValue.get();
-            }
-            return objects.get(0);
-        }
-
-        /**
-         * 批量创建
-         *
-         * @return List
-         */
-        public List<I> create() {
-            if (ObjectUtils.isNotEmpty(features)) {
-                for (Feature<I> feature : features) {
-                    feature.execute(this);
-                }
-            }
-            List<I> instances = Lists.newArrayList();
-            // 空参数创建
-            if (ObjectUtils.isEmpty(constructorParameters)) {
-                for (Class<? extends I> clazz : waitForInstanceClasses) {
-                    I ins = newEmptyParametersInstance(clazz);
-                    instances.add(ins);
-                }
-            } else {
-                for (Class<? extends I> clazz : waitForInstanceClasses) {
-                    I ins = newInstance(clazz);
-                    instances.add(ins);
-                }
-            }
-            // 排除实例为null
-            if (excludeNull) {
-                List<I> nonNullInstances = Lists.newArrayList();
-                for (I instance : instances) {
-                    if (ObjectUtils.isNotEmpty(instance)) {
-                        nonNullInstances.add(instance);
-                    }
-                }
-                return nonNullInstances;
-            }
-            return instances;
-        }
-
-        /**
-         * 创建实例，如果抛出异常则以无参构造器创建
-         *
-         * @param clazz clazz
-         * @return instance or null
-         */
-        private I newInstance(Class<? extends I> clazz) {
-            Constructor<?>[] constructors = clazz.getConstructors();
-            for (Constructor<?> constructor : constructors) {
-                if (constructor.getParameterCount() == constructorParameters.length) {
-                    try {
-                        setAccessible(constructor);
-                        return (I) constructor.newInstance(constructorParameters);
-                    } catch (Throwable ex) {
-                        // 尝试以空参数进行创建
-                        return newEmptyParametersInstance(clazz);
-                    }
-                }
-            }
-            return newEmptyParametersInstance(clazz);
-        }
-
-        /**
-         * 创建参数为空的实例。如果抛出以
-         *
-         * @return instance or null
-         */
-        private I newEmptyParametersInstance(Class<? extends I> clazz) {
-            // 验证参数
-            Supplier<? extends I> exceptionValue = ifErrorDefaultValue == null ? nullValue : ifErrorDefaultValue;
-            try {
-                return clazz.newInstance();
-            } catch (Throwable ex) {
-                return exceptionValue.get();
-            }
-        }
-    }
-
-    /**
-     * 特性策略
-     */
-    public interface Feature<I> {
-
-        /**
-         * 执行对应特性策略
-         *
-         * @param instantiation 实例化参数
-         */
-        void execute(Instantiation<I> instantiation);
-    }
-
-    /**
-     * 排序策略
-     */
-    public static class SortFeature<I> implements Feature<I> {
-
-        @Override
-        public void execute(Instantiation<I> instantiation) {
-            Class<? extends I>[] waitForInstanceClasses = instantiation.getWaitForInstanceClasses();
-            AnnotationAwareOrderComparator.sort(waitForInstanceClasses);
-            instantiation.rewriteInstanceClasses(waitForInstanceClasses);
-        }
-    }
-
-    /**
-     * 回调策略
-     */
-    public static class CallbackFeature<I> implements Feature<I> {
-
-        private final Consumer<Instantiation<I>> consumer;
-
-        public CallbackFeature(Consumer<Instantiation<I>> consumer) {
-            this.consumer = consumer;
-        }
-
-        @Override
-        public void execute(Instantiation<I> instantiation) {
-            consumer.accept(instantiation);
-        }
-    }
-
-    /**
-     * 去重策略（简单的stream distinct进行去重）
-     */
-    public static class DeDuplicationFeature<I> implements Feature<I> {
-
-        @Override
-        public void execute(Instantiation<I> instantiation) {
-            Class<? extends I>[] waitForInstanceClasses = instantiation.getWaitForInstanceClasses();
-            instantiation.rewriteInstanceClasses(Stream.of(waitForInstanceClasses).distinct().toArray(Class[]::new));
-        }
-    }
 }

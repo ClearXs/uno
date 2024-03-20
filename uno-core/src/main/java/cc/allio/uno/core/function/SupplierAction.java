@@ -5,7 +5,7 @@ import java.util.function.Supplier;
 /**
  * supplier 动作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/9 15:58
  * @since 1.1.7
  */

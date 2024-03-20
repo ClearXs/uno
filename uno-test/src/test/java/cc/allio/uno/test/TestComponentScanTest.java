@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import java.util.Set;
 
 @RunTest(components = TestConfiguration.class)
-public class TestComponentScanTest extends BaseTestCase {
+class TestComponentScanTest extends BaseTestCase {
 
     @Test
     void testCom(@Parameter CoreTest coreTest) {

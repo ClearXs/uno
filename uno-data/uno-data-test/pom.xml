@@ -17,5 +17,10 @@
             <groupId>cc.allio</groupId>
             <artifactId>uno-data-api</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-test</artifactId>
+            <scope>compile</scope>
+        </dependency>
     </dependencies>
 </project>

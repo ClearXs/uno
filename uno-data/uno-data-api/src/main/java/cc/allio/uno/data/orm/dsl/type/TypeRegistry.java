@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * type register
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/13 16:00
  * @since 1.1.4
  */

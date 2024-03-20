@@ -10,7 +10,7 @@ import java.sql.JDBCType;
 /**
  * 执行器执行结果
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 17:39
  * @since 1.1.4
  */

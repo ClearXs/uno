@@ -10,7 +10,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
 /**
  * Uno WebSocket自动配置类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/29 13:47
  * @since 1.0
  */

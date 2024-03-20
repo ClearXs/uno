@@ -3,7 +3,7 @@ package cc.allio.uno.core.datastructure.tree;
 /**
  * 树节点访问器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/26 11:58
  * @since 1.1.4
  */

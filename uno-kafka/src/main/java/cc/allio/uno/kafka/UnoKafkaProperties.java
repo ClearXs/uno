@@ -13,7 +13,7 @@ import java.util.*;
 /**
  * Kafka配置参数<a href="https://kafka.apache.org/documentation/#configuration">configuration</a>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/25 09:29
  * @since 1.0
  */

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * DSL Executor factory
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 23:38
  * @since 1.1.4
  */
@@ -19,22 +19,22 @@ public final class CommandExecutorFactory {
     }
 
     /**
-     * 注册{@link CommandExecutor}实例
+     * 注册{@link AggregateCommandExecutor}实例
      *
      * @param commandExecutor commandExecutor
      * @param <T>             T
      * @return command executor
      */
-    public static <T extends CommandExecutor> T register(T commandExecutor) {
+    public static <T extends AggregateCommandExecutor> T register(T commandExecutor) {
         return getRegistry().registerCommandExecutor(commandExecutor.getOptions(), () -> commandExecutor, true);
     }
 
     /**
-     * 基于{@link ExecutorKey#getSystemExecutorKey()}获取的{@link CommandExecutor}实例
+     * 基于{@link ExecutorKey#getSystemExecutorKey()}获取的{@link AggregateCommandExecutor}实例
      *
      * @return DSLExecutor or null
      */
-    public static <T extends CommandExecutor> T getDSLExecutor() {
+    public static <T extends AggregateCommandExecutor> T getDSLExecutor() {
         T defaultExecutor = getDSLExecutor(CommandExecutor.getDefaultKey());
         if (defaultExecutor == null) {
             return getDSLExecutor(ExecutorKey.getSystemExecutorKey());
@@ -43,22 +43,22 @@ public final class CommandExecutorFactory {
     }
 
     /**
-     * 获取{@link CommandExecutor}实例
+     * 获取{@link AggregateCommandExecutor}实例
      *
      * @param executorKey 判断使用何种执行器key
      * @return DSLExecutor
      */
-    public static <T extends CommandExecutor> T getDSLExecutor(ExecutorKey executorKey) {
+    public static <T extends AggregateCommandExecutor> T getDSLExecutor(ExecutorKey executorKey) {
         return getRegistry().getCommandExecutor(executorKey);
     }
 
     /**
-     * 根据唯一标识获取{@link CommandExecutor}实例
+     * 根据唯一标识获取{@link AggregateCommandExecutor}实例
      *
      * @param key key
      * @return DSLExecutor
      */
-    public static <T extends CommandExecutor> T getDSLExecutor(String key) {
+    public static <T extends AggregateCommandExecutor> T getDSLExecutor(String key) {
         return getRegistry().getCommandExecutor(key);
     }
 

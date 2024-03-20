@@ -21,7 +21,7 @@ import java.util.*;
  * cc.allio.uno.core.spi.Demo2=\<br/>
  * cc.allio.uno.core.spi.Demo2Impl<br/>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/3/31 19:32
  * @since 1.0.6
  */

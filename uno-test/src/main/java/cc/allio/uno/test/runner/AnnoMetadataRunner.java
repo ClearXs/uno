@@ -1,5 +1,8 @@
 package cc.allio.uno.test.runner;
 
+import cc.allio.uno.core.reflect.Instantiation;
+import cc.allio.uno.core.reflect.InstantiationBuilder;
+import cc.allio.uno.core.reflect.InstantiationFeature;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.test.env.Environment;
 import cc.allio.uno.test.env.annotation.AnnoConfigure;
@@ -25,7 +28,7 @@ import java.util.List;
  *     <li>{@link Extractor}</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/2 17:34
  * @see AnnoConfigure
  * @since 1.1.4
@@ -55,7 +58,6 @@ public class AnnoMetadataRunner implements RegisterRunner {
                 }
             }
         }
-
     }
 
     /**
@@ -63,15 +65,15 @@ public class AnnoMetadataRunner implements RegisterRunner {
      *
      * @param env Environment
      */
-    public void resolveEnv(CoreTest coreTest, Env env)  {
+    public void resolveEnv(CoreTest coreTest, Env env) {
         Class<? extends Environment>[] envClasses = env.value();
-        ClassUtils.Instantiation<Environment> instantiation =
-                ClassUtils.<Environment>instantiationBuilder()
+        Instantiation<Environment> instantiation =
+                InstantiationBuilder.<Environment>builder()
                         .addMultiForInstanceClasses(envClasses)
                         .setExcludeNull(true)
                         .build();
-        instantiation.addFeature(new ClassUtils.DeDuplicationFeature<>());
-        instantiation.addFeature(new ClassUtils.SortFeature<>());
+        instantiation.addFeature(InstantiationFeature.sort());
+        instantiation.addFeature(InstantiationFeature.deduplicate());
         List<Environment> environments = instantiation.create();
         for (Environment environment : environments) {
             try {

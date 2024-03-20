@@ -21,5 +21,10 @@
             <groupId>org.mongodb</groupId>
             <artifactId>mongodb-driver-sync</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-data-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

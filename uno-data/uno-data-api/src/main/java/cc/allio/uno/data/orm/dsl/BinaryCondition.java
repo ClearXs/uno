@@ -6,7 +6,7 @@ import lombok.Data;
 /**
  * SQL二元操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/13 12:07
  * @since 1.1.4
  */

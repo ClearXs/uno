@@ -3,7 +3,7 @@ package cc.allio.uno.core.type;
 /**
  * 计算操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/10 22:19
  * @since 1.1.0
  */

@@ -21,5 +21,10 @@
             <groupId>com.influxdb</groupId>
             <artifactId>influxdb-client-java</artifactId>
         </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-data-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * exception for predicate test method
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/18 15:57
  * @see MethodPredicate
  * @since 1.1.7

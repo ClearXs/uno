@@ -28,7 +28,7 @@ import java.util.stream.Stream;
  *     <li>Bean必须要是Public</li>
  * </ol>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/17 0:05
  * @since 1.0.0
  */

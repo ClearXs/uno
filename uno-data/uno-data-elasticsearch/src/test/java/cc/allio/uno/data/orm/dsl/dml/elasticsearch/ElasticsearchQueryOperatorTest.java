@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 public class ElasticsearchQueryOperatorTest extends BaseTestCase {
 
-    ElasticSearchQueryOperator queryOperator = new ElasticSearchQueryOperator();
+    EsQueryOperator queryOperator = new EsQueryOperator();
 
     @BeforeEach
     public void setup() {

@@ -9,7 +9,7 @@ import java.util.function.Supplier;
  * Topic-Node之间的通知者，一对一的关系
  *
  * @param <C> 通知者通知泛型
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/19 12:41 PM
  * @since 1.0
  */

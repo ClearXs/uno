@@ -11,7 +11,7 @@ import org.springframework.context.ApplicationContext;
 /**
  * {@link Source}数据源包装类。直接进行处理获取
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/27 15:55
  * @since 1.1.0
  */

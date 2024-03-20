@@ -10,7 +10,7 @@ import java.lang.annotation.Annotation;
 /**
  * {@link MybatisPlusEnv}注解抽取器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/6 16:26
  * @since 1.1.4
  */

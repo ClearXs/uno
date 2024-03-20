@@ -5,7 +5,7 @@ import java.util.Comparator;
 /**
  * Float Comparator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/10 17:41
  * @since 1.0
  */

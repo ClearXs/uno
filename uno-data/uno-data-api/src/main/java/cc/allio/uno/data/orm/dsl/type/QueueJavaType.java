@@ -7,7 +7,7 @@ import java.util.Queue;
 /**
  * queue
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 17:10
  * @since 1.1.4
  */

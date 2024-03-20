@@ -3,7 +3,7 @@ package cc.allio.uno.core.util.id;
 /**
  * 分布式ID生成器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/26 09:46
  * @see SnowflakeIdWorker
  * @since 1.0

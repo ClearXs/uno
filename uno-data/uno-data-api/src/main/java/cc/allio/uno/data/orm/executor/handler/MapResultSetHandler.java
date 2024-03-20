@@ -7,7 +7,7 @@ import java.util.Map;
 /**
  * ResultGroup -> map
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/18 13:24
  * @since 1.1.4
  */

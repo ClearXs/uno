@@ -11,7 +11,7 @@ import java.lang.reflect.Method;
 /**
  * {@link QueryMapper#queryContemporaneous(QueryFilter)}方法拦截器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/18 13:09
  * @since 1.1.0
  */

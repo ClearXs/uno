@@ -12,10 +12,11 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 /**
- * SQL Update Operator
+ * Update Operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 15:19
+ * @see OperatorGroup
  * @since 1.1.4
  */
 public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOperator<UpdateOperator>, WhereOperator<UpdateOperator> {
@@ -28,7 +29,7 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @return SQLUpdateOperator
      */
     default <R> UpdateOperator update(MethodReferenceColumn<R> reference, Object value) {
-        return update(reference.getColumn(), getValueIfNullThenNullValue(value));
+        return update(reference.getColumn(), getValueIfNull(value));
     }
 
     /**
@@ -39,7 +40,7 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @return SQLUpdateOperator
      */
     default UpdateOperator update(String fieldName, Object value) {
-        return update(Tuples.of(fieldName, getValueIfNullThenNullValue(value)));
+        return update(Tuples.of(fieldName, getValueIfNull(value)));
     }
 
     /**
@@ -50,7 +51,7 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @return SQLUpdateOperator
      */
     default UpdateOperator update(String f1, Object v1, String f2, Object v2) {
-        return update(Tuples.of(f1, getValueIfNullThenNullValue(v1)), Tuples.of(f2, getValueIfNullThenNullValue(v2)));
+        return update(Tuples.of(f1, getValueIfNull(v1)), Tuples.of(f2, getValueIfNull(v2)));
     }
 
     /**
@@ -64,9 +65,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      */
     default UpdateOperator update(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
         return update(
-                Tuples.of(f1, getValueIfNullThenNullValue(v1)),
-                Tuples.of(f2, getValueIfNullThenNullValue(v2)),
-                Tuples.of(f3, getValueIfNullThenNullValue(v3)));
+                Tuples.of(f1, getValueIfNull(v1)),
+                Tuples.of(f2, getValueIfNull(v2)),
+                Tuples.of(f3, getValueIfNull(v3)));
     }
 
     /**
@@ -84,10 +85,10 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      */
     default UpdateOperator update(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
         return update(
-                Tuples.of(f1, getValueIfNullThenNullValue(v1)),
-                Tuples.of(f2, getValueIfNullThenNullValue(v2)),
-                Tuples.of(f3, getValueIfNullThenNullValue(v3)),
-                Tuples.of(f4, getValueIfNullThenNullValue(v4)));
+                Tuples.of(f1, getValueIfNull(v1)),
+                Tuples.of(f2, getValueIfNull(v2)),
+                Tuples.of(f3, getValueIfNull(v3)),
+                Tuples.of(f4, getValueIfNull(v4)));
     }
 
     /**

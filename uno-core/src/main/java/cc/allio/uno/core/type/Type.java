@@ -7,7 +7,7 @@ package cc.allio.uno.core.type;
  *     <li>通过SPI加载单例对象</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/20 10:26
  * @since 1.0
  */
