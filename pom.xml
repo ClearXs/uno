@@ -7,7 +7,7 @@
     <groupId>cc.allio</groupId>
     <artifactId>uno</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.7-beta.0</version>
+    <version>1.1.7</version>
     <description>构建大型应用需要的基本能力 --- all in one</description>
     <url>https://github.com/b6688c/uno</url>
 
