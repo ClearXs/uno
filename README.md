@@ -1,28 +1,19 @@
+## overview
 
+uno ('u:no, pronounced wu no) provides the ability to build large and complex applications by offering foundational
+components.
 
-# 概述
-
-uno（'u:no，读wu no）提供基础的组件，来构建大型复杂应用的能力。
-
-- <a href="./docs/core.md">core</a>：核心库，提供通用的工具、事件总线、简易的类型系统、元数据转换，通用链式接口声明、简易的Task、Cache机制。
-- <a href="./docs/data.md">data</a>：数据处理，包含通用查询模块、orm框架。
-- <a href="./docs/rule.md">rule</a>：规则引擎。
-- <a href="./docs/web.md">web</a>：简易的web工具集，提供系统默认的HTTP请求端点。
-- <a href="./docs/test.md">test</a>：基于spring环境方便使用的测试工具集。
-- gis：构建mybatis的空间数据转换、jackson -> 标准geojson的转换、坐标系转换。
-- auto：自动生成spi文件、还包括spring.factories。
-- bom：项目包依赖集。
-- plugins（未实现）：通用的插件工具，包含微内核模式接口声明、jar包等第三方插件包加载与执行。
-- <a href="./docs/components/http.md">http</a>: 构建openapi工具，响应式的http请求响应框架。
-- kafka：基于响应式背压封装的kafka。
-- netty：封装netty，构建无集群模式的RPC框架。
-- sequential：时序数据的处理，包含数据接收、转换、处理，基于响应式，背压特性高性能的数据处理。
-- websocket：封装websocket，具有数据批推，发布订阅模式，客户端可以使用Topic的路径树化。
-- <a href="./docs/starter.md">starter</a>：为各个组件编写spring-starter包。
-  - core
-  - kafka
-  - sequential
-  - websocket
-
-
-
+- <a href="./docs/core.md">core</a>：Core library providing common utilities, event bus, simple type system, metadata conversion, generic chained interface declaration, simple Task, and Cache mechanism.
+- <a href="./docs/data.md">data</a>：Data processing including a generic query module and ORM framework.
+- <a href="./docs/rule.md">rule</a>：Rule engine.
+- <a href="./docs/web.md">web</a>：Simple web toolkit providing default HTTP request endpoints for the system.
+- <a href="./docs/test.md">test</a>：Testing toolkit designed for convenient use within the jupiter-test environment.
+- gis：Spatial data conversion for MyBatis, Jackson to standard GeoJSON conversion, and coordinate system conversion.
+- auto：Automated SPI file generation, including spring.factories.
+- bom：Project dependency collection.
+- plugins (not implemented): General plugin tools including microkernel mode interface declaration, loading, and execution of third-party plugin packages such as JARs.
+- <a href="./docs/components/http.md">http</a>: Construction of OpenAPI tools and reactive HTTP request-response framework.
+- kafka：Kafka encapsulation based on reactive backpressure.
+- netty： Netty encapsulation for building RPC framework without clustering mode.
+- sequential：Processing of time-series data including data reception, conversion, and processing based on reactive, high-performance data processing with backpressure characteristics.
+- websocket：Websocket encapsulation with batch data push, publish-subscribe mode, and client-side usage of topic path trees.
