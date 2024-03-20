@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 /**
  * BigDecimal相关数据工具类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/6/17 20:05
  * @since 1.0
  */

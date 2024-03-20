@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  * SQL Func
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/12 16:19
  * @since 1.1.4
  */

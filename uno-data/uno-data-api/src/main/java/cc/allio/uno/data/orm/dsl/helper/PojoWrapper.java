@@ -53,7 +53,7 @@ import java.util.stream.Collectors;
  *     <li>所有setXX方法的字段名称全是驼峰命名</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/7/4 17:14
  * @see #getInstance(Object)
  * @since 1.1.4

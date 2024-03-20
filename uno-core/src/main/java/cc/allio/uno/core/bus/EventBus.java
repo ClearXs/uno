@@ -12,7 +12,7 @@ import java.util.function.LongConsumer;
 /**
  * 事件总线，定义于不同组件之间进行通信，设计是基于Topic-Event，即主题事件。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/15 15:44
  * @see BusEvent
  * @see DefaultEventBus

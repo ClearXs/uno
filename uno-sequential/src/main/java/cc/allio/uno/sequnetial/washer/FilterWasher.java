@@ -7,7 +7,7 @@ import java.util.function.Predicate;
 /**
  * 数据、类型过滤清洁器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/5/20 15:38
  * @since 1.0
  */

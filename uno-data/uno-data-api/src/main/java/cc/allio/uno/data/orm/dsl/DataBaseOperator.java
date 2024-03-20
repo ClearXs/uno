@@ -5,7 +5,7 @@ import cc.allio.uno.core.api.Self;
 /**
  * database relevant operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/15 11:43
  * @since 1.1.7
  */

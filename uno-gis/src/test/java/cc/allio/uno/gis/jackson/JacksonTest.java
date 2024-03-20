@@ -39,7 +39,7 @@ import java.util.Map;
  * </code>
  * geojson序列化实体定义
  *
- * @author jiangwei
+ * @author j.x
  * @GeoJsonType 注解该geojson对象的类型
  * @JsonSerialize(using = {@link GeoJsonSerializer}) 注释该实体使用{@link GeoJsonSerializer}进行序列化
  * @JsonDeserialize(using = GeoJsonDeserializer.class) 注释该实体使用{@link GeoJsonDeserializer}进行反序列化

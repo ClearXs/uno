@@ -8,12 +8,12 @@ import com.alibaba.druid.sql.ast.expr.*;
 
 import java.util.Objects;
 
-import static cc.allio.uno.data.orm.dsl.type.DSLType.DefaultDSLType.*;
+import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
 
 /**
  * druid的类型转换器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 20:06
  * @since 1.1.4
  */
@@ -34,7 +34,7 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
         DataType dataType = o;
         // dataType为null，赋值于VARCHAR
         if (dataType == null) {
-            dataType = DataType.createCharType(DefaultDSLType.VARCHAR, 64);
+            dataType = DataType.createCharType(DSLType.DefaultDSLType.VARCHAR, 64);
         }
         // 通用的做分组比较
         DSLType sqlType = dataType.getDslType();

@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * 抽象树结点定义
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/26 11:31
  * @since 1.1.4
  */

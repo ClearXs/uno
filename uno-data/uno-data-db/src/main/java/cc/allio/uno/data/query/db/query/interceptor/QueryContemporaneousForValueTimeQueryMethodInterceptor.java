@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 /**
  * {@link QueryMapper#queryContemporaneousForValueTime(QueryFilter)} 方法拦截器，调用{@link QueryContemporaneousQueryMethodInterceptor}结果进行封装
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/18 13:11
  * @since 1.1.0
  */

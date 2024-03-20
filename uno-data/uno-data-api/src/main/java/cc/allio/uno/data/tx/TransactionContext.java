@@ -9,7 +9,7 @@ import java.util.function.UnaryOperator;
 /**
  * 基于Spring编程式事物工具
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/10 21:57
  * @since 1.0
  */

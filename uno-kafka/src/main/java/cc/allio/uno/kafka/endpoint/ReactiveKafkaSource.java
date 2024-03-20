@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * reactive kafka source
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/27 18:09
  * @since 1.1.4
  */

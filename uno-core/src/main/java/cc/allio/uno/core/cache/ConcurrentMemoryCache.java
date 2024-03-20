@@ -11,7 +11,7 @@ import java.util.function.BiPredicate;
  * 实用线程安全的{@link CopyOnWriteArraySet}作为缓存
  * <b>需要放入的缓存实现{@link Object#equals(Object)}</b>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/9 15:15
  * @since 1.0
  */

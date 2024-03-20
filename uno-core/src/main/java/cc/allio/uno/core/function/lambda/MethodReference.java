@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  *     MethodReference reference = user::getName
  * </pre>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/5 15:07
  * @since 1.1.4
  */

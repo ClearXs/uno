@@ -3,7 +3,7 @@ package cc.allio.uno.data.query.stream;
 /**
  * 动态Stream创建器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/1/20 11:25
  * @since 1.1.4
  */

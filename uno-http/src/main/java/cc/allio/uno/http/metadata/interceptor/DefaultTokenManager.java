@@ -3,7 +3,7 @@ package cc.allio.uno.http.metadata.interceptor;
 /**
  * 基于内存默认Token管理器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/25 09:27
  * @since 1.0
  */

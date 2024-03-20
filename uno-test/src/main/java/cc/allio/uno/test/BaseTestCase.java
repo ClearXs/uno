@@ -1,5 +1,6 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.core.exception.Exceptions;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.*;
  * </ol>
  * 除此之后还支持不同框架（如Redis、Spring）的环境支持
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/1/30 10:09
  * @see BaseSpringTest
  * @since 1.0
@@ -27,8 +28,8 @@ public abstract class BaseTestCase extends Assertions implements BenchmarkTest {
     public void setup() {
         try {
             onInit();
-        } catch (Throwable e) {
-            log.error("Unit test init failed", e);
+        } catch (Throwable ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 
@@ -37,8 +38,8 @@ public abstract class BaseTestCase extends Assertions implements BenchmarkTest {
     public void tearDown() {
         try {
             onDown();
-        } catch (Throwable e) {
-            log.error("Unit test down failed", e);
+        } catch (Throwable ex) {
+            throw Exceptions.unchecked(ex);
         }
     }
 

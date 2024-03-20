@@ -8,7 +8,7 @@ import java.lang.annotation.*;
  * mybatis.configLocation = @PropertiesName("mybatis.configLocation")
  * </p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/3 13:35
  * @since 1.1.4
  * @see

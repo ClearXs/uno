@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 
 public class ElasticSearchShowColumnsOperatorTest extends BaseTestCase {
 
-    ElasticSearchShowColumnsOperator searchShowColumnsOperator = new ElasticSearchShowColumnsOperator();
+    EsShowColumnsOperator searchShowColumnsOperator = new EsShowColumnsOperator();
 
     @Test
     void testMapping() {

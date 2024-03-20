@@ -6,6 +6,9 @@ import cc.allio.uno.data.orm.executor.interceptor.*;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
+import cc.allio.uno.data.orm.executor.internal.QOInnerCommandExecutor;
+import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +21,14 @@ import java.util.stream.Collectors;
 /**
  * 实现自{@link CommandExecutor}的基本的类，所有的具体实现类都需要继承该类。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/8 10:45
  * @since 1.1.7
  */
 @Slf4j
 @Getter
 public abstract class AbstractCommandExecutor implements CommandExecutor {
+
     private final ExecutorOptions options;
 
     protected AbstractCommandExecutor(ExecutorOptions options) {
@@ -43,8 +47,27 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      * @param commandType      DSL命令
      * @param resultSetHandler 结果集处理器
      * @return true 成功 false 失败
+     * @throws DSLException invoke process has error
      */
-    protected abstract boolean doBool(Operator<?> operator, CommandType commandType, ResultSetHandler<Boolean> resultSetHandler);
+    protected boolean doBool(Operator<?> operator, CommandType commandType, ResultSetHandler<Boolean> resultSetHandler) {
+        InnerCommandExecutorManager manager = getManager();
+        if (manager == null) {
+            throw new DSLException("inner command executor manager is null, can't execute operator");
+        }
+        try {
+            return switch (commandType) {
+                case CREATE_TABLE -> manager.getCreateTable().exec(operator, resultSetHandler);
+                case DELETE_TABLE -> manager.getDeleteTable().exec(operator, resultSetHandler);
+                case EXIST_TABLE -> manager.getExistTable().exec(operator, resultSetHandler);
+                case INSERT -> manager.getInsert().exec(operator, resultSetHandler);
+                case UPDATE -> manager.getUpdate().exec(operator, resultSetHandler);
+                case DELETE -> manager.getDelete().exec(operator, resultSetHandler);
+                default -> false;
+            };
+        } catch (Throwable ex) {
+            throw new DSLException(String.format("exec operator %s has err", operator.getClass().getName()), ex);
+        }
+    }
 
     @Override
     public <R> List<R> queryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
@@ -61,7 +84,17 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    protected abstract <R> List<R> doQueryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler);
+    protected <R> List<R> doQueryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        InnerCommandExecutorManager manager = getManager();
+        if (manager == null) {
+            throw new DSLException("inner command executor manager is null, can't execute operator");
+        }
+        try {
+            return manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(queryOperator, resultSetHandler);
+        } catch (Throwable ex) {
+            throw new DSLException("exec query list has err", ex);
+        }
+    }
 
     /**
      * 给定操作的切面并执行
@@ -72,7 +105,7 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      * @param <T>         操作返回类型
      * @return 返回类结果
      */
-    private <T> T aspect(Operator<?> operator, CommandType commandType, Supplier<T> operate) {
+    <T> T aspect(Operator<?> operator, CommandType commandType, Supplier<T> operate) {
         List<Interceptor> interceptors = options.getInterceptors();
         InterceptorAttributes beforeAttributes = new InterceptorAttributes(this, operator, commandType);
         var before = Mono.defer(() -> {
@@ -91,4 +124,12 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
         return before.then(after).block();
     }
 
+    /**
+     * sub-class implementation, must be not null
+     *
+     * @return InnerCommandExecutorManager
+     */
+    protected InnerCommandExecutorManager getManager() {
+        return null;
+    }
 }

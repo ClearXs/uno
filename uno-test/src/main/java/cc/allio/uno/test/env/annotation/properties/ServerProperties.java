@@ -7,7 +7,7 @@ import java.lang.annotation.*;
 /**
  * {@link org.springframework.boot.autoconfigure.web.ServerProperties}的注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/9 22:11
  * @since 1.1.4
  */

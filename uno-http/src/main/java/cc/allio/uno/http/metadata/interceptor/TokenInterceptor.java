@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Token认证拦截器，当请求没有Token认证时，此时会经过此验证
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/8/24 17:11
  * @since 1.0
  */

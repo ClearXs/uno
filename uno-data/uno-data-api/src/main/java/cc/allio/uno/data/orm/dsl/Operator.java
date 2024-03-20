@@ -9,7 +9,7 @@ import java.util.Objects;
 /**
  * DSL操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/12 19:44
  * @since 1.1.4
  */
@@ -53,7 +53,7 @@ public interface Operator<T extends Operator<T>> {
      * @param originalValue originalValue
      * @return
      */
-    default Object getValueIfNullThenNullValue(Object originalValue) {
+    default Object getValueIfNull(Object originalValue) {
         return Objects.requireNonNullElse(originalValue, ValueWrapper.EMPTY_VALUE);
     }
 

@@ -5,7 +5,7 @@ import cc.allio.uno.sequnetial.context.SequentialContext;
 /**
  * 计算属性
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/26 16:43
  * @since 1.1.4
  */

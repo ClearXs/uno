@@ -7,7 +7,7 @@ import cc.allio.uno.rule.api.RuleResult;
 /**
  * 触发报警规则事件
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 09:04
  * @since 1.1.4
  */

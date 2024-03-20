@@ -5,7 +5,7 @@ import reactor.core.publisher.Flux;
 /**
  * 集合数据流
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/18 13:06
  * @since 1.1.0
  */

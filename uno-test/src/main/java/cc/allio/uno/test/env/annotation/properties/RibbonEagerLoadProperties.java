@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * {@link org.springframework.cloud.netflix.ribbon.RibbonEagerLoadProperties}注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/9 15:36
  * @since 1.1.4
  */

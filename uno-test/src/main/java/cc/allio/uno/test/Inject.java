@@ -3,9 +3,9 @@ package cc.allio.uno.test;
 import java.lang.annotation.*;
 
 /**
- * 字段注入，除此之外还还可以使用{@link javax.annotation.Resource}、{@link org.springframework.beans.factory.annotation.Autowired}
+ * 字段注入，除此之外还还可以使用{@link jakarta.annotation.Resource}、{@link org.springframework.beans.factory.annotation.Autowired}
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/19 15:11
  * @since 1.1.0
  */

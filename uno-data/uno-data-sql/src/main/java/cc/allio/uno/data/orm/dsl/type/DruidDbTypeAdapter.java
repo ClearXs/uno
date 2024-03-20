@@ -5,7 +5,7 @@ import com.alibaba.druid.DbType;
 /**
  * DruidDbTypeBridge
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/2/23 16:47
  * @since 1.1.4
  */

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 public class ElasticSearchUpdateOperatorTest extends BaseTestCase {
 
-    private final ElasticSearchUpdateOperator updateOperator = new ElasticSearchUpdateOperator();
+    private final EsUpdateOperator updateOperator = new EsUpdateOperator();
 
     @Test
     void testUpdateForEQ() {

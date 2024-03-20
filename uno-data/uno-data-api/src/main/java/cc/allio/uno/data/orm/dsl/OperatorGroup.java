@@ -12,7 +12,7 @@ import lombok.Data;
 /**
  * 操作管理接口
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/13 18:52
  * @see Operator
  * @since 1.1.4
@@ -39,6 +39,13 @@ public interface OperatorGroup {
     QueryOperator query(DBType dbType);
 
     /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends QueryOperator> T getQueryOperator(Class<T> queryOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(queryOperatorClass, operatorKey, dbType);
+    }
+
+    /**
      * 获取insert操作
      *
      * @return InsertOperator
@@ -54,6 +61,13 @@ public interface OperatorGroup {
      * @return InsertOperator
      */
     InsertOperator insert(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends InsertOperator> T getInsertOperator(Class<T> insertOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(insertOperatorClass, operatorKey, dbType);
+    }
 
     /**
      * 获取update操作
@@ -72,6 +86,12 @@ public interface OperatorGroup {
      */
     UpdateOperator update(DBType dbType);
 
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends UpdateOperator> T getUpdateOperator(Class<T> updateOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(updateOperatorClass, operatorKey, dbType);
+    }
 
     /**
      * 获取delete操作
@@ -88,6 +108,13 @@ public interface OperatorGroup {
      * @return SQLDeleteOperator
      */
     DeleteOperator delete(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends DeleteOperator> T getDeleteOperator(Class<T> deleteOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(deleteOperatorClass, operatorKey, dbType);
+    }
 
     // ======================== DDL ========================
 
@@ -109,6 +136,13 @@ public interface OperatorGroup {
     CreateTableOperator createTable(DBType dbType);
 
     /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends CreateTableOperator> T getCreateTableOperator(Class<T> createTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(createTableOperatorClass, operatorKey, dbType);
+    }
+
+    /**
      * drop xxxx
      *
      * @return DropTableOperator
@@ -124,6 +158,13 @@ public interface OperatorGroup {
      * @return DropTableOperator
      */
     DropTableOperator dropTable(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends DropTableOperator> T getDropTableOperator(Class<T> dropTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(dropTableOperatorClass, operatorKey, dbType);
+    }
 
     /**
      * exist xxxx
@@ -143,6 +184,13 @@ public interface OperatorGroup {
     ExistTableOperator existTable(DBType dbType);
 
     /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends ExistTableOperator> T getExistTableOperator(Class<T> existTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(existTableOperatorClass, operatorKey, dbType);
+    }
+
+    /**
      * show columns for xxxx
      *
      * @return ShowColumnsOperator
@@ -158,6 +206,13 @@ public interface OperatorGroup {
      * @return ShowColumnsOperator
      */
     ShowColumnsOperator showColumns(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends ShowColumnsOperator> T getShowColumnsOperator(Class<T> showColumnsOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(showColumnsOperatorClass, operatorKey, dbType);
+    }
 
     /**
      * show tables
@@ -177,6 +232,13 @@ public interface OperatorGroup {
     ShowTablesOperator showTables(DBType dbType);
 
     /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends ShowTablesOperator> T getShowTablesOperator(Class<T> showTablesOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(showTablesOperatorClass, operatorKey, dbType);
+    }
+
+    /**
      * @see #alterTables(DBType)
      */
     default AlterTableOperator alterTables() {
@@ -190,6 +252,13 @@ public interface OperatorGroup {
      * @return AlterTableOperator
      */
     AlterTableOperator alterTables(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends AlterTableOperator> T getAlterTableOperator(Class<T> alterTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
+        return getOperator(alterTableOperatorClass, operatorKey, dbType);
+    }
 
     /**
      * 获取当前系统的SQL Operator
@@ -211,7 +280,6 @@ public interface OperatorGroup {
         return null;
     }
 
-
     /**
      * 根据operator的class获取指定operator实例.
      * <ul>
@@ -230,38 +298,16 @@ public interface OperatorGroup {
     }
 
     /**
-     * 根据operator的class获取指定operator实例
-     * <ul>
-     *     <li>dbtype = {@link DBType#getSystemDbType()}</li>
-     * </ul>
-     *
-     * @param operatorClass operatorClass
-     * @param <T>           SQLOperator
-     * @param operatorKey   operatorKey
-     * @return SQLOperator
-     * @throws IllegalArgumentException operatorClass is null
-     * @throws NullPointerException     An operation that does not exist
-     * @see OperatorKey#getSystemOperatorKey()
+     * @see #getOperator(Class, OperatorKey, DBType)
      */
-    static <T extends Operator<T>> T getOperator(Class<T> operatorClass, OperatorKey operatorKey) {
+    static <T extends Operator<?>> T getOperator(Class<T> operatorClass, OperatorKey operatorKey) {
         return getOperator(operatorClass, operatorKey, DBType.getSystemDbType());
     }
 
     /**
-     * 根据operator的class获取指定operator实例
-     * <ul>
-     *     <li>dbtype = {@link DBType#getSystemDbType()}</li>
-     * </ul>
-     *
-     * @param operatorClass operatorClass
-     * @param <T>           SQLOperator
-     * @param dbType        dbType
-     * @return SQLOperator
-     * @throws IllegalArgumentException operatorClass is null
-     * @throws NullPointerException     An operation that does not exist
-     * @see OperatorKey#getSystemOperatorKey()
+     * @see #getOperator(Class, OperatorKey, DBType)
      */
-    static <T extends Operator<T>> T getOperator(Class<T> operatorClass, DBType dbType) {
+    static <T extends Operator<?>> T getOperator(Class<T> operatorClass, DBType dbType) {
         return getOperator(operatorClass, OperatorKey.getSystemOperatorKey(), dbType);
     }
 
@@ -271,13 +317,14 @@ public interface OperatorGroup {
      * @param operatorClass operatorClass
      * @param operatorKey   operatorKey
      * @param dbType        dbtype
-     * @param <T>           SQLOperator
-     * @return SQLOperator
+     * @param <T>           generic of Operator type
+     * @return Operator
      * @throws IllegalArgumentException operatorClass is null
      * @throws NullPointerException     An operation that does not exist
      * @see OperatorKey
+     * @see SPIOperatorHelper#lazyGet(Class, OperatorKey, DBType)
      */
-    static <T extends Operator<T>> T getOperator(Class<T> operatorClass, OperatorKey operatorKey, DBType dbType) {
+    static <T extends Operator<?>> T getOperator(Class<T> operatorClass, OperatorKey operatorKey, DBType dbType) {
         return SPIOperatorHelper.lazyGet(operatorClass, operatorKey, dbType);
     }
 

@@ -6,7 +6,7 @@ import cc.allio.uno.data.orm.dsl.type.DSLType;
 /**
  * 不同数据类型方言转换器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/8 19:33
  * @since 1.1.7
  */

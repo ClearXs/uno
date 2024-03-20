@@ -12,7 +12,7 @@ import java.lang.annotation.Annotation;
  * Mybatis测试环境类。
  * <p><b>优先级需要低于{@link DataSourceEnvironment}</b></p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/14 14:27
  * @since 1.0
  */

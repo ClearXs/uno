@@ -6,7 +6,7 @@ import cc.allio.uno.rule.api.EventBusRuleEngine;
 /**
  * 基于 easy rules engien
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/25 15:51
  * @since 1.1.4
  */

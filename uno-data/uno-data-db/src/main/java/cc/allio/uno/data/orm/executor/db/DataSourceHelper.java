@@ -18,7 +18,7 @@ import java.util.function.UnaryOperator;
  *     <li>基于{@link javax.sql.DataSource}获取{@link cc.allio.uno.data.orm.dsl.type.DBType}</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/25 13:10
  * @since 1.1.7
  */

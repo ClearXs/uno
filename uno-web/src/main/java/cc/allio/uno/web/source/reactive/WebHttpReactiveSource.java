@@ -9,7 +9,7 @@ import reactor.core.publisher.FluxSink;
 /**
  * 基于http的 reactive source
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/15 12:25
  * @since 1.1.4
  */

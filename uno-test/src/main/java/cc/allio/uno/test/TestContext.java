@@ -10,7 +10,7 @@ import java.util.*;
 /**
  * test-context
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/2 19:24
  * @since 1.1.4
  */
@@ -33,8 +33,10 @@ public class TestContext implements OptionalContext {
     public TestContext(Class<?> testClass) {
         this.store = Maps.newConcurrentMap();
         putAttribute(TEST_CLASS, testClass);
-        putAttribute(CoreTest.class.getName(), new ExecutableCoreTest(testClass, this));
-        putAttribute(RunTestAttributes.class.getName(), new RunTestAttributes(testClass));
+        RunTestAttributes runTestAttributes = new RunTestAttributes(testClass);
+        putAttribute(RunTestAttributes.class.getName(), runTestAttributes);
+        ExecutableCoreTest executableCoreTest = new ExecutableCoreTest(testClass, this, runTestAttributes);
+        putAttribute(CoreTest.class.getName(), executableCoreTest);
         this.stage = ThreadLocal.withInitial(() -> null);
     }
 
@@ -134,6 +136,7 @@ public class TestContext implements OptionalContext {
      * @return RunTestAttributes instance
      */
     public RunTestAttributes getRunTestAttributes() {
-        return get(RunTestAttributes.class.getName(), RunTestAttributes.class).orElseThrow(() -> new IllegalArgumentException("nonexistence RunTestAttributes"));
+        return get(RunTestAttributes.class.getName(), RunTestAttributes.class)
+                .orElseThrow(() -> new IllegalArgumentException("nonexistence RunTestAttributes"));
     }
 }

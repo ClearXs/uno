@@ -16,7 +16,7 @@ import java.lang.reflect.Method;
 /**
  * http source的抽象接口，包含注册端点方法
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/5/15 12:30
  * @since 1.1.4
  */

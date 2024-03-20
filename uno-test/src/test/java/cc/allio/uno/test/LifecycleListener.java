@@ -1,9 +1,10 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.test.listener.Listener;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-public class LifecycleListener implements TestListener {
+public class LifecycleListener implements Listener {
 
     @Override
     public void beforeEntryClass(TestContext testContext) {

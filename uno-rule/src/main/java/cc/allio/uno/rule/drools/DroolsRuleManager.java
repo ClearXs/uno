@@ -22,7 +22,7 @@ import java.util.Map;
 /**
  * 用于管理drools的类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 19:49
  * @see Fact#ruleValues() 构建运行时数据
  * @see /src/test/resources/cc/allio/uno/rule/drools/ruleindex.drl 构建的drl数据

@@ -4,12 +4,11 @@ import com.google.common.collect.Lists;
 import org.springframework.util.Assert;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * {@link Runner}列表中心
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/28 17:33
  * @since 1.1.0
  */
@@ -18,10 +17,7 @@ public class RunnerCenter {
     /**
      * 可以被共享的Runner实例
      */
-    public final RunnerList sharedRunner = new RunnerList();
-
-    public RunnerCenter() {
-    }
+    public final RunnerSet sharedRunner = new RunnerSet();
 
     /**
      * 注册私有的Runner实例
@@ -70,7 +66,7 @@ public class RunnerCenter {
     /**
      * Runner列表，支持根据Runner类型查找
      */
-    public static class RunnerList extends HashSet<Runner> {
+    public static class RunnerSet extends HashSet<Runner> {
 
         /**
          * 在list中查找指定类型的{@link Runner}的列表
@@ -82,7 +78,7 @@ public class RunnerCenter {
             Assert.notNull(clazz, String.format("Runner Clazz %s is not empty", clazz.getName()));
             return stream()
                     .filter(clazz::isInstance)
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         /**
@@ -108,7 +104,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> RegisterRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         /**
@@ -120,7 +116,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> RefreshCompleteRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         /**
@@ -132,7 +128,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> CloseRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
 }

@@ -10,7 +10,7 @@ import java.lang.annotation.*;
  *     注解的坏处在于：嵌入对象很难以描述。（所以在所有的配置注解缺少嵌入的描述）
  * </p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/3 11:51
  * @see AnnoPropertiesParser
  * @since 1.1.4

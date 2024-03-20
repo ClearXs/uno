@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 /**
  * 以{@link ContemporaneousStream}数据数据流，把其数据转换为ValueTime的数据流
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/18 14:54
  * @since 1.1.0
  */

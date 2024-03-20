@@ -15,7 +15,7 @@ import java.util.List;
  *     <li>包含优先级关系</li>
  * </ul>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/14 14:05
  * @see AnnotationAwareOrderComparator#sort(List)
  * @since 1.1.1

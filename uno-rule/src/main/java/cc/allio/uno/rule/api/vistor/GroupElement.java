@@ -5,7 +5,7 @@ import java.util.List;
 /**
  * group node. tag for element
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/26 12:04
  * @since 1.1.4
  */

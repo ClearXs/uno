@@ -1,6 +1,9 @@
 package cc.allio.uno.core.util;
 
 import cc.allio.uno.core.BaseTestCase;
+import cc.allio.uno.core.reflect.Instantiation;
+import cc.allio.uno.core.reflect.InstantiationBuilder;
+import cc.allio.uno.core.reflect.InstantiationFeature;
 import com.google.common.collect.Maps;
 import jakarta.annotation.Priority;
 import lombok.AllArgsConstructor;
@@ -70,34 +73,33 @@ class ClassUtilTest extends BaseTestCase {
 
     @Test
     void testAddFeature() {
-        ClassUtils.Instantiation<Object> build = ClassUtils.instantiationBuilder()
-                .addOneInstanceClass(Demo1.class)
-                .build();
-        build.addFeature(new ClassUtils.CallbackFeature<>(System.out::println));
+        Instantiation<Object> build = InstantiationBuilder.builder().addOneInstanceClass(Demo1.class).build();
+        build.addFeature(InstantiationFeature.callback(System.out::println));
         Object one = build.createOne();
-
+        assertNotNull(one);
     }
 
     @Test
     void testDeDuplicateInstance() {
-        ClassUtils.Instantiation<DemoParent> instantiation = ClassUtils.<DemoParent>instantiationBuilder()
+        Instantiation<DemoParent> instantiation = InstantiationBuilder.<DemoParent>builder()
                 .addMultiForInstanceClasses(new Class[]{Demo2.class, Demo2.class, Demo2.class})
                 .build();
         List<DemoParent> demoParents = instantiation.create();
         assertEquals(3, demoParents.size());
-        instantiation.addFeature(new ClassUtils.DeDuplicationFeature<>());
+        instantiation.addFeature(InstantiationFeature.deduplicate());
         demoParents = instantiation.create();
         assertEquals(1, demoParents.size());
     }
 
     @Test
     void testSortInstance() {
-        ClassUtils.Instantiation<DemoParent> build = ClassUtils.<DemoParent>instantiationBuilder()
+        Instantiation<DemoParent> build = InstantiationBuilder.<DemoParent>builder()
                 .addMultiForInstanceClasses(new Class[]{Demo2.class, Demo1.class})
                 .build();
-        build.addFeature(new ClassUtils.SortFeature<>());
+        build.addFeature(InstantiationFeature.sort());
         List<DemoParent> demoParents = build.create();
         DemoParent demoParent = demoParents.get(0);
+        assertNotNull(demoParent);
     }
 
 

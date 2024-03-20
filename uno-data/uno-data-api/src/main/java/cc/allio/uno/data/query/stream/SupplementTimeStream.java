@@ -29,7 +29,7 @@ import java.util.concurrent.atomic.AtomicLong;
  *     <li>增补时间依赖于数据排序规则，默认按照{@link OrderCondition#DESC}进行</li>
  * </ol>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/16 13:20
  * @see SupplementList
  * @since 1.1.0

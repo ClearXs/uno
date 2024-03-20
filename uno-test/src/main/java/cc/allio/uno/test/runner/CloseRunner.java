@@ -6,7 +6,7 @@ import org.springframework.context.ConfigurableApplicationContext;
 /**
  * <b>标识接口</b>当spring关闭时执行
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/10/29 12:51
  * @since 1.1.0
  */

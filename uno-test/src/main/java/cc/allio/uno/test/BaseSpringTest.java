@@ -6,6 +6,7 @@ import cc.allio.uno.core.env.SpringEnv;
 import cc.allio.uno.core.env.SystemEnv;
 import cc.allio.uno.core.util.ObjectUtils;
 import com.google.common.collect.Lists;
+import lombok.Getter;
 import lombok.NonNull;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -34,10 +35,16 @@ import java.util.*;
  * @author jw
  * @date 2021/12/15 23:22
  */
+@Getter
 public abstract class BaseSpringTest extends BaseTestCase {
 
     /**
      * 注解spring上下文对象
+     * -- GETTER --
+     *  获取Spring上下文实例对象
+     *
+     * @return
+
      */
     private GenericApplicationContext context;
 
@@ -279,15 +286,6 @@ public abstract class BaseSpringTest extends BaseTestCase {
 
     public <T> T getBean(Class<T> beanClass) {
         return context.getBean(beanClass);
-    }
-
-    /**
-     * 获取Spring上下文实例对象
-     *
-     * @return
-     */
-    public GenericApplicationContext getContext() {
-        return context;
     }
 
     /**

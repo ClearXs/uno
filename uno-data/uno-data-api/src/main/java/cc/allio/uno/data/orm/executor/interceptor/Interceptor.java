@@ -16,7 +16,7 @@ import reactor.core.publisher.Mono;
 /**
  * 允许用户在执行过程中添加自定义代码，参考自 hibernate #Interceptor
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/8 10:22
  * @since 1.1.7
  */

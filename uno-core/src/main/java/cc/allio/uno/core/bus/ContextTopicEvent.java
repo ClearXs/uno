@@ -5,7 +5,7 @@ import lombok.Getter;
 /**
  * 上下文{@link EventContext}的抽象类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/28 14:01
  * @since 1.1.4
  */

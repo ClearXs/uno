@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * {@link ColumnDef}结果集处理器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/7/4 14:54
  * @since 1.1.4
  */

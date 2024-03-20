@@ -5,7 +5,7 @@ import cc.allio.uno.core.metadata.convert.Converter;
 /**
  * 映射字段转换器
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/12/14 12:55
  * @see DefaultMappingFieldConverter
  * @see ArrayStringMappingFieldConverter

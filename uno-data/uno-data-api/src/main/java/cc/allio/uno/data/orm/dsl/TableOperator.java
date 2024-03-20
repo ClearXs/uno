@@ -8,7 +8,7 @@ import java.util.function.UnaryOperator;
 /**
  * Table Operator (xxxx xxx)
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/16 18:07
  * @since 1.1.4
  */

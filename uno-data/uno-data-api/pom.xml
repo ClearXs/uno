@@ -25,5 +25,11 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
+        <!-- test -->
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-test</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 </project>

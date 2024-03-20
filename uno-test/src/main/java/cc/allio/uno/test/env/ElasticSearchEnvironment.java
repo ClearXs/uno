@@ -9,7 +9,7 @@ import java.lang.annotation.Annotation;
 /**
  * 配置的es环境
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/7/5 16:03
  * @since 1.1.4
  */

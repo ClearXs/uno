@@ -1,11 +1,8 @@
 package cc.allio.uno.test;
 
 import cc.allio.uno.core.bus.EventBus;
-import cc.allio.uno.test.env.PropertiesVisitor;
-import cc.allio.uno.test.env.Visitor;
-import cc.allio.uno.test.runner.AnnoMetadataRunner;
-import cc.allio.uno.test.runner.InjectRunner;
-import cc.allio.uno.test.runner.Runner;
+import cc.allio.uno.test.listener.Listener;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.test.context.TestContextManager;
 
@@ -16,12 +13,13 @@ import java.lang.reflect.UndeclaredThrowableException;
  * 测试框架管理器，参考自{@link TestContextManager}实现。
  * <p>通过事件机制，当test经历不同的测试阶段时发布对应的事件。事件使用于{@link EventBus}</p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/2 20:05
  * @since 1.1.4
  */
+@Getter
 @Slf4j
-public class TestManager {
+public final class TestManager {
 
     /**
      * 测试阶段周期
@@ -41,24 +39,7 @@ public class TestManager {
     public TestManager(Class<?> testClass) {
         this.testContext = new TestContext(testClass);
         this.testContext.setStage(INIT);
-
-        // --------- @RunTest解析 ---------
-        // 对TestListener、Runner、Visitor进行注册
-        registerExtensionObject();
     }
-
-    /**
-     * 注册{@link TestListener}、{@link Runner}、{@link Visitor}
-     */
-    private void registerExtensionObject() {
-        // 注册默认Listener
-        getTestContext().getRunTestAttributes().addListenerClasses(CoreTestListener.class, PrintTimingListener.class, WebListener.class);
-        // 注册默认Visitor
-        getTestContext().getRunTestAttributes().addVisitorClasses(PropertiesVisitor.class);
-        // 注册默认Runner
-        getTestContext().getRunTestAttributes().addRunnerClasses(InjectRunner.class, AnnoMetadataRunner.class);
-    }
-
 
     /**
      * 用于在执行类中的任何测试之前对测试类进行预处理。例如使用{@link org.junit.jupiter.api.BeforeAll}
@@ -67,7 +48,7 @@ public class TestManager {
      */
     public void beforeEntryClass() {
         getTestContext().setStage(BEFORE_ENTRY_CLASS);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.beforeEntryClass(getTestContext());
             } catch (Exception ex) {
@@ -84,7 +65,7 @@ public class TestManager {
      */
     public void afterEntryClass() {
         getTestContext().setStage(AFTER_ENTRY_CLASS);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.afterEntryClass(getTestContext());
             } catch (Exception ex) {
@@ -103,7 +84,7 @@ public class TestManager {
     public void prepareTestInstance(Object testInstance) {
         getTestContext().setStage(PREPARE_TEST_INSTANCE);
         getTestContext().setTestInstance(testInstance);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
 
             try {
                 lis.prepareTestInstance(getTestContext());
@@ -125,7 +106,7 @@ public class TestManager {
         getTestContext().setStage(BEFORE_ENTRY_METHOD);
         getTestContext().setTestInstance(testInstance);
         getTestContext().setTestMethod(testMethod);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.beforeEntryMethod(getTestContext());
             } catch (Exception ex) {
@@ -150,7 +131,7 @@ public class TestManager {
         getTestContext().setStage(AFTER_ENTRY_METHOD);
         getTestContext().setTestInstance(testInstance);
         getTestContext().setTestMethod(testMethod);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.afterEntryMethod(getTestContext());
             } catch (Exception ex) {
@@ -171,7 +152,7 @@ public class TestManager {
         getTestContext().setStage(BEFORE_TEST_EXECUTION);
         getTestContext().setTestInstance(testInstance);
         getTestContext().setTestMethod(testMethod);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.beforeTestExecution(getTestContext());
             } catch (Exception ex) {
@@ -196,7 +177,7 @@ public class TestManager {
         getTestContext().setStage(AFTER_TEST_EXECUTION);
         getTestContext().setTestInstance(testInstance);
         getTestContext().setTestMethod(testMethod);
-        for (TestListener lis : getTestContext().getRunTestAttributes().getTestListeners()) {
+        for (Listener lis : getTestContext().getRunTestAttributes().getListeners()) {
             try {
                 lis.afterTestExecution(getTestContext());
             } catch (Exception ex) {
@@ -204,15 +185,6 @@ public class TestManager {
                 throw new UndeclaredThrowableException(ex);
             }
         }
-    }
-
-    /**
-     * 获取TestContext
-     *
-     * @return TestContext
-     */
-    public TestContext getTestContext() {
-        return testContext;
     }
 
 }

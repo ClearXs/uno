@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * {@link  org.springframework.cloud.netflix.ribbon.ServerIntrospectorProperties}注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/9 15:37
  * @since 1.1.4
  */

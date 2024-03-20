@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * 时间段任务，每隔多少时间执行一次这个任务。内部采用Netty时间轮实现
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/22 15:20
  * @since 1.0
  */

@@ -7,7 +7,7 @@ import java.util.function.Consumer;
 /**
  * Sequential数据源
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/13 16:28
  * @since 1.1.0
  */

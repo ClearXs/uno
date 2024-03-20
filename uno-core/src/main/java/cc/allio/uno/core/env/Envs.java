@@ -5,7 +5,7 @@ import org.springframework.lang.Nullable;
 /**
  * 环境工具类
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/27 14:39
  * @since 1.1.4
  */

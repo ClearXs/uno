@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 /**
  * 定义值 wrapper对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 18:39
  * @see BeanInfoWrapper 根据{@link BeanInfo}提取bean对象的属性进而实现值提取动作
  * @see ObjectWrapper 接收某个具体的对象（一般为pojo）

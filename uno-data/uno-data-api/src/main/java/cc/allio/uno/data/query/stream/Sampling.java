@@ -12,7 +12,7 @@ import java.util.stream.Stream;
  * 数据采样。
  * <p>基于随机采取指定的样本数据量</p>
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/17 19:17
  * @since 1.1.1
  */

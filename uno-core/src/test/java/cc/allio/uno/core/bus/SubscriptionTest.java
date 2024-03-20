@@ -11,7 +11,7 @@ import java.util.List;
 /**
  * 订阅信息单元测试
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/7 17:53
  * @since 1.0
  */

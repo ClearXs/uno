@@ -8,7 +8,7 @@ import java.util.Map;
 /**
  * 复合的高阶查询，提供对单表数据多维度的快速分析
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 18:17
  * @see BaseHigherQuery
  * @since 1.1.4

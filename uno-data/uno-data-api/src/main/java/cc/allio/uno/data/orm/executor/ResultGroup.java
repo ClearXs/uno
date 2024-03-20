@@ -22,7 +22,7 @@ import java.util.function.Supplier;
 /**
  * 结果集。保持顺序一致性
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/14 18:02
  * @since 1.1.4
  */

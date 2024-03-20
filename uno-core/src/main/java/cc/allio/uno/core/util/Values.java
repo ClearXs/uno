@@ -9,7 +9,7 @@ import java.util.stream.Stream;
 /**
  * 与值相关的操作
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/2/19 17:42
  * @since 1.1.7
  */
@@ -46,6 +46,9 @@ public class Values {
      * @return value of stream
      */
     public static <V> Stream<V> streamExpand(V... values) {
+        if (values == null) {
+            return Stream.empty();
+        }
         return Arrays.stream(values)
                 .flatMap(v -> {
                     Class<V> valueClass = (Class<V>) v.getClass();

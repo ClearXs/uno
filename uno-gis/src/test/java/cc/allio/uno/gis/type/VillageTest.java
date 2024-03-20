@@ -15,7 +15,7 @@ import java.util.List;
 @RunTest
 @MybatisPlusEnv(basePackages = "cc.allio.uno.gis.type.mapper.**")
 @MybatisProperties(typeHandlersPackage = "cc/allio/uno/gis/mybatis/type")
-public class VillageTest extends CoreTest {
+class VillageTest extends CoreTest {
 
     @Inject
     private VillageMapper mapper;

@@ -17,7 +17,7 @@ import java.util.concurrent.atomic.AtomicReference;
 /**
  * 指定某一个集合数据流，按照给定的数据字段（{@link QueryWrapper#getDataFields()}）使其转换为{@link ValueTime}的时间数据。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/11/18 14:33
  * @since 1.1.0
  */

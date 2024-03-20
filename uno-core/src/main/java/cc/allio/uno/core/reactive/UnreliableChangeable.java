@@ -11,7 +11,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 /**
  * 指定两个数据进行比较，判断值是否发生变化，它是不可靠的.他会创建一个原子变量来表示这个数据发生变化与否
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/7 19:31
  * @since 1.0
  */

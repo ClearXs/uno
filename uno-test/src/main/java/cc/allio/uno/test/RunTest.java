@@ -2,6 +2,7 @@ package cc.allio.uno.test;
 
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.env.annotation.ImportAutoConfiguration;
+import cc.allio.uno.test.listener.Listener;
 import cc.allio.uno.test.runner.Runner;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.boot.SpringApplication;
@@ -16,9 +17,10 @@ import java.lang.annotation.*;
 /**
  * 运行的测试环境
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/9/15 17:39
  * @see RunTestAttributes
+ * @see TestManager
  * @since 1.1.0
  */
 @Documented
@@ -31,13 +33,11 @@ public @interface RunTest {
 
     /**
      * 配置文件名称
-     *
      */
     String profile() default "uno";
 
     /**
      * 配置文件对应环境
-     *
      */
     String active() default "test";
 
@@ -77,7 +77,7 @@ public @interface RunTest {
      *
      * @return TestListener
      */
-    Class<? extends TestListener>[] listeners() default {};
+    Class<? extends Listener>[] listeners() default {};
 
     /**
      * 参考于SpringBootTest WebEnvironment

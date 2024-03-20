@@ -1,14 +1,16 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
+import cc.allio.uno.data.orm.dsl.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
 
 /**
- * SQL 查询是否存在指定表
+ * Exist Operator
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/17 09:46
  * @since 1.1.4
+ * @see OperatorGroup
  */
 public interface ExistTableOperator extends PrepareOperator<ExistTableOperator>, TableOperator<ExistTableOperator> {
 

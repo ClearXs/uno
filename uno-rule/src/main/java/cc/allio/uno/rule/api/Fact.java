@@ -11,7 +11,7 @@ import java.util.Map;
 /**
  * rule 事实对象
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/4/23 17:21
  * @since 1.1.4
  */

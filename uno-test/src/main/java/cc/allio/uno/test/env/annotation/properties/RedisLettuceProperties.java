@@ -5,7 +5,7 @@ import java.lang.annotation.*;
 /**
  * {@link org.springframework.boot.autoconfigure.data.redis.RedisProperties.Pool}的注解描述
  *
- * @author jiangwei
+ * @author j.x
  * @date 2023/3/13 19:44
  * @since 1.1.4
  */

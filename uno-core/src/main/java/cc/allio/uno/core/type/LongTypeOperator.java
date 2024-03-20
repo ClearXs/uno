@@ -3,7 +3,7 @@ package cc.allio.uno.core.type;
 /**
  * Long类型转换器，可能抛出NumberFormatException异常
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/24 15:42
  * @since 1.0
  */

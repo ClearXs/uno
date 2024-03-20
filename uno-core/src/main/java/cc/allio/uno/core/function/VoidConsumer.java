@@ -5,7 +5,7 @@ import java.util.function.Consumer;
 /**
  * 不接收如何参数的消费者
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/9 15:57
  * @since 1.1.7
  */

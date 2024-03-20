@@ -8,7 +8,7 @@ import java.util.function.Predicate;
 /**
  * 连接认证器，实现类通过带上{@link AutoService}进行注入SPI。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/7/29 14:43
  * @since 1.0
  */

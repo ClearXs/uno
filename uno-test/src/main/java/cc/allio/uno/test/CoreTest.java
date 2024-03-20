@@ -1,11 +1,17 @@
 package cc.allio.uno.test;
 
+import cc.allio.uno.core.api.Self;
+import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.test.env.Environment;
 import cc.allio.uno.test.env.EnvironmentFacade;
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.runner.CoreRunner;
 import cc.allio.uno.test.runner.Runner;
+import cc.allio.uno.test.testcontainers.Container;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.annotation.MergedAnnotation;
@@ -19,20 +25,39 @@ import java.util.stream.Collectors;
 /**
  * 提供uno.core下基础的Spring环境
  *
- * @author jiangwei
+ * @author j.x
  * @date 2022/2/14 14:03
  * @since 1.0
  */
+@Getter
 @Slf4j
-public class CoreTest extends BaseSpringTest {
+public class CoreTest extends BaseSpringTest implements Self<CoreTest> {
 
-    // 当前进行测试的class对象
+    /**
+     * 当前进行测试的class对象
+     */
     private final Class<?> testClass;
+
+    @Setter
     private EnvironmentFacade env;
-    // 测试runner实例对象
+
+    /**
+     * 测试runner实例对象
+     */
+    @Setter
     private CoreRunner coreRunner;
-    // 构建{@link Environment}对象
+
+    /**
+     * 构建{@link Environment}对象
+     */
+    @Setter
     private Set<Visitor> visitors;
+
+    /**
+     * test run in container environment
+     */
+    @Setter
+    private Container container;
 
     public CoreTest() {
         this(null);
@@ -42,19 +67,15 @@ public class CoreTest extends BaseSpringTest {
         this.testClass = Objects.requireNonNullElseGet(testClass, this::getClass);
     }
 
-    // ----------------- lifecycle -----------------
-
     @Override
     protected void onInitSpringEnv() throws Throwable {
-        CoreRunner coreRunner = getCoreRunner();
         if (coreRunner != null) {
-            Collection<Runner> registerRunner = getCoreRunner().getRegisterRunner();
+            Collection<Runner> registerRunner = coreRunner.getRegisterRunner();
             for (Runner runner : registerRunner) {
                 try {
                     runner.run(this);
                 } catch (Throwable ex) {
-                    // ignore Exception
-                    log.error("run is failed", ex);
+                    throw Exceptions.unchecked(ex);
                 }
             }
         }
@@ -62,14 +83,12 @@ public class CoreTest extends BaseSpringTest {
 
     @Override
     protected void onRefreshComplete() throws Throwable {
-        CoreRunner coreRunner = getCoreRunner();
         if (coreRunner != null) {
-            for (Runner runner : getCoreRunner().getRefreshCompleteRunner()) {
+            for (Runner runner : coreRunner.getRefreshCompleteRunner()) {
                 try {
                     runner.run(this);
                 } catch (Throwable ex) {
-                    // ignore Exception
-                    log.error("runner: {} run is failed", runner, ex);
+                    throw Exceptions.unchecked(ex);
                 }
             }
         }
@@ -77,14 +96,12 @@ public class CoreTest extends BaseSpringTest {
 
     @Override
     protected void onContextClose() throws Throwable {
-        CoreRunner coreRunner = getCoreRunner();
         if (coreRunner != null) {
-            for (Runner runner : getCoreRunner().getCloseRunner()) {
+            for (Runner runner : coreRunner.getCloseRunner()) {
                 try {
                     runner.run(this);
                 } catch (Throwable ex) {
-                    // ignore Exception
-                    log.error("runner: {} run is failed", runner, ex);
+                    throw Exceptions.unchecked(ex);
                 }
             }
         }
@@ -95,73 +112,11 @@ public class CoreTest extends BaseSpringTest {
         return new RunTestAttributes(getTestClass());
     }
 
-    // ----------------- getValue/setValue -----------------
-
-    public void setEnv(EnvironmentFacade env) {
-        this.env = env;
-    }
-
     /**
-     * 获取当前测试的环境实例
-     *
-     * @return
-     */
-    public EnvironmentFacade getEnv() {
-        return env;
-    }
-
-    /**
-     * setValue CoreRunner
-     *
-     * @param coreRunner coreRunner
-     */
-    public void setCoreRunner(CoreRunner coreRunner) {
-        this.coreRunner = coreRunner;
-    }
-
-    /**
-     * getValue coreRunner
-     *
-     * @return coreRunner
-     */
-    public CoreRunner getCoreRunner() {
-        return coreRunner;
-    }
-
-    /**
-     * 设置Visitor
-     *
-     * @param visitors visitors
-     */
-    public void setVisitors(Set<Visitor> visitors) {
-        this.visitors = visitors;
-    }
-
-    /**
-     * 获取Visitor
-     *
-     * @return visitors
-     */
-    public Set<Visitor> getVisitors() {
-        return this.visitors;
-    }
-
-    /**
-     * 获取当前测试class对象
-     *
-     * @return testClass
-     */
-    public Class<?> getTestClass() {
-        return testClass;
-    }
-
-    /**
-     * 获取当前测试实例
-     *
-     * @return this
+     * obtain test instance
      */
     public Object getTestInstance() {
-        return this;
+        return null;
     }
 
     // ----------------- annotation -----------------
@@ -217,7 +172,6 @@ public class CoreTest extends BaseSpringTest {
         }
         return annotation;
     }
-
 
     /**
      * 判断指定的注解是否存在，先判断是否在测试类上，在判断是否在{@link RunTest#components()}中给定的配置类上

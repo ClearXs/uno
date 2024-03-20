@@ -22,15 +22,12 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
 /**
  * Helper
  *
- * @author jiangwei
+ * @author j.x
  * @date 2024/1/3 22:25
  * @since 1.1.7
  */
 @Slf4j
 public final class SPIOperatorHelper {
-
-    private SPIOperatorHelper() {
-    }
 
     private static final Map<OperatorKey, OperatorTraitGroup> OTG_CACHES = Maps.newConcurrentMap();
     private static final ReadWriteLock lock = new ReentrantReadWriteLock();
@@ -38,7 +35,7 @@ public final class SPIOperatorHelper {
     /**
      * @see #lazyGet(Class, OperatorKey, DBType)
      */
-    public static <T extends Operator<T>> T lazyGet(Class<T> operatorClass, OperatorKey operatorKey) {
+    public static <T extends Operator<?>> T lazyGet(Class<T> operatorClass, OperatorKey operatorKey) {
         return lazyGet(operatorClass, operatorKey, null);
     }
 
@@ -53,7 +50,7 @@ public final class SPIOperatorHelper {
      * @throws DSLException             当通过SPI没有找到获取实例化失败时抛出
      * @throws IllegalArgumentException operatorClass or groupKey为null时抛出
      */
-    public static <T extends Operator<T>> T lazyGet(Class<T> operatorClass, OperatorKey operatorKey, DBType dbType) {
+    public static <T extends Operator<?>> T lazyGet(Class<T> operatorClass, OperatorKey operatorKey, DBType dbType) {
         if (operatorClass == null || operatorKey == null) {
             throw new IllegalArgumentException("The parameter operatorClass or groupKey is null");
         }
@@ -96,7 +93,7 @@ public final class SPIOperatorHelper {
         } catch (Throwable ex) {
             err = ex;
         }
-        if (result == null || err != null) {
+        if (result == null) {
             try {
                 compensate.doAccept();
                 result = action.get();
@@ -171,7 +168,6 @@ public final class SPIOperatorHelper {
             }
             this.traits.add(trait);
         }
-
     }
 
     @Data
@@ -195,12 +191,8 @@ public final class SPIOperatorHelper {
             }
         }
 
-        public <T extends Operator<T>> T newInstance() {
-            return this.newInstance(null);
-        }
-
-        public <T extends Operator<T>> T newInstance(DBType dbType) {
-            Operator<?> sqlOperator = null;
+        public <T extends Operator<?>> T newInstance(DBType dbType) {
+            Operator<?> sqlOperator;
             try {
                 if (dbType == null) {
                     sqlOperator = ClassUtils.newInstance(clazz);

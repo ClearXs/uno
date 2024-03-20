@@ -9,7 +9,7 @@ import java.util.concurrent.TimeUnit;
  * <p/>
  * <b>CronTask</b>使用Cron表达式来指定任务在什么时段定时执行。
  *
- * @author jiangwei
+ * @author j.x
  * @date 2021/12/30 15:41
  * @see CronExpression
  * @since 1.0
