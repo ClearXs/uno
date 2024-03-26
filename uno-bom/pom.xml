@@ -12,12 +12,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>cc.allio</groupId>
     <artifactId>uno-bom</artifactId>
-    <version>1.1.7</version>
+    <version>1.1.8</version>
     <packaging>pom</packaging>
 
     <properties>
         <!-- 统一版本管理 -->
-        <uno.version>1.1.7</uno.version>
+        <uno.version>1.1.8</uno.version>
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
