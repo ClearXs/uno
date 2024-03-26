@@ -82,7 +82,7 @@ class MongodbCommandExecutorTest extends BaseTestCase implements CommandExecutor
         assertEquals(1, resultGroups.size());
         Map<String, Object> map = resultGroups.get(0).toMap();
         assertEquals("a", map.get("a"));
-        
+
     }
 
     void prepareValues() {
