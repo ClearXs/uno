@@ -4,10 +4,12 @@ import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.api.Adapter;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
+import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
+import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
+import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
@@ -147,7 +149,18 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
     }
 
     @Override
-    protected <R> List<R> doQueryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+    protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        QueryOperator queryOperator;
+        if (commandType == CommandType.SELECT) {
+            queryOperator = (QueryOperator) operator;
+        } else if (commandType == CommandType.SHOW_TABLES) {
+            queryOperator = ((ShowTablesOperator) operator).toQueryOperator();
+        } else if (commandType == CommandType.SHOW_COLUMNS) {
+            queryOperator = ((ShowColumnsOperator) operator).toQueryOperator();
+        } else {
+            throw new DSLException(String.format("un accept command to Db query list %s", commandType));
+        }
+
         String querySQL = queryOperator.getPrepareDSL();
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, querySQL, null);
         // 构建ResultMap对象

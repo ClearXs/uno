@@ -50,6 +50,7 @@ public final class ReflectTools {
     /**
      * get specific generic type by index
      *
+     * @param index determinate generic type index, ignore if indistinct
      * @return index generic type or null
      * @see #obtainGenericTypes(Class, Class)
      */
@@ -123,7 +124,11 @@ public final class ReflectTools {
                         if (superType instanceof ParameterizedType parameterizedSuperType) {
                             Type[] actualTypeArguments = parameterizedSuperType.getActualTypeArguments();
                             try {
-                                return Arrays.stream(actualTypeArguments).map(Class.class::cast).toArray(Class[]::new);
+                                return Arrays.stream(actualTypeArguments)
+                                        // t must be class type
+                                        .filter(t -> Class.class.isAssignableFrom(t.getClass()))
+                                        .map(Class.class::cast)
+                                        .toArray(Class[]::new);
                             } catch (Throwable ex) {
                                 log.error("obtain generic type by obj class {} from super class {}, happen class cast error", objClass.getName(), superClassOrInterface.getName(), ex);
                                 return new Class[0];
@@ -183,6 +188,5 @@ public final class ReflectTools {
     static class BinaryClassKey {
         private final Class<?> cls1;
         private final Class<?> cls2;
-
     }
 }

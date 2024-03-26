@@ -1,15 +1,27 @@
 package cc.allio.uno.data.orm.executor.mongodb.internal;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.util.Requires;
+import cc.allio.uno.data.orm.dsl.DSLName;
+import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.mongodb.dml.MongodbQueryOperator;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
+import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.ResultSet;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.QOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import com.google.common.collect.Lists;
+import com.mongodb.client.FindIterable;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * mongodb query command executor
@@ -31,6 +43,31 @@ public class MongodbQueryCommandExecutor<R> implements QOInnerCommandExecutor<R,
 
     @Override
     public List<R> doExec(MongodbQueryOperator operator, ListResultSetHandler<R> handler) throws Throwable {
-        return null;
+        // validate
+        Table fromColl = operator.getTable();
+        Requires.isNotNull(fromColl, "from collection");
+
+        MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
+        Bson filter = operator.getFilter();
+        FindIterable<Document> documents = collection.find(filter);
+
+        List<ResultGroup> resultGroups =
+                Lists.newArrayList(documents)
+                        .stream()
+                        .map(document -> {
+                            ResultGroup resultGroup = new ResultGroup();
+                            for (Map.Entry<String, Object> dEntry : document.entrySet()) {
+                                ResultRow row = ResultRow.builder()
+                                        .column(DSLName.of(dEntry.getKey()))
+                                        .value(dEntry.getValue())
+                                        .build();
+                                resultGroup.addRow(row);
+                            }
+                            return resultGroup;
+                        })
+                        .toList();
+        ResultSet resultSet = new ResultSet();
+        resultSet.setResultGroups(resultGroups);
+        return handler.apply(resultSet);
     }
 }

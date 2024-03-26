@@ -68,7 +68,7 @@ public interface CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    <R> List<R> queryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler);
+    <R> List<R> queryList(Operator<?> queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler);
 
     /**
      * 检查给定的集合是否只有一个元素

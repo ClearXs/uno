@@ -22,7 +22,7 @@ public class FakeCommandExecutor implements AggregateCommandExecutor {
     }
 
     @Override
-    public <R> List<R> queryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+    public <R> List<R> queryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
         throw Exceptions.unOperate("queryList");
     }
 

@@ -58,6 +58,29 @@ public interface Operator<T extends Operator<T>> {
     }
 
     /**
+     * according to operator type, this type maybe is subtype, so translate specifies operator type
+     * <p>rules</p>
+     * <ul>
+     *     <li>current operator type must be class-type</li>
+     *     <li>find operator type first interface if {@link Operator} </li>
+     * </ul>
+     *
+     * @param operatorType operatorType
+     * @return {@link Operator} or parent type
+     */
+    static Class<? extends Operator<?>> getHireachialType(Class<? extends Operator<?>> operatorType) {
+        if (!operatorType.isInterface()) {
+            Class<?>[] interfaces = operatorType.getInterfaces();
+            for (Class<?> hireachial : interfaces) {
+                if (Operator.class.isAssignableFrom(hireachial)) {
+                    return (Class<? extends Operator<?>>) hireachial;
+                }
+            }
+        }
+        return operatorType;
+    }
+
+    /**
      * Operator 分组注解
      */
     @Documented

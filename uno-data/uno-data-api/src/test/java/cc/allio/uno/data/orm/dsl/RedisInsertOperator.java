@@ -10,7 +10,7 @@ import java.util.function.Supplier;
 
 @AutoService(InsertOperator.class)
 @Operator.Group(OperatorKey.REDIS_LITERAL)
-public class RedisSQLInsertOperator implements InsertOperator {
+public class RedisInsertOperator implements InsertOperator {
     @Override
     public String getDSL() {
         return null;

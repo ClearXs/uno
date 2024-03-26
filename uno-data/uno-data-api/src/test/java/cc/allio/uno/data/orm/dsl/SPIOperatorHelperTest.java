@@ -8,7 +8,7 @@ import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
 
-public class SPIOperatorHelperTest extends BaseTestCase {
+class SPIOperatorHelperTest extends BaseTestCase {
 
     @Test
     void testJustFindOne() {
@@ -39,5 +39,11 @@ public class SPIOperatorHelperTest extends BaseTestCase {
     @Test
     void testNotFoundOperator() {
         assertThrows(DSLException.class, () -> SPIOperatorHelper.lazyGet(UpdateOperator.class, OperatorKey.SQL));
+    }
+
+    @Test
+    void testFindHireachicalOperator() {
+        var show = SPIOperatorHelper.lazyGet(RedisShowColumnsOperator.class, OperatorKey.REDIS);
+        assertNotNull(show);
     }
 }

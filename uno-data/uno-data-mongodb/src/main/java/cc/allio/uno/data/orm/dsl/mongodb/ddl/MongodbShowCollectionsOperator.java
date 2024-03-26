@@ -8,6 +8,10 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import org.bson.BsonArray;
+import org.bson.BsonDocument;
+import org.bson.BsonInt32;
+import org.bson.BsonString;
 
 import java.util.List;
 
@@ -18,14 +22,13 @@ import java.util.List;
  * @date 2024/3/12 01:11
  * @since 1.1.7
  */
+@Getter
 @AutoService(ShowTablesOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
 public class MongodbShowCollectionsOperator implements ShowTablesOperator {
 
-    @Getter
     private Database fromDb;
 
-    @Getter
     private final List<Table> tables = Lists.newArrayList();
 
     @Override
@@ -34,9 +37,21 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
         return self();
     }
 
+    // @see https://www.mongodb.com/docs/manual/reference/command/listCollections/#std-label-list-collection-output
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        if (tables.isEmpty()) {
+            throw Exceptions.unOperate("check collections is empty");
+        }
+        BsonDocument bson = new BsonDocument("listCollections", new BsonInt32(1));
+
+        BsonArray collections = new BsonArray();
+        for (Table table : tables) {
+            collections.add(new BsonString(table.getName().format()));
+        }
+        BsonDocument filter = new BsonDocument("name", new BsonDocument("$eq", collections));
+        bson.append("filter", filter);
+        return bson.toJson();
     }
 
     @Override
@@ -62,7 +77,7 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
 
     @Override
     public String getPrepareDSL() {
-        throw Exceptions.unOperate("getPrepareDSL");
+        return getDSL();
     }
 
     @Override

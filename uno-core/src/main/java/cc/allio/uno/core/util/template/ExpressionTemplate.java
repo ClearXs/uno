@@ -48,7 +48,7 @@ public interface ExpressionTemplate {
      * @param v1       模板变量v
      * @return 解析完成的字符串
      */
-    default String paresTemplate(String template, String k1, Object v1) {
+    default String parseTemplate(String template, String k1, Object v1) {
         return parseTemplate(template, Tuples.of(k1, v1));
     }
 

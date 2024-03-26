@@ -13,6 +13,7 @@ import cc.allio.uno.data.orm.executor.internal.DTOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.internal.operation.DropCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
@@ -21,6 +22,7 @@ import org.bson.Document;
  *
  * @author j.x
  * @date 2024/3/15 11:17
+ * @see DropCollectionOperation
  * @since 1.1.7
  */
 @Slf4j

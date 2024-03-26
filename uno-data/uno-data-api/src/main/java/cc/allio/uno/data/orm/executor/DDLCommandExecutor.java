@@ -284,7 +284,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @return ColumnDef
      */
     default List<ColumnDef> showColumns(ShowColumnsOperator showColumnsOperator) {
-        return queryList(showColumnsOperator.toQueryOperator(), CommandType.SHOW_COLUMNS, getOptions().obtainColumnDefListResultSetHandler());
+        return queryList(showColumnsOperator, CommandType.SHOW_COLUMNS, getOptions().obtainColumnDefListResultSetHandler());
     }
 
     /**
@@ -333,7 +333,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @return List<Table>
      */
     default List<Table> showTables(ShowTablesOperator showTablesOperator) {
-        return queryList(showTablesOperator.toQueryOperator(), CommandType.SHOW_TABLES, getOptions().obtainTableListResultSetHandler());
+        return queryList(showTablesOperator, CommandType.SHOW_TABLES, getOptions().obtainTableListResultSetHandler());
     }
 
     /**

@@ -12,6 +12,7 @@ import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.CTOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.internal.operation.CreateCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
  *
  * @author j.x
  * @date 2024/3/15 10:59
+ * @see CreateCollectionOperation
  * @since 1.1.7
  */
 @Slf4j

@@ -3,7 +3,6 @@ package cc.allio.uno.data.orm.executor.elasticsearch;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
@@ -19,7 +18,6 @@ import org.elasticsearch.client.RestClientBuilder;
 
 import java.io.IOException;
 import java.net.SocketTimeoutException;
-import java.util.List;
 
 /**
  * 基于es的SQL执行器
@@ -43,15 +41,6 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Aggreg
         this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.ELASTICSEARCH);
         SPIInnerCommandScanner scanner = options.getScanner();
         this.manager = scanner.scan(new ElasticsearchIndicesClient(transport), new ElasticsearchClient(transport));
-    }
-
-    @Override
-    public List<ColumnDef> showColumns(ShowColumnsOperator operator) {
-        try {
-            return manager.getShowColumn().exec(operator, getOptions().obtainColumnDefListResultSetHandler());
-        } catch (Throwable ex) {
-            throw new DSLException("exec show columns has err", ex);
-        }
     }
 
     @Override

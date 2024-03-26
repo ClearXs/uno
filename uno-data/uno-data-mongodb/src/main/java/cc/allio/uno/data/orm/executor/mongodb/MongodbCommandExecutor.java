@@ -1,15 +1,11 @@
 package cc.allio.uno.data.orm.executor.mongodb;
 
+import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
-import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.executor.AbstractCommandExecutor;
 import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
-import cc.allio.uno.data.orm.executor.CommandType;
-import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
-import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
@@ -19,7 +15,6 @@ import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
 
 import java.net.SocketTimeoutException;
-import java.util.List;
 
 /**
  * command executor for document database mongodb implementation
@@ -30,7 +25,8 @@ import java.util.List;
  */
 public class MongodbCommandExecutor extends AbstractCommandExecutor implements AggregateCommandExecutor {
 
-    private static final String MONGO_CONNECTION_TEMPLATE = "mongodb://#{username}:#{password}@#{address}/?retryWrites=true&w=majority";
+    private static final String MONGO_CONNECTION_TEMPLATE = "mongodb://#{username}:#{password}@#{address}/?retryWrites=true&w=majority&directConnection=true&serverSelectionTimeoutMS=2000";
+    private static final String NO_AUTH_MONGO_CONNECTION_TEMPLATE = "mongodb://#{address}/?retryWrites=true&w=majority&directConnection=true&serverSelectionTimeoutMS=2000";
     private static final ExpressionTemplate TEMPLATE_PARSER = ExpressionTemplate.defaultTemplate();
 
     private final MongoClient mongoClient;
@@ -44,13 +40,19 @@ public class MongodbCommandExecutor extends AbstractCommandExecutor implements A
         String username = options.getUsername();
         String password = options.getPassword();
         String address = options.getAddress();
-        String url = TEMPLATE_PARSER.parseTemplate(MONGO_CONNECTION_TEMPLATE, "username", username, "password", password, "address", address);
+        String url;
+        if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
+            url = TEMPLATE_PARSER.parseTemplate(NO_AUTH_MONGO_CONNECTION_TEMPLATE, "address", address);
+        } else {
+
+            url = TEMPLATE_PARSER.parseTemplate(MONGO_CONNECTION_TEMPLATE, "username", username, "password", password, "address", address);
+        }
         String databaseName = options.getDatabase();
         this.mongoClient = MongoClients.create(url);
         this.database = mongoClient.getDatabase(databaseName);
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.ELASTICSEARCH);
+        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.MONGODB);
         SPIInnerCommandScanner scanner = options.getScanner();
-        this.manager = scanner.scan(database);
+        this.manager = scanner.scan(database, mongoClient);
     }
 
     @Override
