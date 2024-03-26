@@ -17,10 +17,10 @@ import java.util.List;
  */
 public class TableListResultSetHandler extends ExecutorOptionsAwareImpl implements ListResultSetHandler<Table> {
 
-    private static final DSLName TABLE_CATALOG_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.HUMP_FEATURE);
-    private static final DSLName TABLE_SCHEMA_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.HUMP_FEATURE);
-    private static final DSLName TABLE_NAME_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.HUMP_FEATURE);
-    private static final DSLName TABLE_TYPE_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.HUMP_FEATURE);
+    public static final DSLName TABLE_CATALOG_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.HUMP_FEATURE);
+    public static final DSLName TABLE_SCHEMA_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.HUMP_FEATURE);
+    public static final DSLName TABLE_NAME_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.HUMP_FEATURE);
+    public static final DSLName TABLE_TYPE_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.HUMP_FEATURE);
 
     @Override
     public List<Table> apply(ResultSet resultSet) {

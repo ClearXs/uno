@@ -22,7 +22,7 @@ public enum CommandType {
     UNKNOWN(null),
     ALERT_TABLE(AlterTableOperator.class),
     CREATE_TABLE(CreateTableOperator.class),
-    DELETE_TABLE(DeleteOperator.class),
+    DELETE_TABLE(DropTableOperator.class),
     EXIST_TABLE(ExistTableOperator.class),
     INSERT(InsertOperator.class),
     UPDATE(UpdateOperator.class),
@@ -45,11 +45,13 @@ public enum CommandType {
         if (o == null) {
             return null;
         }
+        // try get hirachical
+        Class<? extends Operator<?>> hireachialType = Operator.getHireachialType(o);
         for (CommandType commandType : values()) {
-            if (commandType.operatorClass == null) {
-                return null;
+            if (commandType == UNKNOWN || commandType == FLUSH) {
+                continue;
             }
-            if (commandType.operatorClass.isAssignableFrom(o)) {
+            if (commandType.operatorClass.isAssignableFrom(hireachialType)) {
                 return commandType;
             }
         }

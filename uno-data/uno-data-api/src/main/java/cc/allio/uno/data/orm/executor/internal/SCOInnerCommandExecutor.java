@@ -11,10 +11,10 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
  * @date 2024/3/15 04:36
  * @since 1.1.7
  */
-public interface SCOInnerCommandExecutor<O extends ShowColumnsOperator> extends InnerListCommandExecutor<ColumnDef, O> {
+public interface SCOInnerCommandExecutor<R, O extends ShowColumnsOperator> extends InnerListCommandExecutor<R, O> {
 
     @Override
     default Class<O> getRealityOperatorType() {
-        return (Class<O>) ReflectTools.getGenericType(this, SCOInnerCommandExecutor.class);
+        return (Class<O>) ReflectTools.getGenericType(this, SCOInnerCommandExecutor.class, 1);
     }
 }

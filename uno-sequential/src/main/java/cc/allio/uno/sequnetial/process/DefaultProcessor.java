@@ -91,7 +91,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
      */
     private void onDispatch(SequentialContext context) {
         Sequential sequential = context.getRealSequential();
-        String topic = TOPIC_TEMPLATE_PARSER.paresTemplate(TOPIC_TEMPLATE, "type", sequential.getType().getCode());
+        String topic = TOPIC_TEMPLATE_PARSER.parseTemplate(TOPIC_TEMPLATE, "type", sequential.getType().getCode());
         Mono.justOrEmpty(sequential).filter(s -> typeManager.contains(s.getType()))
                 .then(Mono.defer(() ->
                         // 判断是否存在指定主题，如果不存在则创建订阅关系，随后向该订阅关系发布时序数据

@@ -11,8 +11,11 @@ import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.ETOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import com.google.common.collect.Lists;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.MongoIterable;
+import com.mongodb.internal.operation.ListCollectionsOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
@@ -21,6 +24,7 @@ import org.bson.Document;
  *
  * @author j.x
  * @date 2024/3/15 11:20
+ * @see ListCollectionsOperation
  * @since 1.1.7
  */
 @Slf4j
@@ -42,8 +46,10 @@ public class MongodbExistCollectionCommandExecutor implements ETOInnerCommandExe
         ResultRow.ResultRowBuilder builder = ResultRow.builder();
         builder.column(BoolResultHandler.GUESS_UPDATE_OR_UPDATE);
         try {
-            MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
-            builder.value(collection != null);
+            boolean present = Lists.newArrayList(database.listCollectionNames())
+                    .stream()
+                    .anyMatch(c -> c.equals(fromColl.getName().format()));
+            builder.value(present);
         } catch (Throwable ex) {
             log.error("mongodb exist collection has error", ex);
             builder.value(false);

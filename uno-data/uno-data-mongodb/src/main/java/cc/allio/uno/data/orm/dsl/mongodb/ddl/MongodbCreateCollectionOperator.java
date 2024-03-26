@@ -9,6 +9,8 @@ import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import lombok.Getter;
+import org.bson.BsonDocument;
+import org.bson.BsonString;
 
 /**
  * mongodb create collection operator
@@ -17,16 +19,21 @@ import lombok.Getter;
  * @date 2024/3/12 00:57
  * @since 1.1.7
  */
+@Getter
 @AutoService(CreateTableOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
 public class MongodbCreateCollectionOperator implements CreateTableOperator {
 
-    @Getter
     private Table fromColl;
 
+    // @see https://www.mongodb.com/docs/mongodb-vscode/playground-databases/
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        if (fromColl == null) {
+            throw Exceptions.unNull("from coll is null");
+        }
+        BsonDocument bson = new BsonDocument("create", new BsonString(fromColl.getName().format()));
+        return bson.toJson();
     }
 
     @Override

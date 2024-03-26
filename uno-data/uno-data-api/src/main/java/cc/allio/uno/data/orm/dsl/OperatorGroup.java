@@ -41,6 +41,13 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends QueryOperator> T getQueryOperator(Class<T> queryOperatorClass, OperatorKey operatorKey) {
+        return getOperator(queryOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends QueryOperator> T getQueryOperator(Class<T> queryOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(queryOperatorClass, operatorKey, dbType);
     }
@@ -61,6 +68,13 @@ public interface OperatorGroup {
      * @return InsertOperator
      */
     InsertOperator insert(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends InsertOperator> T getInsertOperator(Class<T> insertOperatorClass, OperatorKey operatorKey) {
+        return getOperator(insertOperatorClass, operatorKey, null);
+    }
 
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
@@ -89,6 +103,13 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends UpdateOperator> T getUpdateOperator(Class<T> updateOperatorClass, OperatorKey operatorKey) {
+        return getOperator(updateOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends UpdateOperator> T getUpdateOperator(Class<T> updateOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(updateOperatorClass, operatorKey, dbType);
     }
@@ -108,6 +129,13 @@ public interface OperatorGroup {
      * @return SQLDeleteOperator
      */
     DeleteOperator delete(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends DeleteOperator> T getDeleteOperator(Class<T> deleteOperatorClass, OperatorKey operatorKey) {
+        return getOperator(deleteOperatorClass, operatorKey, null);
+    }
 
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
@@ -138,6 +166,13 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends CreateTableOperator> T getCreateTableOperator(Class<T> createTableOperatorClass, OperatorKey operatorKey) {
+        return getOperator(createTableOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends CreateTableOperator> T getCreateTableOperator(Class<T> createTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(createTableOperatorClass, operatorKey, dbType);
     }
@@ -158,6 +193,13 @@ public interface OperatorGroup {
      * @return DropTableOperator
      */
     DropTableOperator dropTable(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends DropTableOperator> T getDropTableOperator(Class<T> dropTableOperatorClass, OperatorKey operatorKey) {
+        return getOperator(dropTableOperatorClass, operatorKey, null);
+    }
 
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
@@ -186,6 +228,13 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends ExistTableOperator> T getExistTableOperator(Class<T> existTableOperatorClass, OperatorKey operatorKey) {
+        return getOperator(existTableOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends ExistTableOperator> T getExistTableOperator(Class<T> existTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(existTableOperatorClass, operatorKey, dbType);
     }
@@ -206,6 +255,13 @@ public interface OperatorGroup {
      * @return ShowColumnsOperator
      */
     ShowColumnsOperator showColumns(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends ShowColumnsOperator> T getShowColumnsOperator(Class<T> showColumnsOperatorClass, OperatorKey operatorKey) {
+        return getOperator(showColumnsOperatorClass, operatorKey, null);
+    }
 
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
@@ -234,6 +290,13 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends ShowTablesOperator> T getShowTablesOperator(Class<T> showTablesOperatorClass, OperatorKey operatorKey) {
+        return getOperator(showTablesOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends ShowTablesOperator> T getShowTablesOperator(Class<T> showTablesOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(showTablesOperatorClass, operatorKey, dbType);
     }
@@ -256,14 +319,21 @@ public interface OperatorGroup {
     /**
      * @see #getOperator(Class, OperatorKey, DBType)
      */
+    static <T extends AlterTableOperator> T getAlterTableOperator(Class<T> alterTableOperatorClass, OperatorKey operatorKey) {
+        return getOperator(alterTableOperatorClass, operatorKey, null);
+    }
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
     static <T extends AlterTableOperator> T getAlterTableOperator(Class<T> alterTableOperatorClass, OperatorKey operatorKey, DBType dbType) {
         return getOperator(alterTableOperatorClass, operatorKey, dbType);
     }
 
     /**
-     * 获取当前系统的SQL Operator
+     * 获取当前系统的OperatorGroup
      *
-     * @return OperatorMetadata or DruidOperatorMetadata
+     * @see #getOperatorGroup(OperatorKey)
      */
     static OperatorGroup getSystemOperatorGroup() {
         OperatorKey systemOperatorKey = OperatorKey.getSystemOperatorKey();
@@ -273,6 +343,11 @@ public interface OperatorGroup {
         return getOperatorGroup(systemOperatorKey);
     }
 
+    /**
+     * base on operator key gain {@link OperatorGroup}
+     *
+     * @return {@link OperatorGroup} or null
+     */
     static OperatorGroup getOperatorGroup(OperatorKey operatorKey) {
         if (operatorKey != null) {
             return new OperatorGroupImpl(operatorKey);

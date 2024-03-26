@@ -10,6 +10,7 @@ import com.mongodb.client.model.Filters;
 import lombok.Getter;
 import org.bson.conversions.Bson;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -24,7 +25,7 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
     @Getter
     protected Bson filter;
     private MongodbLogical logical;
-    private final List<Bson> expression;
+    private List<Bson> expression;
 
     public MongodbWhereOperatorImpl() {
         this.filter = Filters.empty();
@@ -198,7 +199,11 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
 
     @Override
     public T or() {
-        this.expression.clear();
+        // 采用 this.expression.clear() 在重新添加filter，将会报下面错误：
+        // *** java.lang.instrument ASSERTION FAILED ***: "!errorOutstanding" with message transform method call failed at open/src/java.instrument/share/native/libinstrument/JPLISAgent.c line: 884
+        // 并且将会产生StackOverflow
+        // 没有找到解决原因 https://stackoverflow.com/questions/60526670/what-is-the-meaning-cause-of-java-lang-instrument-assertion-failed-er
+        this.expression = Lists.newArrayList();
         this.expression.add(filter);
         this.logical = new MongodbOrLogical();
         this.filter = this.logical.doAccept(expression);
@@ -207,7 +212,7 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
 
     @Override
     public T and() {
-        this.expression.clear();
+        this.expression = Lists.newArrayList();
         this.expression.add(filter);
         this.logical = new MongodbAndLogical();
         this.filter = this.logical.doAccept(expression);
@@ -216,7 +221,7 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
 
     @Override
     public T nor() {
-        this.expression.clear();
+        this.expression = Lists.newArrayList();
         this.expression.add(filter);
         this.logical = new MongodbNorLogical();
         this.filter = this.logical.doAccept(expression);
@@ -226,7 +231,7 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
     protected void clear() {
         this.filter = null;
         this.logical = new MongodbAndLogical();
-        this.expression.clear();
+        this.expression = new ArrayList<>();
     }
 
     interface MongodbLogical extends BiLogical<Bson, List<Bson>> {

@@ -28,7 +28,7 @@ import java.util.List;
 public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator> implements QueryOperator {
 
     private Table fromColl;
-    private final List<Bson> orders;
+    private List<Bson> orders;
     @Getter
     private Bson bsonOrder;
     @Getter
@@ -43,7 +43,6 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
 
     @Override
     public String getDSL() {
-
         return null;
     }
 
@@ -56,7 +55,7 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     public void reset() {
         clear();
         this.fromColl = null;
-        this.orders.clear();
+        this.orders = Lists.newArrayList();
         this.bsonOrder = null;
         this.bsonWindow = null;
     }

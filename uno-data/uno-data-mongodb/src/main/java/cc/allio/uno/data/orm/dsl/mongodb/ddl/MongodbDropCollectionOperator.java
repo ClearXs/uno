@@ -7,6 +7,9 @@ import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
+import com.mongodb.internal.operation.DropCollectionOperation;
+import org.bson.BsonDocument;
+import org.bson.BsonString;
 
 /**
  * mongodb drop collection operator
@@ -23,7 +26,11 @@ public class MongodbDropCollectionOperator implements DropTableOperator {
 
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        if (fromColl == null) {
+            throw Exceptions.unNull("from coll is null");
+        }
+        BsonDocument bson = new BsonDocument("drop", new BsonString(fromColl.getName().format()));
+        return bson.toJson();
     }
 
     @Override

@@ -34,7 +34,7 @@ import java.util.Map;
 @Slf4j
 @AutoService(SCOInnerCommandExecutor.class)
 @CommandExecutor.Group(ExecutorKey.ELASTICSEARCH_LITERAL)
-public class EsShowColumnCommandExecutor implements SCOInnerCommandExecutor<EsShowColumnsOperator> {
+public class EsShowColumnCommandExecutor implements SCOInnerCommandExecutor<ColumnDef, EsShowColumnsOperator> {
 
     private final ElasticsearchIndicesClient indicesClient;
 

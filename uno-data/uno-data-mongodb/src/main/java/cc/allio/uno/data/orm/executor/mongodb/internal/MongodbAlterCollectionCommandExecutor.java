@@ -13,6 +13,7 @@ import cc.allio.uno.data.orm.executor.internal.ATOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import com.mongodb.MongoNamespace;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.internal.operation.RenameCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 
 /**
@@ -21,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
  * @author j.x
  * @date 2024/3/15 10:51
  * @since 1.1.7
+ * @see RenameCollectionOperation
  */
 @Slf4j
 @AutoService(ATOInnerCommandExecutor.class)

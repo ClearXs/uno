@@ -5,6 +5,8 @@ import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.test.testcontainers.Container;
+import org.testcontainers.containers.GenericContainer;
+import org.testcontainers.containers.MongoDBContainer;
 
 /**
  * mongodb impl translator
@@ -14,6 +16,8 @@ import cc.allio.uno.test.testcontainers.Container;
  * @since 1.1.7
  */
 public class MongodbTranslator implements ContainerExecutorOptionsTranslator {
+
+    private static final int MONGODB_INTERNAL_PORT = 27017;
 
     @Override
     public DBType withDBType(Container testContainer) {
@@ -28,6 +32,12 @@ public class MongodbTranslator implements ContainerExecutorOptionsTranslator {
     @Override
     public OperatorKey withOperatorKey(Container testContainer) {
         return OperatorKey.MONGODB;
+    }
+
+    @Override
+    public String withAddress(Container testContainer) {
+        GenericContainer<?> internal = testContainer.getInternal();
+        return internal.getHost() + ":" + internal.getMappedPort(MONGODB_INTERNAL_PORT);
     }
 
     @Override

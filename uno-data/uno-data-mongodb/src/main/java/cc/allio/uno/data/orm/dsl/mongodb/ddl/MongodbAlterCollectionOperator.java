@@ -6,6 +6,9 @@ import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import lombok.Getter;
+import org.bson.BsonBoolean;
+import org.bson.BsonDocument;
+import org.bson.BsonString;
 
 import java.util.Collection;
 
@@ -24,9 +27,16 @@ public class MongodbAlterCollectionOperator implements AlterTableOperator {
     private Table fromColl;
     private Table toColl;
 
+    // @see https://www.mongodb.com/docs/manual/reference/command/renameCollection/
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        if (fromColl == null || toColl == null) {
+            throw Exceptions.unNull("from coll is null or to coll is null");
+        }
+        BsonDocument bson =
+                new BsonDocument("renameCollection", new BsonString(fromColl.getName().format()))
+                        .append("to", new BsonString(toColl.getName().format()));
+        return bson.toJson();
     }
 
     @Override

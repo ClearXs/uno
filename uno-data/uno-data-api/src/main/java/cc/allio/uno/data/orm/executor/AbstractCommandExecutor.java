@@ -1,5 +1,7 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
+import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.interceptor.*;
@@ -8,7 +10,8 @@ import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.internal.QOInnerCommandExecutor;
-import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
+import cc.allio.uno.data.orm.executor.internal.SCOInnerCommandExecutor;
+import cc.allio.uno.data.orm.executor.internal.STInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -59,10 +62,12 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
                 case CREATE_TABLE -> manager.getCreateTable().exec(operator, resultSetHandler);
                 case DELETE_TABLE -> manager.getDeleteTable().exec(operator, resultSetHandler);
                 case EXIST_TABLE -> manager.getExistTable().exec(operator, resultSetHandler);
+                case ALERT_TABLE -> manager.getAlter().exec(operator, resultSetHandler);
                 case INSERT -> manager.getInsert().exec(operator, resultSetHandler);
                 case UPDATE -> manager.getUpdate().exec(operator, resultSetHandler);
                 case DELETE -> manager.getDelete().exec(operator, resultSetHandler);
-                default -> false;
+                default -> throw new DSLException(String.format("unknown command type in bool %s, accepted " +
+                        "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType));
             };
         } catch (Throwable ex) {
             throw new DSLException(String.format("exec operator %s has err", operator.getClass().getName()), ex);
@@ -70,27 +75,37 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public <R> List<R> queryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+    public <R> List<R> queryList(Operator<?> queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
         return aspect(queryOperator, commandType, () -> doQueryList(queryOperator, commandType, resultSetHandler));
     }
 
     /**
      * 子类实现
      *
-     * @param queryOperator    QueryOperator
+     * @param <R>              返回结果类型
+     * @param operator         operator
      * @param commandType      命令类型
      * @param resultSetHandler 结果集处理器
-     * @param <R>              返回结果类型
      * @return List
      * @throws DSLException query failed throw
      */
-    protected <R> List<R> doQueryList(QueryOperator queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+    protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
         InnerCommandExecutorManager manager = getManager();
         if (manager == null) {
             throw new DSLException("inner command executor manager is null, can't execute operator");
         }
+
         try {
-            return manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(queryOperator, resultSetHandler);
+            return switch (commandType) {
+                case SHOW_TABLES ->
+                        manager.<R, ShowTablesOperator, STInnerCommandExecutor<R, ShowTablesOperator>>getShowTable().exec(operator, resultSetHandler);
+                case SHOW_COLUMNS ->
+                        manager.<R, ShowColumnsOperator, SCOInnerCommandExecutor<R, ShowColumnsOperator>>getShowColumn().exec(operator, resultSetHandler);
+                case SELECT ->
+                        manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(operator, resultSetHandler);
+                default ->
+                        throw new DSLException(String.format("unknown command type in queryList %s, accepted 'SHOW_TABLES', 'SHOW_COLUMNS', 'SELECT'", commandType));
+            };
         } catch (Throwable ex) {
             throw new DSLException("exec query list has err", ex);
         }

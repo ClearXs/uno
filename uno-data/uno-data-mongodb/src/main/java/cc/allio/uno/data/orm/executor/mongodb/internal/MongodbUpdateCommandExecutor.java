@@ -1,13 +1,22 @@
 package cc.allio.uno.data.orm.executor.mongodb.internal;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.util.Requires;
+import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.mongodb.dml.MongodbUpdateOperator;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
+import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.UOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
+import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
+import com.mongodb.client.result.UpdateResult;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
+import org.bson.conversions.Bson;
 
 /**
  * mongodb update command executor
@@ -29,6 +38,27 @@ public class MongodbUpdateCommandExecutor implements UOInnerCommandExecutor<Mong
 
     @Override
     public Boolean doExec(MongodbUpdateOperator operator, ResultSetHandler<Boolean> handler) throws Throwable {
-        return null;
+        // validate
+        Table fromColl = operator.getTable();
+        Requires.isNotNull(fromColl, "from collection");
+
+        // initial result group
+        ResultGroup resultGroup = new ResultGroup();
+        ResultRow.ResultRowBuilder builder = ResultRow.builder();
+        builder.column(BoolResultHandler.GUESS_UPDATE_OR_UPDATE);
+
+        Bson filter = operator.getFilter();
+        Bson update = operator.getUpdate();
+        MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
+        try {
+            UpdateResult updateResult = collection.updateMany(filter, update);
+            builder.value(updateResult.wasAcknowledged() && updateResult.getModifiedCount() > 0);
+        } catch (Throwable ex) {
+            log.error("Failed to mongodb update document. the filter bson is {}, update bson is {}", filter, update, ex);
+            builder.value(false);
+        }
+        ResultRow updateRow = builder.build();
+        resultGroup.addRow(updateRow);
+        return handler.apply(resultGroup);
     }
 }

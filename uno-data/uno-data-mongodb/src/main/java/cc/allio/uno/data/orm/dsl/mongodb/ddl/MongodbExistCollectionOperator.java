@@ -8,6 +8,9 @@ import cc.allio.uno.data.orm.dsl.PrepareValue;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.ExistTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
+import org.bson.BsonDocument;
+import org.bson.BsonInt32;
+import org.bson.BsonString;
 
 import java.util.List;
 
@@ -24,9 +27,16 @@ public class MongodbExistCollectionOperator implements ExistTableOperator {
 
     private Table fromColl;
 
+    // @see https://www.mongodb.com/docs/manual/reference/command/listCollections/#std-label-list-collection-output
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        if (fromColl == null) {
+            throw Exceptions.unNull("from coll is null");
+        }
+        BsonDocument bson = new BsonDocument("listCollections", new BsonInt32(1));
+        BsonDocument filter = new BsonDocument("name", new BsonDocument("$eq", new BsonString(fromColl.getName().format())));
+        bson.append("filter", filter);
+        return bson.toJson();
     }
 
     @Override

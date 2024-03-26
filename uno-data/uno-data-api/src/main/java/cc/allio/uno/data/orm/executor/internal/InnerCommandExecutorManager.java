@@ -40,11 +40,11 @@ public class InnerCommandExecutorManager {
      * @param <O>          {@link InnerCommandExecutor} operator
      */
     public <R, O extends Operator<?>, H> void set(Class<O> operatorType, InnerCommandExecutor<R, O, H> executor) {
-        registry.put(operatorType, executor);
         CommandType commandType = CommandType.getByOperatorClass(operatorType);
         if (commandType != null) {
             commandExecutorMap.put(commandType, executor);
         }
+        registry.put(operatorType, executor);
     }
 
     /**
@@ -80,7 +80,7 @@ public class InnerCommandExecutorManager {
     }
 
     /**
-     * get inner through operator type
+     * get inner through directly operator type, not interface operator, must implementation
      *
      * @param operatorType the operatorType is not null
      * @param <R>          {@link InnerCommandExecutor#exec(Operator, Object)} return type
@@ -183,9 +183,23 @@ public class InnerCommandExecutorManager {
      * @param <E> sub-type {@link SCOInnerCommandExecutor}
      * @return SCOInnerCommandExecutor instance or null
      */
-    public <O extends ShowColumnsOperator, E extends SCOInnerCommandExecutor<O>> E getShowColumn() {
+    public <R, O extends ShowColumnsOperator, E extends SCOInnerCommandExecutor<R, O>> E getShowColumn() {
         if (commandExecutorMap.containsKey(CommandType.SHOW_COLUMNS)) {
             return (E) commandExecutorMap.get(CommandType.SHOW_COLUMNS);
+        }
+        return null;
+    }
+
+    /**
+     * get {@link STInnerCommandExecutor} if exist
+     *
+     * @param <O> sub-type {@link ShowTablesOperator}
+     * @param <E> sub-type {@link STInnerCommandExecutor}
+     * @return SCOInnerCommandExecutor instance or null
+     */
+    public <R, O extends ShowTablesOperator, E extends STInnerCommandExecutor<R, O>> E getShowTable() {
+        if (commandExecutorMap.containsKey(CommandType.SHOW_TABLES)) {
+            return (E) commandExecutorMap.get(CommandType.SHOW_TABLES);
         }
         return null;
     }

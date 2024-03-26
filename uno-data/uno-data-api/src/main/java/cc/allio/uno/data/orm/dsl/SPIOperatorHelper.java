@@ -116,28 +116,42 @@ public final class SPIOperatorHelper {
     /**
      * 基于SPI加载{@link Operator}的类型，放入缓存
      */
-    private static void loadOperatorBySPI(Class<? extends Operator<?>> operatorClazz) {
-        ServiceLoader.load(operatorClazz, ClassLoader.getSystemClassLoader())
-                .stream()
-                .forEach(provider -> {
-                    Class<? extends Operator<?>> type = provider.type();
-                    Operator.Group group = AnnotationUtils.findAnnotation(type, Operator.Group.class);
-                    if (group == null) {
-                        throw new IllegalArgumentException(String.format("Operator %s without Annotation @SQLOperator.Group", type.getName()));
-                    }
-                    String groupKey = group.value();
-                    Lock writeLock = lock.writeLock();
-                    writeLock.lock();
-                    try {
-                        OperatorTraitGroup operatorTraitGroup = OTG_CACHES.computeIfAbsent(OperatorKey.returnKey(groupKey), k -> new OperatorTraitGroup());
-                        if (log.isDebugEnabled()) {
-                            log.debug("Through SPI load Operator Type [{}]", type.getName());
+    private static void loadOperatorBySPI(Class<? extends Operator<?>> operatorClass) {
+        ServiceLoader<? extends Operator<?>> loader = ServiceLoader.load(operatorClass, ClassLoader.getSystemClassLoader());
+        boolean present = loader.stream().findAny().isPresent();
+        if (!present) {
+            Class<?>[] interfaces = operatorClass.getInterfaces();
+            for (Class<?> hierachical : interfaces) {
+                // recursion of find parent class
+                // requirement parent class must be interfaces and subtype of Operator
+                if (Operator.class.isAssignableFrom(hierachical)) {
+                    loadOperatorBySPI((Class<? extends Operator<?>>) hierachical);
+                    break;
+                }
+            }
+        } else {
+            loader.reload();
+            loader.stream()
+                    .forEach(provider -> {
+                        Class<? extends Operator<?>> type = provider.type();
+                        Operator.Group group = AnnotationUtils.findAnnotation(type, Operator.Group.class);
+                        if (group == null) {
+                            throw new IllegalArgumentException(String.format("Operator %s without Annotation @SQLOperator.Group", type.getName()));
                         }
-                        operatorTraitGroup.append(type);
-                    } finally {
-                        writeLock.unlock();
-                    }
-                });
+                        String groupKey = group.value();
+                        Lock writeLock = lock.writeLock();
+                        writeLock.lock();
+                        try {
+                            OperatorTraitGroup operatorTraitGroup = OTG_CACHES.computeIfAbsent(OperatorKey.returnKey(groupKey), k -> new OperatorTraitGroup());
+                            if (log.isDebugEnabled()) {
+                                log.debug("Through SPI load Operator Type [{}]", type.getName());
+                            }
+                            operatorTraitGroup.append(type);
+                        } finally {
+                            writeLock.unlock();
+                        }
+                    });
+        }
     }
 
     static class OperatorTraitGroup {
@@ -148,17 +162,33 @@ public final class SPIOperatorHelper {
             this.traits = Sets.newConcurrentHashSet();
         }
 
+        /**
+         * by the operator class find OperatorTrait
+         *
+         * @param operatorClazz operatorClazz
+         * @return OperatorTrait or null
+         */
         public OperatorTrait find(Class<? extends Operator<?>> operatorClazz) {
+            // find operator class parent
+            Class<? extends Operator<?>> parent = Operator.getHireachialType(operatorClazz);
             return this.traits.stream()
-                    .filter(trait -> trait.getSuperClazz().equals(operatorClazz))
+                    .filter(trait -> trait.getParent().equals(parent))
                     .findFirst()
                     .orElse(null);
         }
 
+        /**
+         * @see #append(OperatorTrait)
+         */
         public void append(Class<? extends Operator<?>> implClazz) {
             this.append(new OperatorTrait(implClazz));
         }
 
+        /**
+         * with group append {@link OperatorTrait} instance
+         *
+         * @param trait trait must not nul
+         */
         public void append(OperatorTrait trait) {
             if (trait == null) {
                 throw new IllegalArgumentException("parameter OperatorTrait is null");
@@ -171,26 +201,27 @@ public final class SPIOperatorHelper {
     }
 
     @Data
-    @EqualsAndHashCode(of = "superClazz")
+    @EqualsAndHashCode(of = "parent")
     static class OperatorTrait {
 
         private final Class<? extends Operator<?>> clazz;
-        private Class<? extends Operator<?>> superClazz;
+        private Class<? extends Operator<?>> parent;
 
         public OperatorTrait(Class<? extends Operator<?>> clazz) {
             this.clazz = clazz;
-            Class<?>[] interfaces = this.clazz.getInterfaces();
-            for (Class<?> in : interfaces) {
-                if (Operator.class.isAssignableFrom(in)) {
-                    this.superClazz = (Class<? extends Operator<?>>) in;
-                    break;
-                }
-            }
-            if (superClazz == null) {
-                throw new DSLException(String.format("operator impl %s not implement any SQLOperator", clazz.getName()));
+            this.parent = Operator.getHireachialType(clazz);
+            if (this.parent == null) {
+                throw new DSLException(String.format("operator impl %s not implement any Operator", clazz.getName()));
             }
         }
 
+        /**
+         * new Operator instance by dbtype
+         *
+         * @param dbType dbType
+         * @param <T>    generic Operator type
+         * @return Operator instance
+         */
         public <T extends Operator<?>> T newInstance(DBType dbType) {
             Operator<?> sqlOperator;
             try {
@@ -200,7 +231,7 @@ public final class SPIOperatorHelper {
                     sqlOperator = ClassUtils.newInstance(clazz, dbType);
                 }
             } catch (Throwable ex) {
-                throw new DSLException(String.format("Instance SQLOperator %s failed, please invoke method Is it right?", clazz.getName()), ex);
+                throw new DSLException(String.format("Instance Operator %s failed, please invoke method Is it right?", clazz.getName()), ex);
             }
             return (T) sqlOperator;
         }

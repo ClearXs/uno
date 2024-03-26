@@ -41,12 +41,14 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
 
     @Override
     public String getDSL() {
-        return null;
+
+
+        return update.toBsonDocument().toJson();
     }
 
     @Override
     public UpdateOperator parse(String dsl) {
-        return null;
+        throw Exceptions.unOperate("parse");
     }
 
     @Override

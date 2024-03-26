@@ -11,10 +11,10 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
  * @date 2024/3/15 11:22
  * @since 1.1.7
  */
-public interface STInnerCommandExecutor<O extends ShowTablesOperator> extends InnerListCommandExecutor<Table, O> {
+public interface STInnerCommandExecutor<R, O extends ShowTablesOperator> extends InnerListCommandExecutor<R, O> {
 
     @Override
     default Class<O> getRealityOperatorType() {
-        return (Class<O>) ReflectTools.getGenericType(this, STInnerCommandExecutor.class);
+        return (Class<O>) ReflectTools.getGenericType(this, STInnerCommandExecutor.class, 1);
     }
 }

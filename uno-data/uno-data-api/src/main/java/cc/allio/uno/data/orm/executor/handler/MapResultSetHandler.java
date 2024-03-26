@@ -13,12 +13,8 @@ import java.util.Map;
  */
 public class MapResultSetHandler extends ExecutorOptionsAwareImpl implements ResultSetHandler<Map<String, Object>> {
 
-    public MapResultSetHandler() {
-    }
-
     @Override
     public Map<String, Object> apply(ResultGroup resultGroup) {
         return resultGroup.toMap();
     }
-
 }

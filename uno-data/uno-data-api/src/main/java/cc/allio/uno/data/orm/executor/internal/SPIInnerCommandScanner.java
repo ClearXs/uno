@@ -33,8 +33,8 @@ public final class SPIInnerCommandScanner {
         INNER_COMMAND_EXECUTOR_CLASSES.add(SCOInnerCommandExecutor.class);
         INNER_COMMAND_EXECUTOR_CLASSES.add(UOInnerCommandExecutor.class);
         INNER_COMMAND_EXECUTOR_CLASSES.add(ATOInnerCommandExecutor.class);
+        INNER_COMMAND_EXECUTOR_CLASSES.add(STInnerCommandExecutor.class);
     }
-
 
     public SPIInnerCommandScanner(ExecutorKey executorKey) {
         this.executorKey = executorKey;
@@ -63,6 +63,7 @@ public final class SPIInnerCommandScanner {
                 .map(ServiceLoader.Provider::get)
                 .toList();
 
+        // set
         for (var innerCommandExecutor : innerCommandExecutors) {
             manager.set(innerCommandExecutor.getRealityOperatorType(), innerCommandExecutor);
         }

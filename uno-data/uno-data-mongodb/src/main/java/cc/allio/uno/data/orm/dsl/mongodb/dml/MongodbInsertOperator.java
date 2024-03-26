@@ -26,13 +26,15 @@ import java.util.function.Supplier;
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
 public class MongodbInsertOperator implements InsertOperator {
 
-    private final List<Document> docs;
+    @Getter
+    private List<Document> docs;
     @Getter
     private List<DSLName> columns;
     private Table fromColl;
 
     public MongodbInsertOperator() {
         this.docs = Lists.newArrayList();
+        this.columns = Lists.newArrayList();
     }
 
     @Override
@@ -49,8 +51,8 @@ public class MongodbInsertOperator implements InsertOperator {
 
     @Override
     public void reset() {
-        this.docs.clear();
-        this.columns = null;
+        this.docs = Lists.newArrayList();
+        this.columns = Lists.newArrayList();
         this.fromColl = null;
     }
 
