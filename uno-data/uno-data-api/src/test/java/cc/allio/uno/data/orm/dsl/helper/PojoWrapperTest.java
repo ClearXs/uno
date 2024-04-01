@@ -14,7 +14,6 @@ public class PojoWrapperTest extends BaseTestCase {
 
     @Test
     void testInconsistentColumnDefAndValue() {
-
         SimplePojo simplePojo = new SimplePojo();
         simplePojo.setId("1");
         simplePojo.setUserName("1");
@@ -26,6 +25,15 @@ public class PojoWrapperTest extends BaseTestCase {
         assertEquals("1", userName);
     }
 
+    @Test
+    void testNullValue() {
+        SimplePojo simplePojo = new SimplePojo();
+
+        PojoWrapper<SimplePojo> instance = PojoWrapper.getInstance(simplePojo);
+
+        Long age = instance.getForce("age", Long.class);
+        assertNull(age);
+    }
 
     @Data
     public static class SimplePojo implements PojoResolver {
@@ -33,6 +41,8 @@ public class PojoWrapperTest extends BaseTestCase {
         private String id;
 
         private String userName;
+
+        private Long age;
 
         @Override
         public ColumnDefListResolver obtainColumnDefListResolver() {

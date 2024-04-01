@@ -58,6 +58,19 @@ public interface Operator<T extends Operator<T>> {
     }
 
     /**
+     * cast reality type, like as mongodb operator, influxdb operator...
+     * <p>thus use it's unique operation </p>
+     *
+     * @param realityType the reality type
+     * @param <O>         reality operator type
+     * @return reality operator
+     * @throws ClassCastException failed to cast to specifies reality type
+     */
+    default <O extends Operator<?>> O castReality(Class<O> realityType) {
+        return realityType.cast(this);
+    }
+
+    /**
      * according to operator type, this type maybe is subtype, so translate specifies operator type
      * <p>rules</p>
      * <ul>

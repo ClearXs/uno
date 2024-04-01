@@ -97,10 +97,8 @@ public class Instantiation<I> {
      * @return List
      */
     public List<I> create() {
-        if (ObjectUtils.isNotEmpty(features)) {
-            for (InstantiationFeature<I> feature : features) {
-                feature.execute(this);
-            }
+        for (InstantiationFeature<I> feature : features) {
+            feature.execute(this);
         }
         List<I> instances = Lists.newArrayList();
         // 空参数创建

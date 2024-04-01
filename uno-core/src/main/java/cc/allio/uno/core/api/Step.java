@@ -37,8 +37,7 @@ public interface Step<T> {
      *
      * @return 获取的结果
      */
-    T stop();
-
+    T end();
 
     class StepImpl<T> implements Step<T>, Self<StepImpl<T>> {
 
@@ -51,7 +50,7 @@ public interface Step<T> {
         }
 
         @Override
-        public T stop() {
+        public T end() {
             Supplier<T> provider;
             while ((provider = providers.pollFirst()) != null) {
                 T value = provider.get();

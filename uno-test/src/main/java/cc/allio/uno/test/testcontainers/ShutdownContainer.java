@@ -4,7 +4,7 @@ import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.runner.CloseRunner;
 
 /**
- * stop test-container
+ * end test-container
  *
  * @author j.x
  * @date 2024/3/18 23:32

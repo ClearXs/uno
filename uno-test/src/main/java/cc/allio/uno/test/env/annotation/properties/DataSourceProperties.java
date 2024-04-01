@@ -90,7 +90,7 @@ public @interface DataSourceProperties {
     String dataPassword() default "";
 
     /**
-     * Whether to stop if an error occurs while initializing the database.
+     * Whether to end if an error occurs while initializing the database.
      */
     boolean continueOnError() default false;
 

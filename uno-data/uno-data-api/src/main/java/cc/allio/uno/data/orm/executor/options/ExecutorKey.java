@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.executor.options;
 import cc.allio.uno.core.api.Key;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -40,10 +41,33 @@ public interface ExecutorKey extends Key {
         return DSL_EXECUTOR_TYPE_KEY;
     }
 
+    /**
+     * base on {@link DBType} returns {@link ExecutorKey}
+     *
+     * @param dbType dbType
+     * @return not null ExecutorKey
+     */
+    static ExecutorKey returnKey(DBType dbType) {
+        String name = dbType.getName();
+        return returnKey(name);
+    }
+
+    /**
+     * base on string key returns {@link ExecutorKey}
+     *
+     * @param key key
+     * @return not null ExecutorKey
+     */
     static ExecutorKey returnKey(String key) {
         return new DefaultExecutorKey(key);
     }
 
+    /**
+     * base on {@link OperatorKey} returns {@link ExecutorKey}
+     *
+     * @param key operator key
+     * @return not null ExecutorKey
+     */
     static ExecutorKey returnKey(OperatorKey key) {
         return new DefaultExecutorKey(key);
     }

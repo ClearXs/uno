@@ -2,10 +2,7 @@ package cc.allio.uno.data.tx;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.TransactionDefinition;
-import org.springframework.transaction.TransactionStatus;
-import org.springframework.transaction.TransactionSystemException;
+import org.springframework.transaction.*;
 
 @Slf4j
 class InternalTransactionBehavior extends TxDefinitionImpl<InternalTransactionBehavior> {
@@ -20,6 +17,7 @@ class InternalTransactionBehavior extends TxDefinitionImpl<InternalTransactionBe
      *
      * @param voidTransaction 可执行事物代码块，非空
      * @throws NoSuchBeanDefinitionException 在IOC容器中没有找到{@link PlatformTransactionManager}实例抛出
+     * @throws UnexpectedRollbackException   rollback throwing
      */
     public void execute(VoidTransactionAction voidTransaction) {
         if (transactionManager != null) {
@@ -32,9 +30,9 @@ class InternalTransactionBehavior extends TxDefinitionImpl<InternalTransactionBe
                 try {
                     voidTransaction.around();
                     transactionManager.commit(status);
-                } catch (Exception e) {
-                    log.error("transaction execute failed, data will be rollback", e);
+                } catch (Exception ex) {
                     transactionManager.rollback(status);
+                    throw new UnexpectedRollbackException("transaction execute failed, data will be rollback", ex);
                 }
             }
         }
@@ -45,6 +43,7 @@ class InternalTransactionBehavior extends TxDefinitionImpl<InternalTransactionBe
      *
      * @param transaction 可执行事物代码块，非空
      * @throws NoSuchBeanDefinitionException 在IOC容器中没有找到{@link PlatformTransactionManager}实例抛出
+     * @throws UnexpectedRollbackException   rollback throwing
      */
     public <R> R execute(Transaction<R> transaction) {
         if (transactionManager != null) {
@@ -58,9 +57,9 @@ class InternalTransactionBehavior extends TxDefinitionImpl<InternalTransactionBe
                     R r = transaction.around();
                     transactionManager.commit(status);
                     return r;
-                } catch (Exception e) {
-                    log.error("transaction execute failed, data will be rollback", e);
+                } catch (Exception ex) {
                     transactionManager.rollback(status);
+                    throw new UnexpectedRollbackException("transaction execute failed, data will be rollback", ex);
                 }
             }
         }

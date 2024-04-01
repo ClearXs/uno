@@ -2,7 +2,7 @@ package cc.allio.uno.core.api;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
-import cc.allio.uno.core.util.Values;
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import com.google.common.collect.Lists;
 import org.springframework.context.ApplicationContext;
@@ -102,9 +102,8 @@ public interface OptionalContext {
      * @return option
      */
     default <T> Optional<T> getTypeFirst(Class<T> typeClass) {
-        Map<String, Object> all = getAll();
-        Collection<Object> values = all.values();
-        return values.stream()
+        return getValues()
+                .stream()
                 .filter(value -> typeClass.isAssignableFrom(value.getClass()))
                 .findFirst()
                 .map(typeClass::cast);
@@ -182,23 +181,61 @@ public interface OptionalContext {
     }
 
     /**
-     * given a type decide whether match
-     *
-     * @param type the type
-     * @return match if true
-     */
-    default boolean match(Class<?> type) {
-        return getTypeFirst(type).isPresent();
-    }
-
-    /**
      * given type array decide whether match all
      *
      * @param types the array type
      * @return match if true
      */
     default boolean matchAll(Class<?>[] types) {
-        return Arrays.stream(types).allMatch(this::match);
+        if (types == null) {
+            return false;
+        }
+        if (types.length == 0 && size() == 0) {
+            return true;
+        } else if (types.length == 0 && size() > 0) {
+            return false;
+        } else {
+            return Arrays.stream(types).allMatch(this::match);
+        }
+    }
+
+    /**
+     * given a type decide whether match
+     *
+     * @param type the type
+     * @return match if true
+     */
+    default boolean match(Class<?> type) {
+        return getValues()
+                .stream()
+                .anyMatch(p -> {
+                    Class<?> leftHand = p.getClass();
+                    Class<?> rightHand = type;
+                    if (leftHand.isInterface()) {
+                        return ClassUtils.isAssignable(leftHand, rightHand);
+                    } else if (rightHand.isInterface()) {
+                        return ClassUtils.isAssignable(rightHand, leftHand);
+                    }
+                    return leftHand.isNestmateOf(rightHand);
+                });
+    }
+
+    /**
+     * return the optional context store data length
+     *
+     * @return the number of data length
+     */
+    default int size() {
+        return getAll().size();
+    }
+
+    /**
+     * return the value view container in optional context. reference to {@link Map#values()}
+     *
+     * @return the {@link Collection} values
+     */
+    default Collection<Object> getValues() {
+        return getAll().values();
     }
 
     /**

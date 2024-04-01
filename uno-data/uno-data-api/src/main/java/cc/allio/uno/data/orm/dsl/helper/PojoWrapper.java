@@ -212,7 +212,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                     table.setName(DSLName.of(indexName));
                     return table;
                 })
-                .stop();
+                .end();
     }
 
     /**
@@ -258,7 +258,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                         pojoFields.stream()
                                                 .map(this::createColumnDef)
                                                 .toList())
-                                .stop());
+                                .end());
     }
 
     /**
@@ -356,7 +356,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                     }
                     return builder.build();
                 })
-                .stop();
+                .end();
     }
 
     /**
@@ -396,6 +396,9 @@ public class PojoWrapper<T> implements ValueWrapper {
     public <K> Mono<K> get(String name, Class<K> fieldType) {
         return valueWrapper.get(name, fieldType)
                 .flatMap(value -> {
+                    if (value == EMPTY_VALUE) {
+                        return Mono.justOrEmpty(Optional.empty());
+                    }
                     DSLName dslName = DSLName.of(name, DSLName.UNDERLINE_FEATURE);
                     Optional<DSLName> filterDslName = dslName.filter(columnDefMap.keySet());
                     return Mono.justOrEmpty(filterDslName)

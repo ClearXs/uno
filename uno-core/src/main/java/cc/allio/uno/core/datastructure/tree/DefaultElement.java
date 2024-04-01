@@ -17,7 +17,8 @@ import java.util.List;
 @Getter
 public class DefaultElement<T extends DefaultElement<T>> extends TraversalElement<T> {
 
-    private final Serializable id;
+    @Setter
+    private Serializable id;
 
     @Getter
     private Serializable parentId;

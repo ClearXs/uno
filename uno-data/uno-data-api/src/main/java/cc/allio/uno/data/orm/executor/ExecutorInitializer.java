@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 
 import java.util.List;
@@ -12,6 +13,7 @@ import java.util.List;
  * @date 2024/1/10 16:04
  * @since 1.1.7
  */
+@Slf4j
 public final class ExecutorInitializer implements InitializingBean {
 
     private final List<CommandExecutorLoader<? extends AggregateCommandExecutor>> loaders;
@@ -26,7 +28,12 @@ public final class ExecutorInitializer implements InitializingBean {
     public void afterPropertiesSet() throws Exception {
         for (CommandExecutorLoader<? extends AggregateCommandExecutor> loader : loaders) {
             AggregateCommandExecutor commandExecutor = loader.load(interceptors);
-            CommandExecutorFactory.register(commandExecutor);
+            if (log.isDebugEnabled()) {
+                log.debug("load command executor by {}, the result is {}", loader.getClass().getSimpleName(), commandExecutor);
+            }
+            if (commandExecutor != null) {
+                CommandExecutorFactory.register(commandExecutor);
+            }
         }
     }
 }

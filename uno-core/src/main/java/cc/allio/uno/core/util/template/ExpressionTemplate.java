@@ -190,4 +190,53 @@ public interface ExpressionTemplate {
     static TokenParser createParse(Tokenizer tokenizer) {
         return new GenericTokenParser(tokenizer);
     }
+
+    /**
+     * @see #parseTemplate(String, Object)
+     */
+    static String parse(String template, Object target) {
+        return defaultTemplate().parseTemplate(template, target);
+    }
+
+    /**
+     * @see #parseTemplate(String, String, Object)
+     */
+    static String parse(String template, String k1, Object v1) {
+        return defaultTemplate().parseTemplate(template, k1, v1);
+    }
+
+    /**
+     * @see #parseTemplate(String, String, Object, String, Object)
+     */
+    static String parse(String template, String k1, Object v1, String k2, Object v2) {
+        return defaultTemplate().parseTemplate(template, k1, v1, k2, v2);
+    }
+
+    /**
+     * @see #parseTemplate(String, String, Object, String, Object, String, Object)
+     */
+    static String parse(String template, String k1, Object v1, String k2, Object v2, String k3, Object v3) {
+        return defaultTemplate().parseTemplate(template, k1, v2, k2, v2, k3, v3);
+    }
+
+    /**
+     * @see #parseTemplate(String, Tuple2)
+     */
+    static String parse(String template, Tuple2<String, Object> kv) {
+        return defaultTemplate().parseTemplate(template, kv);
+    }
+
+    /**
+     * @see #parseTemplate(String, Tuple4)
+     */
+    static String parse(String template, Tuple4<String, Object, String, Object> kv) {
+        return defaultTemplate().parseTemplate(template, kv);
+    }
+
+    /**
+     * @see #parseTemplate(String, Tuple6)
+     */
+    static String parse(String template, Tuple6<String, Object, String, Object, String, Object> kv) {
+        return defaultTemplate().parseTemplate(template, kv);
+    }
 }

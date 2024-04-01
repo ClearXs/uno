@@ -17,6 +17,7 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Array;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Stream;
@@ -131,7 +132,15 @@ public class BeanInfoWrapper<T> {
      * @return 单数据源对象
      */
     public <F> Mono<F> get(Object target, String name, Class<F> fieldType) {
-        return get(target, name).cast(fieldType);
+        return get(target, name)
+                .flatMap(v -> {
+                    if (v == ValueWrapper.EMPTY_VALUE) {
+                        return Mono.justOrEmpty(Optional.empty());
+                    } else {
+                        return Mono.just(v);
+                    }
+                })
+                .cast(fieldType);
     }
 
     /**

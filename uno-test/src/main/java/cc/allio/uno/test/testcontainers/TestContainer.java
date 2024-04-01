@@ -20,6 +20,6 @@ public class TestContainer extends GenericContainer<TestContainer> {
 
     @Override
     public void stop() {
-        log.debug("stop test container...");
+        log.debug("end test container...");
     }
 }

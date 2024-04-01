@@ -44,7 +44,6 @@ public class MongodbCommandExecutor extends AbstractCommandExecutor implements A
         if (StringUtils.isBlank(username) || StringUtils.isBlank(password)) {
             url = TEMPLATE_PARSER.parseTemplate(NO_AUTH_MONGO_CONNECTION_TEMPLATE, "address", address);
         } else {
-
             url = TEMPLATE_PARSER.parseTemplate(MONGO_CONNECTION_TEMPLATE, "username", username, "password", password, "address", address);
         }
         String databaseName = options.getDatabase();
