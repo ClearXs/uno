@@ -26,8 +26,9 @@ public class LogicGroup extends TraversalElement<LogicGroup> implements GroupEle
     @Setter
     private Serializable parentId;
 
+    @Setter
     @Getter
-    private final Serializable id;
+    private Serializable id;
 
     @Getter
     private final LogicPredicate logic;

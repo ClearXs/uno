@@ -40,17 +40,20 @@ public final class TreeSupport {
         if (CollectionUtils.isEmpty(expandTrees)) {
             return Collections.emptyList();
         }
-        return adjust(
+        List<R> expands =
                 expandTrees.stream()
                         .map(expand -> {
                             R element = treeFunc.apply(expand);
-                            if (element != null && element.getParentId() == null) {
+                            if (element.getParentId() == null) {
                                 element.setParentId(expand.getParentId());
+                            }
+                            if (element.getId() == null) {
+                                element.setId(expand.getId());
                             }
                             return element;
                         })
-                        .toList()
-        );
+                        .toList();
+        return adjust(expands);
     }
 
     /**

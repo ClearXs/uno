@@ -199,7 +199,7 @@ public abstract class BaseWebsocketEndpoint<R> implements WebSocketEndpoint {
                 } else {
                     try {
                         log.warn("After the heartbeat time, no heartbeat message will close the websocket");
-                        // HashedWheelTimer.stop()如果是同一个线程不允许关闭
+                        // HashedWheelTimer.end()如果是同一个线程不允许关闭
                         // session.close()会回调加上@OnClose注解的方法
                         session.close();
                     } catch (IOException e) {

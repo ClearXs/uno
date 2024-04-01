@@ -47,6 +47,7 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
         this.translatorMap.put(ContainerType.MSSQL, new MSSQLTranslator());
         this.translatorMap.put(ContainerType.PostgreSQL, new PostgreSQLTranslator());
         this.translatorMap.put(ContainerType.Mongodb, new MongodbTranslator());
+        this.translatorMap.put(ContainerType.Influxdb, new InfluxdbTranslator());
         this.translatorMap.put(ContainerType.Test, new TestTranslator());
         // load command executor loader instance
         var load = ClassPathServiceLoader.load(CommandExecutorLoader.class);

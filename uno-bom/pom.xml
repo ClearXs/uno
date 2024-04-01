@@ -56,7 +56,7 @@
         <!-- elasticsearch -->
         <elasticsearch-client.version>8.12.2</elasticsearch-client.version>
         <!-- influxdb -->
-        <influxdb-client.version>6.7.0</influxdb-client.version>
+        <influxdb-client.version>7.0.0</influxdb-client.version>
         <!-- tdengine -->
         <tdengine.version>3.2.4</tdengine.version>
         <!-- mongodb -->

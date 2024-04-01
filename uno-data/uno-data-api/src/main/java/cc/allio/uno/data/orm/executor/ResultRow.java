@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.type.JavaType;
+import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import lombok.Builder;
 import lombok.Data;
 
@@ -27,4 +28,18 @@ public class ResultRow {
     private JDBCType jdbcType;
     // java类型
     private JavaType<?> javaType;
+
+
+    /**
+     * build the update result value
+     *
+     * @param value the bool value
+     * @return a {@link ResultRow} instance
+     */
+    public static ResultRow buildUpdateRow(boolean value) {
+        ResultRowBuilder builder = ResultRow.builder();
+        builder.column(BoolResultHandler.GUESS_UPDATE_OR_UPDATE);
+        builder.value(value);
+        return builder.build();
+    }
 }

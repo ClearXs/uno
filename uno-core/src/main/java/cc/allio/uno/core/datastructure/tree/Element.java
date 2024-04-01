@@ -22,6 +22,11 @@ public interface Element<T extends Element<T>> extends Serializable {
     int ROOT_NODE = 0;
 
     /**
+     * set id
+     */
+    void setId(Serializable id);
+
+    /**
      * 获取树的标识
      */
     Serializable getId();
