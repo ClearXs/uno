@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import jakarta.validation.constraints.NotNull;
@@ -58,6 +59,16 @@ public interface CommandExecutorRegistry {
      * @return AggregateCommandExecutor
      */
     <T extends AggregateCommandExecutor> T getCommandExecutor(String key);
+
+    /**
+     * obtain {@link AggregateCommandExecutor} by {@link DBType}.
+     * <p>if a number of {@link AggregateCommandExecutor}, then find first one</p>
+     *
+     * @param dbType the dbType
+     * @param <T>    the {@link AggregateCommandExecutor} type
+     * @return {@link AggregateCommandExecutor} instance or null
+     */
+    <T extends AggregateCommandExecutor> T getCommandExecutorByDBTypeFirst(DBType dbType);
 
     /**
      * 基于{@link ExecutorKey}批量移除找到{@link AggregateCommandExecutor}实例

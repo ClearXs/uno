@@ -46,28 +46,42 @@ public class MongodbQueryCommandExecutor<R> implements QOInnerCommandExecutor<R,
         // validate
         Table fromColl = operator.getTable();
         Requires.isNotNull(fromColl, "from collection");
-
-        MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
-        Bson filter = operator.getFilter();
-        FindIterable<Document> documents = collection.find(filter);
-
-        List<ResultGroup> resultGroups =
-                Lists.newArrayList(documents)
-                        .stream()
-                        .map(document -> {
-                            ResultGroup resultGroup = new ResultGroup();
-                            for (Map.Entry<String, Object> dEntry : document.entrySet()) {
-                                ResultRow row = ResultRow.builder()
-                                        .column(DSLName.of(dEntry.getKey()))
-                                        .value(dEntry.getValue())
-                                        .build();
-                                resultGroup.addRow(row);
-                            }
-                            return resultGroup;
-                        })
-                        .toList();
         ResultSet resultSet = new ResultSet();
-        resultSet.setResultGroups(resultGroups);
+        MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
+
+        // decide how to use query api
+        Bson filter = operator.getFilter();
+
+        // by count
+        boolean isCount = operator.isCount();
+        if (isCount) {
+            long nums = collection.countDocuments(filter);
+            ResultRow resultRow = ResultRow.buildCountRow(nums);
+            ResultGroup resultGroup = new ResultGroup();
+            resultGroup.addRow(resultRow);
+            resultSet.setResultGroups(Lists.newArrayList(resultGroup));
+        } else {
+            // by general query
+            FindIterable<Document> documents = collection.find(filter);
+            List<ResultGroup> resultGroups =
+                    Lists.newArrayList(documents)
+                            .stream()
+                            .map(document -> {
+                                ResultGroup resultGroup = new ResultGroup();
+                                for (Map.Entry<String, Object> dEntry : document.entrySet()) {
+                                    // build filed name - value result row
+                                    ResultRow row = ResultRow.builder()
+                                            .column(DSLName.of(dEntry.getKey()))
+                                            .value(dEntry.getValue())
+                                            .build();
+                                    resultGroup.addRow(row);
+                                }
+                                return resultGroup;
+                            })
+                            .toList();
+            resultSet.setResultGroups(resultGroups);
+        }
+
         return handler.apply(resultSet);
     }
 }

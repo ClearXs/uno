@@ -138,6 +138,24 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
     }
 
     @Override
+    public <T extends AggregateCommandExecutor> T getCommandExecutorByDBTypeFirst(DBType dbType) {
+        if (dbType == null) {
+            return null;
+        }
+        Lock readLock = lock.readLock();
+        readLock.lock();
+        try {
+            return (T) commandExecutorMap.values()
+                    .stream()
+                    .filter(c -> c.getOptions().getDbType() == dbType)
+                    .findFirst()
+                    .orElse(null);
+        } finally {
+            readLock.unlock();
+        }
+    }
+
+    @Override
     public boolean remove(ExecutorKey executorKey) {
         List<ExecutorOptions> executorOptions = matchAll(executorKey);
         if (CollectionUtils.isNotEmpty(executorOptions)) {
