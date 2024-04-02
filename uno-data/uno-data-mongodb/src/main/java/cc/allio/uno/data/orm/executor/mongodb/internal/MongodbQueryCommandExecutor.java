@@ -81,7 +81,6 @@ public class MongodbQueryCommandExecutor<R> implements QOInnerCommandExecutor<R,
                             .toList();
             resultSet.setResultGroups(resultGroups);
         }
-
         return handler.apply(resultSet);
     }
 }

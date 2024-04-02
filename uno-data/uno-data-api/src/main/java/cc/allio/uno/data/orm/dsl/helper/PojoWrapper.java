@@ -411,6 +411,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                         .map(javaType -> TypeOperatorFactory.translator(javaType.getJavaType()).convert(value));
                             })
                             .cast(fieldType)
+                            .onErrorResume(ex -> Mono.just(value))
                             .defaultIfEmpty(value);
                 });
     }
@@ -501,7 +502,6 @@ public class PojoWrapper<T> implements ValueWrapper {
                     return POJO_INSPECTS.computeIfAbsent(pojoClass, k -> Optional.ofNullable(pojoInspectClass).map(ClassUtils::newInstance).orElse(null));
                 })
                 .orElse(DEFAULT_POJO_INSPECT);
-
     }
 
     /**

@@ -516,11 +516,6 @@ public final class TypeRegistry {
                 getJdbcType(Types.OTHER),
                 getJavaType(UnknownJavaType.class)
         );
-        // java_object
-        registerRelation(
-                getJdbcType(Types.JAVA_OBJECT),
-                getJavaType(UnknownJavaType.class)
-        );
         // distinct
         registerRelation(
                 getJdbcType(Types.DISTINCT),
@@ -656,10 +651,9 @@ public final class TypeRegistry {
      */
     public Collection<JdbcType> findJdbcTypeFindJavaType(JavaType<?> javaType) {
         Collection<Integer> jdbcCodes = javaTypeMappings.get(javaType);
-        return
-                Collections.unmodifiableCollection(
-                        jdbcCodes.stream().map(jdbcTypes::get).collect(Collectors.toList())
-                );
+        return Collections.unmodifiableCollection(
+                jdbcCodes.stream().map(jdbcTypes::get).collect(Collectors.toList())
+        );
     }
 
     /**
@@ -729,6 +723,10 @@ public final class TypeRegistry {
         // 判断是否为Enum
         if (valueType.isEnum()) {
             return getJavaType(EnumJavaType.class);
+        }
+        // 判断是否为bean
+        if (cc.allio.uno.core.type.Types.isBean(valueType)) {
+            return new BeanJavaType<>(valueType);
         }
         return getJavaType(UnknownJavaType.class);
     }

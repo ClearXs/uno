@@ -110,7 +110,8 @@ public class MongodbInsertOperator implements InsertOperator {
         for (int i = 0; i < columns.size(); i++) {
             DSLName col = columns.get(i);
             Object v = values.get(i);
-            document.put(col.format(), v);
+            Object bsonValue = MongodbSupport.toBsonValue(v);
+            document.put(col.format(), bsonValue);
         }
         this.docs.add(document);
         return self();

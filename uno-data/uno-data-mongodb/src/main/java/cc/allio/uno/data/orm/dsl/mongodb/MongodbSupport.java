@@ -1,9 +1,12 @@
 package cc.allio.uno.data.orm.dsl.mongodb;
 
+import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.JsonUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Lists;
+import org.bson.BsonArray;
+import org.bson.BsonDocument;
 import org.bson.Document;
 
 import java.util.List;
@@ -51,5 +54,24 @@ public final class MongodbSupport {
             items.add(JsonUtils.readTree(doc.toJson()));
         }
         return items.toPrettyString();
+    }
+
+    /**
+     * transfer v to bson value if value is complex type. such as {@link Object}, {@link java.util.Collection}, {@link java.util.Map}
+     *
+     * @param v the v
+     * @return bson document value or raw v
+     */
+    public static Object toBsonValue(Object v) {
+        if (v == null) {
+            return null;
+        }
+        Class<?> valueType = v.getClass();
+        if (Types.isBean(valueType) || Types.isMap(valueType)) {
+            return BsonDocument.parse(JsonUtils.toJson(v));
+        } else if (Types.isCollection(valueType) || Types.isArray(valueType)) {
+            return BsonArray.parse(JsonUtils.toJson(v));
+        }
+        return v;
     }
 }

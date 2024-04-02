@@ -2,9 +2,9 @@ package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.core.exception.Exceptions;
-import cc.allio.uno.core.type.Types;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import cc.allio.uno.data.orm.dsl.mongodb.MongodbSupport;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
@@ -12,7 +12,6 @@ import com.mongodb.client.model.Updates;
 import lombok.Getter;
 import org.bson.conversions.Bson;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
@@ -120,7 +119,8 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
          * @param v the v
          */
         public void set(String k, Object v) {
-            this.updates.put(k, v);
+            Object bsonValue = MongodbSupport.toBsonValue(v);
+            this.updates.put(k, bsonValue);
         }
 
         /**
@@ -146,13 +146,8 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
             for (Map.Entry<String, Object> entry : updates.entrySet()) {
                 String key = entry.getKey();
                 Object value = entry.getValue();
-                if (value != null && Types.isCollection(value.getClass())) {
-                    Bson field = Updates.addToSet(key, Lists.newArrayList((Collection<?>) value));
-                    combines.add(field);
-                } else {
-                    Bson field = Updates.set(key, value);
-                    combines.add(field);
-                }
+                Bson field = Updates.set(key, value);
+                combines.add(field);
             }
             return Updates.combine(combines);
         }
