@@ -19,14 +19,14 @@ import java.util.List;
 public interface ExecutorOptions extends ExecutorResultHandlerSet, OptionalContext {
 
     String KEY_MARK = "key";
-    String DB_TYPE_MARK = "db type";
+    String DB_TYPE_MARK = "dbType";
     String EXECUTOR_KEY_MARK = "executor";
     String OPERATOR_KEY_MARK = "operator";
     String USERNAME_MARK = "username";
     String PASSWORD_MARK = "password";
     String DATABASE_MARK = "database";
     String ADDRESS_MARK = "address";
-    String SYSTEM_DEFAULT_MARK = "system default";
+    String SYSTEM_DEFAULT_MARK = "systemDefault";
 
     /**
      * 唯一标识

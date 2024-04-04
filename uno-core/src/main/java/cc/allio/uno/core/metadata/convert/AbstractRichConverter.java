@@ -85,7 +85,7 @@ public abstract class AbstractRichConverter<T extends Metadata> implements RichC
                         Class<?> type = mappingField.getType();
                         // 尝试进行类型转换
                         if (type != null) {
-                            setter = new TypeValue(type, setter).tryTransfer();
+                            setter = new TypeValue(type, setter).tryConvert();
                         }
                         // 设置值在values
                         Object setValue = setter;

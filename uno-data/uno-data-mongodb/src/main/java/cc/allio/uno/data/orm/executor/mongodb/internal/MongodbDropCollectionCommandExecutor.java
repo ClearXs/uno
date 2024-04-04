@@ -17,6 +17,8 @@ import com.mongodb.internal.operation.DropCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
+import java.util.Map;
+
 /**
  * mongodb drop collection command executor
  *
@@ -51,7 +53,9 @@ public class MongodbDropCollectionCommandExecutor implements DTOInnerCommandExec
             log.error("mongodb drop collection has error", ex);
             builder.value(false);
         }
-        resultGroup.addRow(builder.build());
+        ResultRow resultRow = builder.build();
+        print(log, Map.of("fromColl", fromColl.getName().format(), "result", resultRow.getValue()));
+        resultGroup.addRow(resultRow);
         return handler.apply(resultGroup);
     }
 }

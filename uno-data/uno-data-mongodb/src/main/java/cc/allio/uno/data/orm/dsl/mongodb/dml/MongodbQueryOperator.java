@@ -11,6 +11,7 @@ import com.mongodb.client.model.Accumulators;
 import com.mongodb.client.model.Sorts;
 import com.mongodb.client.model.Windows;
 import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.conversions.Bson;
 
 import java.util.Collection;
@@ -23,6 +24,7 @@ import java.util.List;
  * @date 2024/3/14 00:52
  * @since 1.1.7
  */
+@Slf4j
 @AutoService(QueryOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
 public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator> implements QueryOperator {
@@ -35,6 +37,9 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     private Bson bsonWindow;
     @Getter
     private Distinct distinct;
+
+    @Getter
+    private boolean count = false;
 
     public MongodbQueryOperator() {
         super();
@@ -58,6 +63,7 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
         this.orders = Lists.newArrayList();
         this.bsonOrder = null;
         this.bsonWindow = null;
+        this.count = false;
     }
 
     @Override
@@ -123,10 +129,13 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
 
     @Override
     public QueryOperator aggregate(Func syntax, DSLName sqlName, String alias, Distinct distinct) {
+        // TODO improve aggregate function
         switch (syntax) {
             case AVG_FUNCTION -> Accumulators.avg(sqlName.format(), null);
+            case COUNT_FUNCTION -> count = true;
         }
-        throw Exceptions.unOperate("aggregate");
+
+        return self();
     }
 
     @Override
@@ -163,6 +172,9 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
 
     @Override
     public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
-        throw Exceptions.unOperate("groupByOnes");
+        if (log.isDebugEnabled()) {
+            log.debug("mongodb query operate 'groupByOnes' nothing to do. ");
+        }
+        return self();
     }
 }

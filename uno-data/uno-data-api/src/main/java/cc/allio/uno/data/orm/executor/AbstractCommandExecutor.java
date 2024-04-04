@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
+import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.interceptor.*;
@@ -65,7 +66,14 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
                 case ALERT_TABLE -> manager.getAlter().exec(operator, resultSetHandler);
                 case INSERT -> manager.getInsert().exec(operator, resultSetHandler);
                 case UPDATE -> manager.getUpdate().exec(operator, resultSetHandler);
-                case DELETE -> manager.getDelete().exec(operator, resultSetHandler);
+                case DELETE -> {
+                    // maybe execute logic delete
+                    if (operator instanceof UpdateOperator) {
+                        yield manager.getUpdate().exec(operator, resultSetHandler);
+                    } else {
+                        yield manager.getDelete().exec(operator, resultSetHandler);
+                    }
+                }
                 default -> throw new DSLException(String.format("unknown command type in bool %s, accepted " +
                         "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType));
             };

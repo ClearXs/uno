@@ -19,6 +19,8 @@ import com.mongodb.internal.operation.ListCollectionsOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
+import java.util.Map;
+
 /**
  * mongodb exist collection command executor
  *
@@ -54,7 +56,9 @@ public class MongodbExistCollectionCommandExecutor implements ETOInnerCommandExe
             log.error("mongodb exist collection has error", ex);
             builder.value(false);
         }
-        resultGroup.addRow(builder.build());
+        ResultRow resultRow = builder.build();
+        print(log, Map.of("fromColl", fromColl.getName().format(), "result", resultRow.getValue()));
+        resultGroup.addRow(resultRow);
         return handler.apply(resultGroup);
     }
 }

@@ -5,7 +5,6 @@ import cc.allio.uno.core.util.JsonUtils;
 import cc.allio.uno.core.util.StringUtils;
 import org.springframework.util.ReflectionUtils;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.lang.reflect.Method;
 import java.util.Map;
@@ -19,14 +18,11 @@ public abstract class BaseHttpSource extends JsonSource implements HttpSource {
      */
     protected final String requestMappingUrl;
 
-    protected final PathPatternParser parser;
-
     protected BaseHttpSource(String requestMappingUrl) {
         if (StringUtils.isBlank(requestMappingUrl)) {
             throw new IllegalArgumentException("requestMappingUrl is empty");
         }
         this.requestMappingUrl = requestMappingUrl;
-        this.parser = new PathPatternParser();
     }
 
     public void endpoint(@RequestBody Map<String, Object> value) {

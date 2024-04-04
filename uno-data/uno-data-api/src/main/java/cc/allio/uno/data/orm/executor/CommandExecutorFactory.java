@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor;
 
+import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,6 +61,15 @@ public final class CommandExecutorFactory {
      */
     public static <T extends AggregateCommandExecutor> T getDSLExecutor(String key) {
         return getRegistry().getCommandExecutor(key);
+    }
+
+    /**
+     * base on {@link DBType} get {@link AggregateCommandExecutor}
+     *
+     * @see CommandExecutorRegistry#getCommandExecutorByDBTypeFirst(DBType)
+     */
+    public static <T extends AggregateCommandExecutor> T getDSLExecutorByDbType(DBType dbType) {
+        return getRegistry().getCommandExecutorByDBTypeFirst(dbType);
     }
 
     /**

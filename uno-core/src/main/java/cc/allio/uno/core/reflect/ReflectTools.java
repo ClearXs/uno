@@ -2,18 +2,12 @@ package cc.allio.uno.core.reflect;
 
 import cc.allio.uno.core.concurrent.LockContext;
 import cc.allio.uno.core.exception.Exceptions;
-import cc.allio.uno.core.util.ObjectUtils;
-import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
@@ -31,6 +25,40 @@ public final class ReflectTools {
     // for obj class as key， value as generic type mapping
     static final Map<BinaryClassKey, Class<?>[]> OBJ_CLASS_MAPPING_GENERIC_TYPES = Maps.newConcurrentMap();
     static final Lock lock = new ReentrantLock();
+
+    static DrawnGeneric<Class<?>> drawnOnClass = new DrawnClass();
+    static DrawnGeneric<Method> drawnOnMethod = new DrawnMethod();
+    static DrawnGeneric<Field> drawnOnField = new DrawnField();
+
+    /**
+     * drawn generic class(maybe)
+     *
+     * @param clazz the class not null
+     * @return a {@link ParameterizedFinder} instance
+     */
+    public static ParameterizedFinder drawn(Class<?> clazz) {
+        return drawnOnClass.drawn(clazz);
+    }
+
+    /**
+     * drawn generic method(maybe)
+     *
+     * @param method the method not null
+     * @return a {@link ParameterizedFinder} instance
+     */
+    public static ParameterizedFinder drawn(Method method) {
+        return drawnOnMethod.drawn(method);
+    }
+
+    /**
+     * drawn generic {@link Field}(maybe)
+     *
+     * @param field the field not nul
+     * @return a {@link ParameterizedFinder} instance
+     */
+    public static ParameterizedFinder drawn(Field field) {
+        return drawnOnField.drawn(field);
+    }
 
     /**
      * @see #obtainGenericTypes(Class, Class)
@@ -109,34 +137,12 @@ public final class ReflectTools {
         return LockContext.lock(lock)
                 .lockReturn(() -> {
                     BinaryClassKey binaryClassKey = BinaryClassKey.of(objClass, superClassOrInterface);
-                    return OBJ_CLASS_MAPPING_GENERIC_TYPES.computeIfAbsent(binaryClassKey, key -> {
-                        List<ParameterizedType> genericTypes = findGenericTypes(objClass);
-                        // 默认取第一个匹配的
-                        Type superType = genericTypes.stream()
-                                .filter(parameterizedType -> {
-                                    if (parameterizedType.getRawType() instanceof Class<?> rawClass) {
-                                        return superClassOrInterface.isAssignableFrom(rawClass);
-                                    }
-                                    return false;
-                                })
-                                .findFirst()
-                                .orElse(null);
-                        if (superType instanceof ParameterizedType parameterizedSuperType) {
-                            Type[] actualTypeArguments = parameterizedSuperType.getActualTypeArguments();
-                            try {
-                                return Arrays.stream(actualTypeArguments)
-                                        // t must be class type
-                                        .filter(t -> Class.class.isAssignableFrom(t.getClass()))
-                                        .map(Class.class::cast)
-                                        .toArray(Class[]::new);
-                            } catch (Throwable ex) {
-                                log.error("obtain generic type by obj class {} from super class {}, happen class cast error", objClass.getName(), superClassOrInterface.getName(), ex);
-                                return new Class[0];
-                            }
-                        }
-                        return new Class[0];
-                    });
-
+                    return OBJ_CLASS_MAPPING_GENERIC_TYPES.computeIfAbsent(
+                            binaryClassKey,
+                            key -> {
+                                ParameterizedFinder parameterizedFinder = drawn(objClass);
+                                return parameterizedFinder.find(superClassOrInterface);
+                            });
                 })
                 .unchecked();
     }
@@ -150,43 +156,5 @@ public final class ReflectTools {
      */
     public static int getGenericTypeLength(Class<?> objClass, Class<?> superClassOrInterface) {
         return obtainGenericTypes(objClass, superClassOrInterface).length;
-    }
-
-    /**
-     * 从给定的Class对象中获取{@link ParameterizedType}类型，该方法将会递归查找所有范型父类以及范型接口
-     *
-     * @param clazz clazz
-     * @return list of {@link ParameterizedType}
-     */
-    static List<ParameterizedType> findGenericTypes(Class<?> clazz) {
-        List<ParameterizedType> types = Lists.newArrayList();
-        Type genericSuperclass = clazz.getGenericSuperclass();
-        if (genericSuperclass != null) {
-            if (genericSuperclass instanceof Class<?> superClass && !Object.class.isAssignableFrom(superClass)) {
-                types.addAll(findGenericTypes(superClass));
-            }
-            if (genericSuperclass instanceof ParameterizedType parameterizedSuperclass) {
-                types.add(parameterizedSuperclass);
-            }
-        }
-        Type[] genericInterfaces = clazz.getGenericInterfaces();
-        if (ObjectUtils.isNotEmpty(genericInterfaces)) {
-            for (Type genericInterface : genericInterfaces) {
-                if (genericInterface instanceof Class<?> superInterface) {
-                    types.addAll(findGenericTypes(superInterface));
-                }
-                if (genericInterface instanceof ParameterizedType parameterizedType) {
-                    types.add(parameterizedType);
-                }
-            }
-        }
-        return types;
-    }
-
-    @Data
-    @AllArgsConstructor(staticName = "of")
-    static class BinaryClassKey {
-        private final Class<?> cls1;
-        private final Class<?> cls2;
     }
 }

@@ -42,4 +42,17 @@ public class ResultRow {
         builder.value(value);
         return builder.build();
     }
+
+    /**
+     * build the count result value
+     *
+     * @param count the count nums value
+     * @return a {@link ResultRow} instance
+     */
+    public static ResultRow buildCountRow(long count) {
+        ResultRowBuilder builder = ResultRow.builder();
+        builder.column(BoolResultHandler.GUESS_COUNT);
+        builder.value(count);
+        return builder.build();
+    }
 }

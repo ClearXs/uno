@@ -1,12 +1,12 @@
 package cc.allio.uno.core.bean;
 
+import cc.allio.uno.core.reflect.ReflectTools;
 import cc.allio.uno.core.type.TypeValue;
 import cc.allio.uno.core.type.Types;
-import cc.allio.uno.core.util.ClassUtils;
+import cc.allio.uno.core.util.Values;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
-import org.checkerframework.checker.units.qual.K;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -15,18 +15,19 @@ import java.beans.BeanInfo;
 import java.beans.IntrospectionException;
 import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
-import java.lang.reflect.Array;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Stream;
 
 /**
  * 增强对Bean对象的操作。<b>禁止在Bean上添加{@link lombok.experimental.Accessors}</b>的注解
  * <p>required</p>
  * <ol>
- *     <li>Bean必须要是Public</li>
+ *     <li>bean must visibility is public</li>
+ *     <li>bean must be has setter and getter methods</li>
  * </ol>
  *
  * @author j.x
@@ -61,6 +62,29 @@ public class BeanInfoWrapper<T> {
                     String name = p.getName();
                     return !"class".equals(name);
                 });
+    }
+
+    /**
+     * find all property
+     *
+     * @return the property list
+     */
+    public List<PropertyDescriptor> properties() {
+        AtomicReference<List<PropertyDescriptor>> ref = new AtomicReference<>();
+        findAll().collectList().doOnNext(ref::set).subscribe();
+        return ref.get();
+    }
+
+    /**
+     * find all property name
+     *
+     * @return the name list
+     */
+    public List<String> names() {
+        return Arrays.stream(beanInfo.getPropertyDescriptors())
+                .map(PropertyDescriptor::getName)
+                .filter(name -> !"class".equals(name))
+                .toList();
     }
 
     /**
@@ -214,13 +238,12 @@ public class BeanInfoWrapper<T> {
     public synchronized <K extends T> Mono<K> setCoverage(K target, String name, boolean forceCoverage, Object... value) {
         Assert.notNull(name, "target must not null");
         return findByName(name)
-                .flatMap(descriptor ->
-                        write(target, descriptor, forceCoverage, value)
-                                .onErrorContinue((error, o) -> {
-                                    if (log.isWarnEnabled()) {
-                                        log.warn("target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), name);
-                                    }
-                                }));
+                .flatMap(descriptor -> write(target, descriptor, forceCoverage, value))
+                .onErrorContinue((error, o) -> {
+                    if (log.isWarnEnabled()) {
+                        log.warn("target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), name);
+                    }
+                });
     }
 
     /**
@@ -260,27 +283,15 @@ public class BeanInfoWrapper<T> {
     private <K extends T> Mono<K> write(K target, PropertyDescriptor descriptor, boolean forceCoverage, Object... args) {
         Mono<K> writeMono = Mono.justOrEmpty(descriptor.getWriteMethod())
                 .flatMap(writeMethod ->
-                        TypeValue.of(writeMethod.getParameterTypes(), args)
-                                .map(TypeValue::tryTransfer)
+                        TypeValue.of(writeMethod.getParameterTypes(), args, () -> ReflectTools.drawn(writeMethod))
+                                .map(TypeValue::tryConvert)
                                 .collectList()
                                 .flatMap(values -> {
                                     try {
                                         Class<?> propertyType = descriptor.getPropertyType();
                                         if (Types.isArray(propertyType)) {
-                                            // 数组赋值
-                                            Object[] arrayValues = values.stream()
-                                                    .flatMap(o -> {
-                                                        if (Types.isArray(o.getClass())) {
-                                                            return Stream.of((Object[]) o);
-                                                        }
-                                                        return Stream.empty();
-                                                    })
-                                                    .toArray(Object[]::new);
-                                            Object o = Array.newInstance(ClassUtils.getArrayClassType(propertyType), arrayValues.length);
-                                            for (int i = 0; i < arrayValues.length; i++) {
-                                                Array.set(o, i, arrayValues[i]);
-                                            }
-                                            writeMethod.invoke(target, o);
+                                            Object[] arrayValues = Values.expandCollection(values);
+                                            writeMethod.invoke(target, arrayValues);
                                         } else {
                                             writeMethod.invoke(target, values.toArray());
                                         }
@@ -290,8 +301,7 @@ public class BeanInfoWrapper<T> {
                                         }
                                     }
                                     return Mono.just(target);
-                                })
-                );
+                                }));
         if (forceCoverage) {
             return writeMono;
         }

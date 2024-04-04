@@ -9,6 +9,7 @@ import cc.allio.uno.data.orm.dsl.mongodb.MongodbSupport;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import org.bson.BsonArray;
 import org.bson.Document;
 
 import java.util.Collection;
@@ -110,7 +111,8 @@ public class MongodbInsertOperator implements InsertOperator {
         for (int i = 0; i < columns.size(); i++) {
             DSLName col = columns.get(i);
             Object v = values.get(i);
-            document.put(col.format(), v);
+            Object bsonValue = MongodbSupport.toBsonValue(v);
+            document.put(col.format(), bsonValue);
         }
         this.docs.add(document);
         return self();

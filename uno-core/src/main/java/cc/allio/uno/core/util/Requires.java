@@ -10,7 +10,7 @@ import java.util.Map;
  * @author jw
  * @date 2021/12/6 13:57
  */
-public class Requires {
+public final class Requires {
 
     /**
      * 批量判断请求对象是否为空
@@ -18,8 +18,7 @@ public class Requires {
      * @param objs 对象数组
      */
     public static void isNotNulls(Object... objs) {
-        Arrays.stream(objs)
-                .forEach(obj -> isNotNull(objs, ""));
+        Arrays.stream(objs).forEach(obj -> isNotNull(objs, ""));
     }
 
     /**
@@ -31,30 +30,6 @@ public class Requires {
      */
     public static void isNotNull(Object obj, String message) {
         if (obj == null) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof String sv && StringUtils.isEmpty(sv)) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Collection<?> coll && CollectionUtils.isEmpty(coll)) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Map<?, ?> map && CollectionUtils.isEmpty(map)) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Integer i && i == 0) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Long l && l == 0L) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Double d && d == 0) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Float f && f == 0) {
-            throw new NullPointerException("requires: " + message + " is empty");
-        }
-        if (obj instanceof Boolean bool && Boolean.FALSE.equals(bool)) {
             throw new NullPointerException("requires: " + message + " is empty");
         }
     }

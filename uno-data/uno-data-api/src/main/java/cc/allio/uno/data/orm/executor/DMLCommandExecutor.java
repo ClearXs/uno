@@ -11,6 +11,7 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import com.google.common.collect.Lists;
@@ -770,7 +771,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
         List<R> r = queryList(queryOperator, resultSetHandler);
         Long count = queryOne(
                 f -> f.count().from(queryOperator.getTable()),
-                resultGroup -> resultGroup.getLongValue("count"));
+                resultGroup -> resultGroup.getLongValue(BoolResultHandler.GUESS_COUNT));
         Page<R> rPage = new Page<>(page);
         rPage.setCurrent(page.getCurrent());
         rPage.setSize(page.getSize());

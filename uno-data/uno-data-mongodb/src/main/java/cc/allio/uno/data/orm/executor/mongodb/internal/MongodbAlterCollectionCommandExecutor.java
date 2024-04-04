@@ -16,13 +16,15 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.internal.operation.RenameCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 /**
  * mongodb alter collection command executor
  *
  * @author j.x
  * @date 2024/3/15 10:51
- * @since 1.1.7
  * @see RenameCollectionOperation
+ * @since 1.1.7
  */
 @Slf4j
 @AutoService(ATOInnerCommandExecutor.class)
@@ -50,10 +52,12 @@ public class MongodbAlterCollectionCommandExecutor implements ATOInnerCommandExe
             database.getCollection(from).renameCollection(new MongoNamespace(database.getName(), to));
             builder.value(true);
         } catch (Throwable ex) {
-            log.error("mongodb alter table has error", ex);
+            log.error("mongodb alter table has error, the from collection {} alter to collection {}", fromColl.getName().format(), toColl.getName().format(), ex);
             builder.value(false);
         }
-        resultGroup.addRow(builder.build());
+        ResultRow resultRow = builder.build();
+        resultGroup.addRow(resultRow);
+        print(log, Map.of("fromColl", fromColl.getName().format(), "toColl", toColl.getName().format(), "result", resultRow.getValue()));
         return handler.apply(resultGroup);
     }
 }

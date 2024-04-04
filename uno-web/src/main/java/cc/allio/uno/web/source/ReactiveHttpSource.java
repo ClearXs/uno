@@ -4,11 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.reactive.result.condition.PatternsRequestCondition;
-import org.springframework.web.reactive.result.condition.RequestMethodsRequestCondition;
 import org.springframework.web.reactive.result.method.RequestMappingInfo;
 import org.springframework.web.reactive.result.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.util.pattern.PathPattern;
 
 import java.lang.reflect.Method;
 
@@ -30,16 +27,13 @@ public class ReactiveHttpSource extends BaseHttpSource {
     public void register(ApplicationContext context) {
         RequestMappingHandlerMapping handlerMapping = null;
         try {
-            handlerMapping = context.getBean(RequestMappingHandlerMapping.class);
+            handlerMapping = context.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
         } catch (NoSuchBeanDefinitionException ex) {
             log.error("register reactive http source {} failed", requestMappingUrl, ex);
         }
         if (handlerMapping != null) {
             Method requestMethod = getEndpointMethod();
-            PathPattern pathPattern = parser.parse(requestMappingUrl);
-            PatternsRequestCondition patternsRequestCondition = new PatternsRequestCondition(pathPattern);
-            RequestMethodsRequestCondition requestMethodsRequestCondition = new RequestMethodsRequestCondition(RequestMethod.POST);
-            RequestMappingInfo mappingInfo = new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, null, null, null);
+            RequestMappingInfo mappingInfo = RequestMappingInfo.paths(requestMappingUrl).methods(RequestMethod.POST).build();
             handlerMapping.registerMapping(mappingInfo, this, requestMethod);
         }
     }
