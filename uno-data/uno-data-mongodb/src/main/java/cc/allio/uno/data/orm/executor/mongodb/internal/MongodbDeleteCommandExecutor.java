@@ -16,6 +16,9 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.DeleteResult;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
+import org.bson.conversions.Bson;
+
+import java.util.Map;
 
 /**
  * mongodb delete command executor
@@ -45,11 +48,13 @@ public class MongodbDeleteCommandExecutor implements DOInnerCommandExecutor<Mong
         ResultRow.ResultRowBuilder builder = ResultRow.builder();
         builder.column(BoolResultHandler.GUESS_UPDATE_OR_UPDATE);
         MongoCollection<Document> collection = database.getCollection(fromColl.getName().format());
-        DeleteResult deleteResult = collection.deleteMany(operator.getFilter());
+        Bson filter = operator.getFilter();
+        DeleteResult deleteResult = collection.deleteMany(filter);
         boolean success = deleteResult.wasAcknowledged() && deleteResult.getDeletedCount() > 0;
         builder.value(success);
-        ResultRow row = builder.build();
-        resultGroup.addRow(row);
+        ResultRow resultRow = builder.build();
+        print(log, Map.of("fromColl", fromColl.getName().format(), "filter", filter.toBsonDocument().toJson(), "result", resultRow.getValue()));
+        resultGroup.addRow(resultRow);
         return handler.apply(resultGroup);
     }
 }

@@ -15,6 +15,8 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.internal.operation.CreateCollectionOperation;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.Map;
+
 /**
  * mongodb create collection command executor
  *
@@ -45,10 +47,12 @@ public class MongodbCreateCollectionCommandExecutor implements CTOInnerCommandEx
             database.createCollection(fromColl.getName().format());
             builder.value(true);
         } catch (Throwable ex) {
-            log.error("mongodb create collection has error", ex);
+            log.error("mongodb create collection has error, the from collection is {}", fromColl.getName().format(), ex);
             builder.value(false);
         }
-        resultGroup.addRow(builder.build());
+        ResultRow resultRow = builder.build();
+        resultGroup.addRow(resultRow);
+        print(log, Map.of("fromColl", fromColl.getName().format(), "result", resultRow.getValue()));
         return handler.apply(resultGroup);
     }
 }

@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
 import cc.allio.uno.core.type.Types;
+import cc.allio.uno.core.util.Values;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.WhereOperator;
 import cc.allio.uno.data.orm.dsl.logical.BiLogical;
@@ -99,15 +100,15 @@ public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements Whe
 
     @Override
     public <V> T in(DSLName dslName, V... values) {
-        Bson expr = Filters.in(dslName.format(), values);
+        Bson expr = Filters.in(dslName.format(), Values.expand(values));
         this.expression.add(expr);
         this.filter = logical.doAccept(expression);
-        return null;
+        return self();
     }
 
     @Override
     public <V> T notIn(DSLName dslName, V... values) {
-        Bson expr = Filters.nin(dslName.format(), values);
+        Bson expr = Filters.nin(dslName.format(), Values.expand(values));
         this.expression.add(expr);
         this.filter = logical.doAccept(expression);
         return self();

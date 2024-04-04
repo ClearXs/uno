@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.bson.conversions.Bson;
 
+import java.util.Map;
+
 /**
  * mongodb update command executor
  *
@@ -57,8 +59,9 @@ public class MongodbUpdateCommandExecutor implements UOInnerCommandExecutor<Mong
             log.error("Failed to mongodb update document. the filter bson is {}, update bson is {}", filter, update, ex);
             builder.value(false);
         }
-        ResultRow updateRow = builder.build();
-        resultGroup.addRow(updateRow);
+        ResultRow resultRow = builder.build();
+        print(log, Map.of("fromColl", fromColl.getName().format(), "filter", filter, "update", update, "result", resultRow.getValue()));
+        resultGroup.addRow(resultRow);
         return handler.apply(resultGroup);
     }
 }

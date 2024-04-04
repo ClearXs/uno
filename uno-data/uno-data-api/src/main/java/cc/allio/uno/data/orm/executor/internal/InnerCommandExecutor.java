@@ -2,6 +2,11 @@ package cc.allio.uno.data.orm.executor.internal;
 
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import com.google.common.collect.Lists;
+import org.slf4j.Logger;
+
+import java.util.List;
+import java.util.Map;
 
 /**
  * Definition DSL internal command executor
@@ -59,4 +64,23 @@ public interface InnerCommandExecutor<R, O extends Operator<?>, H> {
      * @return the operator type
      */
     Class<O> getRealityOperatorType();
+
+
+    /**
+     * print the inner command msg
+     *
+     * @param logger the logger
+     * @param prints the prints
+     */
+    default void print(Logger logger, Map<String, Object> prints) {
+        if (logger.isDebugEnabled()) {
+            StringBuilder printMsg = new StringBuilder();
+            printMsg.append("Inner command Executor [{}]");
+            for (String printKey : prints.keySet()) {
+                printMsg.append(" ").append(printKey).append(": ").append("{}");
+            }
+            List<Object> printValues = Lists.asList(this.getClass().getSimpleName(), prints.values().toArray());
+            logger.debug(printMsg.toString(), printValues.toArray());
+        }
+    }
 }

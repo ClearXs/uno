@@ -21,4 +21,9 @@ public class BeanResultSetHandler<R> extends ExecutorOptionsAwareImpl implements
     public R apply(ResultGroup resultGroup) {
         return resultGroup.toEntity(beanClass);
     }
+
+    @Override
+    public Class<R> getBeanType() {
+        return beanClass;
+    }
 }

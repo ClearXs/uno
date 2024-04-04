@@ -9,6 +9,7 @@ import cc.allio.uno.data.orm.dsl.mongodb.MongodbSupport;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import org.bson.BsonArray;
 import org.bson.Document;
 
 import java.util.Collection;

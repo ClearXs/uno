@@ -225,6 +225,7 @@ public class PojoWrapper<T> implements ValueWrapper {
      * </ol>
      */
     private List<ColumnDef> obtainColumnDefs() {
+        // TODO verify column duplicate
         return Optional.ofNullable(columnDefs)
                 .orElseGet(() ->
                         Step.<List<ColumnDef>>start()

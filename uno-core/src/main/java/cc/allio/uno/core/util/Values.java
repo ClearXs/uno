@@ -13,13 +13,26 @@ import java.util.stream.Stream;
  * @date 2024/2/19 17:42
  * @since 1.1.7
  */
-public class Values {
+public final class Values {
+
+    /**
+     * expand values if value is a array
+     *
+     * @param coll the {@link Collection}
+     * @param <V>  the value type
+     * @return value array
+     * @see #expand(Object[])
+     */
+    public static <V> V[] expandCollection(Collection<V> coll) {
+        return (V[]) expand(coll.toArray());
+    }
 
     /**
      * 返回数组
      *
      * @see #streamExpand(Object[])
      */
+    @SafeVarargs
     public static <V> V[] expand(V... values) {
         return (V[]) streamExpand(values).toArray(Object[]::new);
     }
@@ -29,6 +42,7 @@ public class Values {
      *
      * @see #streamExpand(Object[])
      */
+    @SafeVarargs
     public static <V> Collection<V> collectionExpand(V... values) {
         return streamExpand(values).toList();
     }
@@ -45,6 +59,7 @@ public class Values {
      * @param <V>    值类型
      * @return value of stream
      */
+    @SafeVarargs
     public static <V> Stream<V> streamExpand(V... values) {
         if (values == null) {
             return Stream.empty();

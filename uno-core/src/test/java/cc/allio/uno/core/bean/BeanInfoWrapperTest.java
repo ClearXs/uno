@@ -75,9 +75,11 @@ class BeanInfoWrapperTest extends BaseTestCase {
     void testSetList() throws IntrospectionException {
         TestComplex testComplex = new TestComplex();
         BeanInfoWrapper<TestComplex> infoWrapper = new BeanInfoWrapper<>(TestComplex.class);
-        infoWrapper.set(testComplex, "list", Lists.newArrayList("2", "2")).subscribe();
-
+        infoWrapper.set(testComplex, "list", Lists.newArrayList(2, "2")).subscribe();
         assertEquals(2, testComplex.getList().size());
+
+        assertEquals("2", testComplex.getList().get(0));
+        assertEquals("2", testComplex.getList().get(1));
     }
 
     @Test

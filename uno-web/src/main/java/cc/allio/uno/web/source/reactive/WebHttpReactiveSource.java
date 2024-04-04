@@ -36,6 +36,6 @@ public class WebHttpReactiveSource extends BaseReactiveSource implements Reactiv
 
     @Override
     public void register(ApplicationContext context) {
-        registryEndpoint(context, getEndpointMethod(), parser);
+        registryEndpoint(context, getEndpointMethod());
     }
 }

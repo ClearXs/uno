@@ -15,9 +15,11 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertManyResult;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.BsonArray;
 import org.bson.Document;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * mongodb insert command executor
@@ -59,8 +61,9 @@ public class MongodbInsertCommandExecutor implements IOInnerCommandExecutor<Mong
             builder.value(false);
         }
 
-        ResultRow insertRow = builder.build();
-        resultGroup.addRow(insertRow);
+        ResultRow resultRow = builder.build();
+        print(log, Map.of("fromColl", fromColl.getName().format(), "docs", docs, "result", resultRow.getValue()));
+        resultGroup.addRow(resultRow);
         return handler.apply(resultGroup);
     }
 }

@@ -19,7 +19,9 @@ import com.mongodb.client.MongoDatabase;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cc.allio.uno.data.orm.executor.handler.TableListResultSetHandler.*;
@@ -91,7 +93,7 @@ public class MongodbShowCollectionCommandExecutor implements STInnerCommandExecu
                     return resultGroup;
                 })
                 .toList();
-
+        print(log, Collections.emptyMap());
         ResultSet resultSet = new ResultSet();
         resultSet.setResultGroups(resultGroups);
         return handler.apply(resultSet);

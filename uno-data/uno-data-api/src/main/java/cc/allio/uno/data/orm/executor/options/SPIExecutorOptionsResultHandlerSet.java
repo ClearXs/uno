@@ -1,6 +1,5 @@
 package cc.allio.uno.data.orm.executor.options;
 
-import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.data.orm.executor.handler.*;
 import com.google.common.collect.Maps;
 
@@ -39,7 +38,7 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
     @Override
     public <B> BeanResultSetHandler<B> obtainBeanResultSetHandler(Class<B> beanClass) {
         BeanResultHandlerDelegate beanResultHandler = obtainSPIHandler(BeanResultHandlerDelegate.class, () -> new BeanResultHandlerDelegate(this));
-        return beanResultHandler.obtainBeanResultSetHandler(beanClass, BeanResultSetHandler.class, () -> new BeanResultSetHandler<>(beanClass));
+        return beanResultHandler.obtainBeanResultSetHandler(beanClass, () -> new BeanResultSetHandler<>(beanClass));
     }
 
     @Override
@@ -67,7 +66,7 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
     @Override
     public <R> ListBeanResultSetHandler<R> obtainListBeanResultSetHandler(Class<R> beanClass) {
         ListBeanResultHandlerDelegate listBeanResultHandlerDelegate = obtainSPIHandler(ListBeanResultHandlerDelegate.class, () -> new ListBeanResultHandlerDelegate(this));
-        return listBeanResultHandlerDelegate.obtainListBeanResultSetHandler(beanClass, ListBeanResultSetHandler.class, () -> new ListBeanResultSetHandler<>(beanClass));
+        return listBeanResultHandlerDelegate.obtainListBeanResultSetHandler(beanClass, () -> new ListBeanResultSetHandler<>(beanClass));
     }
 
     @Override
@@ -153,27 +152,6 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
     }
 
     /**
-     * 基于{@link Class#getConstructors()}创建handler
-     *
-     * @param handlerClass   handlerClass
-     * @param defaultHandler defaultHandler
-     * @param <H>            处理器类型
-     * @return Handler 实例
-     */
-    private <H extends ResultHandler> H obtainConstructorHandler(Class<H> handlerClass, Supplier<H> defaultHandler, Object[] params) {
-        return (H) handlerSets.computeIfAbsent(
-                handlerClass,
-                k -> {
-                    H handler = ClassUtils.newInstance(handlerClass, params);
-                    if (handler != null) {
-                        handler.setExecutorOptions(this);
-                        return handler;
-                    }
-                    return defaultHandler.get();
-                });
-    }
-
-    /**
      * 强制添加指定类型的handler
      *
      * @param handlerClass handlerClass
@@ -206,11 +184,11 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
          * @param <H>          bean handler type
          * @return BeanResultSetHandler
          */
-        <B, H extends BeanResultHandler<B>> H obtainBeanResultSetHandler(Class<B> beanClass, Class<H> beanResultHandlerClass, Supplier<H> defaultValue) {
+        <B, H extends BeanResultHandler<B>> H obtainBeanResultSetHandler(Class<B> beanClass, Supplier<H> defaultValue) {
             return (H) beanHandlers.computeIfAbsent(
                     beanClass,
                     k -> {
-                        H handler = executorResultHandlerSet.obtainConstructorHandler(beanResultHandlerClass, defaultValue, new Object[]{beanClass});
+                        H handler = defaultValue.get();
                         handler.setExecutorOptions(executorResultHandlerSet);
                         return handler;
                     });
@@ -248,11 +226,11 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
          * @param <H>          bean handler type
          * @return BeanResultSetHandler
          */
-        <B, H extends ListBeanResultHandler<B>> H obtainListBeanResultSetHandler(Class<B> beanClass, Class<H> beanResultHandlerClass, Supplier<H> defaultValue) {
+        <B, H extends ListBeanResultHandler<B>> H obtainListBeanResultSetHandler(Class<B> beanClass, Supplier<H> defaultValue) {
             return (H) beanHandlers.computeIfAbsent(
                     beanClass,
                     k -> {
-                        H handler = executorResultHandlerSet.obtainConstructorHandler(beanResultHandlerClass, defaultValue, new Object[]{beanClass});
+                        H handler = defaultValue.get();
                         handler.setExecutorOptions(executorResultHandlerSet);
                         return handler;
                     });

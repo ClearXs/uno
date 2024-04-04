@@ -20,6 +20,6 @@ public class WebHttpSource extends BaseHttpSource {
 
     @Override
     public void register(ApplicationContext context) {
-        registryEndpoint(context, getEndpointMethod(), parser);
+        registryEndpoint(context, getEndpointMethod());
     }
 }

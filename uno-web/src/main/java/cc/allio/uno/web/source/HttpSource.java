@@ -4,12 +4,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.servlet.mvc.condition.PatternsRequestCondition;
-import org.springframework.web.servlet.mvc.condition.RequestMethodsRequestCondition;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
-import org.springframework.web.util.pattern.PathPattern;
-import org.springframework.web.util.pattern.PathPatternParser;
 
 import java.lang.reflect.Method;
 
@@ -25,24 +21,20 @@ public interface HttpSource {
     /**
      * 注册
      *
-     * @param context  spring application context
-     * @param endpoint 端点方法
-     * @param parser   路径解析器
+     * @param context         spring application context
+     * @param endpointHandler 端点方法
      */
-    default void registryEndpoint(ApplicationContext context, Method endpoint, PathPatternParser parser) {
+    default void registryEndpoint(ApplicationContext context, Method endpointHandler) {
         RequestMappingHandlerMapping handlerMapping = null;
         try {
-            handlerMapping = context.getBean(RequestMappingHandlerMapping.class);
+            handlerMapping = context.getBean("requestMappingHandlerMapping", RequestMappingHandlerMapping.class);
         } catch (NoSuchBeanDefinitionException ex) {
             LoggerFactory.getLogger(getClass()).error("register http source {} failed", getMappingUrl(), ex);
         }
         if (handlerMapping != null) {
-            Method requestMethod = endpoint;
-            PathPattern pathPattern = parser.parse(getMappingUrl());
-            PatternsRequestCondition patternsRequestCondition = new PatternsRequestCondition(pathPattern.getPatternString());
-            RequestMethodsRequestCondition requestMethodsRequestCondition = new RequestMethodsRequestCondition(RequestMethod.POST);
-            RequestMappingInfo mappingInfo = new RequestMappingInfo(patternsRequestCondition, requestMethodsRequestCondition, null, null, null, null, null);
-            handlerMapping.registerMapping(mappingInfo, this, requestMethod);
+            String mappingUrl = getMappingUrl();
+            RequestMappingInfo mappingInfo = RequestMappingInfo.paths(mappingUrl).methods(RequestMethod.POST).build();
+            handlerMapping.registerMapping(mappingInfo, this, endpointHandler);
         }
     }
 
