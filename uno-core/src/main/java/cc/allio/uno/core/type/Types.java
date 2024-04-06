@@ -244,7 +244,6 @@ public class Types {
         return clazz.isArray();
     }
 
-
     /**
      * 判断给定的class是否是Bean
      *
@@ -252,7 +251,10 @@ public class Types {
      * @return true false
      */
     public static boolean isBean(Class<?> clazz) {
-        return !SIMPLE_TYPES.contains(clazz) && !isList(clazz) && !isMap(clazz);
+        return !SIMPLE_TYPES.contains(clazz)
+                && !isList(clazz)
+                && !isMap(clazz)
+                && !clazz.isEnum();
     }
 
     /**
