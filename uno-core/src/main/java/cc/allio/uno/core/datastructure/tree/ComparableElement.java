@@ -3,6 +3,13 @@ package cc.allio.uno.core.datastructure.tree;
 import java.io.Serializable;
 import java.util.Comparator;
 
+/**
+ * comparable tree element base on {@link Comparator}
+ *
+ * @author j.x
+ * @date 2023/4/11 22:21
+ * @since 1.1.4
+ */
 public class ComparableElement<T extends ComparableElement<T>> extends DefaultElement<T> {
 
     private final Comparator<T> comparator;
@@ -16,7 +23,12 @@ public class ComparableElement<T extends ComparableElement<T>> extends DefaultEl
     public void addChildren(T element) {
         super.addChildren(element);
         if (comparator != null) {
-            getChildren().sort((o1, o2) -> comparator.compare((T) o1, (T) o2));
+            getChildren().sort(comparator);
         }
+    }
+
+    @Override
+    public Element obtainSentinel() {
+        return new ComparableElement(-1, comparator);
     }
 }

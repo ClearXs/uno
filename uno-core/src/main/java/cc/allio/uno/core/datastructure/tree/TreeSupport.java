@@ -88,15 +88,22 @@ public final class TreeSupport {
             }
         }
 
-        Element sentinel = Element.getRootSentinel();
-        for (R virtual : idElement.values()) {
-            if (virtual.getDepth() == Element.ROOT_NODE) {
-                // 触发Element添加结点的特性，如排序
-                sentinel.addChildren(virtual);
-            }
-        }
+        // base on first element (if empty then return empty list) get sentinel element then traversal each element and add children (maybe trigger element feature, like as sort)
+        return idElement.values()
+                .stream()
+                .findFirst()
+                .map(Element::obtainSentinel)
+                .map(sentinel -> {
+                    for (R virtual : idElement.values()) {
+                        if (virtual.getDepth() == Element.ROOT_NODE) {
+                            // 触发Element添加结点的特性，如排序
+                            sentinel.addChildren(virtual);
+                        }
+                    }
+                    return sentinel.getChildren();
+                })
+                .orElse(Collections.emptyList());
 
-        return sentinel.getChildren();
     }
 
     /**
