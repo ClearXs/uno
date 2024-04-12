@@ -22,4 +22,9 @@ public abstract class RDBTranslator implements ContainerExecutorOptionsTranslato
     public OperatorKey withOperatorKey(Container testContainer) {
         return OperatorKey.SQL;
     }
+
+    @Override
+    public boolean withDefault() {
+        return true;
+    }
 }

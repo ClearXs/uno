@@ -4,10 +4,12 @@ import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import com.google.common.collect.Lists;
 
 import java.util.Collection;
+import java.util.List;
 
 /**
  * Query Operator
@@ -22,21 +24,21 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
     // ============================== SELECT PART ==============================
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
      * @param reference 方法引用
-     * @return Select
+     * @return self
      */
     default <R> QueryOperator select(MethodReferenceColumn<R> reference) {
         return select(reference.getColumn());
     }
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
      * @param reference 方法引用
      * @param alias     alias
-     * @return Select
+     * @return self
      */
     default <R> QueryOperator select(MethodReferenceColumn<R> reference, String alias) {
         return select(reference.getColumn(), alias);
@@ -52,71 +54,87 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
     }
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
     default QueryOperator select(String fieldName) {
         return select(DSLName.of(fieldName));
     }
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
-     * @param sqlName sqlName
-     * @return Select
+     * @param dslName dslName
+     * @return self
      */
-    QueryOperator select(DSLName sqlName);
+    QueryOperator select(DSLName dslName);
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
      * @param fieldName java variable name
      * @param alias     alias
-     * @return Select
+     * @return self
      */
     default QueryOperator select(String fieldName, String alias) {
         return select(DSLName.of(fieldName), alias);
     }
 
     /**
-     * 添加'SELECT'条件
+     * the select field
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param alias   alias
-     * @return Select
+     * @return self
      */
-    QueryOperator select(DSLName sqlName, String alias);
+    QueryOperator select(DSLName dslName, String alias);
 
 
     /**
-     * 批量添加'SELECT'条件
+     * the select field
      *
      * @param fieldNames java variable name
-     * @return Select
+     * @return self
      */
     default QueryOperator select(String[] fieldNames) {
         return select(Lists.newArrayList(fieldNames));
     }
 
     /**
-     * 批量条件'SELECT'条件
+     * the select field
      *
      * @param fieldNames java variable name
-     * @return Select
+     * @return self
      */
     default QueryOperator select(Collection<String> fieldNames) {
         return selects(fieldNames.stream().map(DSLName::of).toList());
     }
 
     /**
+     * the select field
+     *
+     * @param entityType the entity type
+     * @return self
+     */
+    default <T> QueryOperator select(Class<T> entityType) {
+        Collection<DSLName> columns = PojoWrapper.findColumns(entityType);
+        return selects(columns);
+    }
+
+    /**
      * 批量条件'SELECT'条件
      *
-     * @param sqlNames sqlNames
+     * @param dslNames dslNames
      * @return Select
      */
-    QueryOperator selects(Collection<DSLName> sqlNames);
+    QueryOperator selects(Collection<DSLName> dslNames);
+
+    /**
+     * obtain select columns
+     */
+    List<String> obtainSelectColumns();
 
     /**
      * 添加 distinct
@@ -717,4 +735,17 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @return Group对象
      */
     QueryOperator groupByOnes(Collection<DSLName> fieldNames);
+
+    // ====================== advanced method ======================
+
+    /**
+     * build tree query operator
+     * <p><b>the entity field muse contains id and parent_id</b></p>
+     *
+     * @param baseQuery the build tree query base query operator
+     * @param subQuery  the build tree query for sub query operator
+     * @return self
+     */
+    QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery);
+
 }

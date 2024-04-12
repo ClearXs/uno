@@ -17,6 +17,8 @@ public class IntegerTypeOperator implements TypeOperator<Integer> {
             return d.intValue();
         } else if (target instanceof Float f) {
             return f.intValue();
+        } else if (target instanceof Short s) {
+            return s.intValue();
         }
         throw new IllegalArgumentException(String.format("target %s can't cast type %s", target, maybeType));
     }

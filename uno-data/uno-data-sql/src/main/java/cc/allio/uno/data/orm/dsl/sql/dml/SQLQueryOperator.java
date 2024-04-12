@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.dsl.sql.dml;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.StringUtils;
+import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.DSLName;
@@ -47,6 +48,8 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     private SQLTableSource tableSource;
     private Table table;
 
+    private SQLWithSubqueryClause subqueryClause;
+
     // order by
     private SQLOrderBy orderBy;
     // group by
@@ -56,6 +59,14 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
 
     // select columns缓存
     private final List<String> columns = Lists.newArrayList();
+
+    /**
+     * tree query template, like as
+     * <p>
+     * WITH RECURSIVE biz_tree AS (SELECT xxx FROM dual WHERE xxx UNION (SELECT sub.* FROM ((SELECT xxx FROM dual WHERE xxx) sub INNER JOIN biz_tree P ON P.ID = sub.parent_id))) SELECT xxx FROM biz_tree
+     * </p>
+     */
+    static final String TREE_QUERY_TEMPLATE = "WITH RECURSIVE biz_tree AS (#{baseQuery} UNION (SELECT sub.* FROM ((#{subQuery}) sub INNER JOIN biz_tree P ON P.ID = sub.PARENT_ID))) SELECT #{columns} FROM biz_tree";
 
     public SQLQueryOperator() {
         this(DBType.getSystemDbType());
@@ -90,19 +101,25 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
             throw new DSLException("not found select statement field");
         }
         ClassUtils.setAccessible(selectField);
+        SQLSelect sqlSelect;
         try {
-            SQLSelect sqlSelect = (SQLSelect) selectField.get(sqlStatement);
-            SQLSelectQueryBlock queryBlock = sqlSelect.getQueryBlock();
-            this.selectQuery = queryBlock;
-            this.tableSource = queryBlock.getFrom();
-            List<SQLSelectItem> selectList = queryBlock.getSelectList();
-            for (SQLSelectItem selectItem : selectList) {
-                SQLExpr expr = selectItem.getExpr();
-                String exprColumn = SQLSupport.getExprColumn(expr);
-                addColumns(exprColumn, null, false);
-            }
+            sqlSelect = (SQLSelect) selectField.get(sqlStatement);
         } catch (Throwable ex) {
             throw new DSLException(ex);
+        }
+        SQLSelectQueryBlock queryBlock = sqlSelect.getQueryBlock();
+        this.selectQuery = queryBlock;
+        this.tableSource = queryBlock.getFrom();
+        List<SQLSelectItem> selectList = queryBlock.getSelectList();
+        for (SQLSelectItem selectItem : selectList) {
+            SQLExpr expr = selectItem.getExpr();
+            String exprColumn = SQLSupport.getExprColumn(expr);
+            addColumns(exprColumn, null, false);
+        }
+        // parse to sub query clause
+        SQLWithSubqueryClause withSubQuery = sqlSelect.getWithSubQuery();
+        if (withSubQuery != null) {
+            this.subqueryClause = withSubQuery;
         }
         return self();
     }
@@ -116,6 +133,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
         this.orderBy = null;
         this.groupBy = null;
         this.sqlLimit = null;
+        this.subqueryClause = null;
         this.columns.clear();
     }
 
@@ -132,23 +150,28 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName) {
-        addColumns(sqlName.format(), null, true);
+    public QueryOperator select(DSLName dslName) {
+        addColumns(dslName.format(), null, true);
         return self();
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName, String alias) {
-        addColumns(sqlName.format(), alias, true);
+    public QueryOperator select(DSLName dslName, String alias) {
+        addColumns(dslName.format(), alias, true);
         return self();
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> sqlNames) {
-        for (DSLName sqlName : sqlNames) {
+    public QueryOperator selects(Collection<DSLName> dslNames) {
+        for (DSLName sqlName : dslNames) {
             addColumns(sqlName.format(), null, true);
         }
         return self();
+    }
+
+    @Override
+    public List<String> obtainSelectColumns() {
+        return columns;
     }
 
     @Override
@@ -261,6 +284,19 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
         return self();
     }
 
+    @Override
+    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+        String baseQueryDsl = baseQuery.getDSL();
+        String subQueryDsl = subQuery.getDSL();
+        String treeQuery =
+                ExpressionTemplate.parse(
+                        TREE_QUERY_TEMPLATE,
+                        "baseQuery", baseQueryDsl,
+                        "subQuery", subQueryDsl,
+                        "columns", String.join(StringPool.COMMA, baseQuery.obtainSelectColumns()));
+        return customize(treeQuery);
+    }
+
     /**
      * 获取 order by子句
      *
@@ -309,7 +345,15 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
             selectQuery.setLimit(sqlLimit);
         }
         selectQuery.setFrom(tableSource);
-        return SQLUtils.toSQLString(selectQuery, druidDbType);
+        if (subqueryClause != null) {
+            SQLSelect sqlSelect = new SQLSelect();
+            sqlSelect.setQuery(selectQuery);
+            sqlSelect.setWithSubQuery(subqueryClause);
+            return SQLUtils.toSQLString(sqlSelect, druidDbType);
+        } else {
+
+            return SQLUtils.toSQLString(selectQuery, druidDbType);
+        }
     }
 
     @Override

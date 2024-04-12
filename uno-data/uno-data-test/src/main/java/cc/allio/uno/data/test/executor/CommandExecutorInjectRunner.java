@@ -23,6 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.ServiceLoader;
 
 /**
@@ -61,8 +62,8 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
     public void onRefreshComplete(CoreTest coreTest) throws Throwable {
         Container container = coreTest.getContainer();
         if (container != null) {
-            Object testcase = coreTest.getTestInstance();
-            if (testcase instanceof CommandExecutorSetter<? extends AggregateCommandExecutor> setter
+            Object testInstance = coreTest.getTestInstance();
+            if (testInstance instanceof CommandExecutorSetter<? extends AggregateCommandExecutor> setter
                     && !commandExecutorLoaders.isEmpty()) {
                 ExecutorOptions executorOptions = drain(container);
                 if (executorOptions != null) {
@@ -83,12 +84,13 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
         DBType dbType = executorOptions.getDbType();
         try {
             return (E) commandExecutorLoaders.stream()
+                    .filter(Objects::nonNull)
                     .filter(loader -> loader.match(dbType))
                     .map(loader -> loader.load(executorOptions))
                     .findFirst()
                     .orElse(null);
         } catch (Throwable ex) {
-            log.error("Failed to load dbtype [{}] to command executor", dbType, ex);
+            log.error("Failed to load database type [{}] to command executor", dbType, ex);
         }
         return null;
     }
@@ -117,6 +119,8 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
         executorOptions.setDatabase(database);
         executorOptions.setUsername(username);
         executorOptions.setPassword(password);
+        boolean isDefault = translator.withDefault();
+        executorOptions.setSystemDefault(isDefault);
         return executorOptions;
     }
 }

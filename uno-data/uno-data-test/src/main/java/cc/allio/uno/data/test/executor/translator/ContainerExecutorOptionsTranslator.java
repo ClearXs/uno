@@ -74,4 +74,11 @@ public interface ContainerExecutorOptionsTranslator {
      * @return the db password
      */
     String withPassword(Container testContainer);
+
+    /**
+     * return is default database, the default is false
+     */
+    default boolean withDefault() {
+        return false;
+    }
 }

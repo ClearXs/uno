@@ -46,7 +46,7 @@ public enum CommandType {
             return null;
         }
         // try get hirachical
-        Class<? extends Operator<?>> hireachialType = Operator.getHireachialType(o);
+        Class<? extends Operator<?>> hireachialType = Operator.getHierarchicalType(o);
         for (CommandType commandType : values()) {
             if (commandType == UNKNOWN || commandType == FLUSH) {
                 continue;

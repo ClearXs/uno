@@ -102,6 +102,9 @@ public class MongodbQueryCommandExecutor<R> implements QOInnerCommandExecutor<R,
      * @return the java value
      */
     public Object toJavaValue(Object v) {
+        if (v == null) {
+            return null;
+        }
         if (Types.isArray(v.getClass())) {
             return Arrays.stream(((Object[]) v)).map(this::toJavaValue).toArray(Object[]::new);
         } else if (v instanceof Collection<?> coll) {

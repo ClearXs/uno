@@ -2,7 +2,9 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.BaseTestCase;
 import com.google.common.collect.Lists;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Field;
@@ -59,6 +61,14 @@ class TypeValueTest extends BaseTestCase {
         assertEquals("n", children.getName());
     }
 
+    @Test
+    void testEnumType() {
+        Object success = new TypeValue(Status.class, "SUCCESS").tryConvert();
+
+        assertNotNull(success);
+        assertEquals(Status.SUCCESS, success);
+    }
+
     public static class TypeSet {
         ENUM[] enums;
         List<ENUM> enumsList;
@@ -81,5 +91,15 @@ class TypeValueTest extends BaseTestCase {
     @Data
     public static class Parent {
         private Children children;
+    }
+
+
+    @Getter
+    @AllArgsConstructor
+    public enum Status {
+        SUCCESS("SUCCESS"),
+        FAILED("FAILED");
+
+        private final String value;
     }
 }

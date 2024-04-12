@@ -196,18 +196,23 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName) {
-        return queryOperator.select(sqlName);
+    public QueryOperator select(DSLName dslName) {
+        return queryOperator.select(dslName);
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName, String alias) {
-        return queryOperator.select(sqlName, alias);
+    public QueryOperator select(DSLName dslName, String alias) {
+        return queryOperator.select(dslName, alias);
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> sqlNames) {
-        return queryOperator.selects(sqlNames);
+    public QueryOperator selects(Collection<DSLName> dslNames) {
+        return queryOperator.selects(dslNames);
+    }
+
+    @Override
+    public List<String> obtainSelectColumns() {
+        return queryOperator.obtainSelectColumns();
     }
 
     @Override
@@ -248,6 +253,11 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     @Override
     public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
         return queryOperator.groupByOnes(fieldNames);
+    }
+
+    @Override
+    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+        return queryOperator.tree(baseQuery, subQuery);
     }
 
     @Override

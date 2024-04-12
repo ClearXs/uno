@@ -216,7 +216,7 @@ public interface ExpressionTemplate {
      * @see #parseTemplate(String, String, Object, String, Object, String, Object)
      */
     static String parse(String template, String k1, Object v1, String k2, Object v2, String k3, Object v3) {
-        return defaultTemplate().parseTemplate(template, k1, v2, k2, v2, k3, v3);
+        return defaultTemplate().parseTemplate(template, k1, v1, k2, v2, k3, v3);
     }
 
     /**

@@ -157,7 +157,7 @@ public interface Element<T extends Element<T>> extends Serializable {
     /**
      * 获取Sentinel结点
      */
-    static Element getRootSentinel() {
+    default Element obtainSentinel() {
         return new DefaultElement<>(-1, -1);
     }
 }

@@ -17,6 +17,7 @@ import co.elastic.clients.json.JsonpUtils;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import com.google.common.collect.Lists;
 
 import java.util.Collection;
 import java.util.Collections;
@@ -33,10 +34,11 @@ import java.util.List;
 @Operator.Group(OperatorKey.ELASTICSEARCH_LITERAL)
 public class EsQueryOperator extends EsGenericWhereOperator<QueryOperator> implements QueryOperator {
 
-    private DBType dbType;
+    private final DBType dbType;
     private SearchRequest searchRequest;
     private SearchRequest.Builder searchBuilder;
     private Table table;
+    private List<String> columns = Lists.newArrayList();
 
     private static final String ERROR_MSG = "elasticsearch query operator not support that operator";
 
@@ -68,6 +70,7 @@ public class EsQueryOperator extends EsGenericWhereOperator<QueryOperator> imple
         super.reset();
         searchRequest = null;
         searchBuilder = new SearchRequest.Builder();
+        columns = Lists.newArrayList();
     }
 
     @Override
@@ -103,22 +106,29 @@ public class EsQueryOperator extends EsGenericWhereOperator<QueryOperator> imple
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName) {
-        return this.selects(Collections.singleton(sqlName));
+    public QueryOperator select(DSLName dslName) {
+        return this.selects(Collections.singleton(dslName));
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName, String alias) {
-        return this.selects(Collections.singleton(sqlName));
+    public QueryOperator select(DSLName dslName, String alias) {
+        return this.selects(Collections.singleton(dslName));
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> sqlNames) {
-        for (DSLName sqlName : sqlNames) {
-            FieldAndFormat ff = FieldAndFormat.of(f -> f.field(sqlName.format()));
+    public QueryOperator selects(Collection<DSLName> dslNames) {
+        for (DSLName dslName : dslNames) {
+            String name = dslName.format();
+            FieldAndFormat ff = FieldAndFormat.of(f -> f.field(name));
             searchBuilder = searchBuilder.fields(ff);
+            this.columns.add(name);
         }
         return self();
+    }
+
+    @Override
+    public List<String> obtainSelectColumns() {
+        return columns;
     }
 
     @Override
@@ -195,6 +205,11 @@ public class EsQueryOperator extends EsGenericWhereOperator<QueryOperator> imple
     @Override
     public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
         throw new DSLException(ERROR_MSG);
+    }
+
+    @Override
+    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+        throw Exceptions.unOperate("tree");
     }
 
     /**

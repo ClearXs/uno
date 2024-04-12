@@ -241,7 +241,7 @@ public class BeanInfoWrapper<T> {
                 .flatMap(descriptor -> write(target, descriptor, forceCoverage, value))
                 .onErrorContinue((error, o) -> {
                     if (log.isWarnEnabled()) {
-                        log.warn("target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), name);
+                        log.warn("Target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), name);
                     }
                 });
     }
@@ -297,7 +297,7 @@ public class BeanInfoWrapper<T> {
                                         }
                                     } catch (Throwable err) {
                                         if (log.isWarnEnabled()) {
-                                            log.warn("Target {} setValue field {} value error setValue empty", target.getClass().getSimpleName(), descriptor.getName());
+                                            log.warn("Target {} setValue field {} value error. the error msg: {}", target.getClass().getSimpleName(), descriptor.getName(), err.getMessage());
                                         }
                                     }
                                     return Mono.just(target);
