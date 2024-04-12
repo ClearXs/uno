@@ -235,4 +235,27 @@ public class SQLQueryOperatorTest extends BaseTestCase {
         });
     }
 
+    @Test
+    void testRecursive() {
+        String sql = "WITH RECURSIVE biz_tree AS (SELECT *\n" +
+                "FROM org\n" +
+                " UNION (SELECT sub.* FROM ((SELECT *\n" +
+                "FROM org\n" +
+                ") sub INNER JOIN biz_tree P ON P.ID = sub.parent_id))) SELECT * FROM biz_tree";
+        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, DBType.MYSQL);
+        String dsl = operator.parse(sql).getDSL();
+        assertEquals("WITH RECURSIVE biz_tree AS (\n" +
+                "\t\tSELECT *\n" +
+                "\t\tFROM org\n" +
+                "\t\tUNION\n" +
+                "\t\t(SELECT sub.*\n" +
+                "\t\tFROM (\n" +
+                "\t\t\tSELECT *\n" +
+                "\t\t\tFROM org\n" +
+                "\t\t) sub\n" +
+                "\t\t\tINNER JOIN biz_tree P ON P.ID = sub.parent_id)\n" +
+                "\t)\n" +
+                "SELECT *\n" +
+                "FROM biz_tree", dsl);
+    }
 }

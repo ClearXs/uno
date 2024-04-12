@@ -170,7 +170,7 @@ public final class SPIOperatorHelper {
          */
         public OperatorTrait find(Class<? extends Operator<?>> operatorClazz) {
             // find operator class parent
-            Class<? extends Operator<?>> parent = Operator.getHireachialType(operatorClazz);
+            Class<? extends Operator<?>> parent = Operator.getHierarchicalType(operatorClazz);
             return this.traits.stream()
                     .filter(trait -> trait.getParent().equals(parent))
                     .findFirst()
@@ -209,7 +209,7 @@ public final class SPIOperatorHelper {
 
         public OperatorTrait(Class<? extends Operator<?>> clazz) {
             this.clazz = clazz;
-            this.parent = Operator.getHireachialType(clazz);
+            this.parent = Operator.getHierarchicalType(clazz);
             if (this.parent == null) {
                 throw new DSLException(String.format("operator impl %s not implement any Operator", clazz.getName()));
             }

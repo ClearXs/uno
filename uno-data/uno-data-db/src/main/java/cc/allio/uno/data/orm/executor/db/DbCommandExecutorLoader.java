@@ -9,6 +9,7 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.google.auto.service.AutoService;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.mapping.Environment;
+import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
 import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -26,17 +27,21 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @since 1.1.7
  */
 @AutoService(CommandExecutorLoader.class)
-public class DbCommandExecutorLoader implements CommandExecutorLoader<DbCommandExecutor> {
+public class DbCommandExecutorLoader extends BaseCommandExecutorLoader<DbCommandExecutor> {
 
     private final DbMybatisConfiguration configuration;
     private final AtomicInteger createCount = new AtomicInteger(0);
+
+    public DbCommandExecutorLoader() {
+        this.configuration = new DbMybatisConfiguration(new Configuration());
+    }
 
     public DbCommandExecutorLoader(DbMybatisConfiguration configuration) {
         this.configuration = configuration;
     }
 
     @Override
-    public DbCommandExecutor load(List<Interceptor> interceptors) {
+    public DbCommandExecutor onLoad(List<Interceptor> interceptors) {
         DataSource dataSource = configuration.getEnvironment().getDataSource();
         DBType dbType = DataSourceHelper.getDbType(dataSource);
         String username = DataSourceHelper.getUsername(dataSource);
@@ -58,9 +63,10 @@ public class DbCommandExecutorLoader implements CommandExecutorLoader<DbCommandE
     }
 
     @Override
-    public DbCommandExecutor load(ExecutorOptions executorOptions) {
-        String jdbcUrl = executorOptions.getDbType().parseTemplate(executorOptions.getAddress(), executorOptions.getDatabase());
-        JdbcConnectionDetails connectionDetails = new JdbcConnectionDetailsImpl(executorOptions.getUsername(), executorOptions.getUsername(), jdbcUrl);
+    public DbCommandExecutor onLoad(ExecutorOptions executorOptions) {
+        DBType dbType = executorOptions.getDbType();
+        String jdbcUrl = dbType.parseTemplate(executorOptions.getAddress(), executorOptions.getDatabase());
+        JdbcConnectionDetails connectionDetails = new JdbcConnectionDetailsImpl(executorOptions.getUsername(), executorOptions.getPassword(), jdbcUrl);
         HikariDataSource dataSource =
                 DataSourceBuilder.create(ClassLoader.getSystemClassLoader())
                         .type(HikariDataSource.class)

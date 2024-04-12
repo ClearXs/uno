@@ -15,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.bson.conversions.Bson;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -98,21 +99,26 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName) {
+    public QueryOperator select(DSLName dslName) {
         // nothing to do
         return self();
     }
 
     @Override
-    public QueryOperator select(DSLName sqlName, String alias) {
+    public QueryOperator select(DSLName dslName, String alias) {
         // nothing to do
         return self();
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> sqlNames) {
+    public QueryOperator selects(Collection<DSLName> dslNames) {
         // nothing to do
         return self();
+    }
+
+    @Override
+    public List<String> obtainSelectColumns() {
+        return Collections.emptyList();
     }
 
     @Override
@@ -176,5 +182,10 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
             log.debug("mongodb query operate 'groupByOnes' nothing to do. ");
         }
         return self();
+    }
+
+    @Override
+    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+        throw Exceptions.unOperate("tree");
     }
 }

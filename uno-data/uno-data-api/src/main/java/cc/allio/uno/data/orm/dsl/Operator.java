@@ -5,6 +5,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.lang.annotation.*;
 import java.util.Objects;
+import java.util.function.Supplier;
 
 /**
  * DSL操作
@@ -26,9 +27,26 @@ public interface Operator<T extends Operator<T>> {
      * 解析DSL
      *
      * @param dsl dsl
-     * @return SQLOperator
+     * @return self
      */
     T parse(String dsl);
+
+    /**
+     * @see #customize(String)
+     */
+    default T customize(Supplier<String> dslSupplier) {
+        return customize(dslSupplier.get());
+    }
+
+    /**
+     * support custom dsl string, assure cover all condition
+     *
+     * @param dsl the dsl syntax
+     * @return self
+     */
+    default T customize(String dsl) {
+        return parse(dsl);
+    }
 
     /**
      * reset operator
@@ -51,7 +69,7 @@ public interface Operator<T extends Operator<T>> {
      * 如果给定原始为null，则返回{@link ValueWrapper#EMPTY_VALUE}
      *
      * @param originalValue originalValue
-     * @return
+     * @return origin value or {@link ValueWrapper#EMPTY_VALUE}
      */
     default Object getValueIfNull(Object originalValue) {
         return Objects.requireNonNullElse(originalValue, ValueWrapper.EMPTY_VALUE);
@@ -81,13 +99,14 @@ public interface Operator<T extends Operator<T>> {
      * @param operatorType operatorType
      * @return {@link Operator} or parent type
      */
-    static Class<? extends Operator<?>> getHireachialType(Class<? extends Operator<?>> operatorType) {
-        if (!operatorType.isInterface()) {
-            Class<?>[] interfaces = operatorType.getInterfaces();
-            for (Class<?> hireachial : interfaces) {
-                if (Operator.class.isAssignableFrom(hireachial)) {
-                    return (Class<? extends Operator<?>>) hireachial;
-                }
+    static Class<? extends Operator<?>> getHierarchicalType(Class<? extends Operator<?>> operatorType) {
+        if (operatorType.isInterface()) {
+            return operatorType;
+        }
+        Class<?>[] interfaces = operatorType.getInterfaces();
+        for (Class<?> hierarchy : interfaces) {
+            if (Operator.class.isAssignableFrom(hierarchy)) {
+                return (Class<? extends Operator<?>>) hierarchy;
             }
         }
         return operatorType;
