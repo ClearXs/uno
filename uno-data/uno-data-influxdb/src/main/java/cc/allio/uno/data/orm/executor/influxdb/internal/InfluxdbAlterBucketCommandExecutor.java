@@ -11,13 +11,22 @@ import cc.allio.uno.data.orm.executor.exception.ExecuteException;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.ATOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
-import com.google.common.collect.Lists;
 import com.influxdb.client.BucketsApi;
 import com.influxdb.client.InfluxDBClient;
 import com.influxdb.client.domain.Bucket;
 import com.influxdb.client.domain.BucketRetentionRules;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
+
+/**
+ * influxdb alter bucket command executor
+ *
+ * @author j.x
+ * @date 2024/4/13 17:15
+ * @see InfluxdbAlterBucketOperator
+ * @since 1.1.8
+ */
 @Slf4j
 @AutoService(ATOInnerCommandExecutor.class)
 @CommandExecutor.Group(ExecutorKey.INFLUXDB_LITERAL)
@@ -42,12 +51,9 @@ public class InfluxdbAlterBucketCommandExecutor implements ATOInnerCommandExecut
         }
         Bucket updateBucket = removalBucket;
         updateBucket.setName(toBucket.getName().format());
-        Long retention = operator.getRetention();
-        if (retention != null) {
-            BucketRetentionRules retentionRules = new BucketRetentionRules();
-            retentionRules.setShardGroupDurationSeconds(retention);
-            retentionRules.setEverySeconds(Math.toIntExact(retention));
-            updateBucket.setRetentionRules(Lists.newArrayList(retentionRules));
+        List<BucketRetentionRules> retentionRules = operator.getRetentionRules();
+        if (retentionRules != null) {
+            updateBucket.setRetentionRules(retentionRules);
         }
         ResultRow resultRow;
         try {

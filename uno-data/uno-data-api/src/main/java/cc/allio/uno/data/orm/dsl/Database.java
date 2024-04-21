@@ -1,6 +1,5 @@
 package cc.allio.uno.data.orm.dsl;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
@@ -11,12 +10,30 @@ import lombok.Data;
  * @since 1.1.7
  */
 @Data
-@AllArgsConstructor(staticName = "of")
-public class Database {
+public class Database implements Meta<Database> {
 
     /**
      * 数据库名
      */
     private DSLName name;
 
+    public Database() {
+
+    }
+
+    public Database(DSLName dslName) {
+        this.name = dslName;
+    }
+
+    /**
+     * create {@link Database} instance
+     *
+     * @param dslName the dsl name
+     * @return {@link Database} instance
+     */
+    public static Database of(DSLName dslName) {
+        Database database = new Database();
+        database.setName(dslName);
+        return database;
+    }
 }

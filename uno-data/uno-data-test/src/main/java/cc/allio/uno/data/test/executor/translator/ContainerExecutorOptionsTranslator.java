@@ -7,6 +7,8 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import cc.allio.uno.test.testcontainers.Container;
 import org.testcontainers.containers.GenericContainer;
 
+import java.util.Map;
+
 /**
  * translate {@link Container} to {@link ExecutorOptions}
  *
@@ -74,6 +76,16 @@ public interface ContainerExecutorOptionsTranslator {
      * @return the db password
      */
     String withPassword(Container testContainer);
+
+    /**
+     * translate to other arguments
+     *
+     * @param testContainer the not null test container
+     * @return the map for arguments
+     */
+    default Map<String, Object> withOthers(Container testContainer) {
+        return Map.of();
+    }
 
     /**
      * return is default database, the default is false

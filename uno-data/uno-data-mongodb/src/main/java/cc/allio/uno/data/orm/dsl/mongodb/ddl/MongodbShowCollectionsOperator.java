@@ -13,7 +13,9 @@ import org.bson.BsonDocument;
 import org.bson.BsonInt32;
 import org.bson.BsonString;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb show collections operator
@@ -25,14 +27,14 @@ import java.util.List;
 @Getter
 @AutoService(ShowTablesOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbShowCollectionsOperator implements ShowTablesOperator {
+public class MongodbShowCollectionsOperator implements ShowTablesOperator<MongodbShowCollectionsOperator> {
 
     private Database fromDb;
 
     private final List<Table> tables = Lists.newArrayList();
 
     @Override
-    public ShowTablesOperator database(Database database) {
+    public MongodbShowCollectionsOperator database(Database database) {
         this.fromDb = database;
         return self();
     }
@@ -44,7 +46,6 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
             throw Exceptions.unOperate("check collections is empty");
         }
         BsonDocument bson = new BsonDocument("listCollections", new BsonInt32(1));
-
         BsonArray collections = new BsonArray();
         for (Table table : tables) {
             collections.add(new BsonString(table.getName().format()));
@@ -55,9 +56,14 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
     }
 
     @Override
-    public ShowTablesOperator parse(String dsl) {
+    public MongodbShowCollectionsOperator parse(String dsl) {
         reset();
         return self();
+    }
+
+    @Override
+    public MongodbShowCollectionsOperator customize(UnaryOperator<MongodbShowCollectionsOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbShowCollectionsOperator());
     }
 
     @Override
@@ -82,7 +88,7 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getPrepareValues");
+        return Collections.emptyList();
     }
 
     @Override
@@ -91,18 +97,18 @@ public class MongodbShowCollectionsOperator implements ShowTablesOperator {
     }
 
     @Override
-    public QueryOperator toQueryOperator() {
+    public QueryOperator<?> toQueryOperator() {
         throw Exceptions.unOperate("toQueryOperator");
     }
 
     @Override
-    public ShowTablesOperator schema(String schema) {
+    public MongodbShowCollectionsOperator schema(String schema) {
         // nothing to do
         return self();
     }
 
     @Override
-    public ShowTablesOperator from(Table table) {
+    public MongodbShowCollectionsOperator from(Table table) {
         this.tables.add(table);
         return self();
     }

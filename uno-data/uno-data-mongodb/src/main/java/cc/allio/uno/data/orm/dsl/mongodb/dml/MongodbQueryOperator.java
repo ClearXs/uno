@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
@@ -17,6 +18,7 @@ import org.bson.conversions.Bson;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb query document operator implementation
@@ -28,7 +30,7 @@ import java.util.List;
 @Slf4j
 @AutoService(QueryOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator> implements QueryOperator {
+public class MongodbQueryOperator extends MongodbWhereOperatorImpl<MongodbQueryOperator> implements QueryOperator<MongodbQueryOperator> {
 
     private Table fromColl;
     private List<Bson> orders;
@@ -49,12 +51,18 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
 
     @Override
     public String getDSL() {
-        return null;
+        return StringPool.EMPTY;
     }
 
     @Override
-    public QueryOperator parse(String dsl) {
-        throw Exceptions.unOperate("parse");
+    public MongodbQueryOperator parse(String dsl) {
+        // nothing to do
+        return self();
+    }
+
+    @Override
+    public MongodbQueryOperator customize(UnaryOperator<MongodbQueryOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbQueryOperator());
     }
 
     @Override
@@ -84,11 +92,11 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getPrepareValues");
+        return List.of();
     }
 
     @Override
-    public QueryOperator from(Table table) {
+    public MongodbQueryOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -99,19 +107,19 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator select(DSLName dslName) {
+    public MongodbQueryOperator select(DSLName dslName) {
         // nothing to do
         return self();
     }
 
     @Override
-    public QueryOperator select(DSLName dslName, String alias) {
+    public MongodbQueryOperator select(DSLName dslName, String alias) {
         // nothing to do
         return self();
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> dslNames) {
+    public MongodbQueryOperator selects(Collection<DSLName> dslNames) {
         // nothing to do
         return self();
     }
@@ -122,22 +130,22 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator distinct() {
+    public MongodbQueryOperator distinct() {
         // nothing to do
         return self();
     }
 
     @Override
-    public QueryOperator distinctOn(DSLName sqlName, String alias) {
-        this.distinct = new Distinct(sqlName);
+    public MongodbQueryOperator distinctOn(DSLName dslName, String alias) {
+        this.distinct = new Distinct(dslName);
         return self();
     }
 
     @Override
-    public QueryOperator aggregate(Func syntax, DSLName sqlName, String alias, Distinct distinct) {
+    public MongodbQueryOperator aggregate(Func syntax, DSLName dslName, String alias, Distinct distinct) {
         // TODO improve aggregate function
         switch (syntax) {
-            case AVG_FUNCTION -> Accumulators.avg(sqlName.format(), null);
+            case AVG_FUNCTION -> Accumulators.avg(dslName.format(), null);
             case COUNT_FUNCTION -> count = true;
         }
 
@@ -145,18 +153,18 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator from(QueryOperator fromTable, String alias) {
+    public MongodbQueryOperator from(QueryOperator<?> fromTable, String alias) {
         throw Exceptions.unOperate("from(QueryOperator fromTable, String alias)");
     }
 
     @Override
-    public QueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
+    public MongodbQueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
         throw Exceptions.unOperate("join");
     }
 
     @Override
-    public QueryOperator orderBy(DSLName sqlName, OrderCondition orderCondition) {
-        Bson order = toBsonOrder(sqlName, orderCondition);
+    public MongodbQueryOperator orderBy(DSLName dslName, OrderCondition orderCondition) {
+        Bson order = toBsonOrder(dslName, orderCondition);
         this.orders.add(order);
         this.bsonOrder = Sorts.orderBy(orders);
         return self();
@@ -171,13 +179,13 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator limit(Long limit, Long offset) {
+    public MongodbQueryOperator limit(Long limit, Long offset) {
         this.bsonWindow = Windows.range(offset, offset + limit);
         return self();
     }
 
     @Override
-    public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
+    public MongodbQueryOperator groupByOnes(Collection<DSLName> fieldNames) {
         if (log.isDebugEnabled()) {
             log.debug("mongodb query operate 'groupByOnes' nothing to do. ");
         }
@@ -185,7 +193,7 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<QueryOperator
     }
 
     @Override
-    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+    public MongodbQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         throw Exceptions.unOperate("tree");
     }
 }

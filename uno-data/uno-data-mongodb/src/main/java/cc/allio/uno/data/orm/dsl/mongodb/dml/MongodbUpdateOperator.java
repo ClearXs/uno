@@ -15,6 +15,7 @@ import org.bson.conversions.Bson;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb update document operator implementation
@@ -25,7 +26,7 @@ import java.util.function.Supplier;
  */
 @AutoService(UpdateOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperator> implements UpdateOperator {
+public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<MongodbUpdateOperator> implements UpdateOperator<MongodbUpdateOperator> {
 
     private Table fromColl;
     @Getter
@@ -40,14 +41,18 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
 
     @Override
     public String getDSL() {
-
-
         return update.toBsonDocument().toJson();
     }
 
     @Override
-    public UpdateOperator parse(String dsl) {
-        throw Exceptions.unOperate("parse");
+    public MongodbUpdateOperator parse(String dsl) {
+        // nothing todo
+        return self();
+    }
+
+    @Override
+    public MongodbUpdateOperator customize(UnaryOperator<MongodbUpdateOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbUpdateOperator());
     }
 
     @Override
@@ -75,11 +80,11 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getPrepareValues");
+        return List.of();
     }
 
     @Override
-    public UpdateOperator from(Table table) {
+    public MongodbUpdateOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -90,14 +95,14 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<UpdateOperat
     }
 
     @Override
-    public UpdateOperator updates(Map<DSLName, Object> values) {
+    public MongodbUpdateOperator updates(Map<DSLName, Object> values) {
         this.trigger.setAll(values);
         this.update = this.trigger.doIt();
         return self();
     }
 
     @Override
-    public UpdateOperator strictFill(String f, Supplier<Object> v) {
+    public MongodbUpdateOperator strictFill(String f, Supplier<Object> v) {
         this.trigger.set(f, v.get());
         this.update = this.trigger.doIt();
         return self();

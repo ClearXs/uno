@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.Operator;
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.TableOperator;
 
 /**
@@ -9,16 +9,16 @@ import cc.allio.uno.data.orm.dsl.TableOperator;
  *
  * @author j.x
  * @date 2023/4/16 12:52
- * @since 1.1.4
  * @see OperatorGroup
+ * @since 1.1.4
  */
-public interface DropTableOperator extends Operator<DropTableOperator>, TableOperator<DropTableOperator> {
+public interface DropTableOperator<T extends DropTableOperator<T>> extends Operator<T>, TableOperator<T> {
 
     /**
      * Drop xxxx if exist
      *
      * @param ifExist ifExist
-     * @return SQLDropTableOperator
+     * @return self
      */
-    DropTableOperator ifExist(Boolean ifExist);
+    T ifExist(Boolean ifExist);
 }

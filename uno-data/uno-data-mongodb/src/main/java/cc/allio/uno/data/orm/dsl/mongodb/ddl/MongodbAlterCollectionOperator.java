@@ -11,6 +11,7 @@ import org.bson.BsonDocument;
 import org.bson.BsonString;
 
 import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb alter collection(table) operator
@@ -22,7 +23,7 @@ import java.util.Collection;
 @Getter
 @AutoService(AlterTableOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbAlterCollectionOperator implements AlterTableOperator {
+public class MongodbAlterCollectionOperator implements AlterTableOperator<MongodbAlterCollectionOperator> {
 
     private Table fromColl;
     private Table toColl;
@@ -40,10 +41,15 @@ public class MongodbAlterCollectionOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator parse(String dsl) {
+    public MongodbAlterCollectionOperator parse(String dsl) {
         // nothing to do
         reset();
         return self();
+    }
+
+    @Override
+    public MongodbAlterCollectionOperator customize(UnaryOperator<MongodbAlterCollectionOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbAlterCollectionOperator());
     }
 
     @Override
@@ -63,7 +69,7 @@ public class MongodbAlterCollectionOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator from(Table table) {
+    public MongodbAlterCollectionOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -74,25 +80,25 @@ public class MongodbAlterCollectionOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
+    public MongodbAlterCollectionOperator alertColumns(Collection<ColumnDef> columnDefs) {
         // nothing to do
         return self();
     }
 
     @Override
-    public AlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
+    public MongodbAlterCollectionOperator addColumns(Collection<ColumnDef> columnDefs) {
         // nothing to do
         return self();
     }
 
     @Override
-    public AlterTableOperator deleteColumns(Collection<DSLName> columns) {
+    public MongodbAlterCollectionOperator deleteColumns(Collection<DSLName> columns) {
         // nothing to do
         return self();
     }
 
     @Override
-    public AlterTableOperator rename(Table to) {
+    public MongodbAlterCollectionOperator rename(Table to) {
         this.toColl = to;
         return self();
     }

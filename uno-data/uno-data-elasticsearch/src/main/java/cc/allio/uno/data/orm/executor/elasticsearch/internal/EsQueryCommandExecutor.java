@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.executor.elasticsearch.internal;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.dsl.dml.elasticsearch.EsQueryOperator;
+import cc.allio.uno.data.orm.dsl.elasticsearch.dml.EsQueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.JavaType;
 import cc.allio.uno.data.orm.dsl.type.TypeRegistry;

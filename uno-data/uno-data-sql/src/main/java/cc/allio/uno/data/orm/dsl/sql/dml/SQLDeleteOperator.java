@@ -17,6 +17,7 @@ import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import reactor.util.function.Tuple2;
 
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * DruidSQLDeleteQueryOperator
@@ -27,7 +28,7 @@ import java.util.function.Consumer;
  */
 @AutoService(DeleteOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> implements DeleteOperator {
+public class SQLDeleteOperator extends SQLWhereOperatorImpl<SQLDeleteOperator> implements DeleteOperator<SQLDeleteOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
@@ -56,7 +57,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
     }
 
     @Override
-    public DeleteOperator parse(String dsl) {
+    public SQLDeleteOperator parse(String dsl) {
         this.deleteStatement = (SQLDeleteStatement) SQLUtils.parseSingleStatement(dsl, druidDbType);
         SQLExpr where = this.deleteStatement.getWhere();
         if (SQLSupport.isBinaryExpr(where)) {
@@ -72,6 +73,11 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
                     });
         }
         return self();
+    }
+
+    @Override
+    public SQLDeleteOperator customize(UnaryOperator<SQLDeleteOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLDeleteOperator(dbType));
     }
 
     @Override
@@ -99,7 +105,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<DeleteOperator> impl
     }
 
     @Override
-    public DeleteOperator from(Table table) {
+    public SQLDeleteOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
         tableSource.setCatalog(table.getCatalog());

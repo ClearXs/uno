@@ -1,10 +1,9 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
 import cc.allio.uno.data.orm.dsl.WhereOperator;
-import cc.allio.uno.data.orm.dsl.type.DBType;
 
 /**
  * DeleteOperator
@@ -14,6 +13,5 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
  * @see OperatorGroup
  * @since 1.1.4
  */
-public interface DeleteOperator extends
-        PrepareOperator<DeleteOperator>, TableOperator<DeleteOperator>, WhereOperator<DeleteOperator> {
+public interface DeleteOperator<T extends DeleteOperator<T>> extends PrepareOperator<T>, TableOperator<T>, WhereOperator<T> {
 }

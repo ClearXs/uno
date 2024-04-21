@@ -4,16 +4,24 @@ import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
+import java.util.function.UnaryOperator;
+
 @AutoService(CreateTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class ADruidSQLCreateOperator implements CreateTableOperator {
+public class ADruidSQLCreateOperator implements CreateTableOperator<ADruidSQLCreateOperator> {
+
     @Override
     public String getDSL() {
         return null;
     }
 
     @Override
-    public CreateTableOperator parse(String dsl) {
+    public ADruidSQLCreateOperator parse(String dsl) {
+        return null;
+    }
+
+    @Override
+    public ADruidSQLCreateOperator customize(UnaryOperator<ADruidSQLCreateOperator> operatorFunc) {
         return null;
     }
 
@@ -33,7 +41,7 @@ public class ADruidSQLCreateOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator from(Table table) {
+    public ADruidSQLCreateOperator from(Table table) {
         return null;
     }
 
@@ -43,12 +51,12 @@ public class ADruidSQLCreateOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator column(ColumnDef columnDef) {
+    public ADruidSQLCreateOperator column(ColumnDef columnDef) {
         return null;
     }
 
     @Override
-    public CreateTableOperator comment(String comment) {
+    public ADruidSQLCreateOperator comment(String comment) {
         return null;
     }
 }

@@ -18,6 +18,10 @@
             <artifactId>uno-data-api</artifactId>
         </dependency>
         <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-data-sql</artifactId>
+        </dependency>
+        <dependency>
             <groupId>com.influxdb</groupId>
             <artifactId>influxdb-client-java</artifactId>
         </dependency>

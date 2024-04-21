@@ -12,6 +12,8 @@ import lombok.Getter;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 
+import java.util.function.UnaryOperator;
+
 /**
  * mongodb create collection operator
  *
@@ -22,7 +24,7 @@ import org.bson.BsonString;
 @Getter
 @AutoService(CreateTableOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbCreateCollectionOperator implements CreateTableOperator {
+public class MongodbCreateCollectionOperator implements CreateTableOperator<MongodbCreateCollectionOperator> {
 
     private Table fromColl;
 
@@ -37,9 +39,14 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator parse(String dsl) {
+    public MongodbCreateCollectionOperator parse(String dsl) {
         reset();
         return self();
+    }
+
+    @Override
+    public MongodbCreateCollectionOperator customize(UnaryOperator<MongodbCreateCollectionOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbCreateCollectionOperator());
     }
 
     @Override
@@ -58,7 +65,7 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator from(Table table) {
+    public MongodbCreateCollectionOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -69,13 +76,13 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator column(ColumnDef columnDef) {
+    public MongodbCreateCollectionOperator column(ColumnDef columnDef) {
         // nothing to do
         return self();
     }
 
     @Override
-    public CreateTableOperator comment(String comment) {
+    public MongodbCreateCollectionOperator comment(String comment) {
         // nothing to do
         return self();
     }

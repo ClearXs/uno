@@ -44,7 +44,7 @@ public interface DBType {
     DBType MARIADB = new DefaultDBType("MariaDB", DatabaseDriver.MARIADB.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:mariadb://" + IP_PORTS_TEMPLATE + "/" + DATABASE_NAME_TEMPLATE);
     DBType SQLITE = new DefaultDBType("SQLite", DatabaseDriver.SQLITE.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:sqlite::memory:");
     DBType H2 = new DefaultDBType("H2", DatabaseDriver.H2.getDriverClassName(), DBCategory.RELATIONAL, "jdbc:h2:mem:" + DATABASE_NAME_TEMPLATE + ";IGNORECASE=TRUE");
-    DBType ELASTIC_SEARCH = new DefaultDBType("ElasticSearch", StringPool.EMPTY, DBCategory.SEARCH_ENGINES, "");
+    DBType ELASTICSEARCH = new DefaultDBType("ElasticSearch", StringPool.EMPTY, DBCategory.SEARCH_ENGINES, "");
     DBType MONGODB = new DefaultDBType("Mongodb", "org.mongodb.Driver", DBCategory.DOCUMENT, "");
     DBType TD_ENGINE = new DefaultDBType("TDEngine", StringPool.EMPTY, DBCategory.TIME_SERIES, "");
     DBType INFLUXDB = new DefaultDBType("Influxdb", StringPool.EMPTY, DBCategory.TIME_SERIES, "");
@@ -54,7 +54,7 @@ public interface DBType {
     /**
      * 类型集合
      */
-    List<DBType> ALL_DB_TYPES = Lists.newArrayList(MYSQL, POSTGRESQL, SQLSERVER, ORACLE, OPEN_GAUSS, DB2, MARIADB, SQLITE, H2, ELASTIC_SEARCH, MONGODB, TD_ENGINE, INFLUXDB, NEO4J, REDIS);
+    List<DBType> ALL_DB_TYPES = Lists.newArrayList(MYSQL, POSTGRESQL, SQLSERVER, ORACLE, OPEN_GAUSS, DB2, MARIADB, SQLITE, H2, ELASTICSEARCH, MONGODB, TD_ENGINE, INFLUXDB, NEO4J, REDIS);
 
     /**
      * 获取数据库类型名称

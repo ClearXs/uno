@@ -11,6 +11,8 @@ import com.mongodb.internal.operation.DropCollectionOperation;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 
+import java.util.function.UnaryOperator;
+
 /**
  * mongodb drop collection operator
  *
@@ -20,7 +22,7 @@ import org.bson.BsonString;
  */
 @AutoService(DropTableOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbDropCollectionOperator implements DropTableOperator {
+public class MongodbDropCollectionOperator implements DropTableOperator<MongodbDropCollectionOperator> {
 
     private Table fromColl;
 
@@ -34,9 +36,14 @@ public class MongodbDropCollectionOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator parse(String dsl) {
+    public MongodbDropCollectionOperator parse(String dsl) {
         reset();
         return self();
+    }
+
+    @Override
+    public MongodbDropCollectionOperator customize(UnaryOperator<MongodbDropCollectionOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbDropCollectionOperator());
     }
 
     @Override
@@ -55,7 +62,7 @@ public class MongodbDropCollectionOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator from(Table table) {
+    public MongodbDropCollectionOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -66,7 +73,7 @@ public class MongodbDropCollectionOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator ifExist(Boolean ifExist) {
+    public MongodbDropCollectionOperator ifExist(Boolean ifExist) {
         // nothing to do
         return self();
     }

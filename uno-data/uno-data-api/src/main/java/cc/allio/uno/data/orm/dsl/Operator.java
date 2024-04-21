@@ -1,11 +1,14 @@
 package cc.allio.uno.data.orm.dsl;
 
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.WrapperOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.lang.annotation.*;
 import java.util.Objects;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * DSL操作
@@ -14,7 +17,7 @@ import java.util.function.Supplier;
  * @date 2023/4/12 19:44
  * @since 1.1.4
  */
-public interface Operator<T extends Operator<T>> {
+public interface Operator<T extends Operator<T>> extends Self<T> {
 
     /**
      * 获取DSL字符串
@@ -47,6 +50,14 @@ public interface Operator<T extends Operator<T>> {
     default T customize(String dsl) {
         return parse(dsl);
     }
+
+    /**
+     * support operatorFunc make be able customization.
+     *
+     * @param operatorFunc create new self operatorFunc, and invoker customize some operate..
+     * @return self
+     */
+    T customize(UnaryOperator<T> operatorFunc);
 
     /**
      * reset operator
@@ -85,7 +96,22 @@ public interface Operator<T extends Operator<T>> {
      * @throws ClassCastException failed to cast to specifies reality type
      */
     default <O extends Operator<?>> O castReality(Class<O> realityType) {
+        if (this instanceof WrapperOperator wrapperOperator) {
+            T actual = wrapperOperator.getActual();
+            return realityType.cast(actual);
+        }
         return realityType.cast(this);
+    }
+
+    /**
+     * obtain {@link MetaAcceptorSet}, the default is empty.
+     * <p>probable implement adopt proxy way.</p>
+     * <p>otherwise will be adopt customize implementation</p>
+     *
+     * @return the {@link MetaAcceptorSet} instance, default is null
+     */
+    default MetaAcceptorSet obtainMetaAcceptorSet() {
+        return null;
     }
 
     /**

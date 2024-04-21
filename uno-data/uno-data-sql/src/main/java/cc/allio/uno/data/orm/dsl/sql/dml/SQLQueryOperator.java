@@ -21,6 +21,7 @@ import com.alibaba.druid.sql.visitor.ParameterizedOutputVisitorUtils;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import com.alibaba.druid.sql.visitor.SQLASTOutputVisitor;
 import com.google.common.collect.Lists;
 import org.apache.commons.lang3.reflect.FieldUtils;
 
@@ -28,6 +29,7 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.function.UnaryOperator;
 
 /**
  * Druid Query Operator
@@ -38,7 +40,7 @@ import java.util.function.Consumer;
  */
 @AutoService(QueryOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implements QueryOperator {
+public class SQLQueryOperator extends SQLWhereOperatorImpl<SQLQueryOperator> implements QueryOperator<SQLQueryOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
@@ -93,8 +95,23 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
                 getPrepareValues().stream().map(PrepareValue::getValue).toList());
     }
 
+    /**
+     * from DSL remain where DSL
+     *
+     * @return the where dsl
+     */
+    public String getWhereDSL() {
+        List<Object> parameters = getPrepareValues().stream().map(PrepareValue::getValue).toList();
+        StringBuilder out = new StringBuilder();
+        SQLASTOutputVisitor visitor = SQLUtils.createOutputVisitor(out, druidDbType);
+        visitor.setInputParameters(parameters);
+        SQLExpr where = selectQuery.getWhere();
+        where.accept(visitor);
+        return out.toString();
+    }
+
     @Override
-    public QueryOperator parse(String dsl) {
+    public SQLQueryOperator parse(String dsl) {
         SQLStatement sqlStatement = SQLUtils.parseSingleStatement(dsl, druidDbType);
         Field selectField = FieldUtils.getField(sqlStatement.getClass(), "select", true);
         if (selectField == null) {
@@ -125,6 +142,11 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
+    public SQLQueryOperator customize(UnaryOperator<SQLQueryOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLQueryOperator(dbType));
+    }
+
+    @Override
     public void reset() {
         super.reset();
         this.selectQuery = new SQLSelectQueryBlock();
@@ -150,19 +172,19 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator select(DSLName dslName) {
+    public SQLQueryOperator select(DSLName dslName) {
         addColumns(dslName.format(), null, true);
         return self();
     }
 
     @Override
-    public QueryOperator select(DSLName dslName, String alias) {
+    public SQLQueryOperator select(DSLName dslName, String alias) {
         addColumns(dslName.format(), alias, true);
         return self();
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> dslNames) {
+    public SQLQueryOperator selects(Collection<DSLName> dslNames) {
         for (DSLName sqlName : dslNames) {
             addColumns(sqlName.format(), null, true);
         }
@@ -175,34 +197,34 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator distinct() {
+    public SQLQueryOperator distinct() {
         SQLSelectItem sqlSelectItem = new SQLSelectItem(new SQLAggregateExpr("", SQLAggregateOption.DISTINCT));
         selectQuery.addSelectItem(sqlSelectItem);
         return self();
     }
 
     @Override
-    public QueryOperator distinctOn(DSLName sqlName, String alias) {
-        SQLSelectItem sqlSelectItem = new SQLSelectItem(new SQLAggregateExpr(sqlName.format(), SQLAggregateOption.DISTINCT));
+    public SQLQueryOperator distinctOn(DSLName dslName, String alias) {
+        SQLSelectItem sqlSelectItem = new SQLSelectItem(new SQLAggregateExpr(dslName.format(), SQLAggregateOption.DISTINCT));
         selectQuery.addSelectItem(sqlSelectItem);
         return self();
     }
 
     @Override
-    public QueryOperator aggregate(Func syntax, DSLName sqlName, String alias, Distinct distinct) {
+    public SQLQueryOperator aggregate(Func syntax, DSLName dslName, String alias, Distinct distinct) {
         SQLSelectItem sqlSelectItem = new SQLSelectItem();
         SQLAggregateExpr sqlAggregateExpr = new SQLAggregateExpr(syntax.getName());
         if (distinct != null) {
             sqlAggregateExpr.setOption(SQLAggregateOption.DISTINCT);
         }
-        sqlAggregateExpr.addArgument(new SQLIdentifierExpr(sqlName.format()));
+        sqlAggregateExpr.addArgument(new SQLIdentifierExpr(dslName.format()));
         sqlSelectItem.setExpr(sqlAggregateExpr);
         selectQuery.addSelectItem(sqlSelectItem);
         return self();
     }
 
     @Override
-    public QueryOperator from(Table table) {
+    public SQLQueryOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
         tableSource.setCatalog(table.getCatalog());
@@ -218,7 +240,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator from(QueryOperator fromTable, String alias) {
+    public SQLQueryOperator from(QueryOperator<?> fromTable, String alias) {
         String fromSQL = fromTable.getDSL();
         SQLStatement sqlStatement = SQLUtils.parseSingleStatement(fromSQL, druidDbType, true);
         SQLSubqueryTableSource from = new SQLSubqueryTableSource((SQLSelect) sqlStatement);
@@ -228,7 +250,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
+    public SQLQueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
         // 构建连接关系
         SQLExprTableSource rightSource = new UnoSQLExprTableSource(druidDbType);
         rightSource.setExpr(new SQLIdentifierExpr(right.getName().format()));
@@ -258,26 +280,26 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator orderBy(DSLName sqlName, OrderCondition orderCondition) {
+    public SQLQueryOperator orderBy(DSLName dslName, OrderCondition orderCondition) {
         SQLOrderingSpecification druidOrder;
         if (orderCondition == OrderCondition.ASC) {
             druidOrder = SQLOrderingSpecification.ASC;
         } else {
             druidOrder = SQLOrderingSpecification.DESC;
         }
-        getOrderBy().addItem(new SQLIdentifierExpr(sqlName.format()), druidOrder);
+        getOrderBy().addItem(new SQLIdentifierExpr(dslName.format()), druidOrder);
         return self();
     }
 
     @Override
-    public QueryOperator limit(Long limit, Long offset) {
+    public SQLQueryOperator limit(Long limit, Long offset) {
         getLimit().setRowCount(Math.toIntExact(limit));
         getLimit().setOffset(Math.toIntExact(offset));
         return self();
     }
 
     @Override
-    public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
+    public SQLQueryOperator groupByOnes(Collection<DSLName> fieldNames) {
         fieldNames.stream()
                 .map(sqlName -> new SQLIdentifierExpr(sqlName.format()))
                 .forEach(getGroupBy()::addItem);
@@ -285,7 +307,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<QueryOperator> implem
     }
 
     @Override
-    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
+    public SQLQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         String baseQueryDsl = baseQuery.getDSL();
         String subQueryDsl = subQuery.getDSL();
         String treeQuery =

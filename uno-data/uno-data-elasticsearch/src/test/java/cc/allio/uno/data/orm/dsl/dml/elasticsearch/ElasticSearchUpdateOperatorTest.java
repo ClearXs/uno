@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
 import cc.allio.uno.core.util.JsonUtils;
+import cc.allio.uno.data.orm.dsl.elasticsearch.dml.EsUpdateOperator;
 import cc.allio.uno.data.test.model.Bank;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;

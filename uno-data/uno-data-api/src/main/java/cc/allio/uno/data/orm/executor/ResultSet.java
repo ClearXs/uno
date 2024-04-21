@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor;
 
 import lombok.Setter;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
@@ -12,12 +13,12 @@ import java.util.List;
  * @date 2023/5/28 23:11
  * @since 1.1.4
  */
+@Setter
 public class ResultSet implements Iterable<ResultGroup> {
 
     /**
      * 结果数据
      */
-    @Setter
     private List<ResultGroup> resultGroups;
 
     @Override
@@ -25,6 +26,6 @@ public class ResultSet implements Iterable<ResultGroup> {
         if (resultGroups != null) {
             return resultGroups.iterator();
         }
-        throw new NullPointerException("resultGroups for list is empty");
+        return Collections.emptyIterator();
     }
 }

@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor.internal;
 
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.WrapperOperator;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 
@@ -16,7 +17,7 @@ import java.util.Map;
  * @modify 1.1.7
  * @since 1.1.4
  */
-public interface InnerCommandExecutor<R, O extends Operator<?>, H> {
+public interface InnerCommandExecutor<R, O extends Operator, H> {
 
     /**
      * 执行类型
@@ -52,14 +53,19 @@ public interface InnerCommandExecutor<R, O extends Operator<?>, H> {
      */
     static <O extends Operator<?>> O castTo(Operator<?> original, Class<O> castFor) {
         try {
-            return castFor.cast(original);
+            if (original instanceof WrapperOperator wrapperOperator) {
+                Operator<?> actual = wrapperOperator.getActual();
+                return castFor.cast(actual);
+            } else {
+                return castFor.cast(original);
+            }
         } catch (ClassCastException ex) {
             throw new DSLException(String.format("original %s cast to %s failed", original.getClass().getName(), castFor.getName()), ex);
         }
     }
 
     /**
-     * sub-class support reality operator type
+     * subclass support reality operator type
      *
      * @return the operator type
      */

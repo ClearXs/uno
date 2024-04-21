@@ -181,7 +181,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                 TableResolver tableResolver =
                                         TABLE_RESOLVES.computeIfAbsent(
                                                 pojoClass,
-                                                k -> {
+                                                _ -> {
                                                     Class<? extends TableResolver> tableResolverClass = tableResolve.value();
                                                     return Optional.ofNullable(tableResolverClass)
                                                             .map(ClassUtils::newInstance)
@@ -244,7 +244,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                                 ColumnDefListResolver columnDefListResolver =
                                                         CLASS_COLUMN_LIST_RESOLVERS.computeIfAbsent(
                                                                 pojoClass,
-                                                                k -> {
+                                                                _ -> {
                                                                     Class<? extends ColumnDefListResolver> columnDefResolverClass = columnDefListResolve.value();
                                                                     return Optional.ofNullable(columnDefResolverClass)
                                                                             .map(ClassUtils::newInstance)
@@ -302,7 +302,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                             .flatMap(c -> {
                                 ColumnDefResolver columnDefResolver = COLUMN_RESOLVES.computeIfAbsent(
                                         field,
-                                        k -> {
+                                        _ -> {
                                             Class<? extends ColumnDefResolver> columnResolverClass = columnDefResolve.value();
                                             return Optional.ofNullable(columnResolverClass)
                                                     .map(ClassUtils::newInstance)
@@ -500,7 +500,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         return Optional.ofNullable(pojoInspection)
                 .map(p -> {
                     Class<? extends PojoInspect> pojoInspectClass = p.value();
-                    return POJO_INSPECTS.computeIfAbsent(pojoClass, k -> Optional.ofNullable(pojoInspectClass).map(ClassUtils::newInstance).orElse(null));
+                    return POJO_INSPECTS.computeIfAbsent(pojoClass, _ -> Optional.ofNullable(pojoInspectClass).map(ClassUtils::newInstance).orElse(null));
                 })
                 .orElse(DEFAULT_POJO_INSPECT);
     }

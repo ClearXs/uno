@@ -18,6 +18,15 @@ import java.util.function.Supplier;
 public interface CommandExecutorRegistry {
 
     /**
+     * 注册 command executor，如果存在则不在进行设置
+     *
+     * @param executorOptions         executorOptions
+     * @param commandExecutorSupplier commandExecutorSupplier
+     * @param ifPresent               if true 如果已经存在则进行覆盖 否则不进行覆盖
+     */
+    <T extends AggregateCommandExecutor> T register(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent);
+
+    /**
      * 基于给定的{@link ExecutorOptions}从{@link CommandExecutorLoader}
      *
      * @param executorOptions executorOptions
@@ -34,15 +43,6 @@ public interface CommandExecutorRegistry {
      * @return AggregateCommandExecutor instance or null
      */
     <T extends AggregateCommandExecutor> T createAndRegister(@NotNull ExecutorOptions executorOptions);
-
-    /**
-     * 注册 command executor，如果存在则不在进行设置
-     *
-     * @param executorOptions         executorOptions
-     * @param commandExecutorSupplier commandExecutorSupplier
-     * @param ifPresent               if true 如果已经存在则进行覆盖 否则不进行覆盖
-     */
-    <T extends AggregateCommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent);
 
     /**
      * 基于最佳匹配原则获取最可能存在的{@link ExecutorOptions}，在基于此获取{@link AggregateCommandExecutor}实例

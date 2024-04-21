@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.dml.sql;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLInsertOperator;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.test.BaseTestCase;
 import com.google.common.collect.Lists;
@@ -15,7 +15,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testInsert() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
         String sql = insertOperator.from("test")
                 .insert("x", "2")
                 .getDSL();
@@ -32,7 +32,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testNotEqualityInsertColumn() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
         String sql = insertOperator.from("dual")
                 .insert("a1", null, "a2", "2")
                 .insert("a1", null)
@@ -43,7 +43,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testNullValueInsert() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
 
         Operators.thenRest(() -> {
             String sql = insertOperator.from("dual")
@@ -67,7 +67,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testStrictSingleValueClause() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
         new Operators(insertOperator)
                 .then(() -> {
                     // column不存在
@@ -93,7 +93,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testStrictMultiValueClause() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
         new Operators(insertOperator)
                 .then(() -> {
                     // column不存在
@@ -120,7 +120,7 @@ public class SQLInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testParse() {
-        InsertOperator insertOperator = OperatorGroup.getOperator(InsertOperator.class, OperatorKey.SQL);
+        SQLInsertOperator insertOperator = OperatorGroup.getOperator(SQLInsertOperator.class, OperatorKey.SQL);
         String oriSQL = "INSERT INTO PUBLIC.t_user (name, age)\n" +
                 "VALUES ('21', 2), ('xc', 2)";
         insertOperator.parse(oriSQL);

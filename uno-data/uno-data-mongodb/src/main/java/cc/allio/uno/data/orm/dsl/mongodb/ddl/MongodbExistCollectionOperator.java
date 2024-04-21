@@ -13,6 +13,7 @@ import org.bson.BsonInt32;
 import org.bson.BsonString;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb exist collection operator
@@ -23,7 +24,7 @@ import java.util.List;
  */
 @AutoService(ExistTableOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbExistCollectionOperator implements ExistTableOperator {
+public class MongodbExistCollectionOperator implements ExistTableOperator<MongodbExistCollectionOperator> {
 
     private Table fromColl;
 
@@ -40,9 +41,14 @@ public class MongodbExistCollectionOperator implements ExistTableOperator {
     }
 
     @Override
-    public ExistTableOperator parse(String dsl) {
+    public MongodbExistCollectionOperator parse(String dsl) {
         reset();
         return self();
+    }
+
+    @Override
+    public MongodbExistCollectionOperator customize(UnaryOperator<MongodbExistCollectionOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbExistCollectionOperator());
     }
 
     @Override
@@ -62,16 +68,16 @@ public class MongodbExistCollectionOperator implements ExistTableOperator {
 
     @Override
     public String getPrepareDSL() {
-        throw Exceptions.unOperate("getDSL");
+        return getDSL();
     }
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getDSL");
+        return List.of();
     }
 
     @Override
-    public ExistTableOperator from(Table table) {
+    public MongodbExistCollectionOperator from(Table table) {
         this.fromColl = table;
         return self();
     }

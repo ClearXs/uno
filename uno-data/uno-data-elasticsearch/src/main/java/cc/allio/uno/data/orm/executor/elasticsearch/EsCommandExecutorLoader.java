@@ -31,7 +31,7 @@ public class EsCommandExecutorLoader extends BaseCommandExecutorLoader<EsCommand
 
     @Override
     public EsCommandExecutor onLoad(List<Interceptor> interceptors) {
-        ExecutorOptions executorOptions = new ExecutorOptionsImpl(DBType.ELASTIC_SEARCH, ExecutorKey.ELASTICSEARCH, OperatorKey.ELASTICSEARCH);
+        ExecutorOptions executorOptions = new ExecutorOptionsImpl(DBType.ELASTICSEARCH, ExecutorKey.ELASTICSEARCH, OperatorKey.ELASTICSEARCH);
         executorOptions.addInterceptors(interceptors);
         return load(executorOptions);
     }
@@ -43,6 +43,6 @@ public class EsCommandExecutorLoader extends BaseCommandExecutorLoader<EsCommand
 
     @Override
     public boolean match(DBType dbType) {
-        return DBType.ELASTIC_SEARCH == dbType;
+        return DBType.ELASTICSEARCH == dbType;
     }
 }

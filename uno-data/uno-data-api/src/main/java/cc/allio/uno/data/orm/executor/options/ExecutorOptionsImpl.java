@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.executor.options;
 
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.id.IdGenerator;
-import cc.allio.uno.data.orm.dsl.OperatorKey;
+import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
@@ -31,6 +31,8 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
     @Getter
     private final SPIInnerCommandScanner scanner;
 
+    private final Map<Class<? extends Meta<?>>, MetaAcceptor<? extends Meta<?>>> acceptorSet;
+
     public ExecutorOptionsImpl(@NotNull DBType dbType, @NotNull ExecutorKey executorKey, @NotNull OperatorKey operatorKey) {
         this(IdGenerator.defaultGenerator().getNextIdAsString(), dbType, executorKey, operatorKey);
     }
@@ -42,6 +44,7 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
         putAttribute(EXECUTOR_KEY_MARK, executorKey);
         putAttribute(OPERATOR_KEY_MARK, operatorKey);
         this.scanner = new SPIInnerCommandScanner(executorKey);
+        this.acceptorSet = Maps.newConcurrentMap();
     }
 
     /**
@@ -89,7 +92,6 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
         return properties;
     }
 
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -101,5 +103,20 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
     @Override
     public int hashCode() {
         return Objects.hashCode(getDbType(), getExecutorKey(), getOperatorKey());
+    }
+
+    @Override
+    public <T extends Meta<T>> void customizeMetaAcceptorSetter(Class<T> metaClass, MetaAcceptor<T> metaAcceptor) {
+        acceptorSet.put(metaClass, metaAcceptor);
+    }
+
+    @Override
+    public <T extends Meta<T>> MetaAcceptor<T> customizeMetaAcceptorGetter(Class<T> metaClass) {
+        return (MetaAcceptor<T>) acceptorSet.get(metaClass);
+    }
+
+    @Override
+    public void clear() {
+        acceptorSet.clear();
     }
 }

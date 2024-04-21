@@ -25,4 +25,11 @@ public @interface RunContainer {
      * @see ContainerType
      */
     ContainerType value();
+
+    /**
+     * through give the class {@link Prelude}, build and trigger {@link Prelude#onPrepare(Container)}
+     *
+     * @return the class of {@link Prelude}
+     */
+    Class<? extends Prelude> prelude() default LogPrelude.class;
 }

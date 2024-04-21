@@ -288,6 +288,9 @@ public class Types {
      * @return String
      */
     public static String toString(Object value) {
+        if (value == null) {
+            return StringPool.EMPTY;
+        }
         return Optional.ofNullable(TypeOperatorFactory.translator(value.getClass()))
                 .map(operator -> operator.fromString(value))
                 .orElse(value.toString());

@@ -1,13 +1,18 @@
 package cc.allio.uno.data.orm.dsl.influxdb.ddl;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
+import com.google.common.collect.Lists;
+import com.influxdb.client.domain.BucketRetentionRules;
 import lombok.Getter;
 
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
+import java.util.function.UnaryOperator;
 
 /**
  * influxdb alter bucket(table) operator
@@ -19,20 +24,27 @@ import java.util.Collection;
 @Getter
 @AutoService(AlterTableOperator.class)
 @Operator.Group(OperatorKey.INFLUXDB_LITERAL)
-public class InfluxdbAlterBucketOperator implements AlterTableOperator {
+public class InfluxdbAlterBucketOperator implements AlterTableOperator<InfluxdbAlterBucketOperator> {
 
     private Table fromBucket;
     private Table toBucket;
     private Long retention;
+    private List<BucketRetentionRules> retentionRules;
 
     @Override
     public String getDSL() {
-        throw Exceptions.unOperate("getDSL");
+        return StringPool.EMPTY;
     }
 
     @Override
-    public AlterTableOperator parse(String dsl) {
-        throw Exceptions.unOperate("parse");
+    public InfluxdbAlterBucketOperator parse(String dsl) {
+        // nothing to do
+        return self();
+    }
+
+    @Override
+    public InfluxdbAlterBucketOperator customize(UnaryOperator<InfluxdbAlterBucketOperator> operatorFunc) {
+        return operatorFunc.apply(new InfluxdbAlterBucketOperator());
     }
 
     @Override
@@ -53,7 +65,7 @@ public class InfluxdbAlterBucketOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator from(Table table) {
+    public InfluxdbAlterBucketOperator from(Table table) {
         this.fromBucket = toBucket;
         return self();
     }
@@ -64,22 +76,25 @@ public class InfluxdbAlterBucketOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
-        throw Exceptions.unOperate("alertColumns");
+    public InfluxdbAlterBucketOperator alertColumns(Collection<ColumnDef> columnDefs) {
+        // nothing to do
+        return self();
     }
 
     @Override
-    public AlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
-        throw Exceptions.unOperate("addColumns");
+    public InfluxdbAlterBucketOperator addColumns(Collection<ColumnDef> columnDefs) {
+        // nothing to do
+        return self();
     }
 
     @Override
-    public AlterTableOperator deleteColumns(Collection<DSLName> columns) {
-        throw Exceptions.unOperate("deleteColumns");
+    public InfluxdbAlterBucketOperator deleteColumns(Collection<DSLName> columns) {
+        // nothing to do
+        return self();
     }
 
     @Override
-    public AlterTableOperator rename(Table to) {
+    public InfluxdbAlterBucketOperator rename(Table to) {
         this.toBucket = to;
         return self();
     }
@@ -90,8 +105,14 @@ public class InfluxdbAlterBucketOperator implements AlterTableOperator {
      * @param retention the long type retention
      * @return return {@link InfluxdbAlterBucketOperator}
      */
-    public InfluxdbAlterBucketOperator retention(Long retention) {
-        this.retention = retention;
-        return this;
+    public InfluxdbAlterBucketOperator addRetentionRule(UnaryOperator<BucketRetentionRules> func) {
+        BucketRetentionRules rules = Optional.ofNullable(func).map(f -> f.apply(new BucketRetentionRules())).orElse(null);
+        if (retentionRules == null) {
+            retentionRules = Lists.newArrayList();
+        }
+        if (rules != null) {
+            retentionRules.add(rules);
+        }
+        return self();
     }
 }

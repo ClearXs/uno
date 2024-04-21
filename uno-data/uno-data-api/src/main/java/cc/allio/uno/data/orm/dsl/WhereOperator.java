@@ -4,7 +4,32 @@ import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 
 /**
- * where eq1=eq2...
+ * where condition, contains following operate:
+ * <ol>
+ *     <li>{@link #gt(DSLName, Object)}</li>
+ *     <li>{@link #gte(DSLName, Object)}</li>
+ *     <li>{@link #lt(DSLName, Object)}</li>
+ *     <li>{@link #lte(DSLName, Object)}</li>
+ *     <li>{@link #eq(DSLName, Object)}</li>
+ *     <li>{@link #neq(DSLName, Object)}</li>
+ *     <li>{@link #notNull(DSLName)}</li>
+ *     <li>{@link #isNull(DSLName)}</li>
+ *     <li>{@link #in(DSLName, Object[])}</li>
+ *     <li>{@link #notIn(DSLName, Object[])}</li>
+ *     <li>{@link #between(DSLName, Object, Object)}</li>
+ *     <li>{@link #notBetween(DSLName, Object, Object)}</li>
+ *     <li>{@link #like(DSLName, Object)}</li>
+ *     <li>{@link #$like(DSLName, Object)}</li>
+ *     <li>{@link #like$(DSLName, Object)}</li>
+ *     <li>{@link #$like$(DSLName, Object)}</li>
+ *     <li>{@link #notLike(DSLName, Object)}</li>
+ *     <li>{@link #$notLike(DSLName, Object)}</li>
+ *     <li>{@link #notLike$(DSLName, Object)}</li>
+ *     <li>{@link #$notLike$(DSLName, Object)}</li>
+ *     <li>{@link #or()}</li>
+ *     <li>{@link #and()}</li>
+ *     <li>{@link #nor()}</li>
+ * </ol>
  *
  * @author j.x
  * @date 2023/4/16 18:14
@@ -17,7 +42,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T gt(MethodReferenceColumn<R> reference, Object value) {
         return gt(reference.getColumn(), value);
@@ -28,7 +53,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T gt(String fieldName, Object value) {
         return gt(DSLName.of(fieldName), value);
@@ -39,7 +64,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T gt(DSLName dslName, Object value);
 
@@ -48,7 +73,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T gte(MethodReferenceColumn<R> reference, Object value) {
         return gte(reference.getColumn(), value);
@@ -59,7 +84,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T gte(String fieldName, Object value) {
         return gte(DSLName.of(fieldName), value);
@@ -70,7 +95,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T gte(DSLName dslName, Object value);
 
@@ -79,7 +104,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T lt(MethodReferenceColumn<R> reference, Object value) {
         return lt(reference.getColumn(), value);
@@ -90,7 +115,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T lt(String fieldName, Object value) {
         return lt(DSLName.of(fieldName), value);
@@ -101,7 +126,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T lt(DSLName dslName, Object value);
 
@@ -110,7 +135,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T lte(MethodReferenceColumn<R> reference, Object value) {
         return lte(reference.getColumn(), value);
@@ -121,7 +146,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T lte(String fieldName, Object value) {
         return lte(DSLName.of(fieldName), value);
@@ -132,7 +157,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T lte(DSLName dslName, Object value);
 
@@ -141,7 +166,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T eq(MethodReferenceColumn<R> reference, Object value) {
         return eq(reference.getColumn(), value);
@@ -152,7 +177,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T eq(String fieldName, Object value) {
         return eq(DSLName.of(fieldName), value);
@@ -163,7 +188,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T eq(DSLName dslName, Object value);
 
@@ -172,7 +197,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T neq(MethodReferenceColumn<R> reference, Object value) {
         return neq(reference.getColumn(), value);
@@ -183,7 +208,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T neq(String fieldName, Object value) {
         return neq(DSLName.of(fieldName), value);
@@ -194,7 +219,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   比较数据值
-     * @return SQLWhereOperator
+     * @return self
      */
     T neq(DSLName dslName, Object value);
 
@@ -202,7 +227,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * is not null condition
      *
      * @param reference 方法引用
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T notNull(MethodReferenceColumn<R> reference) {
         return notNull(reference.getColumn());
@@ -212,7 +237,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * is not null condition
      *
      * @param fieldName java variable name
-     * @return SQLWhereOperator
+     * @return self
      */
     default T notNull(String fieldName) {
         return notNull(DSLName.of(fieldName));
@@ -222,7 +247,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * is not null condition
      *
      * @param dslName dslName
-     * @return SQLWhereOperator
+     * @return self
      */
     T notNull(DSLName dslName);
 
@@ -267,7 +292,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param values  数值数据
-     * @return SQLWhereOperator
+     * @return self
      */
     <V> T in(DSLName dslName, V... values);
 
@@ -290,7 +315,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param values  数值数据
-     * @return SQLWhereOperator
+     * @return self
      */
     <V> T notIn(DSLName dslName, V... values);
 
@@ -300,7 +325,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param reference 方法引用
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T between(MethodReferenceColumn<R> reference, Object withValue, Object endValue) {
         return between(reference.getColumn(), withValue, endValue);
@@ -312,7 +337,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param fieldName java variable name
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T between(String fieldName, Object withValue, Object endValue) {
         return between(DSLName.of(fieldName), withValue, endValue);
@@ -324,7 +349,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param dslName   dslName
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     T between(DSLName dslName, Object withValue, Object endValue);
 
@@ -334,7 +359,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param reference 方法引用
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T notBetween(MethodReferenceColumn<R> reference, Object withValue, Object endValue) {
         return notBetween(reference.getColumn(), withValue, endValue);
@@ -346,7 +371,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param fieldName java variable name
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T notBetween(String fieldName, Object withValue, Object endValue) {
         return notBetween(DSLName.of(fieldName), withValue, endValue);
@@ -358,7 +383,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      * @param dslName   dslName
      * @param withValue between起始值
      * @param endValue  between结束值
-     * @return SQLWhereOperator
+     * @return self
      */
     T notBetween(DSLName dslName, Object withValue, Object endValue);
 
@@ -367,7 +392,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T like(MethodReferenceColumn<R> reference, Object value) {
         return like(reference.getColumn(), value);
@@ -378,7 +403,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T $like(MethodReferenceColumn<R> reference, Object value) {
         return $like(reference.getColumn(), value);
@@ -389,7 +414,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T like(String fieldName, Object value) {
         return like(DSLName.of(fieldName), value);
@@ -400,7 +425,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T like(DSLName dslName, Object value);
 
@@ -409,7 +434,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T $like(String fieldName, Object value) {
         return $like(DSLName.of(fieldName), value);
@@ -420,7 +445,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T $like(DSLName dslName, Object value);
 
@@ -429,7 +454,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T like$(MethodReferenceColumn<R> reference, Object value) {
         return like$(reference.getColumn(), value);
@@ -440,7 +465,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T like$(String fieldName, Object value) {
         return like$(DSLName.of(fieldName), value);
@@ -451,7 +476,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T like$(DSLName dslName, Object value);
 
@@ -461,7 +486,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param reference 方法引用
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default <R> T $like$(MethodReferenceColumn<R> reference, Object value) {
         return $like$(reference.getColumn(), value);
@@ -472,7 +497,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param fieldName java variable name
      * @param value     like值
-     * @return SQLWhereOperator
+     * @return self
      */
     default T $like$(String fieldName, Object value) {
         return $like$(DSLName.of(fieldName), value);
@@ -483,7 +508,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T $like$(DSLName dslName, Object value);
 
@@ -506,7 +531,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T notLike(DSLName dslName, Object value);
 
@@ -529,7 +554,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T $notLike(DSLName dslName, Object value);
 
@@ -552,7 +577,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T notLike$(DSLName dslName, Object value);
 
@@ -575,7 +600,7 @@ public interface WhereOperator<T extends Self<T>> extends Self<T> {
      *
      * @param dslName dslName
      * @param value   like值
-     * @return SQLWhereOperator
+     * @return self
      */
     T $notLike$(DSLName dslName, Object value);
 

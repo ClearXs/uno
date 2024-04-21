@@ -29,7 +29,9 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
 
     private final ReadWriteLock lock = new ReentrantReadWriteLock();
 
-    // 以唯一标识作为key的Map
+    /**
+     * base on {@link ExecutorKey#key()} as the map key, the map value is {@link AggregateCommandExecutor}
+     */
     private final Map<String, AggregateCommandExecutor> commandExecutorMap = Maps.newConcurrentMap();
     // 以option作为key，获取commandExecutor的的唯一标识
     // option的equals是根据 DBType ExecutorKey OperatorKey
@@ -70,11 +72,11 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         if (executorLoader == null) {
             return null;
         }
-        return (T) registerCommandExecutor(executorOptions, () -> executorLoader.load(executorOptions), true);
+        return (T) register(executorOptions, () -> executorLoader.load(executorOptions), true);
     }
 
     @Override
-    public <T extends AggregateCommandExecutor> T registerCommandExecutor(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent) {
+    public <T extends AggregateCommandExecutor> T register(ExecutorOptions executorOptions, Supplier<T> commandExecutorSupplier, boolean ifPresent) {
         Lock writeLock = lock.writeLock();
         writeLock.lock();
         try {
@@ -84,11 +86,11 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
             }
             T commandExecutor;
             if (ifPresent) {
-                commandExecutor = (T) commandExecutorMap.compute(key, (k, v) -> commandExecutorSupplier.get());
-                optionsKeyMap.compute(executorOptions, (k, v) -> key);
+                commandExecutor = (T) commandExecutorMap.compute(key, (_, _) -> commandExecutorSupplier.get());
+                optionsKeyMap.compute(executorOptions, (_, _) -> key);
             } else {
-                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, k -> commandExecutorSupplier.get());
-                optionsKeyMap.computeIfAbsent(executorOptions, k -> key);
+                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, _ -> commandExecutorSupplier.get());
+                optionsKeyMap.computeIfAbsent(executorOptions, _ -> key);
             }
             boolean systemDefault = executorOptions.isSystemDefault();
             if (systemDefault) {

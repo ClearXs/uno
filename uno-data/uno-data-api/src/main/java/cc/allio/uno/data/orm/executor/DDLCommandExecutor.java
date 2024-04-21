@@ -31,21 +31,21 @@ public interface DDLCommandExecutor extends CommandExecutor {
      *
      * @see #alertTable(AlterTableOperator)
      */
-    default <R> boolean alertTable(Class<R> entityType, UnaryOperator<AlterTableOperator> func) {
+    default <R> boolean alertTable(Class<R> entityType, UnaryOperator<AlterTableOperator<?>> func) {
         return alertTable(func.apply(getOperatorGroup().alterTables().from(entityType)));
     }
 
     /**
      * @see #alertTable(AlterTableOperator)
      */
-    default boolean alertTable(UnaryOperator<AlterTableOperator> func) {
+    default boolean alertTable(UnaryOperator<AlterTableOperator<?>> func) {
         return alertTable(func.apply(getOperatorGroup().alterTables()));
     }
 
     /**
      * @see #bool(Operator, CommandType)
      */
-    default boolean alertTable(AlterTableOperator alterTableOperator) {
+    default boolean alertTable(AlterTableOperator<?> alterTableOperator) {
         return bool(alterTableOperator, CommandType.ALERT_TABLE);
     }
 
@@ -56,7 +56,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler   resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean alertTable(AlterTableOperator alterTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean alertTable(AlterTableOperator<?> alterTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(alterTableOperator, CommandType.ALERT_TABLE, resultSetHandler);
     }
 
@@ -77,7 +77,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return true 成功 false 失败
      */
-    default boolean createTable(UnaryOperator<CreateTableOperator> func) {
+    default boolean createTable(UnaryOperator<CreateTableOperator<?>> func) {
         return createTable(func.apply(getOperatorGroup().createTable(getOptions().getDbType())));
     }
 
@@ -87,7 +87,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param createTableOperator CreateTableOperator
      * @return true 成功 false 失败
      */
-    default boolean createTable(CreateTableOperator createTableOperator) {
+    default boolean createTable(CreateTableOperator<?> createTableOperator) {
         return bool(createTableOperator, CommandType.CREATE_TABLE);
     }
 
@@ -98,7 +98,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler    resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean createTable(CreateTableOperator createTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean createTable(CreateTableOperator<?> createTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(createTableOperator, CommandType.CREATE_TABLE, resultSetHandler);
     }
 
@@ -149,7 +149,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param func func
      * @return true 成功 false 失败
      */
-    default boolean dropTable(UnaryOperator<DropTableOperator> func) {
+    default boolean dropTable(UnaryOperator<DropTableOperator<?>> func) {
         return dropTable(func.apply(getOperatorGroup().dropTable(getOptions().getDbType())));
     }
 
@@ -159,7 +159,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param dropTableOperator dropTableOperator
      * @return true 成功 false 失败
      */
-    default boolean dropTable(DropTableOperator dropTableOperator) {
+    default boolean dropTable(DropTableOperator<?> dropTableOperator) {
         return bool(dropTableOperator, CommandType.DELETE_TABLE);
     }
 
@@ -170,7 +170,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler  resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean dropTable(DropTableOperator dropTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean dropTable(DropTableOperator<?> dropTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(dropTableOperator, CommandType.DELETE, resultSetHandler);
     }
 
@@ -211,7 +211,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return true 成功 false 失败
      */
-    default boolean existTable(UnaryOperator<ExistTableOperator> func) {
+    default boolean existTable(UnaryOperator<ExistTableOperator<?>> func) {
         return existTable(func.apply(getOperatorGroup().existTable(getOptions().getDbType())));
     }
 
@@ -221,7 +221,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param existTableOperator ExistTableOperator
      * @return true 成功 false 失败
      */
-    default boolean existTable(ExistTableOperator existTableOperator) {
+    default boolean existTable(ExistTableOperator<?> existTableOperator) {
         return bool(existTableOperator, CommandType.EXIST_TABLE);
     }
 
@@ -232,7 +232,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler   resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean existTable(ExistTableOperator existTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean existTable(ExistTableOperator<?> existTableOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(existTableOperator, CommandType.EXIST_TABLE, resultSetHandler);
     }
 
@@ -273,7 +273,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return ColumnDef
      */
-    default List<ColumnDef> showColumns(UnaryOperator<ShowColumnsOperator> func) {
+    default List<ColumnDef> showColumns(UnaryOperator<ShowColumnsOperator<?>> func) {
         return showColumns(func.apply(getOperatorGroup().showColumns(getOptions().getDbType())));
     }
 
@@ -283,7 +283,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param showColumnsOperator showColumnsOperator
      * @return ColumnDef
      */
-    default List<ColumnDef> showColumns(ShowColumnsOperator showColumnsOperator) {
+    default List<ColumnDef> showColumns(ShowColumnsOperator<?> showColumnsOperator) {
         return queryList(showColumnsOperator, CommandType.SHOW_COLUMNS, getOptions().obtainColumnDefListResultSetHandler());
     }
 
@@ -322,7 +322,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param func func
      * @return List<Table>
      */
-    default List<Table> showTables(UnaryOperator<ShowTablesOperator> func) {
+    default List<Table> showTables(UnaryOperator<ShowTablesOperator<?>> func) {
         return showTables(func.apply(getOperatorGroup().showTables(getOptions().getDbType())));
     }
 
@@ -332,7 +332,7 @@ public interface DDLCommandExecutor extends CommandExecutor {
      * @param showTablesOperator showTablesOperator
      * @return List<Table>
      */
-    default List<Table> showTables(ShowTablesOperator showTablesOperator) {
+    default List<Table> showTables(ShowTablesOperator<?> showTablesOperator) {
         return queryList(showTablesOperator, CommandType.SHOW_TABLES, getOptions().obtainTableListResultSetHandler());
     }
 

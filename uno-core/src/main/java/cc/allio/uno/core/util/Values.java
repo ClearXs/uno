@@ -4,6 +4,8 @@ import cc.allio.uno.core.type.Types;
 
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
 import java.util.stream.Stream;
 
 /**
@@ -80,5 +82,18 @@ public final class Values {
                     }
                     return Stream.of(v);
                 });
+    }
+
+
+    /**
+     * functional mapping getter to setter
+     * <p>for example: {@code mapping(User::getName, User::setName)}</p>
+     *
+     * @param getter the getter function object
+     * @param setter the setter function object
+     * @param <T>    the value type
+     */
+    public static <T> void mapping(Supplier<T> getter, Consumer<T> setter) {
+        setter.accept(getter.get());
     }
 }

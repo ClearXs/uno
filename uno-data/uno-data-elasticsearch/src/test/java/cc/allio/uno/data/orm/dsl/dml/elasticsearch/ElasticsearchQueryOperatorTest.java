@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl.dml.elasticsearch;
 
+import cc.allio.uno.data.orm.dsl.elasticsearch.dml.EsQueryOperator;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

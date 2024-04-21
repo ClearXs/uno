@@ -63,9 +63,11 @@ public final class SPIOperatorHelper {
                         readLock.lock();
                         operatorTrait = operatorTraitGroup.find(operatorClass);
                         if (operatorTrait == null) {
-                            throw new DSLException(String.format("On the basis of SPI load operator %s and %s, " +
-                                    "but not found counterpart Impl, " +
-                                    "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
+                            throw new DSLException(
+                                    String.format(
+                                            "On the basis of SPI load operator %s and %s, " +
+                                            "but not found counterpart Impl, " +
+                                            "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
                         }
                     } finally {
                         readLock.unlock();

@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.ddl.sql;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
+import cc.allio.uno.data.orm.dsl.sql.ddl.SQLShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
@@ -11,7 +11,7 @@ public class SQLShowTablesOperatorTest extends BaseTestCase {
 
     @Test
     void testSQLLByH2() {
-        ShowTablesOperator operator = OperatorGroup.getOperator(ShowTablesOperator.class, OperatorKey.SQL);
+        SQLShowTablesOperator operator = OperatorGroup.getOperator(SQLShowTablesOperator.class, OperatorKey.SQL);
         String sql = operator.getDSL();
         assertEquals("SELECT TABLE_CATALOG AS CATALOG, TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME, TABLE_TYPE AS TYPE\n" +
                 "FROM INFORMATION_SCHEMA.TABLES\n" +
@@ -21,7 +21,7 @@ public class SQLShowTablesOperatorTest extends BaseTestCase {
 
     @Test
     void testSQLLByMySQL() {
-        ShowTablesOperator operator = OperatorGroup.getOperator(ShowTablesOperator.class, OperatorKey.SQL, DBType.MYSQL);
+        SQLShowTablesOperator operator = OperatorGroup.getOperator(SQLShowTablesOperator.class, OperatorKey.SQL, DBType.MYSQL);
         String sql = operator.database("da").getDSL();
         assertEquals("SELECT TABLE_CATALOG AS CATALOG, TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME, TABLE_TYPE AS TYPE\n" +
                 "FROM INFORMATION_SCHEMA.TABLES\n" +
@@ -32,7 +32,7 @@ public class SQLShowTablesOperatorTest extends BaseTestCase {
 
     @Test
     void testSQLLByPostgreSQL() {
-        ShowTablesOperator operator = OperatorGroup.getOperator(ShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        SQLShowTablesOperator operator = OperatorGroup.getOperator(SQLShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
         String sql = operator.getDSL();
         assertEquals("SELECT TABLE_CATALOG AS CATALOG, TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME, TABLE_TYPE AS TYPE\n" +
                 "FROM INFORMATION_SCHEMA.TABLES\n" +
@@ -42,7 +42,7 @@ public class SQLShowTablesOperatorTest extends BaseTestCase {
 
     @Test
     void testDualShowTable() {
-        ShowTablesOperator operator = OperatorGroup.getOperator(ShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        SQLShowTablesOperator operator = OperatorGroup.getOperator(SQLShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
         String sql = operator.from("dual").getDSL();
         assertEquals("SELECT TABLE_CATALOG AS CATALOG, TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME, TABLE_TYPE AS TYPE\n" +
                 "FROM INFORMATION_SCHEMA.TABLES\n" +
@@ -53,7 +53,7 @@ public class SQLShowTablesOperatorTest extends BaseTestCase {
 
     @Test
     void testCompositeShowTable() {
-        ShowTablesOperator operator = OperatorGroup.getOperator(ShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        SQLShowTablesOperator operator = OperatorGroup.getOperator(SQLShowTablesOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
         String sql = operator.from("dualA").from("dualB").database("da").schema("db").getDSL();
         assertEquals("SELECT TABLE_CATALOG AS CATALOG, TABLE_SCHEMA AS SCHEMA, TABLE_NAME AS NAME, TABLE_TYPE AS TYPE\n" +
                 "FROM INFORMATION_SCHEMA.TABLES\n" +

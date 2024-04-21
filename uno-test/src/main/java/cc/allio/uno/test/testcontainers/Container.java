@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.testcontainers.containers.GenericContainer;
 
+import java.util.List;
+
 /**
  * describe {@link org.testcontainers.containers.Container}
  *
@@ -18,6 +20,7 @@ public final class Container {
 
     private final ContainerType containerType;
     private final GenericContainer<?> internal;
+    private final List<Prelude> containerPrelude;
 
     /**
      * get container env by key
@@ -30,6 +33,15 @@ public final class Container {
             return internal.getEnvMap().get(key);
         }
         return StringPool.EMPTY;
+    }
+
+    /**
+     * prepare container
+     */
+    public void prelude() {
+        containerPrelude.stream()
+                .filter(prelude -> prelude.match(containerType))
+                .forEach(p -> p.onPrepare(this));
     }
 
     /**
