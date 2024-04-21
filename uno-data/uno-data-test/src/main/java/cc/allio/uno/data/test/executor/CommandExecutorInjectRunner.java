@@ -101,12 +101,13 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
      * @param container container
      * @return ExecutorOptions
      */
-    private ExecutorOptions drain(Container container) {
+    ExecutorOptions drain(Container container) {
         ContainerType containerType = container.getContainerType();
         ContainerExecutorOptionsTranslator translator = translatorMap.get(containerType);
         if (translator == null) {
             return null;
         }
+        // with xxx
         DBType dbType = translator.withDBType(container);
         ExecutorKey executorKey = translator.withExecutorKey(container);
         OperatorKey operatorKey = translator.withOperatorKey(container);
@@ -121,6 +122,8 @@ public class CommandExecutorInjectRunner implements RefreshCompleteRunner {
         executorOptions.setPassword(password);
         boolean isDefault = translator.withDefault();
         executorOptions.setSystemDefault(isDefault);
+        Map<String, Object> property = translator.withOthers(container);
+        executorOptions.putAll(property);
         return executorOptions;
     }
 }

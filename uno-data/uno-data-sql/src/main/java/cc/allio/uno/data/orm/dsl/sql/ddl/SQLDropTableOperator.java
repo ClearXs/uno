@@ -11,6 +11,8 @@ import com.alibaba.druid.sql.ast.statement.SQLDropTableStatement;
 import com.alibaba.druid.sql.ast.statement.SQLExprTableSource;
 import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
 
+import java.util.function.UnaryOperator;
+
 /**
  * DruidSQLDropTableOperator
  *
@@ -20,7 +22,7 @@ import cc.allio.uno.data.orm.dsl.ddl.DropTableOperator;
  */
 @AutoService(DropTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLDropTableOperator implements DropTableOperator {
+public class SQLDropTableOperator implements DropTableOperator<SQLDropTableOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
@@ -44,8 +46,13 @@ public class SQLDropTableOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator parse(String dsl) {
+    public SQLDropTableOperator parse(String dsl) {
         return null;
+    }
+
+    @Override
+    public SQLDropTableOperator customize(UnaryOperator<SQLDropTableOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLDropTableOperator(dbType));
     }
 
     @Override
@@ -68,7 +75,7 @@ public class SQLDropTableOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator from(Table table) {
+    public SQLDropTableOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(table.getName().getName());
         tableSource.setSchema(table.getSchema());
@@ -84,7 +91,7 @@ public class SQLDropTableOperator implements DropTableOperator {
     }
 
     @Override
-    public DropTableOperator ifExist(Boolean ifExist) {
+    public SQLDropTableOperator ifExist(Boolean ifExist) {
         dropTableStatement.setIfExists(ifExist);
         return self();
     }

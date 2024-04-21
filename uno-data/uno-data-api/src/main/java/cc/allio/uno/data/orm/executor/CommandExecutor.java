@@ -3,8 +3,8 @@ package cc.allio.uno.data.orm.executor;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.executor.handler.*;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
@@ -102,21 +102,21 @@ public interface CommandExecutor {
     /**
      * 获取执行器key
      *
-     * @return ExecutorKey
+     * @return the {@link ExecutorKey} instance
      */
     ExecutorKey getKey();
 
     /**
      * 获取DSL操作元数据。
      *
-     * @return OperatorMetadata实例
+     * @return the {@link OperatorGroup} instance
      */
     OperatorGroup getOperatorGroup();
 
     /**
      * 获取执行器参数
      *
-     * @return ExecutorOptions
+     * @return the {@link ExecutorOptions} instance
      */
     ExecutorOptions getOptions();
 

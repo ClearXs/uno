@@ -15,6 +15,7 @@ import com.alibaba.druid.sql.ast.statement.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 
 import java.util.Collection;
+import java.util.function.UnaryOperator;
 
 /**
  * druid for modify xxxx structure
@@ -25,7 +26,7 @@ import java.util.Collection;
  */
 @AutoService(AlterTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLAlterTableOperator implements AlterTableOperator {
+public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOperator> {
 
     private SQLAlterTableStatement alterTableStatement;
     private DBType dbType;
@@ -59,9 +60,14 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator parse(String dsl) {
+    public SQLAlterTableOperator parse(String dsl) {
         this.alterTableStatement = (SQLAlterTableStatement) SQLUtils.parseSingleStatement(dsl, druidDbType);
         return self();
+    }
+
+    @Override
+    public SQLAlterTableOperator customize(UnaryOperator<SQLAlterTableOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLAlterTableOperator(dbType));
     }
 
     @Override
@@ -83,7 +89,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
+    public SQLAlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
         for (ColumnDef columnDef : columnDefs) {
             SQLColumnDefinition columnDefinition = new SQLColumnDefinition();
             columnDefinition.setComment(columnDef.getComment());
@@ -114,7 +120,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
+    public SQLAlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
         for (ColumnDef columnDef : columnDefs) {
             SQLAlterTableAddColumn alterTableAddColumn = new SQLAlterTableAddColumn();
             alterTableAddColumn.toString();
@@ -126,7 +132,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator deleteColumns(Collection<DSLName> columns) {
+    public SQLAlterTableOperator deleteColumns(Collection<DSLName> columns) {
         SQLAlterTableDropColumnItem dropColumnItem = new SQLAlterTableDropColumnItem();
         for (DSLName column : columns) {
             dropColumnItem.addColumn(new SQLIdentifierExpr(column.format()));
@@ -136,7 +142,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator rename(Table to) {
+    public SQLAlterTableOperator rename(Table to) {
         SQLAlterTableRename alterTableRename = new SQLAlterTableRename();
         alterTableRename.setTo(new SQLIdentifierExpr(to.getName().format()));
         this.alterTableStatement.addItem(alterTableRename);
@@ -144,7 +150,7 @@ public class SQLAlterTableOperator implements AlterTableOperator {
     }
 
     @Override
-    public AlterTableOperator from(Table table) {
+    public SQLAlterTableOperator from(Table table) {
         this.from = table;
         SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
         this.alterTableStatement.setTableSource(tableSource);

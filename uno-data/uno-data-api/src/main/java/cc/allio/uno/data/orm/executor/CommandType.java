@@ -32,7 +32,7 @@ public enum CommandType {
     SHOW_COLUMNS(ShowColumnsOperator.class),
     SHOW_TABLES(ShowTablesOperator.class);
 
-    private final Class<? extends Operator<?>> operatorClass;
+    private final Class<? extends Operator> operatorClass;
 
     /**
      * base on operator class get command type, if {@link CommandType} self operatorClass is null, return null
@@ -46,7 +46,7 @@ public enum CommandType {
             return null;
         }
         // try get hirachical
-        Class<? extends Operator<?>> hireachialType = Operator.getHierarchicalType(o);
+        Class<? extends Operator<?>> hireachialType = cc.allio.uno.data.orm.dsl.Operator.getHierarchicalType(o);
         for (CommandType commandType : values()) {
             if (commandType == UNKNOWN || commandType == FLUSH) {
                 continue;

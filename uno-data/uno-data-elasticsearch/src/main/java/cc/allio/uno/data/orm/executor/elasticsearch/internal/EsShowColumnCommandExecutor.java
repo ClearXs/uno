@@ -2,8 +2,8 @@ package cc.allio.uno.data.orm.executor.elasticsearch.internal;
 
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
-import cc.allio.uno.data.orm.dsl.ddl.elasticsearch.EsPropertyAdapter;
-import cc.allio.uno.data.orm.dsl.ddl.elasticsearch.EsShowColumnsOperator;
+import cc.allio.uno.data.orm.dsl.elasticsearch.ddl.EsPropertyAdapter;
+import cc.allio.uno.data.orm.dsl.elasticsearch.ddl.EsShowColumnsOperator;
 import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.ResultGroup;

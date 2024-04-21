@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.dml.sql;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLUpdateOperator;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.data.test.model.User;
 import cc.allio.uno.test.BaseTestCase;
@@ -12,7 +12,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testSimplePojoInsert() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         User user = new User();
         user.setName("a");
         String sql = updateOperator.from(User.class).updatePojo(user).getDSL();
@@ -22,7 +22,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testUpdateWherePrepareValue() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         updateOperator.eq("eq1", "eq1");
         updateOperator.update("t11", "t11");
 
@@ -50,7 +50,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testSimpleUpdate() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         User user = new User();
         user.setName("test");
         String sql = updateOperator.from(User.class).updatePojo(user).getDSL();
@@ -60,7 +60,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testWhereUpdate() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         String sql = updateOperator.from("dual").update("a", "a").eq("a", "a").getDSL();
         assertEquals("UPDATE PUBLIC.dual\n" +
                 "SET a = 'a'\n" +
@@ -69,7 +69,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testComplexWhereUpdate() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         String sql = updateOperator.from("dual").update("a", "a")
                 .eq("a", "a")
                 .eq("b", "b")
@@ -88,7 +88,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testStrictFill() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
 
         new Operators(updateOperator)
                 .then(() -> {
@@ -121,7 +121,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testParse() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         Operators.thenRest(() -> {
             String sql = "UPDATE PUBLIC.dual\n" +
                     "SET a = 'a'\n" +
@@ -148,7 +148,7 @@ public class SQLUpdateOperatorTest extends BaseTestCase {
 
     @Test
     void testStrictModelUpdate() {
-        UpdateOperator updateOperator = OperatorGroup.getOperator(UpdateOperator.class, OperatorKey.SQL);
+        SQLUpdateOperator updateOperator = OperatorGroup.getOperator(SQLUpdateOperator.class, OperatorKey.SQL);
         User user = new User();
         user.setId(1L);
         String sql = updateOperator.updatePojo(user).getDSL();

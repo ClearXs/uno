@@ -1,11 +1,10 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.DataBaseOperator;
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
-import cc.allio.uno.data.query.stream.SQLCommandExecutorStream;
 
 /**
  * Show Columns
@@ -15,8 +14,7 @@ import cc.allio.uno.data.query.stream.SQLCommandExecutorStream;
  * @see OperatorGroup
  * @since 1.1.4
  */
-public interface ShowColumnsOperator
-        extends PrepareOperator<ShowColumnsOperator>, TableOperator<ShowColumnsOperator>, DataBaseOperator<ShowColumnsOperator> {
+public interface ShowColumnsOperator<T extends ShowColumnsOperator<T>> extends PrepareOperator<T>, TableOperator<T>, DataBaseOperator<T> {
 
     String TABLE_CATALOG_FIELD = "TABLE_CATALOG";
     String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
@@ -35,7 +33,7 @@ public interface ShowColumnsOperator
     /**
      * 转换为{@link QueryOperator}
      *
-     * @return SQLQueryOperator for instance
+     * @return {@link QueryOperator} for instance
      */
-    QueryOperator toQueryOperator();
+    QueryOperator<?> toQueryOperator();
 }

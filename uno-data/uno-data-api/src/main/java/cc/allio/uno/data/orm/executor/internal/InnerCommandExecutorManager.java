@@ -7,7 +7,6 @@ import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
 import cc.allio.uno.data.orm.executor.CommandType;
-import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -36,7 +35,7 @@ public class InnerCommandExecutorManager {
      *
      * @param operatorType the operatorType is not null
      * @param executor     the executor is not null
-     * @param <R>          {@link InnerCommandExecutor#exec(Operator, ResultSetHandler)} return type
+     * @param <R>          {@link InnerCommandExecutor#exec(Operator, Object)} return type
      * @param <O>          {@link InnerCommandExecutor} operator
      */
     public <R, O extends Operator<?>, H> void set(Class<O> operatorType, InnerCommandExecutor<R, O, H> executor) {

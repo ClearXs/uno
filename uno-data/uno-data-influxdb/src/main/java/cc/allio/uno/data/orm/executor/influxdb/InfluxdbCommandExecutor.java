@@ -1,18 +1,22 @@
 package cc.allio.uno.data.orm.executor.influxdb;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.config.influxdb.InfluxdbProperties;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
+import cc.allio.uno.data.orm.dsl.Table;
+import cc.allio.uno.data.orm.dsl.influxdb.InfluxDbTableAcceptor;
 import cc.allio.uno.data.orm.executor.AbstractCommandExecutor;
 import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
+import cc.allio.uno.data.orm.executor.influxdb.internal.InfluxdbCommandExecutorAdaptation;
 import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.influxdb.LogLevel;
-import com.influxdb.client.InfluxDBClient;
-import com.influxdb.client.InfluxDBClientFactory;
-import com.influxdb.client.InfluxDBClientOptions;
+import com.influxdb.client.*;
+import com.influxdb.client.domain.WritePrecision;
 
 import java.net.SocketTimeoutException;
 
@@ -38,19 +42,32 @@ public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements 
         String address = options.getAddress();
         String connectionString = ExpressionTemplate.parse(CONNECTION_URL_TEMPLATE, "address", address);
         clientOptionsBuilder.connectionString(connectionString);
-        // organization
-        String organization = options.getDatabase();
-        clientOptionsBuilder.org(organization);
         // auth
         String username = options.getUsername();
         String password = options.getPassword();
         clientOptionsBuilder.authenticate(username, password.toCharArray());
-        clientOptionsBuilder.logLevel(LogLevel.BASIC);
+        // bucket
+        String bucket = options.getDatabase();
+        clientOptionsBuilder.bucket(bucket);
+        // organization
+        String organization = options.get(InfluxdbProperties.ORGANIZATION, String.class).orElse(StringPool.EMPTY);
+        clientOptionsBuilder.org(organization);
+        // token
+        String token = options.get(InfluxdbProperties.TOKEN, String.class).orElse(StringPool.EMPTY);
+        clientOptionsBuilder.authenticateToken(token.toCharArray());
+        // settings
+        LogLevel logLevel = options.get(InfluxdbProperties.LOG_LEVEL, LogLevel.class).orElse(LogLevel.BASIC);
+        clientOptionsBuilder.logLevel(logLevel);
+        WritePrecision writePrecision = options.get(InfluxdbProperties.WRITE_PRECISION, WritePrecision.class).orElse(WritePrecision.S);
+        clientOptionsBuilder.precision(writePrecision);
         InfluxDBClientOptions clientOptions = clientOptionsBuilder.build();
         this.influxDBClient = InfluxDBClientFactory.create(clientOptions);
         SPIInnerCommandScanner scanner = options.getScanner();
-        this.manager = scanner.scan(influxDBClient);
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.INFLUXDB);
+        InfluxdbCommandExecutorAdaptation adaptation = new InfluxdbCommandExecutorAdaptation(influxDBClient, clientOptions);
+        this.manager = scanner.scan(influxDBClient, clientOptions, adaptation);
+
+        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.INFLUXDB, options);
+        options.customizeMetaAcceptorSetter(Table.class, new InfluxDbTableAcceptor());
     }
 
     @Override
@@ -78,7 +95,7 @@ public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements 
     }
 
     @Override
-    protected InnerCommandExecutorManager getManager() {
+    protected InnerCommandExecutorManager getInnerCommandExecutorManager() {
         return manager;
     }
 }

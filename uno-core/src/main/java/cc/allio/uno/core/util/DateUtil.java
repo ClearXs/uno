@@ -869,4 +869,12 @@ public class DateUtil {
         return nowDate.after(startDate) && nowTime.before(endTime);
     }
 
+    /**
+     * get computer epoch time. it is 1970-01-01 08:00:00
+     *
+     * @return the epoch time
+     */
+    public static Date getEpochTime() {
+        return new Date(0);
+    }
 }

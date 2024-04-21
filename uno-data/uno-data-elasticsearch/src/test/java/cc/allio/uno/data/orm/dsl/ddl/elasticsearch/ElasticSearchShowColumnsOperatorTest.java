@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.dsl.ddl.elasticsearch;
 
+import cc.allio.uno.data.orm.dsl.elasticsearch.ddl.EsShowColumnsOperator;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
 

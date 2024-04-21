@@ -7,17 +7,23 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 @AutoService(InsertOperator.class)
 @Operator.Group(OperatorKey.REDIS_LITERAL)
-public class RedisInsertOperator implements InsertOperator {
+public class RedisInsertOperator implements InsertOperator<RedisInsertOperator> {
     @Override
     public String getDSL() {
         return null;
     }
 
     @Override
-    public InsertOperator parse(String dsl) {
+    public RedisInsertOperator parse(String dsl) {
+        return null;
+    }
+
+    @Override
+    public RedisInsertOperator customize(UnaryOperator<RedisInsertOperator> operatorFunc) {
         return null;
     }
 
@@ -47,7 +53,7 @@ public class RedisInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator from(Table table) {
+    public RedisInsertOperator from(Table table) {
         return null;
     }
 
@@ -57,17 +63,17 @@ public class RedisInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator strictFill(String f, Supplier<Object> v) {
+    public RedisInsertOperator strictFill(String f, Supplier<Object> v) {
         return null;
     }
 
     @Override
-    public InsertOperator columns(Collection<DSLName> columns) {
+    public RedisInsertOperator columns(Collection<DSLName> columns) {
         return null;
     }
 
     @Override
-    public InsertOperator values(List<Object> values) {
+    public RedisInsertOperator values(List<Object> values) {
         return null;
     }
 

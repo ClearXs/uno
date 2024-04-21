@@ -2,8 +2,7 @@ package cc.allio.uno.data.test.executor;
 
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.Operator;
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandType;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;

@@ -17,12 +17,9 @@ import com.google.common.collect.Lists;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoDatabase;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.Document;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
 
 import static cc.allio.uno.data.orm.executor.handler.TableListResultSetHandler.*;
 
@@ -49,21 +46,17 @@ public class MongodbShowCollectionCommandExecutor implements STInnerCommandExecu
         Database fromDb = operator.getFromDb();
         Requires.isNotNull(fromDb, "fromDb");
         List<Table> tables = operator.getTables();
-        List<String> filterTableNames =
-                tables.stream()
-                        .map(Table::getName)
-                        .map(DSLName::format)
-                        .toList();
+        List<String> filteringCollectionNames = tables.stream().map(Table::getName).map(DSLName::format).toList();
         MongoDatabase database = mongoClient.getDatabase(fromDb.getName().format());
         List<ResultGroup> resultGroups = Lists.newArrayList(database.listCollections())
                 .stream()
                 .filter(document -> {
-                    if (filterTableNames.isEmpty()) {
+                    if (filteringCollectionNames.isEmpty()) {
                         return true;
                     }
                     // filter exist name
                     String collectionName = document.getString("name");
-                    return filterTableNames.contains(collectionName);
+                    return filteringCollectionNames.contains(collectionName);
                 })
                 .map(document -> {
                     ResultGroup resultGroup = new ResultGroup();

@@ -2,14 +2,16 @@ package cc.allio.uno.data.orm.dsl.sql.ddl;
 
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
 import cc.allio.uno.data.orm.dsl.ddl.ExistTableOperator;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * druid
@@ -20,12 +22,12 @@ import java.util.List;
  */
 @AutoService(ExistTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperator> implements ExistTableOperator {
+public class SQLExistTableOperator extends PrepareOperatorImpl<SQLExistTableOperator> implements ExistTableOperator<SQLExistTableOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
     private Table table;
-    private final QueryOperator queryOperator;
+    private final SQLQueryOperator queryOperator;
 
     public SQLExistTableOperator() {
         this(DBType.getSystemDbType());
@@ -34,7 +36,7 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     public SQLExistTableOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
-        this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, dbType);
+        this.queryOperator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
     }
 
     @Override
@@ -43,8 +45,13 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     }
 
     @Override
-    public ExistTableOperator parse(String dsl) {
+    public SQLExistTableOperator parse(String dsl) {
         throw SQLSupport.on(this).onNonsupport("parse").<DSLException>execute();
+    }
+
+    @Override
+    public SQLExistTableOperator customize(UnaryOperator<SQLExistTableOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLExistTableOperator(dbType));
     }
 
     @Override
@@ -53,7 +60,7 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<ExistTableOperato
     }
 
     @Override
-    public ExistTableOperator from(Table table) {
+    public SQLExistTableOperator from(Table table) {
         Object obj = SQLSupport.on(this)
                 .onDb(druidDbType)
                 .then(() ->

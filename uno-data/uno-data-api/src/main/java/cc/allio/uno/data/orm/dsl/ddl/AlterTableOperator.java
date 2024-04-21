@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.dsl.ddl;
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -13,22 +14,22 @@ import java.util.function.UnaryOperator;
  *
  * @author j.x
  * @date 2023/6/8 19:21
- * @since 1.1.4
  * @see OperatorGroup
+ * @since 1.1.4
  */
-public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<AlterTableOperator>, TableOperator<AlterTableOperator> {
+public interface AlterTableOperator<T extends AlterTableOperator<T>> extends Operator<T>, Self<T>, TableOperator<T> {
 
     /**
      * @see #alertColumns(Collection)
      */
-    default AlterTableOperator alertColumn(ColumnDef columnDef) {
+    default T alertColumn(ColumnDef columnDef) {
         return alertColumns(columnDef);
     }
 
     /**
      * @see #alertColumns(Collection)
      */
-    default AlterTableOperator alertColumns(ColumnDef... columnDefs) {
+    default T alertColumns(ColumnDef... columnDefs) {
         return alertColumns(Arrays.stream(columnDefs).toList());
     }
 
@@ -36,21 +37,21 @@ public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<A
      * 修改列
      *
      * @param columnDefs columnDefs
-     * @return AlterTableOperator
+     * @return self
      */
-    AlterTableOperator alertColumns(Collection<ColumnDef> columnDefs);
+    T alertColumns(Collection<ColumnDef> columnDefs);
 
     /**
      * @see #addColumns(Collection)
      */
-    default AlterTableOperator addColumn(ColumnDef columnDef) {
+    default T addColumn(ColumnDef columnDef) {
         return addColumns(columnDef);
     }
 
     /**
      * @see #addColumns(Collection)
      */
-    default AlterTableOperator addColumns(ColumnDef... columnDefs) {
+    default T addColumns(ColumnDef... columnDefs) {
         return addColumns(Arrays.stream(columnDefs).toList());
     }
 
@@ -58,28 +59,28 @@ public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<A
      * 添加column
      *
      * @param columnDefs columnDefs
-     * @return AlterTableOperator
+     * @return self
      */
-    AlterTableOperator addColumns(Collection<ColumnDef> columnDefs);
+    T addColumns(Collection<ColumnDef> columnDefs);
 
     /**
      * @see #deleteColumn(DSLName)
      */
-    default AlterTableOperator deleteColumn(String column) {
+    default T deleteColumn(String column) {
         return deleteColumn(DSLName.of(column));
     }
 
     /**
      * @see #deleteColumns(Collection)
      */
-    default AlterTableOperator deleteColumn(DSLName column) {
+    default T deleteColumn(DSLName column) {
         return deleteColumns(column);
     }
 
     /**
      * @see #deleteColumns(Collection)
      */
-    default AlterTableOperator deleteColumns(DSLName... columns) {
+    default T deleteColumns(DSLName... columns) {
         return deleteColumns(Arrays.stream(columns).toList());
     }
 
@@ -87,35 +88,35 @@ public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<A
      * 删除列
      *
      * @param columns columns
-     * @return AlterTableOperator
+     * @return self
      */
-    AlterTableOperator deleteColumns(Collection<DSLName> columns);
+    T deleteColumns(Collection<DSLName> columns);
 
     /**
      * @see #rename(Table)
      */
-    default AlterTableOperator rename(String table) {
+    default T rename(String table) {
         return rename(Table.of(table));
     }
 
     /**
      * @see #rename(Table)
      */
-    default AlterTableOperator rename(DSLName table) {
+    default T rename(DSLName table) {
         return rename(Table.of(table));
     }
 
     /**
      * @see #rename(Table)
      */
-    default <R> AlterTableOperator rename(Class<R> pojoClass) {
+    default <R> T rename(Class<R> pojoClass) {
         return rename(PojoWrapper.findTable(pojoClass));
     }
 
     /**
      * @see #rename(Table)
      */
-    default AlterTableOperator rename(UnaryOperator<Table> func) {
+    default T rename(UnaryOperator<Table> func) {
         return rename(func.apply(new Table()));
     }
 
@@ -123,7 +124,7 @@ public interface AlterTableOperator extends Operator<AlterTableOperator>, Self<A
      * 重命名表名
      *
      * @param to to
-     * @return AlterTableOperator
+     * @return self
      */
-    AlterTableOperator rename(Table to);
+    T rename(Table to);
 }

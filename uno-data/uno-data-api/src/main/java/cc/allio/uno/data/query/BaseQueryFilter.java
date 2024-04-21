@@ -3,11 +3,13 @@ package cc.allio.uno.data.query;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * 基于{@link QueryOperator}实现的{@link QueryFilter}
@@ -16,13 +18,17 @@ import java.util.List;
  * @date 2023/4/17 18:21
  * @since 1.1.4
  */
-public class BaseQueryFilter implements QueryFilter, QueryOperator {
+public class BaseQueryFilter implements QueryFilter, QueryOperator<BaseQueryFilter> {
 
     private QueryWrapper queryWrapper;
-    private final QueryOperator queryOperator;
+    private final QueryOperator<?> queryOperator;
+    private final DBType dbType;
+    private final OperatorKey operatorMetadataKey;
 
     public BaseQueryFilter(DBType dbType, OperatorKey operatorMetadataKey) {
-        queryOperator = OperatorGroup.getOperator(QueryOperator.class, operatorMetadataKey, dbType);
+        this.dbType = dbType;
+        this.operatorMetadataKey = operatorMetadataKey;
+        this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, operatorMetadataKey, dbType);
     }
 
     @Override
@@ -31,8 +37,15 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public QueryOperator parse(String dsl) {
-        return queryOperator.parse(dsl);
+    public BaseQueryFilter parse(String dsl) {
+        queryOperator.parse(dsl);
+        return self();
+    }
+
+    @Override
+    public BaseQueryFilter customize(UnaryOperator<BaseQueryFilter> operatorFunc) {
+        // TODO will be implementation #customize
+        return self();
     }
 
     @Override
@@ -42,12 +55,12 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
 
     @Override
     public void setDBType(DBType dbType) {
-
+        queryOperator.setDBType(dbType);
     }
 
     @Override
     public DBType getDBType() {
-        return null;
+        return queryOperator.getDBType();
     }
 
     @Override
@@ -71,8 +84,9 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public QueryOperator from(Table table) {
-        return queryOperator.from(table);
+    public BaseQueryFilter from(Table table) {
+        queryOperator.from(table);
+        return self();
     }
 
     @Override
@@ -81,133 +95,159 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public QueryOperator gt(DSLName sqlName, Object value) {
-        return queryOperator.gt(sqlName, value);
+    public BaseQueryFilter gt(DSLName sqlName, Object value) {
+        queryOperator.gt(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator gte(DSLName sqlName, Object value) {
-        return queryOperator.gte(sqlName, value);
+    public BaseQueryFilter gte(DSLName sqlName, Object value) {
+        queryOperator.gte(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator lt(DSLName sqlName, Object value) {
-        return queryOperator.lt(sqlName, value);
+    public BaseQueryFilter lt(DSLName sqlName, Object value) {
+        queryOperator.lt(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator lte(DSLName sqlName, Object value) {
-        return queryOperator.lte(sqlName, value);
+    public BaseQueryFilter lte(DSLName sqlName, Object value) {
+        queryOperator.lte(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator eq(DSLName sqlName, Object value) {
-        return queryOperator.eq(sqlName, value);
+    public BaseQueryFilter eq(DSLName sqlName, Object value) {
+        queryOperator.eq(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator neq(DSLName sqlName, Object value) {
-        return queryOperator.neq(sqlName, value);
+    public BaseQueryFilter neq(DSLName sqlName, Object value) {
+        queryOperator.neq(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator notNull(DSLName sqlName) {
-        return queryOperator.notNull(sqlName);
+    public BaseQueryFilter notNull(DSLName sqlName) {
+        queryOperator.notNull(sqlName);
+        return self();
     }
 
     @Override
-    public QueryOperator isNull(DSLName sqlName) {
-        return queryOperator.isNull(sqlName);
+    public BaseQueryFilter isNull(DSLName sqlName) {
+        queryOperator.isNull(sqlName);
+        return self();
     }
 
     @Override
-    public QueryOperator in(DSLName sqlName, Object... values) {
-        return queryOperator.in(sqlName, values);
+    public BaseQueryFilter in(DSLName sqlName, Object... values) {
+        queryOperator.in(sqlName, values);
+        return self();
     }
 
     @Override
-    public QueryOperator notIn(DSLName sqlName, Object... values) {
-        return queryOperator.notIn(sqlName, values);
+    public BaseQueryFilter notIn(DSLName sqlName, Object... values) {
+        queryOperator.notIn(sqlName, values);
+        return self();
     }
 
     @Override
-    public QueryOperator between(DSLName sqlName, Object withValue, Object endValue) {
-        return queryOperator.between(sqlName, withValue, endValue);
+    public BaseQueryFilter between(DSLName sqlName, Object withValue, Object endValue) {
+        queryOperator.between(sqlName, withValue, endValue);
+        return self();
     }
 
     @Override
-    public QueryOperator notBetween(DSLName sqlName, Object withValue, Object endValue) {
-        return queryOperator.notBetween(sqlName, withValue, endValue);
+    public BaseQueryFilter notBetween(DSLName sqlName, Object withValue, Object endValue) {
+        queryOperator.notBetween(sqlName, withValue, endValue);
+        return self();
     }
 
     @Override
-    public QueryOperator like(DSLName sqlName, Object value) {
-        return queryOperator.like(sqlName, value);
+    public BaseQueryFilter like(DSLName sqlName, Object value) {
+        queryOperator.like(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator $like(DSLName sqlName, Object value) {
-        return queryOperator.$like(sqlName, value);
+    public BaseQueryFilter $like(DSLName sqlName, Object value) {
+        queryOperator.$like(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator like$(DSLName sqlName, Object value) {
-        return queryOperator.like$(sqlName, value);
+    public BaseQueryFilter like$(DSLName sqlName, Object value) {
+        queryOperator.like$(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator $like$(DSLName sqlName, Object value) {
-        return queryOperator.$like$(sqlName, value);
+    public BaseQueryFilter $like$(DSLName sqlName, Object value) {
+        queryOperator.$like$(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator notLike(DSLName sqlName, Object value) {
-        return queryOperator.notLike(sqlName, value);
+    public BaseQueryFilter notLike(DSLName sqlName, Object value) {
+        queryOperator.notLike(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator $notLike(DSLName sqlName, Object value) {
-        return queryOperator.$notLike(sqlName, value);
+    public BaseQueryFilter $notLike(DSLName sqlName, Object value) {
+        queryOperator.$notLike(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator notLike$(DSLName sqlName, Object value) {
-        return queryOperator.notLike$(sqlName, value);
+    public BaseQueryFilter notLike$(DSLName sqlName, Object value) {
+        queryOperator.notLike$(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator $notLike$(DSLName sqlName, Object value) {
-        return queryOperator.$notLike$(sqlName, value);
+    public BaseQueryFilter $notLike$(DSLName sqlName, Object value) {
+        queryOperator.$notLike$(sqlName, value);
+        return self();
     }
 
     @Override
-    public QueryOperator or() {
-        return queryOperator.or();
+    public BaseQueryFilter or() {
+        queryOperator.or();
+        return self();
     }
 
     @Override
-    public QueryOperator and() {
-        return queryOperator.and();
+    public BaseQueryFilter and() {
+        queryOperator.and();
+        return self();
     }
 
     @Override
-    public QueryOperator nor() {
-        return queryOperator.nor();
+    public BaseQueryFilter nor() {
+        queryOperator.nor();
+        return self();
     }
 
     @Override
-    public QueryOperator select(DSLName dslName) {
-        return queryOperator.select(dslName);
+    public BaseQueryFilter select(DSLName dslName) {
+        queryOperator.select(dslName);
+        return self();
     }
 
     @Override
-    public QueryOperator select(DSLName dslName, String alias) {
-        return queryOperator.select(dslName, alias);
+    public BaseQueryFilter select(DSLName dslName, String alias) {
+        queryOperator.select(dslName, alias);
+        return self();
     }
 
     @Override
-    public QueryOperator selects(Collection<DSLName> dslNames) {
-        return queryOperator.selects(dslNames);
+    public BaseQueryFilter selects(Collection<DSLName> dslNames) {
+        queryOperator.selects(dslNames);
+        return self();
     }
 
     @Override
@@ -216,52 +256,56 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator {
     }
 
     @Override
-    public QueryOperator distinct() {
-        return queryOperator.distinct();
+    public BaseQueryFilter distinct() {
+        queryOperator.distinct();
+        return self();
     }
 
     @Override
-    public QueryOperator distinctOn(DSLName sqlName, String alias) {
-        return queryOperator.distinctOn(sqlName, alias);
+    public BaseQueryFilter distinctOn(DSLName dslName, String alias) {
+        queryOperator.distinctOn(dslName, alias);
+        return self();
     }
 
     @Override
-    public QueryOperator aggregate(Func syntax, DSLName sqlName, String alias, Distinct distinct) {
-        return queryOperator.aggregate(syntax, sqlName, alias, distinct);
+    public BaseQueryFilter aggregate(Func syntax, DSLName dslName, String alias, Distinct distinct) {
+        queryOperator.aggregate(syntax, dslName, alias, distinct);
+        return self();
     }
 
     @Override
-    public QueryOperator from(QueryOperator fromTable, String alias) {
-        return queryOperator.from(fromTable, alias);
+    public BaseQueryFilter from(QueryOperator<?> fromTable, String alias) {
+        queryOperator.from(fromTable, alias);
+        return self();
     }
 
     @Override
-    public QueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
-        return queryOperator.join(left, joinType, right, condition);
+    public BaseQueryFilter join(Table left, JoinType joinType, Table right, BinaryCondition condition) {
+        queryOperator.join(left, joinType, right, condition);
+        return self();
     }
 
     @Override
-    public QueryOperator orderBy(DSLName sqlName, OrderCondition orderCondition) {
-        return queryOperator.orderBy(sqlName, orderCondition);
+    public BaseQueryFilter orderBy(DSLName dslName, OrderCondition orderCondition) {
+        queryOperator.orderBy(dslName, orderCondition);
+        return self();
     }
 
     @Override
-    public QueryOperator limit(Long limit, Long offset) {
-        return queryOperator.limit(limit, offset);
+    public BaseQueryFilter limit(Long limit, Long offset) {
+        queryOperator.limit(limit, offset);
+        return self();
     }
 
     @Override
-    public QueryOperator groupByOnes(Collection<DSLName> fieldNames) {
-        return queryOperator.groupByOnes(fieldNames);
+    public BaseQueryFilter groupByOnes(Collection<DSLName> fieldNames) {
+        queryOperator.groupByOnes(fieldNames);
+        return self();
     }
 
     @Override
-    public QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery) {
-        return queryOperator.tree(baseQuery, subQuery);
-    }
-
-    @Override
-    public QueryOperator self() {
-        return queryOperator;
+    public BaseQueryFilter tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
+        queryOperator.tree(baseQuery, subQuery);
+        return self();
     }
 }

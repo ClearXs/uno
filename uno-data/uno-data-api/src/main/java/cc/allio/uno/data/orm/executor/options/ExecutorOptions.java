@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor.options;
 
 import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.data.orm.dsl.MetaAcceptorSet;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.handler.ExecutorResultHandlerSet;
@@ -16,7 +17,7 @@ import java.util.List;
  * @date 2024/2/14 21:07
  * @since 1.1.7
  */
-public interface ExecutorOptions extends ExecutorResultHandlerSet, OptionalContext {
+public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorSet, OptionalContext {
 
     String KEY_MARK = "key";
     String DB_TYPE_MARK = "dbType";

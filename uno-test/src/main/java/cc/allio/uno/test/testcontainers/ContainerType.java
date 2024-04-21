@@ -19,13 +19,13 @@ public enum ContainerType {
     MySQL("mysql:8.0.36", "org.testcontainers.containers.MySQLContainer"),
     MSSQL("", "org.testcontainers.containers.MSSQLServerContainer"),
     Mongodb("mongo:7.0.6", "org.testcontainers.containers.MongoDBContainer"),
-    Influxdb("2.7.5", "org.testcontainers.containers.InfluxDBContainer"),
+    Influxdb("influxdb:2.7", "org.testcontainers.containers.InfluxDBContainer"),
 
     // marked test
     Test("", "cc.allio.uno.test.testcontainers.TestContainer");
 
     final String version;
-    final String className;
+    final String testContainerClassName;
 
     public DockerImageName getDockerImageName() {
         DockerImageName imageName = DockerImageName.parse(version);

@@ -1,6 +1,5 @@
 package cc.allio.uno.data.orm.dsl;
 
-import cc.allio.uno.core.api.Self;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 
 import java.util.function.UnaryOperator;
@@ -12,7 +11,18 @@ import java.util.function.UnaryOperator;
  * @date 2023/4/16 18:07
  * @since 1.1.4
  */
-public interface TableOperator<T extends Self<T>> extends Self<T> {
+public interface TableOperator<T extends TableOperator<T>> extends Operator<T> {
+
+    /**
+     * FROM XX
+     *
+     * @param entityClass entityClass
+     * @return Operator
+     */
+    default <P> T from(Class<P> entityClass) {
+        String table = PojoWrapper.findTable(entityClass);
+        return from(table);
+    }
 
     /**
      * FROM XX
@@ -21,7 +31,8 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      * @return Operator
      */
     default T from(String name) {
-        return from(Table.of(name));
+        Table table = Table.of(name);
+        return from(table);
     }
 
     /**
@@ -31,7 +42,8 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      * @return Operator
      */
     default T from(DSLName name) {
-        return from(Table.of(name));
+        Table table = Table.of(name);
+        return from(table);
     }
 
     /**
@@ -42,17 +54,8 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      * @return Operator
      */
     default T from(String name, String alias) {
-        return from(Table.of(name, alias));
-    }
-
-    /**
-     * FROM XX
-     *
-     * @param entityClass entityClass
-     * @return Operator
-     */
-    default <P> T from(Class<P> entityClass) {
-        return from(PojoWrapper.findTable(entityClass));
+        Table table = Table.of(name, alias);
+        return from(table);
     }
 
     /**
@@ -62,7 +65,8 @@ public interface TableOperator<T extends Self<T>> extends Self<T> {
      * @return Operator
      */
     default T from(UnaryOperator<Table> func) {
-        return from(func.apply(new Table()));
+        Table table = new Table();
+        return from(func.apply(table));
     }
 
     /**

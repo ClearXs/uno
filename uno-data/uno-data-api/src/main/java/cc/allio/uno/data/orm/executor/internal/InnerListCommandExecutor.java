@@ -12,5 +12,5 @@ import java.util.List;
  * @date 2024/3/15 06:39
  * @since 1.1.7
  */
-public interface InnerListCommandExecutor<R, O extends Operator<?>> extends InnerCommandExecutor<List<R>, O, ListResultSetHandler<R>> {
+public interface InnerListCommandExecutor<R, O extends Operator> extends InnerCommandExecutor<List<R>, O, ListResultSetHandler<R>> {
 }

@@ -10,5 +10,5 @@ import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
  * @date 2024/3/15 06:42
  * @since 1.1.7
  */
-public interface InnerDefaultCommandExecutor<R, O extends Operator<?>> extends InnerCommandExecutor<R, O, ResultSetHandler<R>> {
+public interface InnerDefaultCommandExecutor<R, O extends Operator> extends InnerCommandExecutor<R, O, ResultSetHandler<R>> {
 }

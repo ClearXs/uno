@@ -1,8 +1,10 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
@@ -19,16 +21,16 @@ import java.util.function.Supplier;
  * @see OperatorGroup
  * @since 1.1.4
  */
-public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOperator<UpdateOperator>, WhereOperator<UpdateOperator> {
+public interface UpdateOperator<T extends UpdateOperator<T>> extends PrepareOperator<T>, TableOperator<T>, WhereOperator<T>, Self<T> {
 
     /**
      * UPDATE VALUES
      *
      * @param reference key
      * @param value     value
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default <R> UpdateOperator update(MethodReferenceColumn<R> reference, Object value) {
+    default <R> T update(MethodReferenceColumn<R> reference, Object value) {
         return update(reference.getColumn(), getValueIfNull(value));
     }
 
@@ -37,9 +39,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      *
      * @param fieldName fieldName
      * @param value     value
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(String fieldName, Object value) {
+    default T update(String fieldName, Object value) {
         return update(Tuples.of(fieldName, getValueIfNull(value)));
     }
 
@@ -48,9 +50,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      *
      * @param f1 f1
      * @param v1 v1
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(String f1, Object v1, String f2, Object v2) {
+    default T update(String f1, Object v1, String f2, Object v2) {
         return update(Tuples.of(f1, getValueIfNull(v1)), Tuples.of(f2, getValueIfNull(v2)));
     }
 
@@ -61,9 +63,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @param v1 v1
      * @param f2 f2
      * @param v2 v2
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
+    default T update(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
         return update(
                 Tuples.of(f1, getValueIfNull(v1)),
                 Tuples.of(f2, getValueIfNull(v2)),
@@ -81,9 +83,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @param v3 v3
      * @param f4 f4
      * @param v4 v4
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
+    default T update(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
         return update(
                 Tuples.of(f1, getValueIfNull(v1)),
                 Tuples.of(f2, getValueIfNull(v2)),
@@ -95,9 +97,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * UPDATE VALUES
      *
      * @param tuple2s Key value
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(Tuple2<String, Object>... tuple2s) {
+    default T update(Tuple2<String, Object>... tuple2s) {
         Map<String, Object> values = Maps.newHashMap();
         for (Tuple2<String, Object> tuple2 : tuple2s) {
             values.put(tuple2.getT1(), tuple2.getT2());
@@ -109,9 +111,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * UPDATE VALUES
      *
      * @param pojo pojo
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator updatePojo(Object pojo) {
+    default T updatePojo(Object pojo) {
         PojoWrapper<Object> pojoWrapper = PojoWrapper.getInstance(pojo);
         List<ColumnDef> notPkColumns = pojoWrapper.getNotPkColumns();
         Map<DSLName, Object> values = Maps.newLinkedHashMap();
@@ -126,9 +128,9 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * UPDATE VALUES，将会过滤为空的值
      *
      * @param values Key value
-     * @return SQLUpdateOperator
+     * @return self
      */
-    default UpdateOperator update(Map<String, Object> values) {
+    default T update(Map<String, Object> values) {
         Map<DSLName, Object> updates = Maps.newLinkedHashMap();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             updates.put(DSLName.of(entry.getKey()), entry.getValue());
@@ -140,14 +142,14 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * UPDATE VALUES
      *
      * @param values Key value
-     * @return SQLUpdateOperator
+     * @return self
      */
-    UpdateOperator updates(Map<DSLName, Object> values);
+    T updates(Map<DSLName, Object> values);
 
     /**
      * @see #strictFill(String, Supplier)
      */
-    default UpdateOperator strictFill(String f, Object v) {
+    default T strictFill(String f, Object v) {
         return strictFill(f, () -> v);
     }
 
@@ -159,5 +161,5 @@ public interface UpdateOperator extends PrepareOperator<UpdateOperator>, TableOp
      * @param v 字段值
      * @return SQLInsertOperator
      */
-    UpdateOperator strictFill(String f, Supplier<Object> v);
+    T strictFill(String f, Supplier<Object> v);
 }

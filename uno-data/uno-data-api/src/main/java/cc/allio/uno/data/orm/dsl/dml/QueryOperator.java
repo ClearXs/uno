@@ -5,6 +5,7 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import com.google.common.collect.Lists;
 
@@ -19,7 +20,7 @@ import java.util.List;
  * @see OperatorGroup
  * @since 1.1.4
  */
-public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOperator<QueryOperator>, WhereOperator<QueryOperator> {
+public interface QueryOperator<T extends QueryOperator<T>> extends PrepareOperator<T>, TableOperator<T>, WhereOperator<T> {
 
     // ============================== SELECT PART ==============================
 
@@ -29,7 +30,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法引用
      * @return self
      */
-    default <R> QueryOperator select(MethodReferenceColumn<R> reference) {
+    default <R> T select(MethodReferenceColumn<R> reference) {
         return select(reference.getColumn());
     }
 
@@ -40,7 +41,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param alias     alias
      * @return self
      */
-    default <R> QueryOperator select(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T select(MethodReferenceColumn<R> reference, String alias) {
         return select(reference.getColumn(), alias);
     }
 
@@ -49,7 +50,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @return Select
      */
-    default QueryOperator selectAll() {
+    default T selectAll() {
         return select(StringPool.ASTERISK);
     }
 
@@ -59,7 +60,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldName java variable name
      * @return self
      */
-    default QueryOperator select(String fieldName) {
+    default T select(String fieldName) {
         return select(DSLName.of(fieldName));
     }
 
@@ -69,7 +70,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param dslName dslName
      * @return self
      */
-    QueryOperator select(DSLName dslName);
+    T select(DSLName dslName);
 
     /**
      * the select field
@@ -78,7 +79,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param alias     alias
      * @return self
      */
-    default QueryOperator select(String fieldName, String alias) {
+    default T select(String fieldName, String alias) {
         return select(DSLName.of(fieldName), alias);
     }
 
@@ -89,7 +90,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param alias   alias
      * @return self
      */
-    QueryOperator select(DSLName dslName, String alias);
+    T select(DSLName dslName, String alias);
 
 
     /**
@@ -98,7 +99,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldNames java variable name
      * @return self
      */
-    default QueryOperator select(String[] fieldNames) {
+    default T select(String[] fieldNames) {
         return select(Lists.newArrayList(fieldNames));
     }
 
@@ -108,7 +109,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldNames java variable name
      * @return self
      */
-    default QueryOperator select(Collection<String> fieldNames) {
+    default T select(Collection<String> fieldNames) {
         return selects(fieldNames.stream().map(DSLName::of).toList());
     }
 
@@ -118,7 +119,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param entityType the entity type
      * @return self
      */
-    default <T> QueryOperator select(Class<T> entityType) {
+    default <P> T select(Class<P> entityType) {
         Collection<DSLName> columns = PojoWrapper.findColumns(entityType);
         return selects(columns);
     }
@@ -127,9 +128,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 批量条件'SELECT'条件
      *
      * @param dslNames dslNames
-     * @return Select
+     * @return self
      */
-    QueryOperator selects(Collection<DSLName> dslNames);
+    T selects(Collection<DSLName> dslNames);
 
     /**
      * obtain select columns
@@ -139,18 +140,18 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
     /**
      * 添加 distinct
      *
-     * @return Select
+     * @return self
      */
-    QueryOperator distinct();
+    T distinct();
 
     /**
      * 添加 distinct on
      *
      * @param reference 方法引用
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator distinctOn(MethodReferenceColumn<R> reference) {
+    default <R> T distinctOn(MethodReferenceColumn<R> reference) {
         return distinctOn(reference.getColumn());
     }
 
@@ -160,9 +161,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法引用
      * @param alias     别名
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator distinctOn(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T distinctOn(MethodReferenceColumn<R> reference, String alias) {
         return distinctOn(reference.getColumn(), alias);
     }
 
@@ -170,9 +171,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加 distinct on
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
-    default QueryOperator distinctOn(String fieldName) {
+    default T distinctOn(String fieldName) {
         return distinctOn(fieldName, fieldName);
     }
 
@@ -181,29 +182,29 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param alias     别名
-     * @return Select
+     * @return self
      */
-    default QueryOperator distinctOn(String fieldName, String alias) {
+    default T distinctOn(String fieldName, String alias) {
         return distinctOn(DSLName.of(fieldName), alias);
     }
 
     /**
      * 添加 distinct on
      *
-     * @param sqlName sqlName
+     * @param dslName dslName
      * @param alias   别名
-     * @return Select
+     * @return self
      */
-    QueryOperator distinctOn(DSLName sqlName, String alias);
+    T distinctOn(DSLName dslName, String alias);
 
     /**
      * 添加 min(field) alias
      *
      * @param reference 方法引用
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator min(MethodReferenceColumn<R> reference) {
+    default <R> T min(MethodReferenceColumn<R> reference) {
         return min(reference.getColumn());
     }
 
@@ -213,9 +214,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法引用
      * @param alias     别名
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator min(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T min(MethodReferenceColumn<R> reference, String alias) {
         return min(reference.getColumn(), alias);
     }
 
@@ -223,9 +224,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加 min(field) alias
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
-    default QueryOperator min(String fieldName) {
+    default T min(String fieldName) {
         return min(fieldName, null);
     }
 
@@ -234,9 +235,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param alias     别名
-     * @return Select
+     * @return self
      */
-    default QueryOperator min(String fieldName, String alias) {
+    default T min(String fieldName, String alias) {
         return aggregate(Func.MIN_FUNCTION.getName(), fieldName, alias, null);
     }
 
@@ -245,9 +246,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param reference 方法引用
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator max(MethodReferenceColumn<R> reference) {
+    default <R> T max(MethodReferenceColumn<R> reference) {
         return max(reference.getColumn());
     }
 
@@ -257,9 +258,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法应用
      * @param alias     别名
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator max(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T max(MethodReferenceColumn<R> reference, String alias) {
         return max(reference.getColumn(), alias);
     }
 
@@ -267,9 +268,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加 max(field) alias
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
-    default QueryOperator max(String fieldName) {
+    default T max(String fieldName) {
         return max(fieldName, fieldName);
     }
 
@@ -278,9 +279,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param alias     别名
-     * @return Select
+     * @return self
      */
-    default QueryOperator max(String fieldName, String alias) {
+    default T max(String fieldName, String alias) {
         return aggregate(Func.MAX_FUNCTION.getName(), fieldName, alias, null);
     }
 
@@ -289,9 +290,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param reference 方法引用
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator avg(MethodReferenceColumn<R> reference) {
+    default <R> T avg(MethodReferenceColumn<R> reference) {
         return avg(reference.getColumn());
     }
 
@@ -301,9 +302,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法应用
      * @param alias     别名
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator avg(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T avg(MethodReferenceColumn<R> reference, String alias) {
         return avg(reference.getColumn(), alias);
     }
 
@@ -311,9 +312,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加 avg(field) alias
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
-    default QueryOperator avg(String fieldName) {
+    default T avg(String fieldName) {
         return avg(fieldName, fieldName);
     }
 
@@ -322,18 +323,18 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param alias     别名
-     * @return Select
+     * @return self
      */
-    default QueryOperator avg(String fieldName, String alias) {
+    default T avg(String fieldName, String alias) {
         return aggregate(Func.AVG_FUNCTION.getName(), fieldName, alias, null);
     }
 
     /**
      * 添加 count(field) alias
      *
-     * @return Select
+     * @return self
      */
-    default QueryOperator count() {
+    default T count() {
         return count(StringPool.ASTERISK, "count");
     }
 
@@ -342,9 +343,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param reference 方法应用
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator count(MethodReferenceColumn<R> reference) {
+    default <R> T count(MethodReferenceColumn<R> reference) {
         return count(reference.getColumn(), null);
     }
 
@@ -354,9 +355,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param reference 方法引用
      * @param alias     别名
      * @param <R>       实体类型
-     * @return Select
+     * @return self
      */
-    default <R> QueryOperator count(MethodReferenceColumn<R> reference, String alias) {
+    default <R> T count(MethodReferenceColumn<R> reference, String alias) {
         return count(reference.getColumn(), alias);
     }
 
@@ -364,9 +365,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加 count(field) alias
      *
      * @param fieldName java variable name
-     * @return Select
+     * @return self
      */
-    default QueryOperator count(String fieldName) {
+    default T count(String fieldName) {
         return count(fieldName, null);
     }
 
@@ -375,9 +376,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param alias     别名
-     * @return Select
+     * @return self
      */
-    default QueryOperator count(String fieldName, String alias) {
+    default T count(String fieldName, String alias) {
         return aggregate(Func.COUNT_FUNCTION.getName(), fieldName, alias, null);
     }
 
@@ -388,10 +389,10 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldName java variable name
      * @param alias     别名
      * @param distinct  distinct
-     * @return Select
+     * @return self
      * @see Func
      */
-    default QueryOperator aggregate(String syntax, String fieldName, String alias, Distinct distinct) {
+    default T aggregate(String syntax, String fieldName, String alias, Distinct distinct) {
         Func func = Func.of(syntax);
         if (func != null) {
             return aggregate(func, fieldName, alias, distinct);
@@ -406,10 +407,10 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldName java variable name
      * @param alias     别名
      * @param distinct  distinct
-     * @return Select
+     * @return self
      * @see Func
      */
-    default QueryOperator aggregate(Func syntax, String fieldName, String alias, Distinct distinct) {
+    default T aggregate(Func syntax, String fieldName, String alias, Distinct distinct) {
         return aggregate(syntax, DSLName.of(fieldName), alias, distinct);
     }
 
@@ -417,13 +418,13 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * Select 函数
      *
      * @param syntax   函数语法
-     * @param sqlName  sqlName
+     * @param dslName  dslName
      * @param alias    别名
      * @param distinct distinct
-     * @return Select
+     * @return self
      * @see Func
      */
-    QueryOperator aggregate(Func syntax, DSLName sqlName, String alias, Distinct distinct);
+    T aggregate(Func syntax, DSLName dslName, String alias, Distinct distinct);
 
     // ============================== FROM PART ==============================
 
@@ -432,9 +433,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fromTable QueryOperator实例
      * @param alias     查询别名
-     * @return QueryOperator
+     * @return self
      */
-    QueryOperator from(QueryOperator fromTable, String alias);
+    T from(QueryOperator<?> fromTable, String alias);
 
     /**
      * FROM t1 left join t2 on t1.xx = t2.xx
@@ -442,9 +443,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param left      left
      * @param right     right
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator leftJoin(Table left, Table right, BinaryCondition condition) {
+    default T leftJoin(Table left, Table right, BinaryCondition condition) {
         return join(left, JoinType.LEFT_OUTER_JOIN, right, condition);
     }
 
@@ -454,9 +455,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param left      left
      * @param right     right
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator rightJoin(Table left, Table right, BinaryCondition condition) {
+    default T rightJoin(Table left, Table right, BinaryCondition condition) {
         return join(left, JoinType.RIGHT_OUTER_JOIN, right, condition);
     }
 
@@ -466,9 +467,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param leftAlias leftAlias
      * @param rightName rightName
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator leftJoinThen(String leftAlias, String rightName, BinaryCondition condition) {
+    default T leftJoinThen(String leftAlias, String rightName, BinaryCondition condition) {
         return leftJoinThen(leftAlias, rightName, rightName, condition);
     }
 
@@ -479,9 +480,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param rightName  rightName
      * @param rightAlias rightAlias
      * @param condition  条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator leftJoinThen(String leftAlias, String rightName, String rightAlias, BinaryCondition condition) {
+    default T leftJoinThen(String leftAlias, String rightName, String rightAlias, BinaryCondition condition) {
         return joinThen(leftAlias, JoinType.LEFT_OUTER_JOIN, Table.of(rightName, rightAlias), condition);
     }
 
@@ -491,9 +492,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param leftAlias right
      * @param rightName rightName
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator rightJoinThen(String leftAlias, String rightName, BinaryCondition condition) {
+    default T rightJoinThen(String leftAlias, String rightName, BinaryCondition condition) {
         return joinThen(leftAlias, JoinType.RIGHT_OUTER_JOIN, Table.of(rightName, rightName), condition);
     }
 
@@ -504,9 +505,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param rightName  rightName
      * @param rightAlias rightAlias
      * @param condition  条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator rightJoinThen(String leftAlias, String rightName, String rightAlias, BinaryCondition condition) {
+    default T rightJoinThen(String leftAlias, String rightName, String rightAlias, BinaryCondition condition) {
         return joinThen(leftAlias, JoinType.RIGHT_OUTER_JOIN, Table.of(rightName, rightAlias), condition);
     }
 
@@ -516,9 +517,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param joinType  连接
      * @param right     right
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator joinThen(JoinType joinType, Table right, BinaryCondition condition) {
+    default T joinThen(JoinType joinType, Table right, BinaryCondition condition) {
         return joinThen("empty", joinType, right, condition);
     }
 
@@ -529,9 +530,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param joinType  连接
      * @param right     right
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    default QueryOperator joinThen(String leftAlias, JoinType joinType, Table right, BinaryCondition condition) {
+    default T joinThen(String leftAlias, JoinType joinType, Table right, BinaryCondition condition) {
         return join(Table.of(leftAlias, leftAlias), joinType, right, condition);
     }
 
@@ -542,9 +543,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param joinType  连接
      * @param right     right
      * @param condition 条件
-     * @return QueryOperator
+     * @return self
      */
-    QueryOperator join(Table left, JoinType joinType, Table right, BinaryCondition condition);
+    T join(Table left, JoinType joinType, Table right, BinaryCondition condition);
 
     // ============================== ORDER PART ==============================
 
@@ -552,9 +553,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 默认Order排序规则
      *
      * @param fieldName java variable name
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator by(String fieldName) {
+    default T by(String fieldName) {
         return byDesc(fieldName);
     }
 
@@ -562,9 +563,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 默认Order排序规则
      *
      * @param reference 方法引用
-     * @return Order对象
+     * @return self
      */
-    default <R> QueryOperator by(MethodReferenceColumn<R> reference) {
+    default <R> T by(MethodReferenceColumn<R> reference) {
         return by(reference.getColumn());
     }
 
@@ -572,9 +573,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加ORDER ASC
      *
      * @param reference 方法引用
-     * @return Order对象
+     * @return self
      */
-    default <R> QueryOperator byAsc(MethodReferenceColumn<R> reference) {
+    default <R> T byAsc(MethodReferenceColumn<R> reference) {
         return byAsc(reference.getColumn());
     }
 
@@ -582,9 +583,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加ORDER ASC
      *
      * @param fieldName java variable name
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator byAsc(String fieldName) {
+    default T byAsc(String fieldName) {
         return orderBy(fieldName, OrderCondition.ASC);
     }
 
@@ -592,9 +593,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加ORDER DESC
      *
      * @param reference 方法引用
-     * @return Order对象
+     * @return self
      */
-    default <R> QueryOperator byDesc(MethodReferenceColumn<R> reference) {
+    default <R> T byDesc(MethodReferenceColumn<R> reference) {
         return byDesc(reference.getColumn());
     }
 
@@ -602,9 +603,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 添加ORDER DESC
      *
      * @param fieldName java variable name
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator byDesc(String fieldName) {
+    default T byDesc(String fieldName) {
         return orderBy(fieldName, OrderCondition.DESC);
     }
 
@@ -613,9 +614,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param reference 方法引用
      * @param order     排序
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator orderBy(MethodReferenceColumn<?> reference, String order) {
+    default T orderBy(MethodReferenceColumn<?> reference, String order) {
         return orderBy(reference.getColumn(), order);
     }
 
@@ -624,9 +625,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName java variable name
      * @param order     排序
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator orderBy(String fieldName, String order) {
+    default T orderBy(String fieldName, String order) {
         return orderBy(fieldName, OrderCondition.valueOf(order));
     }
 
@@ -635,9 +636,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param reference      方法引用
      * @param orderCondition 排序条件
-     * @return Order对象
+     * @return self
      */
-    default <R> QueryOperator orderBy(MethodReferenceColumn<R> reference, OrderCondition orderCondition) {
+    default <R> T orderBy(MethodReferenceColumn<R> reference, OrderCondition orderCondition) {
         return orderBy(reference.getColumn(), orderCondition);
     }
 
@@ -646,20 +647,20 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param fieldName      java variable name
      * @param orderCondition 排序条件
-     * @return Order对象
+     * @return self
      */
-    default QueryOperator orderBy(String fieldName, OrderCondition orderCondition) {
+    default T orderBy(String fieldName, OrderCondition orderCondition) {
         return orderBy(DSLName.of(fieldName), orderCondition);
     }
 
     /**
      * 添加Order语句
      *
-     * @param sqlName        sqlName
+     * @param dslName        dslName
      * @param orderCondition 排序条件
-     * @return Order对象
+     * @return self
      */
-    QueryOperator orderBy(DSLName sqlName, OrderCondition orderCondition);
+    T orderBy(DSLName dslName, OrderCondition orderCondition);
 
     // ============================== LIMIT PART ==============================
 
@@ -668,9 +669,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param current  当前页
      * @param pageSize 页大小
-     * @return Limit
+     * @return self
      */
-    default QueryOperator page(Long current, Long pageSize) {
+    default T page(Long current, Long pageSize) {
         return limit(pageSize, (current - 1) * pageSize);
     }
 
@@ -679,20 +680,19 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      *
      * @param limit  限制查询的数量
      * @param offset 偏移数
-     * @return Limit
+     * @return self
      */
-    QueryOperator limit(Long limit, Long offset);
+    T limit(Long limit, Long offset);
 
     // ============================== WHERE PART ==============================
-
 
     /**
      * 由某一个字段进行分组
      *
      * @param reference 方法引用
-     * @return Group对象
+     * @return self
      */
-    default <R> QueryOperator groupByOne(MethodReferenceColumn<R> reference) {
+    default <R> T groupByOne(MethodReferenceColumn<R> reference) {
         return groupByOnes(reference.getColumn());
     }
 
@@ -702,9 +702,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 由某一个字段进行分组
      *
      * @param fieldName java variable name
-     * @return Group对象
+     * @return self
      */
-    default QueryOperator groupByOne(String fieldName) {
+    default T groupByOne(String fieldName) {
         return groupByOnes(fieldName);
     }
 
@@ -712,9 +712,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 由某一类字段进行分组
      *
      * @param fieldNames java variable name数组
-     * @return Group对象
+     * @return self
      */
-    default QueryOperator groupByOnes(String... fieldNames) {
+    default T groupByOnes(String... fieldNames) {
         return groupByOne(Lists.newArrayList(fieldNames));
     }
 
@@ -722,9 +722,9 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * 由某一类字段进行分组
      *
      * @param fieldNames java variable name集合
-     * @return Group对象
+     * @return self
      */
-    default QueryOperator groupByOne(Collection<String> fieldNames) {
+    default T groupByOne(Collection<String> fieldNames) {
         return groupByOnes(fieldNames.stream().map(DSLName::of).toList());
     }
 
@@ -734,7 +734,7 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param fieldNames java variable name集合
      * @return Group对象
      */
-    QueryOperator groupByOnes(Collection<DSLName> fieldNames);
+    T groupByOnes(Collection<DSLName> fieldNames);
 
     // ====================== advanced method ======================
 
@@ -746,6 +746,5 @@ public interface QueryOperator extends PrepareOperator<QueryOperator>, TableOper
      * @param subQuery  the build tree query for sub query operator
      * @return self
      */
-    QueryOperator tree(QueryOperator baseQuery, QueryOperator subQuery);
-
+    T tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery);
 }

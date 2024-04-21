@@ -4,12 +4,15 @@ import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * 表结构
@@ -20,13 +23,13 @@ import java.util.List;
  */
 @AutoService(ShowColumnsOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOperator> implements ShowColumnsOperator {
+public class SQLShowColumnsOperator extends PrepareOperatorImpl<SQLShowColumnsOperator> implements ShowColumnsOperator<SQLShowColumnsOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
     private Table table;
     private Database database;
-    private final QueryOperator queryOperator;
+    private final SQLQueryOperator queryOperator;
 
     public SQLShowColumnsOperator() {
         this(DBType.getSystemDbType());
@@ -35,7 +38,7 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     public SQLShowColumnsOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
-        this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, dbType);
+        this.queryOperator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
     }
 
     @Override
@@ -47,8 +50,13 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     }
 
     @Override
-    public ShowColumnsOperator parse(String dsl) {
+    public SQLShowColumnsOperator parse(String dsl) {
         throw SQLSupport.on(this).onNonsupport("parse").<DSLException>execute();
+    }
+
+    @Override
+    public SQLShowColumnsOperator customize(UnaryOperator<SQLShowColumnsOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLShowColumnsOperator(dbType));
     }
 
     @Override
@@ -80,7 +88,7 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     }
 
     @Override
-    public ShowColumnsOperator from(Table table) {
+    public SQLShowColumnsOperator from(Table table) {
         Object result = SQLSupport.on(this)
                 .onDb(druidDbType)
                 .then(queryOperator::reset)
@@ -136,7 +144,7 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     }
 
     @Override
-    public QueryOperator toQueryOperator() {
+    public QueryOperator<?> toQueryOperator() {
         return SQLSupport.on(this)
                 .onDb(druidDbType)
                 .then(() -> queryOperator)
@@ -144,7 +152,7 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<ShowColumnsOpera
     }
 
     @Override
-    public ShowColumnsOperator database(Database database) {
+    public SQLShowColumnsOperator database(Database database) {
         this.database = database;
         return self();
     }

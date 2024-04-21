@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.Operator;
@@ -15,19 +15,19 @@ import java.util.function.UnaryOperator;
  *
  * @author j.x
  * @date 2023/4/12 19:42
- * @since 1.1.4
  * @see OperatorGroup
+ * @since 1.1.4
  */
-public interface CreateTableOperator extends Operator<CreateTableOperator>, TableOperator<CreateTableOperator> {
+public interface CreateTableOperator<T extends CreateTableOperator<T>> extends Operator<T>, TableOperator<T> {
 
     /**
      * 根据pojo的clas创表实例
      *
      * @param pojoClass the pojoClass
-     * @return SQLCreateTableOperator
+     * @return self
      */
-    default <T> CreateTableOperator fromPojo(Class<T> pojoClass) {
-        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojoClass);
+    default <P> T fromPojo(Class<P> pojoClass) {
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojoClass);
         List<ColumnDef> columnDefs = pojoWrapper.getColumnDefs();
         return from(pojoWrapper.getTable()).columns(columnDefs);
     }
@@ -36,9 +36,9 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      * 字段
      *
      * @param columnDefs 集合
-     * @return CreateTableOperator
+     * @return self
      */
-    default CreateTableOperator columns(ColumnDef... columnDefs) {
+    default T columns(ColumnDef... columnDefs) {
         if (columnDefs != null) {
             for (ColumnDef columnDef : columnDefs) {
                 column(columnDef);
@@ -51,9 +51,9 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      * 字段
      *
      * @param columnDefs 集合
-     * @return CreateTableOperator
+     * @return self
      */
-    default CreateTableOperator columns(List<ColumnDef> columnDefs) {
+    default T columns(List<ColumnDef> columnDefs) {
         if (CollectionUtils.isNotEmpty(columnDefs)) {
             for (ColumnDef columnDef : columnDefs) {
                 column(columnDef);
@@ -66,9 +66,9 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      * 字段
      *
      * @param builder the builder
-     * @return CreateTableOperator
+     * @return self
      */
-    default CreateTableOperator column(UnaryOperator<ColumnDef.ColumnDefBuilder> builder) {
+    default T column(UnaryOperator<ColumnDef.ColumnDefBuilder> builder) {
         return column(builder.apply(ColumnDef.builder()).build());
     }
 
@@ -76,15 +76,15 @@ public interface CreateTableOperator extends Operator<CreateTableOperator>, Tabl
      * 字段
      *
      * @param columnDef SQLColumnDef
-     * @return CreateTableOperator
+     * @return self
      */
-    CreateTableOperator column(ColumnDef columnDef);
+    T column(ColumnDef columnDef);
 
     /**
      * 注释
      *
      * @param comment 注释
-     * @return CreateTableOperator
+     * @return self
      */
-    CreateTableOperator comment(String comment);
+    T comment(String comment);
 }

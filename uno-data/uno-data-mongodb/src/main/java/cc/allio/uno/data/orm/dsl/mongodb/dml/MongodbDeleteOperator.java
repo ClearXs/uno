@@ -1,17 +1,17 @@
 package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.Operator;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.PrepareValue;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import com.mongodb.client.model.Filters;
 import org.bson.BsonDocument;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb delete document operator
@@ -22,7 +22,7 @@ import java.util.List;
  */
 @AutoService(DeleteOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbDeleteOperator extends MongodbWhereOperatorImpl<DeleteOperator> implements DeleteOperator {
+public class MongodbDeleteOperator extends MongodbWhereOperatorImpl<MongodbDeleteOperator> implements DeleteOperator<MongodbDeleteOperator> {
 
     private Table fromColl;
 
@@ -36,9 +36,14 @@ public class MongodbDeleteOperator extends MongodbWhereOperatorImpl<DeleteOperat
     }
 
     @Override
-    public DeleteOperator parse(String dsl) {
+    public MongodbDeleteOperator parse(String dsl) {
         this.filter = BsonDocument.parse(dsl);
         return self();
+    }
+
+    @Override
+    public MongodbDeleteOperator customize(UnaryOperator<MongodbDeleteOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbDeleteOperator());
     }
 
     @Override
@@ -64,11 +69,11 @@ public class MongodbDeleteOperator extends MongodbWhereOperatorImpl<DeleteOperat
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getPrepareValues");
+        return Collections.emptyList();
     }
 
     @Override
-    public DeleteOperator from(Table table) {
+    public MongodbDeleteOperator from(Table table) {
         this.fromColl = table;
         return self();
     }

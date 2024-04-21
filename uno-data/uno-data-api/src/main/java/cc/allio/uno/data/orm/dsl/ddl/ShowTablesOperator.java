@@ -2,18 +2,17 @@ package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 
 /**
  * Show Tables Operator
  *
  * @author j.x
  * @date 2024/1/4 16:56
- * @since 1.1.7
  * @see OperatorGroup
+ * @since 1.1.7
  */
-public interface ShowTablesOperator
-        extends TableOperator<ShowTablesOperator>,
-        PrepareOperator<ShowTablesOperator>, DataBaseOperator<ShowTablesOperator> {
+public interface ShowTablesOperator<T extends ShowTablesOperator<T>> extends TableOperator<T>, PrepareOperator<T>, DataBaseOperator<T> {
 
     String TABLE_CATALOG_FILED = "TABLE_CATALOG";
     String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
@@ -23,24 +22,24 @@ public interface ShowTablesOperator
     /**
      * 转换为{@link QueryOperator}
      *
-     * @return SQLQueryOperator for instance
+     * @return {@link QueryOperator}
      */
-    QueryOperator toQueryOperator();
+    QueryOperator<?> toQueryOperator();
 
     /**
      * schema
      *
      * @param schema schema
-     * @return ShowTablesOperator
+     * @return self
      */
-    ShowTablesOperator schema(String schema);
+    T schema(String schema);
 
     /**
      * 作为库表查询的过滤，可以多次使用，如果多次则查询这多个信息
      *
      * @param table xxxx
-     * @return ShowTablesOperator
+     * @return self
      */
     @Override
-    ShowTablesOperator from(Table table);
+    T from(Table table);
 }

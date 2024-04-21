@@ -4,6 +4,7 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;
@@ -21,16 +22,16 @@ import java.util.function.Supplier;
  * @see OperatorGroup
  * @since 1.1.4
  */
-public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOperator<InsertOperator> {
+public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOperator<T>, TableOperator<T> {
 
     /**
      * INSERT VALUES
      *
      * @param reference key
      * @param value     value
-     * @return InsertOperator
+     * @return self
      */
-    default <R> InsertOperator insert(MethodReferenceColumn<R> reference, Object value) {
+    default <R> T insert(MethodReferenceColumn<R> reference, Object value) {
         return insert(reference.getColumn(), value);
     }
 
@@ -39,9 +40,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      *
      * @param fieldName fieldName
      * @param value     value
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(String fieldName, Object value) {
+    default T insert(String fieldName, Object value) {
         return insert(Map.of(fieldName, getValueIfNull(value)));
     }
 
@@ -50,9 +51,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      *
      * @param f1 f1
      * @param v1 v1
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(String f1, Object v1, String f2, Object v2) {
+    default T insert(String f1, Object v1, String f2, Object v2) {
         return insert(Tuples.of(f1, getValueIfNull(v1)), Tuples.of(f2, getValueIfNull(v2)));
     }
 
@@ -63,9 +64,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @param v1 v1
      * @param f2 f2
      * @param v2 v2
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
+    default T insert(String f1, Object v1, String f2, Object v2, String f3, Object v3) {
         return insert(
                 Tuples.of(f1, getValueIfNull(v1)),
                 Tuples.of(f2, getValueIfNull(v2)),
@@ -83,9 +84,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * @param v3 v3
      * @param f4 f4
      * @param v4 v4
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
+    default T insert(String f1, Object v1, String f2, Object v2, String f3, Object v3, String f4, Object v4) {
         return insert(
                 Tuples.of(f1, getValueIfNull(v1)),
                 Tuples.of(f2, getValueIfNull(v2)),
@@ -97,9 +98,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * INSERT VALUES
      *
      * @param tuple2s Key value
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(Tuple2<String, Object>... tuple2s) {
+    default T insert(Tuple2<String, Object>... tuple2s) {
         Map<String, Object> values = Maps.newHashMap();
         for (Tuple2<String, Object> tuple2 : tuple2s) {
             values.put(tuple2.getT1(), tuple2.getT2());
@@ -111,10 +112,10 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * 基于POJO实体动态构建INSERT VALUES，如果该实体某个字段没有值将不会加入到INSERT中
      *
      * @param pojo pojo
-     * @return SQLInsertOperator
+     * @return self
      */
-    default <T> InsertOperator insertPojo(T pojo) {
-        PojoWrapper<T> pojoWrapper = PojoWrapper.getInstance(pojo);
+    default <P> T insertPojo(P pojo) {
+        PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
         String pkName = pojoWrapper.getPkColumn().getDslName().format(DSLName.HUMP_FEATURE);
         ColumnDef pkColumn = pojoWrapper.getPkColumn();
         Object pkValue = pkColumn.castValue(IdGenerator.defaultGenerator().getNextId());
@@ -128,9 +129,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * INSERT VALUES
      *
      * @param values Key value
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator insert(Map<String, Object> values) {
+    default T insert(Map<String, Object> values) {
         Map<DSLName, Object> inserts = Maps.newLinkedHashMap();
         for (Map.Entry<String, Object> entry : values.entrySet()) {
             inserts.put(DSLName.of(entry.getKey()), getValueIfNull(entry.getValue()));
@@ -142,9 +143,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * INSERT VALUES
      *
      * @param values Key value
-     * @return InsertOperator
+     * @return self
      */
-    default InsertOperator inserts(Map<DSLName, Object> values) {
+    default T inserts(Map<DSLName, Object> values) {
         Set<DSLName> sqlNames = values.keySet();
         Collection<Object> value = values.values();
         return columns(sqlNames.stream().toList()).values(Lists.newArrayList(value));
@@ -154,10 +155,10 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * 基于POJO实体动态构建INSERT VALUES，如果该实体某个字段没有值将不会加入到INSERT中
      *
      * @param pojos pojos list
-     * @return SQLInsertOperator
+     * @return self
      */
-    default <T> InsertOperator batchInsertPojos(List<T> pojos) {
-        for (T pojo : pojos) {
+    default <P> T batchInsertPojos(List<P> pojos) {
+        for (P pojo : pojos) {
             insertPojo(pojo);
         }
         return self();
@@ -167,9 +168,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * INSERT VALUES,VALUES,VALUES
      *
      * @param values values
-     * @return SQLInsertOperator
+     * @return self
      */
-    default InsertOperator batchInsert(List<String> columns, List<List<Object>> values) {
+    default T batchInsert(List<String> columns, List<List<Object>> values) {
         return batchInserts(columns.stream().map(DSLName::of).toList(), values);
     }
 
@@ -177,9 +178,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * INSERT VALUES,VALUES,VALUES
      *
      * @param values values
-     * @return SQLInsertOperator
+     * @return self
      */
-    default InsertOperator batchInserts(List<DSLName> columns, List<List<Object>> values) {
+    default T batchInserts(List<DSLName> columns, List<List<Object>> values) {
         columns(columns);
         for (List<Object> value : values) {
             values(value);
@@ -190,7 +191,7 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
     /**
      * @see #strictFill(String, Supplier)
      */
-    default InsertOperator strictFill(String f, Object v) {
+    default T strictFill(String f, Object v) {
         return strictFill(f, () -> v);
     }
 
@@ -201,17 +202,17 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      *
      * @param f 字段名
      * @param v 字段值
-     * @return SQLInsertOperator
+     * @return self
      */
-    InsertOperator strictFill(String f, Supplier<Object> v);
+    T strictFill(String f, Supplier<Object> v);
 
     /**
      * 提供insert column
      *
      * @param columns columns
-     * @return SQLInsertOperator
+     * @return self
      */
-    default InsertOperator columns(String... columns) {
+    default T columns(String... columns) {
         return columns(Lists.newArrayList(columns).stream().map(DSLName::of).toList());
     }
 
@@ -219,9 +220,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * 提供insert column
      *
      * @param columns columns
-     * @return SQLInsertOperator
+     * @return self
      */
-    default InsertOperator columns(DSLName... columns) {
+    default T columns(DSLName... columns) {
         return columns(Lists.newArrayList(columns));
     }
 
@@ -229,14 +230,14 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * 提供insert column
      *
      * @param columns columns
-     * @return SQLInsertOperator
+     * @return self
      */
-    InsertOperator columns(Collection<DSLName> columns);
+    T columns(Collection<DSLName> columns);
 
     /**
      * @see #values(List)
      */
-    default InsertOperator values(Object... values) {
+    default T values(Object... values) {
         return values(Lists.newArrayList(values));
     }
 
@@ -251,9 +252,9 @@ public interface InsertOperator extends PrepareOperator<InsertOperator>, TableOp
      * </ul>
      *
      * @param values values
-     * @return SQLInsertOperator
+     * @return self
      */
-    InsertOperator values(List<Object> values);
+    T values(List<Object> values);
 
     /**
      * 是否是批量插入

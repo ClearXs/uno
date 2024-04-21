@@ -5,6 +5,7 @@ import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.StringUtils;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.Objects;
 import java.util.regex.Pattern;
@@ -17,8 +18,9 @@ import java.util.regex.Pattern;
  * @since 1.1.4
  */
 @Getter
+@Setter
 @EqualsAndHashCode(of = "name")
-public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
+public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSLName> {
 
     // 当前存入的dsl name
     private String name;
@@ -34,7 +36,7 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
     /**
      * 名称格式化key
      */
-    private static final String NAME_FORMAT_KEY = "allio.uno.data.orm.sql.name.format";
+    private static final String NAME_FORMAT_KEY = "allio.uno.data.orm.dsl.name.format";
     // 名称以下划线
     private static final String NAME_FORMAT_UNDERLINE = "underline";
     // 名称以驼峰
@@ -51,6 +53,24 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
     public static final NameFeature PLAIN_FEATURE = new PlainFeature();
     public static final NameFeature LOWER_CASE_FEATURE = new LowerCaseFeature();
     public static final NameFeature UPPER_CASE_FEATURE = new UpperCaseFeature();
+
+    public DSLName() {
+
+    }
+
+    public DSLName(String name) {
+        this(name, getNameFeature());
+    }
+
+    public DSLName(String name, NameFeature nameFeature) {
+        this.name = name;
+        this.feature = nameFeature;
+    }
+
+    public DSLName(DSLName dslName, NameFeature... nameFeatures) {
+        this.name = dslName.format();
+        this.feature = NameFeature.aggregate(nameFeatures);
+    }
 
     private void setFeature(NameFeature... features) {
         this.feature = new AggregateNameFeature(features);
@@ -93,31 +113,10 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
     }
 
     /**
-     * 获取name feature
-     *
-     * @return NameFeature or default {@link #PLAIN_FEATURE}
-     */
-    public static NameFeature getNameFeature() {
-        String nameFormatKey = Envs.getProperty(NAME_FORMAT_KEY);
-        if (NAME_FORMAT_UNDERLINE.equals(nameFormatKey)) {
-            return UNDERLINE_FEATURE;
-        } else if (NAME_FORM_HUMP.equals(nameFormatKey)) {
-            return HUMP_FEATURE;
-        } else if (NAME_FORM_PLAIN.equals(nameFormatKey)) {
-            return PLAIN_FEATURE;
-        } else if (NAME_FORM_LOWER_CASE.equals(nameFormatKey)) {
-            return LOWER_CASE_FEATURE;
-        } else if (NAME_FORM_UPPER_CASE.equals(nameFormatKey)) {
-            return UPPER_CASE_FEATURE;
-        }
-        return UNDERLINE_FEATURE;
-    }
-
-    /**
-     * 创建SQLName实例
+     * 创建{@link DSLName}实例
      *
      * @param name name
-     * @return SQLName
+     * @return {@link DSLName}
      */
     public static DSLName of(String name) {
         return of(name, getNameFeature());
@@ -169,6 +168,27 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName> {
      */
     public static String toUnderline(String hump) {
         return DSLName.of(hump, UNDERLINE_FEATURE).format();
+    }
+
+    /**
+     * 获取name feature
+     *
+     * @return NameFeature or default {@link #PLAIN_FEATURE}
+     */
+    public static NameFeature getNameFeature() {
+        String nameFormatKey = Envs.getProperty(NAME_FORMAT_KEY);
+        if (NAME_FORMAT_UNDERLINE.equals(nameFormatKey)) {
+            return UNDERLINE_FEATURE;
+        } else if (NAME_FORM_HUMP.equals(nameFormatKey)) {
+            return HUMP_FEATURE;
+        } else if (NAME_FORM_PLAIN.equals(nameFormatKey)) {
+            return PLAIN_FEATURE;
+        } else if (NAME_FORM_LOWER_CASE.equals(nameFormatKey)) {
+            return LOWER_CASE_FEATURE;
+        } else if (NAME_FORM_UPPER_CASE.equals(nameFormatKey)) {
+            return UPPER_CASE_FEATURE;
+        }
+        return UNDERLINE_FEATURE;
     }
 
     /**

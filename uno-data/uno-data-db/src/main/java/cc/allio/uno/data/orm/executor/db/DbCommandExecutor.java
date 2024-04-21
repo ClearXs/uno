@@ -8,12 +8,14 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
+import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
@@ -74,7 +76,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
         this.executor = new SimpleExecutor(configuration, tx);
         this.languageDriver = new RawLanguageDriver();
         this.sqlCommandAdapter = new MybatisSQLCommandAdapter();
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.SQL);
+        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.SQL, options);
     }
 
     @Override
@@ -150,13 +152,13 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
 
     @Override
     protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
-        QueryOperator queryOperator;
+        QueryOperator<?> queryOperator;
         if (commandType == CommandType.SELECT) {
-            queryOperator = (QueryOperator) operator;
+            queryOperator = (QueryOperator<?>) operator;
         } else if (commandType == CommandType.SHOW_TABLES) {
-            queryOperator = ((ShowTablesOperator) operator).toQueryOperator();
+            queryOperator = ((ShowTablesOperator<?>) operator).toQueryOperator();
         } else if (commandType == CommandType.SHOW_COLUMNS) {
-            queryOperator = ((ShowColumnsOperator) operator).toQueryOperator();
+            queryOperator = ((ShowColumnsOperator<?>) operator).toQueryOperator();
         } else {
             throw new DSLException(String.format("un accept command to Db query list %s", commandType));
         }
@@ -193,6 +195,11 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
             }
             throw new DSLException(ex);
         }
+    }
+
+    @Override
+    protected InnerCommandExecutorManager getInnerCommandExecutorManager() {
+        return null;
     }
 
     @Override

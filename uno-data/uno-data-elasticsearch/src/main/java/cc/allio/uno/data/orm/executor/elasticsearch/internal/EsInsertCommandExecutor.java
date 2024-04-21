@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.elasticsearch.internal;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.dsl.dml.elasticsearch.EsInsertOperator;
+import cc.allio.uno.data.orm.dsl.elasticsearch.dml.EsInsertOperator;
 import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;

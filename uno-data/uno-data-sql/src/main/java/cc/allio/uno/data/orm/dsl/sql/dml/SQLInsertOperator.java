@@ -20,7 +20,7 @@ import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 
 import java.util.*;
 import java.util.function.Supplier;
-import java.util.stream.Collectors;
+import java.util.function.UnaryOperator;
 
 /**
  * Druid INSERT
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
  */
 @AutoService(InsertOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> implements InsertOperator {
+public class SQLInsertOperator extends PrepareOperatorImpl<SQLInsertOperator> implements InsertOperator<SQLInsertOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
@@ -58,11 +58,11 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
         return ParameterizedOutputVisitorUtils.restore(
                 getPrepareDSL(),
                 druidDbType,
-                getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList()));
+                getPrepareValues().stream().map(PrepareValue::getValue).toList());
     }
 
     @Override
-    public InsertOperator parse(String dsl) {
+    public SQLInsertOperator parse(String dsl) {
         this.insertStatement = (SQLInsertStatement) SQLUtils.parseSingleStatement(dsl, druidDbType);
         List<SQLExpr> columns = insertStatement.getColumns();
         List<SQLInsertStatement.ValuesClause> valuesList = insertStatement.getValuesList();
@@ -87,6 +87,11 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
+    public SQLInsertOperator customize(UnaryOperator<SQLInsertOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLInsertOperator(dbType));
+    }
+
+    @Override
     public void reset() {
         super.reset();
         this.insertStatement = new SQLInsertStatement();
@@ -107,7 +112,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
-    public InsertOperator from(Table table) {
+    public SQLInsertOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
         tableSource.setCatalog(table.getCatalog());
@@ -124,12 +129,12 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
 
 
     @Override
-    public InsertOperator strictFill(String f, Supplier<Object> v) {
+    public SQLInsertOperator strictFill(String f, Supplier<Object> v) {
         return strictFill(f, v, true);
     }
 
     @Override
-    public InsertOperator columns(Collection<DSLName> columns) {
+    public SQLInsertOperator columns(Collection<DSLName> columns) {
         List<SQLInsertStatement.ValuesClause> valuesList = insertStatement.getValuesList();
         if (valuesList.isEmpty()) {
             for (DSLName column : columns) {
@@ -144,7 +149,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
     }
 
     @Override
-    public InsertOperator values(List<Object> values) {
+    public SQLInsertOperator values(List<Object> values) {
         SQLInsertStatement.ValuesClause valuesClause = new SQLInsertStatement.ValuesClause();
         for (int i = 0; i < columns.size(); i++) {
             String column = columns.get(i);
@@ -178,7 +183,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<InsertOperator> imple
      * @param existAssign existAssign
      * @return SQLInsertOperator
      */
-    private InsertOperator strictFill(String f, Supplier<Object> supplier, boolean existAssign) {
+    private SQLInsertOperator strictFill(String f, Supplier<Object> supplier, boolean existAssign) {
         // 1.在batch里面
         // 2.如果相同column值覆盖
         int index = columns.indexOf(f);

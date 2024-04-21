@@ -1,7 +1,6 @@
 package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
@@ -9,12 +8,12 @@ import cc.allio.uno.data.orm.dsl.mongodb.MongodbSupport;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.google.common.collect.Lists;
 import lombok.Getter;
-import org.bson.BsonArray;
 import org.bson.Document;
 
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * mongodb insert document operator
@@ -25,7 +24,7 @@ import java.util.function.Supplier;
  */
 @AutoService(InsertOperator.class)
 @Operator.Group(OperatorKey.MONGODB_LITERAL)
-public class MongodbInsertOperator implements InsertOperator {
+public class MongodbInsertOperator implements InsertOperator<MongodbInsertOperator> {
 
     @Getter
     private List<Document> docs;
@@ -44,10 +43,15 @@ public class MongodbInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator parse(String dsl) {
+    public MongodbInsertOperator parse(String dsl) {
         List<Document> documentsFromDsl = MongodbSupport.parse(dsl);
         this.docs.addAll(documentsFromDsl);
         return self();
+    }
+
+    @Override
+    public MongodbInsertOperator customize(UnaryOperator<MongodbInsertOperator> operatorFunc) {
+        return operatorFunc.apply(new MongodbInsertOperator());
     }
 
     @Override
@@ -74,11 +78,11 @@ public class MongodbInsertOperator implements InsertOperator {
 
     @Override
     public List<PrepareValue> getPrepareValues() {
-        throw Exceptions.unOperate("getPrepareValues");
+        return List.of();
     }
 
     @Override
-    public InsertOperator from(Table table) {
+    public MongodbInsertOperator from(Table table) {
         this.fromColl = table;
         return self();
     }
@@ -89,7 +93,7 @@ public class MongodbInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator strictFill(String f, Supplier<Object> v) {
+    public MongodbInsertOperator strictFill(String f, Supplier<Object> v) {
         for (Document doc : docs) {
             doc.put(f, v.get());
         }
@@ -97,13 +101,13 @@ public class MongodbInsertOperator implements InsertOperator {
     }
 
     @Override
-    public InsertOperator columns(Collection<DSLName> columns) {
+    public MongodbInsertOperator columns(Collection<DSLName> columns) {
         this.columns = Lists.newArrayList(columns);
         return self();
     }
 
     @Override
-    public InsertOperator values(List<Object> values) {
+    public MongodbInsertOperator values(List<Object> values) {
         if (CollectionUtils.isEmpty(columns)) {
             return self();
         }

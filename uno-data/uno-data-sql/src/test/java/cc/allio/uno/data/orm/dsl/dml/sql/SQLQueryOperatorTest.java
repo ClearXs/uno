@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.dml.sql;
 
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
-import cc.allio.uno.data.orm.dsl.type.DBType;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
@@ -11,14 +11,14 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testSelect() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.selectAll().getDSL();
         assertEquals("SELECT *", sql);
     }
 
     @Test
     void testFunc() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z")
                 .min("z")
                 .getDSL();
@@ -27,7 +27,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testSimpleWhere() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z").from("dual").like("x", "zxc").getDSL();
         assertEquals("SELECT z\n" +
                 "FROM PUBLIC.dual\n" +
@@ -36,7 +36,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testMultiWhere() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z").from("dual").like("a", "a").eq("b", "b").getDSL();
         assertEquals("SELECT z\n" +
                 "FROM PUBLIC.dual\n" +
@@ -46,7 +46,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testLogicPredicateOr() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z").from("dual").or().eq("a", "a").eq("b", "b").getDSL();
         assertEquals("SELECT z\n" +
                 "FROM PUBLIC.dual\n" +
@@ -56,7 +56,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testMultiLogicPredicate() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z").from("dual").or().eq("a", "a").eq("b", "b").and().eq("d", "d").getDSL();
         assertEquals("SELECT z\n" +
                 "FROM PUBLIC.dual\n" +
@@ -67,7 +67,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testSubTable() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.leftJoin(Table.of("dual1"), Table.of("dual2"), BinaryCondition.of("dual1.cc", "dual2.aa", TokenOperator.EQUALITY))
                 .leftJoinThen("dual", "dual3", BinaryCondition.of("dual.xx", "dual3.xx", TokenOperator.EQUALITY))
                 .getDSL();
@@ -79,7 +79,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testOrder() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("a")
                 .from("dual")
                 .orderBy("a", OrderCondition.DESC)
@@ -91,7 +91,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testGroup() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String sql = operator.select("z")
                 .from("dual")
                 .groupByOne("z")
@@ -104,7 +104,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
     @Test
     void testLimit() {
         Operators.thenRest(() -> {
-            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+            SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
             String sql = operator.select("z")
                     .from("dual")
                     .page(1L, 10L)
@@ -117,14 +117,14 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
         // test pg
         Operators.thenRest(() -> {
-            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+            SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
             String sql = operator.select("z")
                     .from("dual")
                     .page(1L, 10L)
                     .getDSL();
             assertEquals("SELECT z\n" +
                     "FROM PUBLIC.dual\n" +
-                    "LIMIT 10 OFFSET 0", sql);
+                    "LIMIT 0, 10", sql);
             return operator;
         });
     }
@@ -132,7 +132,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
     @Test
     void testIn() {
         Operators.thenRest(() -> {
-            QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+            SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
             String sql = operator.select("z")
                     .from("dual")
                     .in("t1", "2", "2")
@@ -147,7 +147,7 @@ public class SQLQueryOperatorTest extends BaseTestCase {
 
     @Test
     void testParse() {
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         Operators.thenRest(() -> {
             String s1 = "SELECT *\n" +
                     "FROM dual";
@@ -196,17 +196,6 @@ public class SQLQueryOperatorTest extends BaseTestCase {
             return operator;
         });
 
-        // druid failed
-//        Operators.thenRest(() -> {
-//            String s6 = "SELECT \n" +
-//                    "FROM (dual1\n" +
-//                    "\tLEFT JOIN PUBLIC.dual2 ON dual1.cc = dual2.aa) AS dual\n" +
-//                    "\tLEFT JOIN PUBLIC.dual3 ON dual.xx = dual3.xx";
-//            String s6p = operator.parse(s6).getDSL();
-//            assertEquals(s6, s6p);
-//            return operator;
-//        });
-
         Operators.thenRest(() -> {
             String s7 = "SELECT a\n" +
                     "FROM PUBLIC.dual\n" +
@@ -242,20 +231,28 @@ public class SQLQueryOperatorTest extends BaseTestCase {
                 " UNION (SELECT sub.* FROM ((SELECT *\n" +
                 "FROM org\n" +
                 ") sub INNER JOIN biz_tree P ON P.ID = sub.parent_id))) SELECT * FROM biz_tree";
-        QueryOperator operator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, DBType.MYSQL);
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
         String dsl = operator.parse(sql).getDSL();
         assertEquals("WITH RECURSIVE biz_tree AS (\n" +
                 "\t\tSELECT *\n" +
                 "\t\tFROM org\n" +
                 "\t\tUNION\n" +
-                "\t\t(SELECT sub.*\n" +
+                "\t\tSELECT sub.*\n" +
                 "\t\tFROM (\n" +
                 "\t\t\tSELECT *\n" +
                 "\t\t\tFROM org\n" +
                 "\t\t) sub\n" +
-                "\t\t\tINNER JOIN biz_tree P ON P.ID = sub.parent_id)\n" +
+                "\t\t\tINNER JOIN biz_tree P ON P.ID = sub.parent_id\n" +
                 "\t)\n" +
                 "SELECT *\n" +
                 "FROM biz_tree", dsl);
+    }
+
+    @Test
+    void testPeelWhere() {
+        SQLQueryOperator operator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL);
+
+        String whereDSL = operator.eq("a", "a").getWhereDSL();
+        assertEquals("a = 'a'", whereDSL);
     }
 }

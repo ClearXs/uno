@@ -73,8 +73,8 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func      the func
      * @return true 成功 false 失败
      */
-    default <T> boolean insert(Class<T> pojoClass, UnaryOperator<InsertOperator> func) {
-        InsertOperator insertOperator = getOperatorGroup().insert(getOptions().getDbType());
+    default <T> boolean insert(Class<T> pojoClass, UnaryOperator<InsertOperator<?>> func) {
+        InsertOperator<?> insertOperator = getOperatorGroup().insert(getOptions().getDbType());
         return insert(func.apply(insertOperator.from(pojoClass)));
     }
 
@@ -84,7 +84,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return true 成功 false 失败
      */
-    default boolean insert(UnaryOperator<InsertOperator> func) {
+    default boolean insert(UnaryOperator<InsertOperator<?>> func) {
         return insert(func.apply(getOperatorGroup().insert(getOptions().getDbType())));
     }
 
@@ -94,7 +94,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param insertOperator insertOperator
      * @return true 成功 false 失败
      */
-    default boolean insert(InsertOperator insertOperator) {
+    default boolean insert(InsertOperator<?> insertOperator) {
         return bool(insertOperator, CommandType.INSERT);
     }
 
@@ -105,7 +105,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean insert(InsertOperator insertOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean insert(InsertOperator<?> insertOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(insertOperator, CommandType.INSERT, resultSetHandler);
     }
 
@@ -128,7 +128,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
     default <P, ID extends Serializable> boolean updatePojoById(P pojo, ID id) {
         PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
         ColumnDef theId = pojoWrapper.getPkColumn();
-        return updatePojoByCondition(pojo, condition -> condition.eq(theId.getDslName(), id));
+        return updatePojoByCondition(pojo, condition -> (WhereOperator<?>) condition.eq(theId.getDslName(), id));
     }
 
     /**
@@ -137,10 +137,10 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param pojo the pojo
      * @return true 成功 false 失败
      */
-    default <P> boolean updatePojoByCondition(P pojo, UnaryOperator<WhereOperator<UpdateOperator>> condition) {
+    default <P> boolean updatePojoByCondition(P pojo, UnaryOperator<WhereOperator<?>> condition) {
         return update(o -> {
             PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
-            UpdateOperator updateOperator = o.from(pojoWrapper.getTable()).updatePojo(pojo);
+            UpdateOperator<?> updateOperator = o.from(pojoWrapper.getTable()).updatePojo(pojo);
             condition.apply(updateOperator);
             return updateOperator;
         });
@@ -154,8 +154,8 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func      the func
      * @return true 成功 false 失败
      */
-    default <T> boolean update(Class<T> pojoClass, UnaryOperator<UpdateOperator> func) {
-        UpdateOperator updateOperator = getOperatorGroup().update(getOptions().getDbType());
+    default <T> boolean update(Class<T> pojoClass, UnaryOperator<UpdateOperator<?>> func) {
+        UpdateOperator<?> updateOperator = getOperatorGroup().update(getOptions().getDbType());
         return update(func.apply(updateOperator.from(pojoClass)));
     }
 
@@ -165,7 +165,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return true 成功 false 失败
      */
-    default boolean update(UnaryOperator<UpdateOperator> func) {
+    default boolean update(UnaryOperator<UpdateOperator<?>> func) {
         return update(func.apply(getOperatorGroup().update(getOptions().getDbType())));
     }
 
@@ -175,7 +175,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param updateOperator updateOperator
      * @return true 成功 false 失败
      */
-    default boolean update(UpdateOperator updateOperator) {
+    default boolean update(UpdateOperator<?> updateOperator) {
         return bool(updateOperator, CommandType.UPDATE);
     }
 
@@ -186,7 +186,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean update(UpdateOperator updateOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean update(UpdateOperator<?> updateOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(updateOperator, CommandType.UPDATE, resultSetHandler);
     }
 
@@ -217,7 +217,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
         if (pkColumn == null) {
             throw new DSLException("Can not find the primary key column");
         }
-        UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
+        UpdateOperator<?> update = getOperatorGroup().update(getOptions().getDbType());
         return bool(update.from(pojoClass).eq(pkColumn.getDslName(), id), CommandType.DELETE);
     }
 
@@ -233,7 +233,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
         if (pkColumn == null) {
             throw new DSLException("Can not find the primary key column");
         }
-        UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
+        UpdateOperator<?> update = getOperatorGroup().update(getOptions().getDbType());
         return bool(update.from(pojoClass), CommandType.DELETE);
     }
 
@@ -270,7 +270,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
         if (pkColumn == null) {
             throw new DSLException("Can not find the primary key column");
         }
-        UpdateOperator update = getOperatorGroup().update(getOptions().getDbType());
+        UpdateOperator<?> update = getOperatorGroup().update(getOptions().getDbType());
         return bool(update.from(pojoClass).in(pkColumn.getDslName(), ids), CommandType.DELETE);
     }
 
@@ -281,8 +281,8 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param pojoClass pojoClass
      * @return true 成功 false 失败
      */
-    default <T> boolean delete(Class<T> pojoClass, UnaryOperator<DeleteOperator> func) {
-        DeleteOperator deleteOperator = getOperatorGroup().delete(getOptions().getDbType());
+    default <T> boolean delete(Class<T> pojoClass, UnaryOperator<DeleteOperator<?>> func) {
+        DeleteOperator<?> deleteOperator = getOperatorGroup().delete(getOptions().getDbType());
         return delete(func.apply(deleteOperator.from(pojoClass)));
     }
 
@@ -292,7 +292,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return true 成功 false 失败
      */
-    default boolean delete(UnaryOperator<DeleteOperator> func) {
+    default boolean delete(UnaryOperator<DeleteOperator<?>> func) {
         return delete(func.apply(getOperatorGroup().delete(getOptions().getDbType())));
     }
 
@@ -302,7 +302,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param deleteOperator deleteOperator
      * @return true 成功 false 失败
      */
-    default boolean delete(DeleteOperator deleteOperator) {
+    default boolean delete(DeleteOperator<?> deleteOperator) {
         return bool(deleteOperator, CommandType.DELETE);
     }
 
@@ -313,7 +313,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param resultSetHandler resultSetHandler
      * @return true 成功 false 失败
      */
-    default boolean delete(DeleteOperator deleteOperator, ResultSetHandler<Boolean> resultSetHandler) {
+    default boolean delete(DeleteOperator<?> deleteOperator, ResultSetHandler<Boolean> resultSetHandler) {
         return bool(deleteOperator, CommandType.DELETE, resultSetHandler);
     }
 
@@ -355,7 +355,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
         return saveOrUpdate(
                 dataExist,
                 () -> {
-                    UpdateOperator updateOperator = getOperatorGroup().update(getOptions().getDbType());
+                    UpdateOperator<?> updateOperator = getOperatorGroup().update(getOptions().getDbType());
                     updateOperator.from(pojoWrapper.getTable());
                     String column = eqUpdate.getColumn();
                     // update for eq
@@ -368,7 +368,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
                     return updateOperator;
                 },
                 () -> {
-                    InsertOperator insertOperator = getOperatorGroup().insert(getOptions().getDbType());
+                    InsertOperator<?> insertOperator = getOperatorGroup().insert(getOptions().getDbType());
                     insertOperator.from(pojoWrapper.getTable());
                     insertOperator.insertPojo(pojoWrapper.getPojo());
                     return insertOperator;
@@ -383,7 +383,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param f3 如果数据不存在则insert
      * @return true 成功 false 失败
      */
-    default boolean saveOrUpdate(BooleanSupplier f1, UnaryOperator<UpdateOperator> f2, UnaryOperator<InsertOperator> f3) {
+    default boolean saveOrUpdate(BooleanSupplier f1, UnaryOperator<UpdateOperator<?>> f2, UnaryOperator<InsertOperator<?>> f3) {
         return saveOrUpdate(f1, () -> f2.apply(getOperatorGroup().update(getOptions().getDbType())), () -> f3.apply(getOperatorGroup().insert(getOptions().getDbType())));
     }
 
@@ -395,7 +395,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param insertOperator 如果数据不存在则insert
      * @return true 成功 false 失败
      */
-    default boolean saveOrUpdate(BooleanSupplier dataExist, UpdateOperator updateOperator, InsertOperator insertOperator) {
+    default boolean saveOrUpdate(BooleanSupplier dataExist, UpdateOperator<?> updateOperator, InsertOperator<?> insertOperator) {
         return saveOrUpdate(dataExist, () -> updateOperator, () -> insertOperator);
     }
 
@@ -408,7 +408,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param insertOperator 如果数据不存在则insert
      * @return true 成功 false 失败
      */
-    default boolean saveOrUpdate(BooleanSupplier dataExist, Supplier<UpdateOperator> updateOperator, Supplier<InsertOperator> insertOperator) {
+    default boolean saveOrUpdate(BooleanSupplier dataExist, Supplier<UpdateOperator<?>> updateOperator, Supplier<InsertOperator<?>> insertOperator) {
         boolean isExist = dataExist.getAsBoolean();
         if (!isExist) {
             return insert(insertOperator.get());
@@ -450,7 +450,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param <T>         实体类型
      * @return 实体 or null
      */
-    default <T> T queryOne(Class<T> entityClass, UnaryOperator<QueryOperator> func) {
+    default <T> T queryOne(Class<T> entityClass, UnaryOperator<QueryOperator<?>> func) {
         return queryOne(func.apply(getOperatorGroup().query(getOptions().getDbType())), getOptions().obtainBeanResultSetHandler(entityClass));
     }
 
@@ -462,7 +462,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param <T>           实体类型
      * @return 实体 or null
      */
-    default <T> T queryOne(Class<T> entityClass, QueryOperator queryOperator) {
+    default <T> T queryOne(Class<T> entityClass, QueryOperator<?> queryOperator) {
         return queryOne(queryOperator, getOptions().obtainBeanResultSetHandler(entityClass));
     }
 
@@ -472,7 +472,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return ResultGroup
      */
-    default ResultGroup queryOne(UnaryOperator<QueryOperator> func) {
+    default ResultGroup queryOne(UnaryOperator<QueryOperator<?>> func) {
         return queryOne(func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -482,7 +482,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return map
      */
-    default Map<String, Object> queryMap(UnaryOperator<QueryOperator> func) {
+    default Map<String, Object> queryMap(UnaryOperator<QueryOperator<?>> func) {
         return queryMap(func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -492,7 +492,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param queryOperator queryOperator
      * @return map
      */
-    default Map<String, Object> queryMap(QueryOperator queryOperator) {
+    default Map<String, Object> queryMap(QueryOperator<?> queryOperator) {
         return queryOne(queryOperator, getOptions().obtainMapResultSetHandler());
     }
 
@@ -502,7 +502,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param queryOperator queryOperator
      * @return ResultGroup
      */
-    default ResultGroup queryOne(QueryOperator queryOperator) {
+    default ResultGroup queryOne(QueryOperator<?> queryOperator) {
         return queryOne(queryOperator, getOptions().obtainDefaultResultSetHandler());
     }
 
@@ -513,7 +513,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param <R>  结果集对象
      * @return ResultGroup
      */
-    default <R> R queryOne(UnaryOperator<QueryOperator> func, ResultSetHandler<R> resultSetHandler) {
+    default <R> R queryOne(UnaryOperator<QueryOperator<?>> func, ResultSetHandler<R> resultSetHandler) {
         return queryOne(func.apply(getOperatorGroup().query(getOptions().getDbType())), resultSetHandler);
     }
 
@@ -525,7 +525,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return ResultGroup
      * @throws DSLException 当结果集大于1时抛出
      */
-    default <R> R queryOne(QueryOperator queryOperator, ResultSetHandler<R> resultSetHandler) {
+    default <R> R queryOne(QueryOperator<?> queryOperator, ResultSetHandler<R> resultSetHandler) {
         List<ResultGroup> resultGroups = queryList(queryOperator);
         ResultGroup resultGroup = checkCollectionIsOneAndGet(resultGroups);
         return Optional.ofNullable(resultGroup).map(resultSetHandler).orElse(null);
@@ -566,7 +566,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param <T>         类型
      * @return list
      */
-    default <T> List<T> queryList(Class<T> entityClass, UnaryOperator<QueryOperator> func) {
+    default <T> List<T> queryList(Class<T> entityClass, UnaryOperator<QueryOperator<?>> func) {
         return queryList(
                 entityClass,
                 func.apply(
@@ -586,7 +586,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param <T>           类型
      * @return list
      */
-    default <T> List<T> queryList(Class<T> entityClass, QueryOperator queryOperator) {
+    default <T> List<T> queryList(Class<T> entityClass, QueryOperator<?> queryOperator) {
         return queryList(queryOperator, getOptions().obtainListBeanResultSetHandler(entityClass));
     }
 
@@ -596,7 +596,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param func the func
      * @return list map
      */
-    default List<Map<String, Object>> queryListMap(UnaryOperator<QueryOperator> func) {
+    default List<Map<String, Object>> queryListMap(UnaryOperator<QueryOperator<?>> func) {
         return queryListMap(func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -606,7 +606,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @param queryOperator queryOperator
      * @return list map
      */
-    default List<Map<String, Object>> queryListMap(QueryOperator queryOperator) {
+    default List<Map<String, Object>> queryListMap(QueryOperator<?> queryOperator) {
         return queryList(queryOperator, getOptions().obtainListMapResultHandler());
     }
 
@@ -617,7 +617,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default List<ResultGroup> queryList(UnaryOperator<QueryOperator> func) {
+    default List<ResultGroup> queryList(UnaryOperator<QueryOperator<?>> func) {
         return queryList(func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -628,7 +628,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default List<ResultGroup> queryList(QueryOperator queryOperator) {
+    default List<ResultGroup> queryList(QueryOperator<?> queryOperator) {
         return queryList(queryOperator, getOptions().obtainDefaultListResultSetHandler());
     }
 
@@ -641,7 +641,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default <R> List<R> queryList(UnaryOperator<QueryOperator> func, ListResultSetHandler<R> resultSetHandler) {
+    default <R> List<R> queryList(UnaryOperator<QueryOperator<?>> func, ListResultSetHandler<R> resultSetHandler) {
         return queryList(func.apply(getOperatorGroup().query(getOptions().getDbType())), resultSetHandler);
     }
 
@@ -654,7 +654,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default <R> List<R> queryList(QueryOperator queryOperator, ListResultSetHandler<R> resultSetHandler) {
+    default <R> List<R> queryList(QueryOperator<?> queryOperator, ListResultSetHandler<R> resultSetHandler) {
         return queryList(queryOperator, CommandType.SELECT, resultSetHandler);
     }
 
@@ -668,14 +668,15 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default <R> IPage<R> queryPage(IPage<?> page, UnaryOperator<QueryOperator> func, Class<R> entityClass) {
+    default <R> IPage<R> queryPage(IPage<?> page, UnaryOperator<QueryOperator<?>> func, Class<R> entityClass) {
         PojoWrapper<R> pojoWrapper = PojoWrapper.getInstance(entityClass);
         return queryPage(
                 page,
-                func.apply(getOperatorGroup()
-                        .query(getOptions().getDbType())
-                        .selects(pojoWrapper.getColumnDSLName())
-                        .from(pojoWrapper.getTable())),
+                func.apply(
+                        getOperatorGroup()
+                                .query(getOptions().getDbType())
+                                .selects(pojoWrapper.getColumnDSLName())
+                                .from(pojoWrapper.getTable())),
                 entityClass);
     }
 
@@ -688,7 +689,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default <R> IPage<R> queryPage(IPage<?> page, QueryOperator queryOperator, Class<R> entityClass) {
+    default <R> IPage<R> queryPage(IPage<?> page, QueryOperator<?> queryOperator, Class<R> entityClass) {
         return queryPage(page, queryOperator, getOptions().obtainListBeanResultSetHandler(entityClass));
     }
 
@@ -700,7 +701,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default IPage<Map<String, Object>> queryPageMap(IPage<?> page, UnaryOperator<QueryOperator> func) {
+    default IPage<Map<String, Object>> queryPageMap(IPage<?> page, UnaryOperator<QueryOperator<?>> func) {
         return queryPageMap(page, func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -712,7 +713,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default IPage<Map<String, Object>> queryPageMap(IPage<?> page, QueryOperator queryOperator) {
+    default IPage<Map<String, Object>> queryPageMap(IPage<?> page, QueryOperator<?> queryOperator) {
         return queryPage(page, queryOperator, getOptions().obtainListMapResultHandler());
     }
 
@@ -724,7 +725,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default IPage<ResultGroup> queryPage(IPage<?> page, UnaryOperator<QueryOperator> func) {
+    default IPage<ResultGroup> queryPage(IPage<?> page, UnaryOperator<QueryOperator<?>> func) {
         return queryPage(page, func.apply(getOperatorGroup().query(getOptions().getDbType())));
     }
 
@@ -736,7 +737,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @return List
      * @throws DSLException query failed throw
      */
-    default IPage<ResultGroup> queryPage(IPage<?> page, QueryOperator queryOperator) {
+    default IPage<ResultGroup> queryPage(IPage<?> page, QueryOperator<?> queryOperator) {
         return queryPage(page, queryOperator, getOptions().obtainDefaultListResultSetHandler());
     }
 
@@ -751,7 +752,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @throws DSLException query failed throw
      * @see #queryList(QueryOperator, ListResultSetHandler)
      */
-    default <R> IPage<R> queryPage(IPage<?> page, UnaryOperator<QueryOperator> func, ListResultSetHandler<R> resultSetHandler) {
+    default <R> IPage<R> queryPage(IPage<?> page, UnaryOperator<QueryOperator<?>> func, ListResultSetHandler<R> resultSetHandler) {
         return queryPage(page, func.apply(getOperatorGroup().query(getOptions().getDbType())), resultSetHandler);
     }
 
@@ -766,7 +767,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @throws DSLException query failed throw
      * @see #queryList(QueryOperator, ListResultSetHandler)
      */
-    default <R> IPage<R> queryPage(IPage<?> page, QueryOperator queryOperator, ListResultSetHandler<R> resultSetHandler) {
+    default <R> IPage<R> queryPage(IPage<?> page, QueryOperator<?> queryOperator, ListResultSetHandler<R> resultSetHandler) {
         queryOperator.page(page.getCurrent(), page.getSize());
         List<R> r = queryList(queryOperator, resultSetHandler);
         Long count = queryOne(

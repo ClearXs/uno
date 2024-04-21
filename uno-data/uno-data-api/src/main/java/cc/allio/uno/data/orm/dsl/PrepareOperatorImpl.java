@@ -14,6 +14,7 @@ import java.util.List;
  * @since 1.1.4
  */
 public abstract class PrepareOperatorImpl<T extends PrepareOperator<T>> implements PrepareOperator<T> {
+
     private static final int DEFAULT_CAPACITY = 0;
     protected PrepareValue[] prepareValues;
     protected int prepareIndex;

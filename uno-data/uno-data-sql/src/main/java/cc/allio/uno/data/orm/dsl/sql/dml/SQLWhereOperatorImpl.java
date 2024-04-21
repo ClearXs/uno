@@ -22,8 +22,7 @@ import java.util.function.Consumer;
  * @since 1.1.7
  */
 public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareOperator<T>>
-        extends PrepareOperatorImpl<T>
-        implements WhereOperator<T> {
+        extends PrepareOperatorImpl<T> implements WhereOperator<T> {
 
     private SQLExpr where = null;
     private LogicMode mode = LogicMode.AND;
@@ -34,76 +33,99 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
 
     @Override
     public T gt(DSLName sqlName, Object value) {
+        // set placeholder value
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.GreaterThan,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK), getDruidType());
+                        placeholder,
+                        getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T gte(DSLName sqlName, Object value) {
+        // set placeholder value
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()), SQLBinaryOperator.GreaterThanOrEqual,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        identifierExpr,
+                        SQLBinaryOperator.GreaterThanOrEqual,
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T lt(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.LessThan,
                         new SQLVariantRefExpr(StringPool.QUESTION_MARK),
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T lte(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()), SQLBinaryOperator.LessThanOrEqual,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        identifierExpr,
+                        SQLBinaryOperator.LessThanOrEqual,
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T eq(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.Equality,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T neq(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.NotEqual,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
@@ -111,7 +133,8 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
     public T notNull(DSLName sqlName) {
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()), SQLBinaryOperator.IsNot,
+                        new SQLIdentifierExpr(sqlName.format()),
+                        SQLBinaryOperator.IsNot,
                         new SQLNullExpr(),
                         getDruidType());
         appendAndSetWhere(expr);
@@ -135,7 +158,9 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
         SQLInListExpr sqlInListExpr = new SQLInListExpr(new SQLIdentifierExpr(sqlName.format()));
         Collection<V> vs = Values.collectionExpand(values);
         for (V v : vs) {
-            sqlInListExpr.addTarget(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
+            SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+            placeholder.setIndex(prepareIndex);
+            sqlInListExpr.addTarget(placeholder);
             addPrepareValue(sqlName.getName(), v);
         }
         appendAndSetWhere(sqlInListExpr);
@@ -148,7 +173,9 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
         sqlInListExpr.setNot(true);
         Collection<V> vs = Values.collectionExpand(values);
         for (V v : vs) {
-            sqlInListExpr.addTarget(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
+            SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+            placeholder.setIndex(prepareIndex);
+            sqlInListExpr.addTarget(placeholder);
             addPrepareValue(sqlName.getName(), v);
         }
         appendAndSetWhere(sqlInListExpr);
@@ -157,132 +184,158 @@ public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareO
 
     @Override
     public T between(DSLName sqlName, Object withValue, Object endValue) {
-        SQLBetweenExpr sqlBetweenExpr =
-                new SQLBetweenExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK));
+        SQLVariantRefExpr withPlaceholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        withPlaceholder.setIndex(prepareIndex);
         addPrepareValue(sqlName.getName(), withValue);
+        SQLVariantRefExpr endPlaceholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        endPlaceholder.setIndex(prepareIndex);
         addPrepareValue(sqlName.getName(), endValue);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
+        SQLBetweenExpr sqlBetweenExpr = new SQLBetweenExpr(identifierExpr, withPlaceholder, endPlaceholder);
         appendAndSetWhere(sqlBetweenExpr);
         return self();
     }
 
     @Override
     public T notBetween(DSLName sqlName, Object withValue, Object endValue) {
-        SQLBetweenExpr sqlBetweenExpr =
-                new SQLBetweenExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK));
-        sqlBetweenExpr.setNot(true);
+        SQLVariantRefExpr withPlaceholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        withPlaceholder.setIndex(prepareIndex);
         addPrepareValue(sqlName.getName(), withValue);
+        SQLVariantRefExpr endPlaceholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        endPlaceholder.setIndex(prepareIndex);
         addPrepareValue(sqlName.getName(), endValue);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
+        SQLBetweenExpr sqlBetweenExpr = new SQLBetweenExpr(identifierExpr, withPlaceholder, endPlaceholder);
+        sqlBetweenExpr.setNot(true);
         appendAndSetWhere(sqlBetweenExpr);
         return self();
     }
 
     @Override
     public T like(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.Like,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T $like(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.Like,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
         return self();
     }
 
     @Override
     public T like$(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.Like,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 
     @Override
     public T $like$(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.Like,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 
     @Override
     public T notLike(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), value);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.NotLike,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), value);
         return self();
     }
 
     @Override
     public T $notLike(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.NotLike,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value));
         return self();
     }
 
     @Override
     public T notLike$(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.NotLike,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 
     @Override
     public T $notLike$(DSLName sqlName, Object value) {
+        SQLVariantRefExpr placeholder = new SQLVariantRefExpr(StringPool.QUESTION_MARK);
+        placeholder.setIndex(prepareIndex);
+        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
+        SQLIdentifierExpr identifierExpr = new SQLIdentifierExpr(sqlName.format());
         SQLBinaryOpExpr expr =
                 new SQLBinaryOpExpr(
-                        new SQLIdentifierExpr(sqlName.format()),
+                        identifierExpr,
                         SQLBinaryOperator.NotLike,
-                        new SQLVariantRefExpr(StringPool.QUESTION_MARK),
+                        placeholder,
                         getDruidType());
         appendAndSetWhere(expr);
-        addPrepareValue(sqlName.getName(), SQLBinaryOperator.Modulus.name + Types.toString(value) + SQLBinaryOperator.Modulus.name);
         return self();
     }
 

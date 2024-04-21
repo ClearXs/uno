@@ -6,10 +6,11 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 @AutoService(ShowColumnsOperator.class)
 @Operator.Group(OperatorKey.REDIS_LITERAL)
-public class RedisShowColumnsOperator implements ShowColumnsOperator {
+public class RedisShowColumnsOperator implements ShowColumnsOperator<RedisShowColumnsOperator> {
 
     @Override
     public String getDSL() {
@@ -17,7 +18,12 @@ public class RedisShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public ShowColumnsOperator parse(String dsl) {
+    public RedisShowColumnsOperator parse(String dsl) {
+        return null;
+    }
+
+    @Override
+    public RedisShowColumnsOperator customize(UnaryOperator<RedisShowColumnsOperator> operatorFunc) {
         return null;
     }
 
@@ -47,7 +53,7 @@ public class RedisShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public ShowColumnsOperator from(Table table) {
+    public RedisShowColumnsOperator from(Table table) {
         return null;
     }
 
@@ -57,12 +63,12 @@ public class RedisShowColumnsOperator implements ShowColumnsOperator {
     }
 
     @Override
-    public QueryOperator toQueryOperator() {
+    public QueryOperator<?> toQueryOperator() {
         return null;
     }
 
     @Override
-    public ShowColumnsOperator database(Database database) {
+    public RedisShowColumnsOperator database(Database database) {
         return null;
     }
 }

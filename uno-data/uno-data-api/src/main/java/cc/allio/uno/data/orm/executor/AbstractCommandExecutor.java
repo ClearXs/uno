@@ -54,7 +54,7 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      * @throws DSLException invoke process has error
      */
     protected boolean doBool(Operator<?> operator, CommandType commandType, ResultSetHandler<Boolean> resultSetHandler) {
-        InnerCommandExecutorManager manager = getManager();
+        InnerCommandExecutorManager manager = getInnerCommandExecutorManager();
         if (manager == null) {
             throw new DSLException("inner command executor manager is null, can't execute operator");
         }
@@ -98,7 +98,7 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      * @throws DSLException query failed throw
      */
     protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
-        InnerCommandExecutorManager manager = getManager();
+        InnerCommandExecutorManager manager = getInnerCommandExecutorManager();
         if (manager == null) {
             throw new DSLException("inner command executor manager is null, can't execute operator");
         }
@@ -152,7 +152,5 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
      *
      * @return InnerCommandExecutorManager
      */
-    protected InnerCommandExecutorManager getManager() {
-        return null;
-    }
+    protected abstract InnerCommandExecutorManager getInnerCommandExecutorManager();
 }

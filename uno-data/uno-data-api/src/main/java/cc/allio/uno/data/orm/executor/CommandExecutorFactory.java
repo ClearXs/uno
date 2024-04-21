@@ -27,7 +27,7 @@ public final class CommandExecutorFactory {
      * @return command executor
      */
     public static <T extends AggregateCommandExecutor> T register(T commandExecutor) {
-        return getRegistry().registerCommandExecutor(commandExecutor.getOptions(), () -> commandExecutor, true);
+        return getRegistry().register(commandExecutor.getOptions(), () -> commandExecutor, true);
     }
 
     /**

@@ -13,6 +13,8 @@ import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStateme
 import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 
+import java.util.function.UnaryOperator;
+
 /**
  * 基于Druid registry operator
  *
@@ -22,7 +24,7 @@ import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
  */
 @AutoService(CreateTableOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLCreateTableOperator implements CreateTableOperator {
+public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTableOperator> {
 
     private DBType dbType;
     private DbType druidType;
@@ -50,9 +52,14 @@ public class SQLCreateTableOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator parse(String dsl) {
+    public SQLCreateTableOperator parse(String dsl) {
         this.createTableStatement = (SQLCreateTableStatement) SQLUtils.parseSingleStatement(dsl, druidType);
         return self();
+    }
+
+    @Override
+    public SQLCreateTableOperator customize(UnaryOperator<SQLCreateTableOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLCreateTableOperator(dbType));
     }
 
     @Override
@@ -74,12 +81,12 @@ public class SQLCreateTableOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator from(String table) {
+    public SQLCreateTableOperator from(String table) {
         return from(Table.of(table));
     }
 
     @Override
-    public CreateTableOperator from(Table table) {
+    public SQLCreateTableOperator from(Table table) {
         this.table = table;
         SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
         createTableStatement.setTableSource(tableSource);
@@ -92,14 +99,14 @@ public class SQLCreateTableOperator implements CreateTableOperator {
     }
 
     @Override
-    public CreateTableOperator column(ColumnDef columnDef) {
+    public SQLCreateTableOperator column(ColumnDef columnDef) {
         SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
         createTableStatement.addColumn(columnDefinition);
         return self();
     }
 
     @Override
-    public CreateTableOperator comment(String comment) {
+    public SQLCreateTableOperator comment(String comment) {
         createTableStatement.setComment(new SQLIdentifierExpr(comment));
         return self();
     }

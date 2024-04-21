@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.ddl.sql;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
+import cc.allio.uno.data.orm.dsl.sql.ddl.SQLAlterTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.test.BaseTestCase;
@@ -13,11 +13,11 @@ import static cc.allio.uno.data.test.model.DataSets.*;
 
 public class SQLAlterTableOperatorTest extends BaseTestCase {
 
-    Operators.OperatorFeature<AlterTableOperator> feature;
+    Operators.OperatorFeature<SQLAlterTableOperator> feature;
 
     @BeforeEach
     void init() {
-        AlterTableOperator alterTableOperator = OperatorGroup.getOperator(AlterTableOperator.class, OperatorKey.SQL);
+        SQLAlterTableOperator alterTableOperator = OperatorGroup.getOperator(SQLAlterTableOperator.class, OperatorKey.SQL);
         feature = Operators.feature(alterTableOperator);
     }
 

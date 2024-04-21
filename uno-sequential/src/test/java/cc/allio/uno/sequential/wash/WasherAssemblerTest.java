@@ -1,7 +1,7 @@
 package cc.allio.uno.sequential.wash;
 
 import cc.allio.uno.core.type.MemoryTypeManager;
-import cc.allio.uno.data.orm.config.elasticsearch.UDElasticSearchAutoConfiguration;
+import cc.allio.uno.data.orm.config.elasticsearch.UnoElasticSearchAutoConfiguration;
 import cc.allio.uno.sequential.TypeSequential;
 import cc.allio.uno.sequential.UnCodeSequential;
 import cc.allio.uno.sequnetial.context.DefaultSequentialContext;
@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
  * @date 2022/5/19 16:17
  * @since 1.0
  */
-@RunTest(components = UDElasticSearchAutoConfiguration.class)
+@RunTest(components = UnoElasticSearchAutoConfiguration.class)
 @EsEnv
 @EsProperties(uris = "http://43.143.195.208:9200")
 class WasherAssemblerTest extends BaseTestCase {

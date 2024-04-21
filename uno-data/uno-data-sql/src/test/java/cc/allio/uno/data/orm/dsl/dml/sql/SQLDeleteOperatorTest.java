@@ -1,8 +1,8 @@
 package cc.allio.uno.data.orm.dsl.dml.sql;
 
-import cc.allio.uno.data.orm.dsl.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLDeleteOperator;
 import cc.allio.uno.data.test.model.Operators;
 import cc.allio.uno.data.test.model.User;
 import cc.allio.uno.test.BaseTestCase;
@@ -12,14 +12,14 @@ public class SQLDeleteOperatorTest extends BaseTestCase {
 
     @Test
     void testSimplePojoInsert() {
-        DeleteOperator deleteOperator = OperatorGroup.getOperator(DeleteOperator.class, OperatorKey.SQL);
+        SQLDeleteOperator deleteOperator = OperatorGroup.getOperator(SQLDeleteOperator.class, OperatorKey.SQL);
         String sql = deleteOperator.from(User.class).from(User.class).getDSL();
         assertEquals("DELETE FROM PUBLIC.t_users", sql);
     }
 
     @Test
     void testComplexCondition() {
-        DeleteOperator deleteOperator = OperatorGroup.getOperator(DeleteOperator.class, OperatorKey.SQL);
+        SQLDeleteOperator deleteOperator = OperatorGroup.getOperator(SQLDeleteOperator.class, OperatorKey.SQL);
         String sql = deleteOperator.from("dual")
                 .eq("a", "a")
                 .or()
@@ -37,7 +37,7 @@ public class SQLDeleteOperatorTest extends BaseTestCase {
 
     @Test
     void testParseSQL() {
-        DeleteOperator deleteOperator = OperatorGroup.getOperator(DeleteOperator.class, OperatorKey.SQL);
+        SQLDeleteOperator deleteOperator = OperatorGroup.getOperator(SQLDeleteOperator.class, OperatorKey.SQL);
         Operators.thenRest(() -> {
             String sql = "DELETE FROM PUBLIC.dual\n" +
                     "WHERE (a = 'a'\n" +

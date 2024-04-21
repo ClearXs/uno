@@ -6,23 +6,26 @@ import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
+import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import com.alibaba.druid.DbType;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.function.UnaryOperator;
 
 @AutoService(ShowTablesOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperator> implements ShowTablesOperator {
+public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOperator> implements ShowTablesOperator<SQLShowTablesOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
     private String schema;
     private Database database;
     private List<Table> tables;
-    private QueryOperator queryOperator;
+    private SQLQueryOperator queryOperator;
 
     public SQLShowTablesOperator() {
         this(DBType.getSystemDbType());
@@ -31,7 +34,7 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     public SQLShowTablesOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
-        this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, OperatorKey.SQL, dbType);
+        this.queryOperator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
         this.schema = "PUBLIC";
         this.tables = Lists.newArrayList();
     }
@@ -43,9 +46,14 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     }
 
     @Override
-    public ShowTablesOperator parse(String dsl) {
+    public SQLShowTablesOperator parse(String dsl) {
         this.queryOperator = queryOperator.parse(dsl);
         return self();
+    }
+
+    @Override
+    public SQLShowTablesOperator customize(UnaryOperator<SQLShowTablesOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLShowTablesOperator(dbType));
     }
 
     @Override
@@ -66,19 +74,19 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     }
 
     @Override
-    public QueryOperator toQueryOperator() {
+    public QueryOperator<?> toQueryOperator() {
         trigger();
         return queryOperator;
     }
 
     @Override
-    public ShowTablesOperator database(Database database) {
+    public SQLShowTablesOperator database(Database database) {
         this.database = database;
         return self();
     }
 
     @Override
-    public ShowTablesOperator schema(String schema) {
+    public SQLShowTablesOperator schema(String schema) {
         this.schema = schema;
         return self();
     }
@@ -128,7 +136,7 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<ShowTablesOperato
     }
 
     @Override
-    public ShowTablesOperator from(Table table) {
+    public SQLShowTablesOperator from(Table table) {
         this.tables.add(table);
         return self();
     }

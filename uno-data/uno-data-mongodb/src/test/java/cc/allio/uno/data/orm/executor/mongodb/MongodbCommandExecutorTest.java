@@ -38,7 +38,7 @@ class MongodbCommandExecutorTest extends BaseTestCase implements CommandExecutor
 
     @Test
     void testInsertDocument() {
-        InsertOperator insertOperator = executor.getOperatorGroup().insert();
+        InsertOperator<?> insertOperator = executor.getOperatorGroup().insert();
         insertOperator.insert("a", "a", "b", "b").from("dual");
         boolean success = executor.insert(insertOperator);
 
@@ -49,7 +49,7 @@ class MongodbCommandExecutorTest extends BaseTestCase implements CommandExecutor
     void testUpdateDocument() {
         prepareValues();
 
-        UpdateOperator updateOperator = executor.getOperatorGroup().update();
+        UpdateOperator<?> updateOperator = executor.getOperatorGroup().update();
         updateOperator.from("dual").update("a", "c").eq("a", "a");
         boolean success = executor.update(updateOperator);
         assertTrue(success);
@@ -57,7 +57,7 @@ class MongodbCommandExecutorTest extends BaseTestCase implements CommandExecutor
 
     @Test
     void testRenameAndDropCollection() {
-        AlterTableOperator alterTableOperator = executor.getOperatorGroup().alterTables();
+        AlterTableOperator<?> alterTableOperator = executor.getOperatorGroup().alterTables();
         alterTableOperator.from("dual").rename("dual2");
 
         boolean success = executor.alertTable(alterTableOperator);
@@ -86,7 +86,7 @@ class MongodbCommandExecutorTest extends BaseTestCase implements CommandExecutor
     }
 
     void prepareValues() {
-        InsertOperator insertOperator = executor.getOperatorGroup().insert();
+        InsertOperator<?> insertOperator = executor.getOperatorGroup().insert();
         insertOperator.insert("a", "a", "b", "b").from("dual");
         executor.insert(insertOperator);
     }

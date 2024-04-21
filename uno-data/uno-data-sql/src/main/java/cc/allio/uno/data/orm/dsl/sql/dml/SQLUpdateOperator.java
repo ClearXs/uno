@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.function.UnaryOperator;
 
 /**
  * DruidSQLUpdateOperator
@@ -35,7 +36,7 @@ import java.util.function.Supplier;
  */
 @AutoService(UpdateOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
-public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> implements UpdateOperator {
+public class SQLUpdateOperator extends SQLWhereOperatorImpl<SQLUpdateOperator> implements UpdateOperator<SQLUpdateOperator> {
 
     private DBType dbType;
     private DbType druidDbType;
@@ -73,7 +74,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public UpdateOperator parse(String dsl) {
+    public SQLUpdateOperator parse(String dsl) {
         this.updateStatement = (SQLUpdateStatement) SQLUtils.parseSingleStatement(dsl, druidDbType);
         // 重构建update使之成为prepare dsl
         List<SQLUpdateSetItem> items = this.updateStatement.getItems();
@@ -109,6 +110,11 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
+    public SQLUpdateOperator customize(UnaryOperator<SQLUpdateOperator> operatorFunc) {
+        return operatorFunc.apply(new SQLUpdateOperator(dbType));
+    }
+
+    @Override
     public void reset() {
         super.reset();
         this.updateStatement = new SQLUpdateStatement();
@@ -130,7 +136,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public UpdateOperator from(Table table) {
+    public SQLUpdateOperator from(Table table) {
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidDbType);
         tableSource.setExpr(new SQLIdentifierExpr(table.getName().format()));
         tableSource.setCatalog(table.getCatalog());
@@ -162,7 +168,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public UpdateOperator updates(Map<DSLName, Object> values) {
+    public SQLUpdateOperator updates(Map<DSLName, Object> values) {
         if (CollectionUtils.isEmpty(values)) {
             throw new DSLException("update needs not empty values");
         }
@@ -179,7 +185,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<UpdateOperator> impl
     }
 
     @Override
-    public UpdateOperator strictFill(String f, Supplier<Object> v) {
+    public SQLUpdateOperator strictFill(String f, Supplier<Object> v) {
         // set语句
         List<String> columns =
                 updateStatement.getItems()
