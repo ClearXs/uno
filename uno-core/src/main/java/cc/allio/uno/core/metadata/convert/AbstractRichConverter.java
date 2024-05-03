@@ -1,6 +1,6 @@
 package cc.allio.uno.core.metadata.convert;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.metadata.mapping.MappingField;
 import cc.allio.uno.core.metadata.mapping.MappingFieldConverter;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
@@ -45,7 +45,7 @@ public abstract class AbstractRichConverter<T extends Metadata> implements RichC
                                                    Object expected,
                                                    T metadata,
                                                    boolean excludeNotNecessaryFilter) {
-        return executeAssignmentAction(name, expected, metadata, new ObjectWrapper(metadata), excludeNotNecessaryFilter);
+        return executeAssignmentAction(name, expected, metadata, new BeanWrapper(metadata), excludeNotNecessaryFilter);
     }
 
     /**
@@ -61,7 +61,7 @@ public abstract class AbstractRichConverter<T extends Metadata> implements RichC
     protected Mono<Object> executeAssignmentAction(String name,
                                                    Object expected,
                                                    T metadata,
-                                                   ObjectWrapper sequentialWrapper,
+                                                   BeanWrapper sequentialWrapper,
                                                    boolean excludeNotNecessaryFilter) {
         Mono<String> mono = Mono.just(name);
         if (!excludeNotNecessaryFilter) {

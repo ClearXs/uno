@@ -110,19 +110,21 @@ public class SerializedLambda implements Serializable {
      * @return SerializedLambda实例
      */
     public static SerializedLambda of(Object lambda) {
-        return cache.computeIfAbsent(lambda.getClass(), clazz -> {
-            Method writeReplace = ClassUtils.getMethod(clazz, "writeReplace");
-            SerializedLambda serializedLambda;
-            try {
-                ClassUtils.setAccessible(writeReplace);
-                serializedLambda = new SerializedLambda((java.lang.invoke.SerializedLambda) writeReplace.invoke(lambda));
-            } catch (IllegalAccessException | InvocationTargetException e) {
-                throw new UnsupportedOperationException(e);
-            }
-            if (serializedLambda.getMethodName().startsWith("lambda$")) {
-                throw new UnsupportedOperationException("请使用方法引用,例如: UserEntity::getName");
-            }
-            return serializedLambda;
-        });
+        return cache.computeIfAbsent(
+                lambda.getClass(),
+                clazz -> {
+                    Method writeReplace = ClassUtils.getMethod(clazz, "writeReplace");
+                    SerializedLambda serializedLambda;
+                    try {
+                        ClassUtils.setAccessible(writeReplace);
+                        serializedLambda = new SerializedLambda((java.lang.invoke.SerializedLambda) writeReplace.invoke(lambda));
+                    } catch (IllegalAccessException | InvocationTargetException e) {
+                        throw new UnsupportedOperationException(e);
+                    }
+                    if (serializedLambda.getMethodName().startsWith("lambda$")) {
+                        throw new UnsupportedOperationException("请使用方法引用,例如: UserEntity::getName");
+                    }
+                    return serializedLambda;
+                });
     }
 }

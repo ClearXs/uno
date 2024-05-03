@@ -1,6 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
-
-import cc.allio.uno.core.util.template.LangValue;
+package cc.allio.uno.core.util.template.internal;
 
 /**
  * 抽象的交换
@@ -12,7 +10,7 @@ import cc.allio.uno.core.util.template.LangValue;
 public abstract class BaseInterchange implements Interchange {
 
     @Override
-    public Object change(String text, Object value, boolean langsym) throws Throwable {
+    public Object change(String text, Object value, boolean langsym) {
         boolean check = onCheck(value);
         // 受检查失败，抛出异常
         if (!check) {

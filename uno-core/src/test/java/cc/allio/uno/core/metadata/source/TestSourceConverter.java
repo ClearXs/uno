@@ -1,6 +1,6 @@
 package cc.allio.uno.core.metadata.source;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.metadata.UserMetadata;
 import cc.allio.uno.core.metadata.convert.AbstractJsonConverter;
 import cc.allio.uno.core.metadata.convert.Converter;
@@ -21,7 +21,7 @@ public class TestSourceConverter implements SourceConverter<UserMetadata> {
         Converter<UserMetadata> converter = new AbstractJsonConverter<UserMetadata>(UserMetadata.class) {
 
             @Override
-            protected Mono<Void> executeAssignmentDefaultAction(UserMetadata metadata, ObjectWrapper wrapper) {
+            protected Mono<Void> executeAssignmentDefaultAction(UserMetadata metadata, BeanWrapper wrapper) {
                 return Mono.defer(() -> {
                     metadata.setId("id");
                     return Mono.empty();

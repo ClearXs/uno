@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
@@ -21,7 +21,7 @@ public class SymbolEngine implements Engine {
     }
 
     @Override
-    public String run(String expression, Object value, boolean langsym) throws Throwable {
+    public String run(String expression, Object value, boolean langsym) {
         String[] texts = expression.split(symbol);
         Object layerValue = value;
         for (String layer : texts) {

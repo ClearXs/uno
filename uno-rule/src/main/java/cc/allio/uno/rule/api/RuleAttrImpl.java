@@ -1,7 +1,7 @@
 package cc.allio.uno.rule.api;
 
 import cc.allio.uno.core.type.Types;
-import cc.allio.uno.core.util.template.LangValue;
+import cc.allio.uno.core.util.template.internal.LangValue;
 import com.google.common.collect.Maps;
 import lombok.Data;
 import lombok.Getter;

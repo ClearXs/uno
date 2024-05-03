@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  * @author j.x
  * @date 2023/4/17 18:39
  * @see BeanInfoWrapper 根据{@link BeanInfo}提取bean对象的属性进而实现值提取动作
- * @see ObjectWrapper 接收某个具体的对象（一般为pojo）
+ * @see BeanWrapper 接收某个具体的对象（一般为pojo）
  * @see MapWrapper 基于{@link Map}实现
  * @since 1.1.4
  */
@@ -294,7 +294,7 @@ public interface ValueWrapper {
      */
     static ValueWrapper get(Object o) {
         if (Types.isBean(o.getClass())) {
-            return new ObjectWrapper(o);
+            return new BeanWrapper(o);
         } else if (Types.isMap(o.getClass())) {
             return new MapWrapper((Map<String, Object>) o);
         }

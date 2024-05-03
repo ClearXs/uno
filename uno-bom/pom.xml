@@ -65,6 +65,7 @@
         <neo4j.version>5.17.0</neo4j.version>
         <!-- redisson -->
         <redisson.version>3.27.1</redisson.version>
+        <mvel.version>2.5.0.Final</mvel.version>
     </properties>
 
     <dependencyManagement>
@@ -395,6 +396,11 @@
                 <groupId>org.redisson</groupId>
                 <artifactId>redisson</artifactId>
                 <version>${redisson.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.mvel</groupId>
+                <artifactId>mvel2</artifactId>
+                <version>${mvel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

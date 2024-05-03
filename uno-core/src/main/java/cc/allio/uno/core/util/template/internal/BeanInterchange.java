@@ -1,6 +1,6 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.type.Types;
 
 /**
@@ -14,7 +14,7 @@ public class BeanInterchange extends BaseInterchange implements KeyInterchange {
 
     @Override
     protected Object onChange(String text, Object value, boolean langsym) {
-        ObjectWrapper wrapper = new ObjectWrapper(value);
+        BeanWrapper wrapper = new BeanWrapper(value);
         return reValue(wrapper.getForce(text), langsym);
     }
 
@@ -22,5 +22,4 @@ public class BeanInterchange extends BaseInterchange implements KeyInterchange {
     protected boolean onCheck(Object value) {
         return Types.isBean(value.getClass());
     }
-
 }

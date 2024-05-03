@@ -1,6 +1,5 @@
-package cc.allio.uno.core.util.template;
+package cc.allio.uno.core.util.template.internal;
 
-import cc.allio.uno.core.util.template.expression.BaseInterchange;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -1,6 +1,6 @@
 package cc.allio.uno.core.metadata.convert;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.metadata.mapping.MappingMetadata;
 import cc.allio.uno.core.serializer.JsonNodeEnhancer;
 import cc.allio.uno.core.util.JsonUtils;
@@ -96,7 +96,7 @@ public abstract class AbstractJsonConverter<T extends Metadata> extends Abstract
      * @param excludeNotNecessaryFilter 排除必要过滤数据
      */
     protected void executeAssignmentAction(JsonNode root, T metadata, boolean excludeNotNecessaryFilter) {
-        ObjectWrapper wrapper = new ObjectWrapper(metadata);
+        BeanWrapper wrapper = new BeanWrapper(metadata);
         JsonNodeEnhancer jsonEnhancer = new JsonNodeEnhancer(root);
         MappingMetadata mappingMetadata = metadata.getMapping();
         Flux.fromStream(mappingMetadata.entrySet().stream())
@@ -117,6 +117,6 @@ public abstract class AbstractJsonConverter<T extends Metadata> extends Abstract
      * @param metadata 元数据
      * @param wrapper  sequential对象包装器
      */
-    protected abstract Mono<Void> executeAssignmentDefaultAction(T metadata, ObjectWrapper wrapper);
+    protected abstract Mono<Void> executeAssignmentDefaultAction(T metadata, BeanWrapper wrapper);
 
 }

@@ -1,6 +1,7 @@
 package cc.allio.uno.core.util.template;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.util.template.internal.TokenParser;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -26,6 +27,8 @@ public interface Tokenizer {
     Tokenizer SMALL_BRACKETS = () -> TokenSymbol.SMALL_BRACKETS_SYMBOL;
     // TOKEN = ()
     Tokenizer DOUBLE_BRACKET = () -> TokenSymbol.DOUBLE_BRACKET;
+    // TOKEN = @{}
+    Tokenizer AT_BRACE = () -> TokenSymbol.AT_BRACE;
 
     /**
      * 获取Token数组列表
@@ -72,6 +75,7 @@ public interface Tokenizer {
         public static final TokenSymbol HASH_BRACE_SYMBOL = new TokenSymbol(StringPool.HASH_LEFT_BRACE, StringPool.RIGHT_BRACE);
         public static final TokenSymbol SMALL_BRACKETS_SYMBOL = new TokenSymbol(StringPool.LEFT_SMALL_BRACKETS, StringPool.RIGHT_SMALL_BRACKETS);
         public static final TokenSymbol DOUBLE_BRACKET = new TokenSymbol(StringPool.LEFT_BRACKET, StringPool.RIGHT_BRACKET);
+        public static final TokenSymbol AT_BRACE = new TokenSymbol(StringPool.AT + StringPool.LEFT_BRACE, StringPool.RIGHT_BRACE);
 
         // token left
         private final String open;
