@@ -1,6 +1,10 @@
 package cc.allio.uno.core.util.template;
 
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.util.IoUtils;
+import cc.allio.uno.core.util.template.internal.GenericTokenParser;
+import cc.allio.uno.core.util.template.internal.PlaceholderExpressionTemplate;
+import cc.allio.uno.core.util.template.internal.TokenParser;
 import com.google.common.collect.Maps;
 import org.springframework.core.io.UrlResource;
 import reactor.util.function.Tuple2;
@@ -34,11 +38,24 @@ public interface ExpressionTemplate {
      * 解析模板，当发生错误时将保持原样
      *
      * @param template 模板
-     * @param target   填充于模版的目标对象，要求是一个POJO对象
+     * @param context  as parse template context. contains variables
      * @return 解析完成的字符串
      * @throws NullPointerException template target为空时抛出
      */
-    String parseTemplate(String template, Object target);
+    String parseTemplate(String template, TemplateContext context);
+
+    /**
+     * 解析模板，当发生错误时将保持原样
+     *
+     * @param template 模板
+     * @param bean     the bean instance
+     * @return 解析完成的字符串
+     * @throws NullPointerException template target为空时抛出
+     */
+    default String parseTemplate(String template, Object bean) {
+        Map<String, Object> vars = BeanWrapper.of(bean).findMapValuesForce();
+        return parseTemplate(template, vars);
+    }
 
     /**
      * 解析模板
@@ -75,7 +92,7 @@ public interface ExpressionTemplate {
      * @param k2       模板变量k2
      * @param v2       模板变量v2
      * @param k3       模板变量k3
-     * @param v3       模板变量v2
+     * @param v3       模板变量v3
      * @return 解析完成的字符串
      */
     default String parseTemplate(String template, String k1, Object v1, String k2, Object v2, String k3, Object v3) {
@@ -90,7 +107,8 @@ public interface ExpressionTemplate {
      * @return 解析完成的字符串
      */
     default String parseTemplate(String template, Tuple2<String, Object> kv) {
-        return parseTemplate(template, Collections.singletonMap(kv.getT1(), kv.getT2()));
+        Map<String, Object> vars = Collections.singletonMap(kv.getT1(), kv.getT2());
+        return parseTemplate(template, vars);
     }
 
     /**
@@ -123,6 +141,19 @@ public interface ExpressionTemplate {
     }
 
     /**
+     * 解析模板
+     *
+     * @param template 模板
+     * @param vars     the template vars
+     * @return 解析完成的字符串
+     */
+    default String parseTemplate(String template, Map<String, Object> vars) {
+        TemplateContext templateContext = new TemplateContext();
+        templateContext.putAll(vars);
+        return parseTemplate(template, templateContext);
+    }
+
+    /**
      * 解析文件模板
      *
      * @param file   文件路径
@@ -139,8 +170,9 @@ public interface ExpressionTemplate {
             UrlResource resource = new UrlResource(url);
             String template = IoUtils.readToString(resource.getInputStream());
             return parseTemplate(template, target);
+        } else {
+            throw new FileNotFoundException(String.format("%s file not found", file));
         }
-        throw new FileNotFoundException(String.format("%s file not found", file));
     }
 
     /**
@@ -149,11 +181,11 @@ public interface ExpressionTemplate {
      * @return ExpressionTemplate实例
      * @see PlaceholderExpressionTemplate
      * @see Tokenizer
-     * @see Tokenizer#HASH_BRACE
+     * @see Tokenizer#AT_BRACE
      * @see #createTemplate(Tokenizer)
      */
     static ExpressionTemplate defaultTemplate() {
-        return createTemplate(Tokenizer.HASH_BRACE);
+        return createTemplate(Tokenizer.AT_BRACE);
     }
 
     /**
@@ -165,7 +197,7 @@ public interface ExpressionTemplate {
      * @see Tokenizer
      */
     static ExpressionTemplate createTemplate(Tokenizer tokenizer) {
-        return new PlaceholderExpressionTemplate(tokenizer);
+        return new ExpressionTemplateNavigator(tokenizer);
     }
 
     /**
@@ -178,7 +210,7 @@ public interface ExpressionTemplate {
      * @see Tokenizer
      */
     static ExpressionTemplate createTemplate(Tokenizer tokenizer, boolean langsym) {
-        return new PlaceholderExpressionTemplate(tokenizer, langsym);
+        return new ExpressionTemplateNavigator(tokenizer, langsym);
     }
 
     /**
@@ -192,10 +224,11 @@ public interface ExpressionTemplate {
     }
 
     /**
-     * @see #parseTemplate(String, Object)
+     * @see #parseTemplate(String, TemplateContext)
      */
     static String parse(String template, Object target) {
-        return defaultTemplate().parseTemplate(template, target);
+        Map<String, Object> vars = BeanWrapper.of(target).findMapValuesForce();
+        return defaultTemplate().parseTemplate(template, vars);
     }
 
     /**

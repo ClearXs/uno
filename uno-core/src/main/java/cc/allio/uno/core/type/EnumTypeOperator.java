@@ -1,6 +1,6 @@
 package cc.allio.uno.core.type;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 
 import java.util.Arrays;
@@ -40,7 +40,7 @@ public class EnumTypeOperator<T extends Enum<?>> extends UnsupportedCalculateOpe
                     if (target.equals(name)) {
                         return true;
                     }
-                    ObjectWrapper constantWrapper = new ObjectWrapper(constant);
+                    BeanWrapper constantWrapper = new BeanWrapper(constant);
                     for (String maybeValueText : maybeValueTexts) {
                         Object force = constantWrapper.getForce(maybeValueText);
                         if (target.equals(force)) {
@@ -99,7 +99,7 @@ public class EnumTypeOperator<T extends Enum<?>> extends UnsupportedCalculateOpe
         Object[] enumConstants = maybeType.getEnumConstants();
         return (T) Arrays.stream(enumConstants)
                 .filter(constant -> {
-                    Object force = new ObjectWrapper(constant).getForce(valueText);
+                    Object force = new BeanWrapper(constant).getForce(valueText);
                     return target.equals(force);
                 })
                 .findFirst()

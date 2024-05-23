@@ -5,6 +5,7 @@ import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.Tokenizer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.google.common.collect.Maps;
 import jakarta.websocket.Session;
 import jakarta.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
@@ -89,7 +90,10 @@ public interface WebSocketEndpoint {
         }
         // 如果有占位符则进行替换
         ExpressionTemplate expressionTemplate = ExpressionTemplate.createTemplate(Tokenizer.BRACE);
-        String endpoint = expressionTemplate.parseTemplate(annotation.value(), getSession().getPathParameters());
+        Map<String, String> pathParameters = getSession().getPathParameters();
+        Map<String, Object> vars = Maps.newHashMap();
+        vars.putAll(pathParameters);
+        String endpoint = expressionTemplate.parseTemplate(annotation.value(), vars);
         return new EndpointKey(endpoint);
     }
 

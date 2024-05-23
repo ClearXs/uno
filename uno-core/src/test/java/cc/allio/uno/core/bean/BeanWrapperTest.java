@@ -6,13 +6,13 @@ import reactor.test.StepVerifier;
 
 import java.util.Map;
 
-public class ObjectWrapperTest {
+public class BeanWrapperTest {
 
     @Test
     void testGet() {
         User user = new User();
         user.setName("name");
-        ObjectWrapper wrapper = new ObjectWrapper(user);
+        BeanWrapper wrapper = new BeanWrapper(user);
         wrapper.get("name")
                 .as(StepVerifier::create)
                 .expectNext("name")
@@ -22,7 +22,7 @@ public class ObjectWrapperTest {
     @Test
     void testSet() {
         User user = new User();
-        ObjectWrapper wrapper = new ObjectWrapper(user);
+        BeanWrapper wrapper = new BeanWrapper(user);
         wrapper.set("name", "name")
                 .map(o -> ((User) o).getName())
                 .as(StepVerifier::create)
@@ -34,7 +34,7 @@ public class ObjectWrapperTest {
     void testSetCoverage() {
         User user = new User();
         user.setName("name");
-        ObjectWrapper wrapper = new ObjectWrapper(user);
+        BeanWrapper wrapper = new BeanWrapper(user);
         wrapper.setCoverage("name", false, "name1")
                 .map(o -> ((User) o).getName())
                 .as(StepVerifier::create)
@@ -52,7 +52,7 @@ public class ObjectWrapperTest {
         User user = new User();
         user.setName("name");
         user.setType("type");
-        ObjectWrapper wrapper = new ObjectWrapper(user);
+        BeanWrapper wrapper = new BeanWrapper(user);
         Map<String, Object> allValuesForce = wrapper.findMapValuesForce();
         System.out.println(allValuesForce);
 

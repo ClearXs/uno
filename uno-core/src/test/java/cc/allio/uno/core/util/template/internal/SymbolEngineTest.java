@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
 import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.StringPool;
@@ -118,5 +118,4 @@ class SymbolEngineTest extends BaseTestCase {
         private Map<String, Object> map;
         private List list;
     }
-
 }

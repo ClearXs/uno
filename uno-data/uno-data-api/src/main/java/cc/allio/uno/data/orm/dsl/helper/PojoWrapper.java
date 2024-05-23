@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.helper;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.api.Step;
 import cc.allio.uno.core.bean.MapWrapper;
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.type.TypeOperatorFactory;
 import cc.allio.uno.core.type.Types;
@@ -97,7 +97,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         if (Types.isMap(pojo.getClass())) {
             this.valueWrapper = new MapWrapper((Map<String, Object>) pojo);
         } else {
-            this.valueWrapper = new ObjectWrapper(pojo);
+            this.valueWrapper = new BeanWrapper(pojo);
         }
         this.pojo = pojo;
         init(pojo.getClass());
@@ -107,7 +107,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         if (Types.isMap(pojoClass)) {
             this.valueWrapper = new MapWrapper();
         } else {
-            this.valueWrapper = new ObjectWrapper(pojoClass);
+            this.valueWrapper = new BeanWrapper(pojoClass);
         }
         init(pojoClass);
     }

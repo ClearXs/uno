@@ -1,6 +1,6 @@
 package cc.allio.uno.rule.api;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuple4;
 import reactor.util.function.Tuple6;
@@ -57,7 +57,7 @@ public interface Fact extends Map<String, Object>, Serializable {
      * @return Fact instance
      */
     static Fact from(Rule rule, Object pojo) {
-        ObjectWrapper wrapper = new ObjectWrapper(pojo);
+        BeanWrapper wrapper = new BeanWrapper(pojo);
         return from(rule, wrapper.findMapValuesForce());
     }
 

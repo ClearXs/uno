@@ -1,7 +1,7 @@
 package cc.allio.uno.core.util;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.util.template.GenericTokenParser;
+import cc.allio.uno.core.util.template.internal.GenericTokenParser;
 import cc.allio.uno.core.util.template.Tokenizer;
 import com.google.common.collect.Lists;
 import lombok.Data;

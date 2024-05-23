@@ -210,13 +210,12 @@ public interface OptionalContext {
                 .stream()
                 .anyMatch(p -> {
                     Class<?> leftHand = p.getClass();
-                    Class<?> rightHand = type;
                     if (leftHand.isInterface()) {
-                        return ClassUtils.isAssignable(leftHand, rightHand);
-                    } else if (rightHand.isInterface()) {
-                        return ClassUtils.isAssignable(rightHand, leftHand);
+                        return ClassUtils.isAssignable(leftHand, type);
+                    } else if (type.isInterface()) {
+                        return ClassUtils.isAssignable(type, leftHand);
                     }
-                    return leftHand.isNestmateOf(rightHand);
+                    return leftHand.isNestmateOf(type);
                 });
     }
 
@@ -280,9 +279,6 @@ public interface OptionalContext {
         return new ImmutableOptionalContext(other, values);
     }
 
-    /**
-     * 不可变的{@link OptionalContext}
-     */
     class ImmutableOptionalContext implements OptionalContext {
 
         private final Map<String, Object> context;

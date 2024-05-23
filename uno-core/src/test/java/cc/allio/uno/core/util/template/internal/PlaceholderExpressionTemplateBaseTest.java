@@ -1,6 +1,8 @@
-package cc.allio.uno.core.util.template;
+package cc.allio.uno.core.util.template.internal;
 
 import cc.allio.uno.core.BaseTestCase;
+import cc.allio.uno.core.util.template.ExpressionTemplate;
+import cc.allio.uno.core.util.template.Tokenizer;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
@@ -68,11 +70,6 @@ class PlaceholderExpressionTemplateBaseTest extends BaseTestCase {
             String template = this.template.parseFileTemplate("cc/allio/uno/core/util/template/exampleMap.template", map);
             log.info(template);
         });
-    }
-
-    @Override
-    protected void onDown() throws Throwable {
-
     }
 
     @Data

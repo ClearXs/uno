@@ -1,6 +1,6 @@
 package cc.allio.uno.data.query.param;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.type.TypeOperatorFactory;
 import cc.allio.uno.data.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
@@ -20,9 +20,9 @@ public class AddDiluteAction implements DiluteAction {
         String[] dataFields = queryWrapper.getDataFields();
         for (String dataField : dataFields) {
             try {
-                ObjectWrapper oWrapper = new ObjectWrapper(o);
+                BeanWrapper oWrapper = new BeanWrapper(o);
                 Object oField = oWrapper.getForce(dataField);
-                ObjectWrapper tWrapper = new ObjectWrapper(t);
+                BeanWrapper tWrapper = new BeanWrapper(t);
                 Object tField = tWrapper.getForce(dataField);
                 Object result = TypeOperatorFactory.translator((Class<Object>) oField.getClass()).add(oField, tField);
                 oWrapper.setForce(dataField, result);

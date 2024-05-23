@@ -2,7 +2,7 @@ package cc.allio.uno.sequnetial.process;
 
 import java.util.*;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.bus.EventBusFactory;
 import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.core.spi.Loader;
@@ -122,7 +122,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
                 .map(tuple2 -> {
                     // 时序处理过程中，时序数据必须是一个唯一确定的sequential类型。所以CompositeSequential需要转换成指定的类型
                     if (sequential instanceof BaseCompositeSequential) {
-                        ObjectWrapper wrapper = new ObjectWrapper(context.getClass());
+                        BeanWrapper wrapper = new BeanWrapper(context.getClass());
                         wrapper.setForce("sequential", tuple2.getT1());
                     }
                     DefaultProcessPipeline pipeline =

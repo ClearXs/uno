@@ -1,10 +1,11 @@
-package cc.allio.uno.core.util.template;
+package cc.allio.uno.core.util.template.internal;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.util.template.expression.Engine;
-import cc.allio.uno.core.util.template.expression.SymbolEngine;
+import cc.allio.uno.core.util.template.*;
 import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Map;
 
 /**
  * 使用{@link TokenParser}完成模板解析
@@ -43,25 +44,24 @@ public class PlaceholderExpressionTemplate implements ExpressionTemplate {
     private final Engine engine;
     private final boolean langsym;
 
-    PlaceholderExpressionTemplate(Tokenizer tokenizer) {
+    public PlaceholderExpressionTemplate(Tokenizer tokenizer) {
         this(tokenizer, false);
     }
 
-    PlaceholderExpressionTemplate(Tokenizer tokenizer, boolean langsym) {
+    public PlaceholderExpressionTemplate(Tokenizer tokenizer, boolean langsym) {
         this.tokenParser = new GenericTokenParser(tokenizer);
         this.engine = new SymbolEngine(StringPool.DOT);
         this.langsym = langsym;
     }
 
     @Override
-    public String parseTemplate(@NonNull String template, @NonNull Object target) {
-        return tokenParser.parse(template, expression -> {
-            try {
-                return engine.run(expression, target, langsym);
-            } catch (Throwable e) {
-                return expression;
-            }
-        });
+    public String parseTemplate(@NonNull String template, TemplateContext context) {
+        return tokenParser.parse(
+                template,
+                expression -> {
+                    Map<String, Object> vars = context.getAll();
+                    return engine.run(expression, vars, langsym);
+                });
     }
 
 }

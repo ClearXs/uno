@@ -1,7 +1,5 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
-import cc.allio.uno.core.util.template.GenericTokenParser;
-import cc.allio.uno.core.util.template.TokenParser;
 import cc.allio.uno.core.util.template.Tokenizer;
 import cc.allio.uno.core.type.Types;
 

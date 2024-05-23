@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
 /**
  * 表达式替换引擎
@@ -18,5 +18,5 @@ public interface Engine {
      * @return 结果
      * @throws Throwable 运行过程中出现错误时抛出
      */
-    String run(String expression, Object value, boolean langsym) throws Throwable;
+    String run(String expression, Object value, boolean langsym);
 }

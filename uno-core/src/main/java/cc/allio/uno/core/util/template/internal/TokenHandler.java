@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template;
+package cc.allio.uno.core.util.template.internal;
 
 import java.util.function.Function;
 

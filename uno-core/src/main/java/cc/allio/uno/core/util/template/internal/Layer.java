@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
 import lombok.Data;
 

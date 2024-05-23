@@ -1,6 +1,6 @@
 package cc.allio.uno.core.metadata.convert;
 
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.metadata.Metadata;
 import reactor.core.publisher.Mono;
 
@@ -44,7 +44,7 @@ public class ConverterFactory {
      * @param consumer Function数据
      * @return Converter实例
      */
-    public static <T extends Metadata> FunctionConverter<T> createConverter(Class<T> type, Consumer<ObjectWrapper> consumer) {
+    public static <T extends Metadata> FunctionConverter<T> createConverter(Class<T> type, Consumer<BeanWrapper> consumer) {
         return new FunctionConverter<>(type, consumer);
     }
 
@@ -52,15 +52,15 @@ public class ConverterFactory {
      * 进行赋值动作时增加使用方进行操作
      */
     public static class FunctionConverter<T extends Metadata> extends AbstractJsonConverter<T> {
-        private final Consumer<ObjectWrapper> consumer;
+        private final Consumer<BeanWrapper> consumer;
 
-        public FunctionConverter(Class<? extends T> convertType, Consumer<ObjectWrapper> consumer) {
+        public FunctionConverter(Class<? extends T> convertType, Consumer<BeanWrapper> consumer) {
             super(convertType);
             this.consumer = consumer;
         }
 
         @Override
-        protected Mono<Void> executeAssignmentDefaultAction(T metadata, ObjectWrapper wrapper) {
+        protected Mono<Void> executeAssignmentDefaultAction(T metadata, BeanWrapper wrapper) {
             consumer.accept(wrapper);
             return Mono.empty();
         }
@@ -76,7 +76,7 @@ public class ConverterFactory {
         }
 
         @Override
-        protected Mono<Void> executeAssignmentDefaultAction(T metadata, ObjectWrapper wrapper) {
+        protected Mono<Void> executeAssignmentDefaultAction(T metadata, BeanWrapper wrapper) {
             // TODO NOTHING
             return Mono.empty();
         }

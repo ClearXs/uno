@@ -1,7 +1,7 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.bean.ObjectWrapper;
+import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
 import lombok.Getter;
@@ -70,7 +70,7 @@ public interface TopicKey {
      * @return TopicKey
      */
     static TopicKey create(String prefix, Object pojo) {
-        ObjectWrapper wrapper = new ObjectWrapper(pojo);
+        BeanWrapper wrapper = new BeanWrapper(pojo);
         return create(prefix, wrapper.findMapValuesForce().values().stream().map(Object::toString).toArray(String[]::new));
     }
 

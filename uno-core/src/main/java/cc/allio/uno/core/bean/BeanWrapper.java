@@ -1,6 +1,7 @@
 package cc.allio.uno.core.bean;
 
 import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.CollectionUtils;
 import com.google.common.collect.Maps;
 import reactor.core.publisher.Flux;
@@ -19,7 +20,7 @@ import java.util.*;
  * @date 2022/5/21 10:17
  * @since 1.0
  */
-public class ObjectWrapper implements ValueWrapper {
+public class BeanWrapper implements ValueWrapper {
 
     /**
      * 解析的目标对象
@@ -27,19 +28,20 @@ public class ObjectWrapper implements ValueWrapper {
     private final Object instance;
     private final BeanInfoWrapper<Object> wrapper;
 
-    public ObjectWrapper(Object instance) {
+    public BeanWrapper(Object instance) {
         if (Objects.isNull(instance)) {
             throw new NullPointerException("Instance Must not null");
         }
+        Class<Object> beanClass = (Class<Object>) instance.getClass();
         try {
-            this.wrapper = new BeanInfoWrapper<>((Class<Object>) instance.getClass());
+            this.wrapper = new BeanInfoWrapper<>(beanClass);
             this.instance = instance;
         } catch (IntrospectionException ex) {
             throw Exceptions.unchecked(ex);
         }
     }
 
-    public ObjectWrapper(Class<Object> instanceClass) {
+    public BeanWrapper(Class<Object> instanceClass) {
         if (Objects.isNull(instanceClass)) {
             throw new NullPointerException("InstanceClass Must not null");
         }
@@ -170,7 +172,7 @@ public class ObjectWrapper implements ValueWrapper {
      * @param value    value
      */
     public static void setValue(Object instance, String name, Object... value) {
-        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        BeanWrapper wrapper = new BeanWrapper(instance);
         if (Boolean.TRUE.equals(wrapper.contains(name))) {
             wrapper.setForce(name, value);
         }
@@ -184,7 +186,7 @@ public class ObjectWrapper implements ValueWrapper {
      * @return value or null
      */
     public static Object getValue(Object instance, String name) {
-        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        BeanWrapper wrapper = new BeanWrapper(instance);
         if (Boolean.TRUE.equals(wrapper.contains(name))) {
             return wrapper.getForce(name);
         }
@@ -199,10 +201,41 @@ public class ObjectWrapper implements ValueWrapper {
      * @return value or null
      */
     public static <T> T getValue(Object instance, String name, Class<T> fieldType) {
-        ObjectWrapper wrapper = new ObjectWrapper(instance);
+        BeanWrapper wrapper = new BeanWrapper(instance);
         if (Boolean.TRUE.equals(wrapper.contains(name))) {
             return wrapper.getForce(name, fieldType);
         }
         return null;
+    }
+
+    /**
+     * create a new {@link BeanWrapper} from bean instance
+     *
+     * @param beanInstance the bean instance
+     * @return {@link BeanWrapper} instance
+     * @throws NullPointerException if bean instance is null
+     */
+    public static BeanWrapper of(Object beanInstance) {
+        if (beanInstance == null) {
+            throw Exceptions.unNull("bean instance is not null");
+        }
+        Class<?> beanClass = beanInstance.getClass();
+        if (!Types.isBean(beanClass)) {
+            throw Exceptions.unOperate("bean must be a bean");
+        }
+        return new BeanWrapper(beanInstance);
+    }
+
+    /**
+     * create a new {@link BeanWrapper} from bean class
+     *
+     * @param beanClass the bean class
+     * @return {@link BeanWrapper} instance
+     */
+    public static BeanWrapper of(Class<?> beanClass) {
+        if (!Types.isBean(beanClass)) {
+            throw Exceptions.unOperate("bean must be a bean");
+        }
+        return new BeanWrapper(beanClass);
     }
 }

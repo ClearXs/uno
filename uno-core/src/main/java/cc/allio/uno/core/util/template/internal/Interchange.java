@@ -1,4 +1,4 @@
-package cc.allio.uno.core.util.template.expression;
+package cc.allio.uno.core.util.template.internal;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
@@ -20,7 +20,7 @@ public interface Interchange {
      * @param langsym 语言值
      * @return 替换后的值
      */
-    Object change(String text, Object value, boolean langsym) throws Throwable;
+    Object change(String text, Object value, boolean langsym) ;
 
     /**
      * 获取语言类型值，如String 2 = "2" char 2 = '2'
