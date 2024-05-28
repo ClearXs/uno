@@ -29,7 +29,6 @@ public class ExpressionTemplateNavigator implements ExpressionTemplate {
         this.tokenizer = tokenizer;
     }
 
-
     @Override
     public String parseTemplate(String template, TemplateContext context) {
         return internal.parseTemplate(template, context);

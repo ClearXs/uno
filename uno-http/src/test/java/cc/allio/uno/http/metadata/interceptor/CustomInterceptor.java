@@ -11,6 +11,6 @@ import reactor.core.publisher.Mono;
 public class CustomInterceptor implements Interceptor {
     @Override
     public Mono<HttpResponseMetadata> execute(Chain<HttpRequestMetadata, HttpResponseMetadata> chain, ChainContext<HttpRequestMetadata> context) throws Throwable {
-        return null;
+        return chain.proceed(context);
     }
 }

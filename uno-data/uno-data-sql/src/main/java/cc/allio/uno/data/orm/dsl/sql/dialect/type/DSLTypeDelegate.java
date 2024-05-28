@@ -58,7 +58,7 @@ public abstract class DSLTypeDelegate implements DSLType {
     }
 
     /**
-     * 子类实现，获取{@link cc.allio.uno.data.orm.dsl.type.DSLType.DSLLinkType}数组，得到某个{@link cc.allio.uno.data.orm.dsl.type.DSLType.DefaultDSLType}关联到不同数据实例的数据类型
+     * 子类实现，获取{@link DSLLinkType}数组，得到某个{@link DefaultDSLType}关联到不同数据实例的数据类型
      *
      * @return values
      */

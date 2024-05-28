@@ -54,7 +54,13 @@ class PlaceholderExpressionTemplateBaseTest extends BaseTestCase {
     void testTemplateParser() {
         assertDoesNotThrow(() -> {
             String template = this.template.parseFileTemplate("cc/allio/uno/core/util/template/example.template", user);
-            log.info(template);
+            assertEquals(
+                    "if (1 == 1) {\n" +
+                            "    user.result = String.valueOf(2);\n" +
+                            "} else {\n" +
+                            "    user.result = \"5\";\n" +
+                            "}\n",
+                    template);
         });
     }
 
@@ -68,7 +74,9 @@ class PlaceholderExpressionTemplateBaseTest extends BaseTestCase {
             map.put("user", user);
             user.test.put("m2", "m2");
             String template = this.template.parseFileTemplate("cc/allio/uno/core/util/template/exampleMap.template", map);
-            log.info(template);
+            assertEquals("1\n" +
+                    "2\n" +
+                    "m2\n", template);
         });
     }
 

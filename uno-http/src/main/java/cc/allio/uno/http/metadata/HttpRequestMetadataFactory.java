@@ -7,6 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import cc.allio.uno.core.proxy.CglibInvocationInterceptor;
 import cc.allio.uno.core.proxy.InvocationInterceptor;
 import cc.allio.uno.core.proxy.ProxyFactory;
+import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.Requires;
 import net.sf.cglib.proxy.MethodProxy;
 import org.springframework.http.HttpMethod;
@@ -73,16 +74,8 @@ public class HttpRequestMetadataFactory {
         boolean isPresent = METHOD_MAPPINGS.keySet()
                 .stream()
                 .anyMatch(method.name()::equals);
-        HttpRequestMetadata request;
-        if (isPresent) {
-            request = ProxyFactory
-                    .proxy()
-                    .newProxyInstance(METHOD_MAPPINGS.get(method.name()), interceptor, new Object[]{url});
-        } else {
-            request = ProxyFactory
-                    .proxy()
-                    .newProxyInstance(GetHttpRequest.class, interceptor, new Object[]{url});
-        }
+        // TODO 替换拦截器实现
+        HttpRequestMetadata request = ClassUtils.newInstance(METHOD_MAPPINGS.get(method.name()), url);
         ((BaseHttpRequest) request).setExpectType(expect);
         return request;
     }

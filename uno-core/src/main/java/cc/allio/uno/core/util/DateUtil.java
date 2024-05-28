@@ -65,6 +65,17 @@ public class DateUtil {
     }
 
     /**
+     * get format date by {@link #PATTERN_DATETIME}
+     *
+     * @return format string date
+     * @see #now()
+     * @see #format(Date, String)
+     */
+    public static String formatNow() {
+        return format(now(), PATTERN_DATETIME);
+    }
+
+    /**
      * 添加年
      *
      * @param date       时间
