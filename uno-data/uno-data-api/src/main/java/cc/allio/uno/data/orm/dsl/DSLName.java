@@ -86,6 +86,46 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
     }
 
     /**
+     * format dsl name to underline
+     *
+     * @return underline string
+     * @see #UNDERLINE_FEATURE
+     */
+    public String formatUnderlie() {
+        return format(UNDERLINE_FEATURE);
+    }
+
+    /**
+     * format dsl name to hump
+     *
+     * @return hump string
+     * @see #HUMP_FEATURE
+     */
+    public String formatHump() {
+        return format(HUMP_FEATURE);
+    }
+
+    /**
+     * format dsl name to lower case
+     *
+     * @return lower case string
+     * @see #LOWER_CASE_FEATURE
+     */
+    public String formatLowerCase() {
+        return format(LOWER_CASE_FEATURE);
+    }
+
+    /**
+     * format dsl name to upper case
+     *
+     * @return upper case string
+     * @see #UPPER_CASE_FEATURE
+     */
+    public String formatUpperCase() {
+        return format(UPPER_CASE_FEATURE);
+    }
+
+    /**
      * 根据指定的名称特性
      *
      * @param feature the feature

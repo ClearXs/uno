@@ -1,10 +1,12 @@
 package cc.allio.uno.core.util.template;
 
 import cc.allio.uno.core.bean.BeanWrapper;
+import cc.allio.uno.core.bean.ValueWrapper;
 import cc.allio.uno.core.util.IoUtils;
 import cc.allio.uno.core.util.template.internal.GenericTokenParser;
 import cc.allio.uno.core.util.template.internal.PlaceholderExpressionTemplate;
 import cc.allio.uno.core.util.template.internal.TokenParser;
+import cc.allio.uno.core.util.template.mvel.MVELExpressionTemplate;
 import com.google.common.collect.Maps;
 import org.springframework.core.io.UrlResource;
 import reactor.util.function.Tuple2;
@@ -24,7 +26,11 @@ import java.util.Map;
  *
  * @author j.x
  * @date 2021/12/25 16:40
+ * @modify 1.1.9
  * @see PlaceholderExpressionTemplate
+ * @see #createMVEL() create a {@link MVELExpressionTemplate}
+ * @see #defaultTemplate() use internal {@link PlaceholderExpressionTemplate}
+ * @see ExpressionTemplateNavigator
  * @since 1.0
  */
 public interface ExpressionTemplate {
@@ -48,12 +54,13 @@ public interface ExpressionTemplate {
      * 解析模板，当发生错误时将保持原样
      *
      * @param template 模板
-     * @param bean     the bean instance
+     * @param target   the target instance
      * @return 解析完成的字符串
      * @throws NullPointerException template target为空时抛出
      */
-    default String parseTemplate(String template, Object bean) {
-        Map<String, Object> vars = BeanWrapper.of(bean).findMapValuesForce();
+    default String parseTemplate(String template, Object target) {
+        ValueWrapper valueWrapper = ValueWrapper.get(target);
+        Map<String, Object> vars = valueWrapper.findMapValuesForce();
         return parseTemplate(template, vars);
     }
 
@@ -180,12 +187,11 @@ public interface ExpressionTemplate {
      *
      * @return ExpressionTemplate实例
      * @see PlaceholderExpressionTemplate
-     * @see Tokenizer
-     * @see Tokenizer#AT_BRACE
+     * @see Tokenizer#HASH_BRACE
      * @see #createTemplate(Tokenizer)
      */
     static ExpressionTemplate defaultTemplate() {
-        return createTemplate(Tokenizer.AT_BRACE);
+        return createTemplate(Tokenizer.HASH_BRACE);
     }
 
     /**
@@ -211,6 +217,15 @@ public interface ExpressionTemplate {
      */
     static ExpressionTemplate createTemplate(Tokenizer tokenizer, boolean langsym) {
         return new ExpressionTemplateNavigator(tokenizer, langsym);
+    }
+
+    /**
+     * create {@link MVELExpressionTemplate} instance
+     *
+     * @return {@link MVELExpressionTemplate} instance
+     */
+    static MVELExpressionTemplate createMVEL() {
+        return new MVELExpressionTemplate();
     }
 
     /**

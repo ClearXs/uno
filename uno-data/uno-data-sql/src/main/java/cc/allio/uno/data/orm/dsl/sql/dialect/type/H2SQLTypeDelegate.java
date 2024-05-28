@@ -1,7 +1,6 @@
 package cc.allio.uno.data.orm.dsl.sql.dialect.type;
 
 import cc.allio.uno.data.orm.dsl.type.DSLType;
-import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -33,11 +32,11 @@ public class H2SQLTypeDelegate extends DSLTypeDelegate {
     @Getter
     @AllArgsConstructor
     public enum H2LinkType implements DSLLinkType {
-        H2_BIGINT("bigint", Types.BIGINT, null, null, Lists.newArrayList(BIGINT)),
-        H2_INT("int", Types.INTEGER, null, null, Lists.newArrayList(INTEGER)),
-        H2_SMALLINT("smallint", Types.SMALLINT, null, null, Lists.newArrayList(SMALLINT)),
-        H2_TINYINT("tinyint", Types.SMALLINT, null, null, Lists.newArrayList(TINYINT)),
-        NUMERIC("numeric", Types.DOUBLE, 12, 2, Lists.newArrayList(DOUBLE, NUMBER));
+        H2_BIGINT("bigint", Types.BIGINT, null, null, List.of(BIGINT)),
+        H2_INT("int", Types.INTEGER, null, null, List.of(INTEGER)),
+        H2_SMALLINT("smallint", Types.SMALLINT, null, null, List.of(SMALLINT)),
+        H2_TINYINT("tinyint", Types.SMALLINT, null, null, List.of(TINYINT)),
+        NUMERIC("numeric", Types.DOUBLE, 12, 2, List.of(DOUBLE, NUMBER));
 
         private final String name;
         private final int jdbcType;

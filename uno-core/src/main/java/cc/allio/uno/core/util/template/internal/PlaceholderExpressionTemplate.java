@@ -63,5 +63,4 @@ public class PlaceholderExpressionTemplate implements ExpressionTemplate {
                     return engine.run(expression, vars, langsym);
                 });
     }
-
 }
