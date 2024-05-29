@@ -1,14 +1,17 @@
 package cc.allio.uno.core.util.template.mvel;
 
+import cc.allio.uno.core.util.IoUtils;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.TemplateContext;
+import io.protostuff.Input;
 import lombok.extern.slf4j.Slf4j;
 import org.mvel2.ParserContext;
 import org.mvel2.templates.CompiledTemplate;
 import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
-import java.io.ByteArrayOutputStream;
+import java.io.*;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -36,18 +39,26 @@ public class MVELExpressionTemplate implements ExpressionTemplate {
         for (Map.Entry<String, Class> importEntry : imports.entrySet()) {
             parserContext.addImport(importEntry.getKey(), importEntry.getValue());
         }
+
         CompiledTemplate compiledTemplate = TemplateCompiler.compileTemplate(template, parserContext);
 
         // 2. execute parse template
         ByteArrayOutputStream out = new ByteArrayOutputStream();
+        OutputStreamWriter writer = new OutputStreamWriter(out, StandardCharsets.UTF_8);
 
         // use customize VariableResolverFactory
         TemplateContextVariableResolverFactory variableResolverFactory = new TemplateContextVariableResolverFactory(context);
         try {
-            TemplateRuntime.execute(compiledTemplate, null, variableResolverFactory, out);
+            TemplateRuntime.execute(compiledTemplate, null, variableResolverFactory, null, new CharsetOutputStream(writer));
         } catch (Throwable ex) {
+            log.error("Failed to mvel parse template {}", template, ex);
+        }
+        try {
+            writer.flush();
+        } catch (IOException ex) {
             log.error("Failed to mvel parse template {}", template, ex);
         }
         return out.toString(StandardCharsets.UTF_8);
     }
+
 }

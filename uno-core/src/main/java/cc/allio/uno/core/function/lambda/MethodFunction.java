@@ -12,9 +12,9 @@ import java.io.Serializable;
  * @since 1.1.7
  */
 @FunctionalInterface
-public interface MethodFunction<T, K> extends Serializable, LambdaMethod {
+public interface MethodFunction<T, R> extends Serializable, LambdaMethod {
 
-    K apply(T t);
+    R apply(T t);
 
     /**
      * 获取参数值的类型
@@ -26,7 +26,7 @@ public interface MethodFunction<T, K> extends Serializable, LambdaMethod {
     /**
      * 获取返回值的类型
      */
-    default Class<K> getReturnType() {
-        return (Class<K>) ReflectTools.getGenericType(this, MethodFunction.class, 1);
+    default Class<R> getReturnType() {
+        return (Class<R>) ReflectTools.getGenericType(this, MethodFunction.class, 1);
     }
 }
