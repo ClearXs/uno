@@ -1,5 +1,7 @@
 package cc.allio.uno.core.datastructure.tree;
 
+import cc.allio.uno.core.bean.BeanWrapper;
+import cc.allio.uno.core.function.lambda.MethodFunction;
 import cc.allio.uno.core.util.CollectionUtils;
 import com.google.common.collect.Lists;
 
@@ -7,6 +9,7 @@ import java.io.Serializable;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * 提供树相关操作
@@ -16,9 +19,6 @@ import java.util.stream.Collectors;
  * @since 1.1.5
  */
 public final class TreeSupport {
-
-    private TreeSupport() {
-    }
 
     /**
      * @see #treeify(List, Function)
@@ -127,7 +127,7 @@ public final class TreeSupport {
      * @param <R>        继承于{@link Element}的泛型
      * @return expand
      */
-    public static synchronized <T extends Expand, R extends Element<R>> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
+    public static <T extends Expand, R extends Element<R>> List<T> expand(List<R> forest, Function<R, T> expandFunc, Comparator<T> comparator) {
         List<T> expands = Lists.newArrayList();
         try {
             Element.ROOT_SENTINEL.setChildren(Lists.newArrayList(forest));
@@ -144,5 +144,35 @@ public final class TreeSupport {
             expands.sort(comparator);
         }
         return expands;
+    }
+
+    /**
+     * with any 'forest' type expand collection type R data
+     *
+     * @param forest the forest about description tree data structure
+     * @param childrenFunc the description children function
+     * @param transfer  transfer type T to type R
+     * @return the collection of type R
+     * @param <T> the forest type T
+     * @param <R> the expand type R
+     * @see #doExpandFn(Collection, MethodFunction, Function)
+     */
+    public static <T, R> Collection<R> withExpandFn(Collection<T> forest, MethodFunction<T,Collection<T>> childrenFunc, Function<T, R> transfer) {
+        return doExpandFn(forest, childrenFunc, transfer).toList();
+    }
+
+    /**
+     * through use java stream feature, do expand
+     */
+    static <T, R> Stream<R> doExpandFn(Collection<T> forest, MethodFunction<T,Collection<T>> childrenFunc, Function<T, R> transfer) {
+        return forest.stream()
+                .flatMap(element -> {
+                    String fieldName = childrenFunc.getFieldName();
+                    Collection<T> children = BeanWrapper.getValue(element, fieldName, Collection.class);
+                    if (CollectionUtils.isNotEmpty(children)) {
+                        return doExpandFn(forest, childrenFunc, transfer);
+                    }
+                    return Stream.of(transfer.apply(element));
+                });
     }
 }

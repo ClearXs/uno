@@ -5,7 +5,9 @@ import cc.allio.uno.core.exception.Exceptions;
 import org.springframework.util.Assert;
 import reactor.core.publisher.Flux;
 
+import java.text.DateFormat;
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.Temporal;
@@ -54,6 +56,10 @@ public class DateUtil {
     public static final DateTimeFormatter DATETIME_MINI_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_DATETIME_MINI);
     public static final DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_DATE);
     public static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern(DateUtil.PATTERN_TIME);
+
+    static final ThreadLocal<DateFormat> DATE_FORMAT_SHORT_DATE_LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMMdd"));
+    static final ThreadLocal<DateFormat> DATE_FORMAT_SHORT_MONTH_LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyyMM"));
+    static final ThreadLocal<DateFormat> DATE_FORMAT_YEAR_LOCAL = ThreadLocal.withInitial(() -> new SimpleDateFormat("yyyy"));
 
     /**
      * 获取当前日期
@@ -887,5 +893,42 @@ public class DateUtil {
      */
     public static Date getEpochTime() {
         return new Date(0);
+    }
+
+    /**
+     * get current datetime format to 'yyyyMMdd'
+     *
+     * @return the format 'yyyyMMdd' time
+     */
+    public static String getNowYMD() {
+        return DATE_FORMAT_SHORT_DATE_LOCAL.get().format(new Date());
+    }
+
+    /**
+     * get current datetime format to 'yyyyMM'
+     *
+     * @return the format 'yyyyMM' time
+     */
+    public static String getNowYM() {
+        return DATE_FORMAT_SHORT_MONTH_LOCAL.get().format(new Date());
+    }
+
+    /**
+     * get current datetime format to 'yyyy'
+     *
+     * @return the format 'yyyy' time
+     */
+    public static String getNowY() {
+        return DATE_FORMAT_YEAR_LOCAL.get().format(new Date());
+    }
+
+    /**
+     * get current datetime specifies pattern format time
+     *
+     * @param pattern the format pattern
+     * @return format time
+     */
+    public static String getNowPart(String pattern) {
+        return format(now(), pattern);
     }
 }

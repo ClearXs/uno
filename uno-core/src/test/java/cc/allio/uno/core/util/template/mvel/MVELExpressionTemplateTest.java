@@ -1,7 +1,6 @@
 package cc.allio.uno.core.util.template.mvel;
 
 import cc.allio.uno.core.BaseTestCase;
-import cc.allio.uno.core.util.DateUtil;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.TemplateContext;
 import lombok.Data;
@@ -38,11 +37,19 @@ public class MVELExpressionTemplateTest extends BaseTestCase {
 
     @Test
     void testUtilityMethod() {
-        String template = "time is @{date.formatNow()}";
+        String template1 = "time is @{date.formatNow()}";
         MVELExpressionTemplate mvelExpressionTemplate = ExpressionTemplate.createMVEL();
         TemplateContext templateContext = new TemplateContext();
-        String resolved = mvelExpressionTemplate.parseTemplate(template, templateContext);
+        String resolved = mvelExpressionTemplate.parseTemplate(template1, templateContext);
         System.out.println(resolved);
+
+        String template2 = "@{string.camelToUnderline(AB)}";
+        Person person = new Person();
+        person.setName("ClickOver");
+        templateContext.addImport(Person.class);
+        templateContext.putAttribute("person", person);
+        String r2 = mvelExpressionTemplate.parseTemplate(template2, templateContext);
+        System.out.println(r2);
     }
 
 

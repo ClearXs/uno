@@ -2,10 +2,7 @@ package cc.allio.uno.core.util.template;
 
 import cc.allio.uno.core.api.OptionalContext;
 import cc.allio.uno.core.type.Types;
-import cc.allio.uno.core.util.BeanUtils;
-import cc.allio.uno.core.util.ClassUtils;
-import cc.allio.uno.core.util.DateUtil;
-import cc.allio.uno.core.util.JsonUtils;
+import cc.allio.uno.core.util.*;
 import com.google.common.collect.Maps;
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;
@@ -41,6 +38,7 @@ public class TemplateContext implements OptionalContext {
     private static final String JSON_UTILITY_NAME = "json";
     private static final String BEAN_UTILITY_NAME = "bean";
     private static final String CLASS_UTILITY_NAME = "class";
+    private static final String STRING_UTILITY_NAME = "string";
 
     public TemplateContext() {
         this.vars = Maps.newConcurrentMap();
@@ -58,6 +56,7 @@ public class TemplateContext implements OptionalContext {
         addImport(JSON_UTILITY_NAME, JsonUtils.class);
         addImport(BEAN_UTILITY_NAME, BeanUtils.class);
         addImport(CLASS_UTILITY_NAME, ClassUtils.class);
+        addImport(STRING_UTILITY_NAME, StringUtils.class);
     }
 
     @Override
