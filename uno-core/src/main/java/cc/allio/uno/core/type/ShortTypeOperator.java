@@ -1,7 +1,5 @@
 package cc.allio.uno.core.type;
 
-import cc.allio.uno.core.StringPool;
-
 /**
  * Short类型的转换器。可能抛出NumberFormatException异常
  *

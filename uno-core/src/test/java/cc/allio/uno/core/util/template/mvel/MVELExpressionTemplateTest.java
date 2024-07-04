@@ -1,7 +1,6 @@
 package cc.allio.uno.core.util.template.mvel;
 
 import cc.allio.uno.core.BaseTestCase;
-import cc.allio.uno.core.util.DateUtil;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.TemplateContext;
 import lombok.Data;
@@ -27,13 +26,32 @@ public class MVELExpressionTemplateTest extends BaseTestCase {
     }
 
     @Test
-    void testUtilityMethod() {
-        String template = "time is @{date.formatNow()}";
+    void testMapParams() {
+        String template = "Hello, @{name}";
         MVELExpressionTemplate mvelExpressionTemplate = ExpressionTemplate.createMVEL();
         TemplateContext templateContext = new TemplateContext();
-        String resolved = mvelExpressionTemplate.parseTemplate(template, templateContext);
-        System.out.println(resolved);
+        templateContext.putAttribute("name", "测试");
+        String out = mvelExpressionTemplate.parseTemplate(template, templateContext);
+        assertEquals("Hello, 测试", out);
     }
+
+    @Test
+    void testUtilityMethod() {
+        String template1 = "time is @{date.formatNow()}";
+        MVELExpressionTemplate mvelExpressionTemplate = ExpressionTemplate.createMVEL();
+        TemplateContext templateContext = new TemplateContext();
+        String resolved = mvelExpressionTemplate.parseTemplate(template1, templateContext);
+        System.out.println(resolved);
+
+        String template2 = "@{string.camelToUnderline(AB)}";
+        Person person = new Person();
+        person.setName("ClickOver");
+        templateContext.addImport(Person.class);
+        templateContext.putAttribute("person", person);
+        String r2 = mvelExpressionTemplate.parseTemplate(template2, templateContext);
+        System.out.println(r2);
+    }
+
 
     @Data
     public static class Person {
