@@ -170,7 +170,7 @@ public final class TreeSupport {
                     String fieldName = childrenFunc.getFieldName();
                     Collection<T> children = BeanWrapper.getValue(element, fieldName, Collection.class);
                     if (CollectionUtils.isNotEmpty(children)) {
-                        return doExpandFn(forest, childrenFunc, transfer);
+                        return doExpandFn(children, childrenFunc, transfer);
                     }
                     return Stream.of(transfer.apply(element));
                 });

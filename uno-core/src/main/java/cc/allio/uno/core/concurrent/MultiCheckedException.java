@@ -1,5 +1,6 @@
 package cc.allio.uno.core.concurrent;
 
+import cc.allio.uno.core.api.Single;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -14,8 +15,8 @@ import java.util.Map;
 public class MultiCheckedException extends Exception {
 
     // 受检查的异常
-    final Map<Class<? extends Throwable>, Throwable> checked = Maps.newHashMap();
-    final Map<Class<? extends RuntimeException>, RuntimeException> unchecked = Maps.newHashMap();
+    final transient Map<Class<? extends Throwable>, Throwable> checked = Maps.newHashMap();
+    final transient Map<Class<? extends RuntimeException>, RuntimeException> unchecked = Maps.newHashMap();
 
     /**
      * 追加异常
@@ -39,11 +40,14 @@ public class MultiCheckedException extends Exception {
      * @return Exception or null
      */
     public <T extends RuntimeException> T findUncheckedException(Class<T> errType) {
-        RuntimeException err = unchecked.get(errType);
-        if (err != null) {
-            return (T) err;
+        if (hasUncheckedException(errType)) {
+            return (T) unchecked.get(errType);
         }
-        return null;
+        var err = Single.from(unchecked.entrySet())
+                .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
+                .map(Map.Entry::getValue)
+                .orElse(null);
+        return (T) err;
     }
 
     /**
@@ -54,11 +58,15 @@ public class MultiCheckedException extends Exception {
      * @return Exception or null
      */
     public <T extends Throwable> T findCheckedException(Class<T> errType) {
-        Throwable err = checked.get(errType);
-        if (err != null) {
-            return (T) err;
+        if (hasCheckedException(errType)) {
+            return (T) checked.get(errType);
         }
-        return null;
+        var err = Single.from(checked.entrySet())
+                .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
+                .map(Map.Entry::getValue)
+                .orElse(null);
+
+        return (T) err;
     }
 
     /**
