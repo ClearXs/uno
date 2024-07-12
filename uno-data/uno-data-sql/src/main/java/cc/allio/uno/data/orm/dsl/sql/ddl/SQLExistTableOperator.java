@@ -68,8 +68,8 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<SQLExistTableOper
                                 .from("INFORMATION_SCHEMA.TABLES")
                                 .$like$("TABLE_NAME", table.getName().format()))
                 .execute();
-        if (obj instanceof DSLException ex) {
-            throw ex;
+        if (obj instanceof DSLException) {
+            throw ((DSLException) obj);
         }
         this.table = table;
         return self();

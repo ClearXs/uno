@@ -38,8 +38,10 @@ public enum LogicMode {
                 return where;
             }
 
-            if (condition instanceof SQLInListExpr inListExpr) {
-                if (item instanceof SQLBinaryOpExpr binaryOpItem) {
+            if (condition instanceof SQLInListExpr) {
+                SQLInListExpr inListExpr = (SQLInListExpr) condition;
+                if (item instanceof SQLBinaryOpExpr) {
+                    SQLBinaryOpExpr binaryOpItem = (SQLBinaryOpExpr) item;
                     SQLExpr left = binaryOpItem.getLeft();
                     SQLExpr right = binaryOpItem.getRight();
                     if (inListExpr.getExpr().equals(left)
@@ -54,26 +56,28 @@ public enum LogicMode {
                         return where;
                     }
                 } else {
-                    if (item instanceof SQLInListExpr inListItem && (inListExpr.getExpr().equals(inListItem.getExpr()))) {
-                        TreeSet<SQLExpr> set = new TreeSet<>(inListItem.getTargetList());
-                        List<SQLExpr> andList = new ArrayList<SQLExpr>();
-                        for (SQLExpr exprItem : inListExpr.getTargetList()) {
-                            if (set.contains(exprItem)) {
-                                andList.add(exprItem.clone());
+                    if (item instanceof SQLInListExpr) {
+                        SQLInListExpr inListItem = (SQLInListExpr) item;
+                        if ((inListExpr.getExpr().equals(inListItem.getExpr()))) {
+                            TreeSet<SQLExpr> set = new TreeSet<>(inListItem.getTargetList());
+                            List<SQLExpr> andList = new ArrayList<SQLExpr>();
+                            for (SQLExpr exprItem : inListExpr.getTargetList()) {
+                                if (set.contains(exprItem)) {
+                                    andList.add(exprItem.clone());
+                                }
                             }
-                        }
 
-                        if (andList.isEmpty()) {
-                            SQLUtils.replaceInParent(item, new SQLBooleanExpr(false));
+                            if (andList.isEmpty()) {
+                                SQLUtils.replaceInParent(item, new SQLBooleanExpr(false));
+                                return where;
+                            }
+
+                            inListItem.getTargetList().clear();
+                            for (SQLExpr val : andList) {
+                                inListItem.addTarget(val);
+                            }
                             return where;
                         }
-
-                        inListItem.getTargetList().clear();
-                        for (SQLExpr val : andList) {
-                            inListItem.addTarget(val);
-                        }
-                        return where;
-
                     }
                 }
             }

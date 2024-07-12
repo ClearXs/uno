@@ -30,6 +30,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.omg.CORBA.UNKNOWN;
 
 import java.lang.reflect.Field;
 import java.net.SocketTimeoutException;
@@ -38,6 +39,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 基于MybatisSQL执行器
@@ -234,8 +236,8 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
      * @return ParameterMap
      */
     private ParameterMap getParameterMap(Operator<?> sqlOperator) {
-        if (sqlOperator instanceof PrepareOperator<?> prepareOperator) {
-            List<PrepareValue> prepareValues = prepareOperator.getPrepareValues();
+        if (sqlOperator instanceof PrepareOperator<?>) {
+            List<PrepareValue> prepareValues = ((PrepareOperator<?>) sqlOperator).getPrepareValues();
             List<ParameterMapping> parameterMappings = prepareValues.stream()
                     .map(prepareValue -> {
                         Class<?> javaType;
@@ -249,7 +251,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
                                 .Builder(configuration, prepareValue.getColumn(), javaType)
                                 .build();
                     })
-                    .toList();
+                    .collect(Collectors.toList());
             return new ParameterMap
                     .Builder(configuration, IdGenerator.defaultGenerator().getNextIdAsString(), null, parameterMappings)
                     .build();
@@ -289,27 +291,42 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
 
         @Override
         public SqlCommandType adapt(CommandType sqlCommand) {
-            return switch (sqlCommand) {
-                case UNKNOWN -> SqlCommandType.UNKNOWN;
-                case FLUSH -> SqlCommandType.FLUSH;
-                case DELETE -> SqlCommandType.DELETE;
-                case INSERT -> SqlCommandType.INSERT;
-                case SELECT -> SqlCommandType.SELECT;
-                case UPDATE -> SqlCommandType.UPDATE;
-                default -> null;
-            };
+            switch (sqlCommand) {
+                case UNKNOWN:
+                    return SqlCommandType.UNKNOWN;
+                case FLUSH:
+                    return SqlCommandType.FLUSH;
+                case DELETE:
+                    return SqlCommandType.DELETE;
+                case INSERT:
+                    return SqlCommandType.INSERT;
+                case SELECT:
+                    return SqlCommandType.SELECT;
+                case UPDATE:
+                    return SqlCommandType.UPDATE;
+                default:
+                    return null;
+            }
         }
 
         @Override
         public CommandType reverse(SqlCommandType sqlCommandType) {
-            return switch (sqlCommandType) {
-                case SELECT -> CommandType.SELECT;
-                case INSERT -> CommandType.INSERT;
-                case FLUSH -> CommandType.FLUSH;
-                case DELETE -> CommandType.DELETE;
-                case UPDATE -> CommandType.UPDATE;
-                case UNKNOWN -> CommandType.UNKNOWN;
-            };
+            switch (sqlCommandType) {
+                case SELECT:
+                    return CommandType.SELECT;
+                case INSERT:
+                    return CommandType.INSERT;
+                case FLUSH:
+                    return CommandType.FLUSH;
+                case DELETE:
+                    return CommandType.DELETE;
+                case UPDATE:
+                    return CommandType.UPDATE;
+                case UNKNOWN:
+                    return CommandType.UNKNOWN;
+                default:
+                    return null;
+            }
         }
     }
 

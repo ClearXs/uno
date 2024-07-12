@@ -17,10 +17,10 @@ import java.beans.Introspector;
 import java.beans.PropertyDescriptor;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 /**
  * 增强对Bean对象的操作。<b>禁止在Bean上添加{@link lombok.experimental.Accessors}</b>的注解
@@ -84,7 +84,7 @@ public class BeanInfoWrapper<T> {
         return Arrays.stream(beanInfo.getPropertyDescriptors())
                 .map(PropertyDescriptor::getName)
                 .filter(name -> !"class".equals(name))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**
@@ -258,7 +258,7 @@ public class BeanInfoWrapper<T> {
                 .flatMap(readMethod -> {
                     try {
                         Object result = readMethod.invoke(target);
-                        return Mono.just(Objects.requireNonNullElse(result, ValueWrapper.EMPTY_VALUE));
+                        return Mono.just(Optional.ofNullable(result).orElse(ValueWrapper.EMPTY_VALUE));
                     } catch (Throwable ex) {
                         return Mono.error(ex);
                     }

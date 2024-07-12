@@ -134,7 +134,7 @@ public interface OptionalContext {
             }
             objs.add(obj);
         }
-        return objs.toArray(Object[]::new);
+        return objs.toArray(new Object[]{});
     }
 
     /**
@@ -215,7 +215,7 @@ public interface OptionalContext {
                     } else if (type.isInterface()) {
                         return ClassUtils.isAssignable(type, leftHand);
                     }
-                    return leftHand.isNestmateOf(type);
+                    return leftHand.isAssignableFrom(type);
                 });
     }
 
@@ -286,7 +286,7 @@ public interface OptionalContext {
 
         public ImmutableOptionalContext(Object[] values) {
             if (values != null) {
-                this.context = HashMap.newHashMap(values.length);
+                this.context = new HashMap<>(values.length);
                 for (Object value : values) {
                     putSingleValue(value);
                 }

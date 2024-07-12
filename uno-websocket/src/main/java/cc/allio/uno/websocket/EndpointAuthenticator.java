@@ -2,13 +2,14 @@ package cc.allio.uno.websocket;
 
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.CollectionUtils;
-import jakarta.websocket.Session;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
 
+import javax.websocket.Session;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ServiceLoader;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 /**
  * WebSocket端点认证器
@@ -50,7 +51,7 @@ public class EndpointAuthenticator {
                                 Thread.currentThread().getContextClassLoader()))
                 .stream()
                 .filter(authFilter())
-                .toList();
+                .collect(Collectors.toList());
         AnnotationAwareOrderComparator.sort(connectionAuthenticators);
 
         // 构建消息接收认证器
@@ -60,7 +61,7 @@ public class EndpointAuthenticator {
                                 Thread.currentThread().getContextClassLoader())))
                 .stream()
                 .filter(authFilter())
-                .toList();
+                .collect(Collectors.toList());
         AnnotationAwareOrderComparator.sort(receiveAuthenticators);
 
         // 构建消息发布认证器
@@ -70,7 +71,7 @@ public class EndpointAuthenticator {
                                 Thread.currentThread().getContextClassLoader())))
                 .stream()
                 .filter(authFilter())
-                .toList();
+                .collect(Collectors.toList());
         AnnotationAwareOrderComparator.sort(receiveAuthenticators);
     }
 

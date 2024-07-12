@@ -13,7 +13,8 @@ public class AuditInterceptor implements Interceptor {
 
     @Override
     public void onSaveBefore(CommandExecutor commandExecutor, Operator<?> operator) {
-        if (operator instanceof InsertOperator insertOperator) {
+        if (operator instanceof InsertOperator) {
+            InsertOperator insertOperator = (InsertOperator) operator;
             insertOperator.strictFill("id", () -> IdGenerator.defaultGenerator().getNextId());
             insertOperator.strictFill("create_user", 1L);
             insertOperator.strictFill("create_dept", 1L);
@@ -26,7 +27,8 @@ public class AuditInterceptor implements Interceptor {
 
     @Override
     public void onUpdateBefore(CommandExecutor commandExecutor, Operator<?> operator) {
-        if (operator instanceof UpdateOperator updateOperator) {
+        if (operator instanceof UpdateOperator) {
+            UpdateOperator updateOperator = (UpdateOperator) operator;
             updateOperator.strictFill("update_user", 1L);
             updateOperator.strictFill("update_time", new Date());
             updateOperator.strictFill("is_deleted", 0);

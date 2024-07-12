@@ -7,6 +7,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.lang.annotation.*;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
@@ -83,7 +84,7 @@ public interface Operator<T extends Operator<T>> extends Self<T> {
      * @return origin value or {@link ValueWrapper#EMPTY_VALUE}
      */
     default Object getValueIfNull(Object originalValue) {
-        return Objects.requireNonNullElse(originalValue, ValueWrapper.EMPTY_VALUE);
+        return Optional.ofNullable(originalValue).orElse(ValueWrapper.EMPTY_VALUE);
     }
 
     /**
@@ -96,8 +97,8 @@ public interface Operator<T extends Operator<T>> extends Self<T> {
      * @throws ClassCastException failed to cast to specifies reality type
      */
     default <O extends Operator<?>> O castReality(Class<O> realityType) {
-        if (this instanceof WrapperOperator wrapperOperator) {
-            T actual = wrapperOperator.getActual();
+        if (this instanceof WrapperOperator) {
+            T actual = ((WrapperOperator) this).getActual();
             return realityType.cast(actual);
         }
         return realityType.cast(this);

@@ -7,6 +7,7 @@ import cc.allio.uno.data.orm.executor.ResultSet;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@link Table}结果集处理器
@@ -34,6 +35,6 @@ public class TableListResultSetHandler extends ExecutorOptionsAwareImpl implemen
                     r.getOptionStringValue(TABLE_TYPE_DSL_NAME, table::setType);
                     return table;
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 }

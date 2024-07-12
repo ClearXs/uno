@@ -3,8 +3,8 @@ package cc.allio.uno.data.orm.executor;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
-import jakarta.validation.constraints.NotNull;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.function.Supplier;
 

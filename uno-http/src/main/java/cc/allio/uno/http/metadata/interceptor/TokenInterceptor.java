@@ -8,7 +8,6 @@ import com.google.common.collect.Maps;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
@@ -57,7 +56,7 @@ public class TokenInterceptor implements Interceptor {
                 .filter(tokenRequest.getTokenVerify())
                 .then(proceed)
                 .onErrorResume(WebClientResponseException.class, error -> {
-                    HttpStatusCode status = error.getStatusCode();
+                    HttpStatus status = error.getStatusCode();
                     // 捕捉Token异常错误
                     if (HttpStatus.UNAUTHORIZED == status) {
                         // 构建Token请求

@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * logic
@@ -132,14 +133,14 @@ public class LogicGroup extends TraversalElement<LogicGroup> implements GroupEle
     public List<LogicGroup> getGroupElement() {
         return children.stream()
                 .filter(e -> !e.isLeaf())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
     public List<LogicGroup> getAttrElement() {
         return children.stream()
                 .filter(LogicGroup::isLeaf)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override

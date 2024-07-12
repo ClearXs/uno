@@ -9,11 +9,11 @@ import cc.allio.uno.rule.api.event.RuleContext;
 import cc.allio.uno.rule.api.vistor.*;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import org.drools.base.definitions.InternalKnowledgePackage;
-import org.drools.base.definitions.rule.impl.RuleImpl;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.Dialect;
-import org.drools.drl.ast.descr.*;
+import org.drools.compiler.lang.descr.*;
+import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.core.definitions.rule.impl.RuleImpl;
 
 import javax.annotation.concurrent.NotThreadSafe;
 import java.util.List;
@@ -130,7 +130,7 @@ public class DroolsRuleManager {
      * @return true 包含 false 不包含
      */
     public boolean compareRuleAndRemoveOldRule(Rule rule) {
-        RuleImpl droolsRule = defaultPkg.getRule(rule.getName());
+        org.drools.core.definitions.rule.impl.RuleImpl droolsRule = defaultPkg.getRule(rule.getName());
         // 存在，判断指标是否一致
         if (droolsRule != null && ruleRegistry.containsKey(rule.getName())) {
             boolean compareResult = true;
@@ -180,7 +180,7 @@ public class DroolsRuleManager {
      */
     public void removeRule(Rule rule) {
         ruleRegistry.remove(rule.getName());
-        RuleImpl ruleImpl = defaultPkg.getRule(rule.getName());
+        org.drools.core.definitions.rule.impl.RuleImpl ruleImpl = defaultPkg.getRule(rule.getName());
         if (ruleImpl != null) {
             defaultPkg.removeRule(ruleImpl);
         }

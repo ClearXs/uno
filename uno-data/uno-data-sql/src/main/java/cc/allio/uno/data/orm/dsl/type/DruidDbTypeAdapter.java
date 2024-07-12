@@ -36,12 +36,17 @@ public class DruidDbTypeAdapter implements DBTypeAdapter<DbType> {
 
     @Override
     public DBType reverse(DbType dbType) {
-        return switch (dbType) {
-            case DbType.mysql -> DBType.MYSQL;
-            case DbType.oracle -> DBType.ORACLE;
-            case DbType.postgresql -> DBType.POSTGRESQL;
-            case DbType.sqlserver -> DBType.SQLSERVER;
-            default -> DBType.H2;
-        };
+        switch (dbType) {
+            case mysql:
+                return DBType.MYSQL;
+            case oracle:
+                return DBType.ORACLE;
+            case postgresql:
+                return DBType.POSTGRESQL;
+            case sqlserver:
+                return DBType.SQLSERVER;
+            default:
+                return DBType.H2;
+        }
     }
 }

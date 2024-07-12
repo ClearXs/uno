@@ -5,19 +5,19 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>2.3.12.RELEASE</version>
+        <relativePath/>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
     <groupId>cc.allio</groupId>
     <artifactId>uno-bom</artifactId>
-    <version>1.1.9</version>
+    <version>1.1.9-jdk8</version>
     <packaging>pom</packaging>
 
     <properties>
         <!-- 统一版本管理 -->
-        <uno.version>1.1.9</uno.version>
+        <uno.version>1.1.9-jdk8</uno.version>
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
@@ -32,16 +32,14 @@
         <!-- 多线程单元测试 -->
         <concurrentunit.version>0.4.6</concurrentunit.version>
         <guava.version>33.0.0-jre</guava.version>
-        <!-- 状态机 -->
-        <spring-statemachine.version>4.0.0</spring-statemachine.version>
         <!-- jakarta规范 -->
         <jakarta.version>2.0.1</jakarta.version>
         <!-- swagger -->
         <swagger-v3.version>2.2.17</swagger-v3.version>
         <swagger-v2.version>1.6.2</swagger-v2.version>
         <springfox-swagger2.version>3.0.0</springfox-swagger2.version>
-        <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
-        <mybatis-plus-boot.version>3.5.5</mybatis-plus-boot.version>
+        <mybatis-spring-boot.version>2.2.1</mybatis-spring-boot.version>
+        <mybatis-plus-boot.version>3.4.2</mybatis-plus-boot.version>
         <!-- 数据库 -->
         <druid.version>1.2.20</druid.version>
         <mysql-connector.version>8.0.22</mysql-connector.version>
@@ -50,7 +48,7 @@
         <sqlserver-connector.version>8.4.1.jre8</sqlserver-connector.version>
         <mybatis-plus-dynamic.version>4.3.0</mybatis-plus-dynamic.version>
         <!-- 空间数据处理 -->
-        <geotools.version>30.2</geotools.version>
+        <geotools.version>27.0</geotools.version>
         <gdal.version>3.8.0</gdal.version>
         <postgis-jdbc.version>2.5.1</postgis-jdbc.version>
         <!-- elasticsearch -->
@@ -107,11 +105,6 @@
                 <artifactId>uno-kafka</artifactId>
                 <version>${uno.version}</version>
             </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-netty</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
             <!-- uno-starters -->
             <dependency>
                 <groupId>cc.allio</groupId>
@@ -141,42 +134,12 @@
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
-                <artifactId>uno-data-test</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
                 <artifactId>uno-data-api</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
                 <groupId>cc.allio</groupId>
                 <artifactId>uno-data-db</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-data-elasticsearch</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-data-influxdb</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-data-mongodb</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-data-neo4j</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio</groupId>
-                <artifactId>uno-data-redis</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
@@ -204,11 +167,6 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.statemachine</groupId>
-                <artifactId>spring-statemachine-core</artifactId>
-                <version>${spring-statemachine.version}</version>
             </dependency>
             <!-- cglib -->
             <dependency>

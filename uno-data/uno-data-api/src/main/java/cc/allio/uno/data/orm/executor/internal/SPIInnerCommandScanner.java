@@ -8,8 +8,9 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.springframework.core.annotation.AnnotationUtils;
 
-import java.util.ServiceLoader;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * scan include annotation {@link cc.allio.uno.data.orm.executor.CommandExecutor.Group} the {@link InnerCommandExecutor}
@@ -49,7 +50,7 @@ public final class SPIInnerCommandScanner {
     public InnerCommandExecutorManager scan(Object... args) {
         InnerCommandExecutorManager manager = new InnerCommandExecutorManager();
         // combine
-        var innerCommandExecutors = INNER_COMMAND_EXECUTOR_CLASSES.stream()
+        List<? extends InnerCommandExecutor> innerCommandExecutors = INNER_COMMAND_EXECUTOR_CLASSES.stream()
                 .flatMap(innerCommandExecutorClass -> {
                     ClassPathServiceLoader<? extends InnerCommandExecutor> load = ClassPathServiceLoader.load(innerCommandExecutorClass, args);
                     return Lists.newArrayList(load).stream();
@@ -60,11 +61,11 @@ public final class SPIInnerCommandScanner {
                     CommandExecutor.Group group = AnnotationUtils.findAnnotation(type, CommandExecutor.Group.class);
                     return group != null && group.value().equals(executorKey.key());
                 })
-                .map(ServiceLoader.Provider::get)
-                .toList();
+                .map(ClassPathServiceLoader.Provider::get)
+                .collect(Collectors.toList());
 
         // set
-        for (var innerCommandExecutor : innerCommandExecutors) {
+        for (InnerCommandExecutor innerCommandExecutor : innerCommandExecutors) {
             manager.set(innerCommandExecutor.getRealityOperatorType(), innerCommandExecutor);
         }
         return manager;

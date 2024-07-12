@@ -8,6 +8,7 @@ import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * DSL修改表以及相关字段操作
@@ -30,7 +31,7 @@ public interface AlterTableOperator<T extends AlterTableOperator<T>> extends Ope
      * @see #alertColumns(Collection)
      */
     default T alertColumns(ColumnDef... columnDefs) {
-        return alertColumns(Arrays.stream(columnDefs).toList());
+        return alertColumns(Arrays.stream(columnDefs).collect(Collectors.toList()));
     }
 
     /**
@@ -52,7 +53,7 @@ public interface AlterTableOperator<T extends AlterTableOperator<T>> extends Ope
      * @see #addColumns(Collection)
      */
     default T addColumns(ColumnDef... columnDefs) {
-        return addColumns(Arrays.stream(columnDefs).toList());
+        return addColumns(Arrays.stream(columnDefs).collect(Collectors.toList()));
     }
 
     /**
@@ -81,7 +82,7 @@ public interface AlterTableOperator<T extends AlterTableOperator<T>> extends Ope
      * @see #deleteColumns(Collection)
      */
     default T deleteColumns(DSLName... columns) {
-        return deleteColumns(Arrays.stream(columns).toList());
+        return deleteColumns(Arrays.stream(columns).collect(Collectors.toList()));
     }
 
     /**

@@ -11,8 +11,8 @@ import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.mapping.Environment;
 import org.apache.ibatis.session.Configuration;
 import org.mybatis.spring.transaction.SpringManagedTransactionFactory;
-import org.springframework.boot.autoconfigure.jdbc.JdbcConnectionDetails;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.boot.jdbc.DatabaseDriver;
 
 import javax.sql.DataSource;
 import java.time.Duration;
@@ -66,14 +66,13 @@ public class DbCommandExecutorLoader extends BaseCommandExecutorLoader<DbCommand
     public DbCommandExecutor onLoad(ExecutorOptions executorOptions) {
         DBType dbType = executorOptions.getDbType();
         String jdbcUrl = dbType.parseTemplate(executorOptions.getAddress(), executorOptions.getDatabase());
-        JdbcConnectionDetails connectionDetails = new JdbcConnectionDetailsImpl(executorOptions.getUsername(), executorOptions.getPassword(), jdbcUrl);
         HikariDataSource dataSource =
                 DataSourceBuilder.create(ClassLoader.getSystemClassLoader())
                         .type(HikariDataSource.class)
-                        .driverClassName(connectionDetails.getDriverClassName())
-                        .url(connectionDetails.getJdbcUrl())
-                        .username(connectionDetails.getUsername())
-                        .password(connectionDetails.getPassword())
+                        .driverClassName( DatabaseDriver.fromJdbcUrl(jdbcUrl).getDriverClassName())
+                        .url(jdbcUrl)
+                        .username(executorOptions.getUsername())
+                        .password(executorOptions.getPassword())
                         .build();
         dataSource.setAutoCommit(true);
         dataSource.setConnectionTimeout(Duration.ofSeconds(10).toMillis());

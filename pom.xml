@@ -7,7 +7,7 @@
     <groupId>cc.allio</groupId>
     <artifactId>uno</artifactId>
     <packaging>pom</packaging>
-    <version>1.1.9</version>
+    <version>1.1.9-jdk8</version>
     <description>构建大型应用需要的基本能力 --- all in one</description>
     <url>https://github.com/ClearXs/uno</url>
 
@@ -32,17 +32,15 @@
         <module>uno-rule</module>
         <module>uno-http</module>
         <module>uno-kafka</module>
-        <module>uno-netty</module>
         <module>uno-sequential</module>
         <module>uno-websocket</module>
-        <module>uno-ai</module>
     </modules>
 
     <properties>
-        <java.version>22</java.version>
-        <drools.version>9.44.0.Final</drools.version>
+        <java.version>1.8</java.version>
+        <drools.version>7.63.0.Final</drools.version>
         <reactor-bom>2023.0.6</reactor-bom>
-        <spring.boot.version>3.3.0</spring.boot.version>
+        <spring.boot.version>2.3.12.RELEASE</spring.boot.version>
         <spring-ai.version>0.8.1-SNAPSHOT</spring-ai.version>
         <maven-source-plugin.version>3.2.1</maven-source-plugin.version>
         <maven-plugin.version>3.8.1</maven-plugin.version>
@@ -97,13 +95,6 @@
                 <groupId>org.drools</groupId>
                 <artifactId>drools-bom</artifactId>
                 <version>${drools.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

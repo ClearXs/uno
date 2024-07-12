@@ -11,8 +11,8 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import jakarta.validation.constraints.NotNull;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;

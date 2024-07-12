@@ -19,7 +19,8 @@ public class DrawnField implements DrawnGeneric<Field> {
     @Override
     public ParameterizedFinder drawn(Field reflectType) {
         Type genericType = reflectType.getGenericType();
-        if (genericType instanceof ParameterizedType parameterizedType) {
+        if (genericType instanceof ParameterizedType) {
+            ParameterizedType parameterizedType = (ParameterizedType) genericType;
             return new ParameterizedFinder(reflectType, Lists.newArrayList(parameterizedType));
         }
         return new ParameterizedFinder(reflectType, Collections.emptyList());

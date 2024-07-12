@@ -10,6 +10,7 @@ import reactor.util.function.Tuples;
 import java.beans.IntrospectionException;
 import java.beans.PropertyDescriptor;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * value = map的wrapper
@@ -101,7 +102,7 @@ public class MapWrapper implements ValueWrapper {
                 instance.keySet()
                         .stream()
                         .map(this::find)
-                        .toList());
+                        .collect(Collectors.toList()));
     }
 
     @Override
@@ -109,7 +110,7 @@ public class MapWrapper implements ValueWrapper {
         return Flux.fromIterable(
                 instance.entrySet().stream()
                         .map(entry -> Tuples.of(entry.getKey(), entry.getValue()))
-                        .toList());
+                        .collect(Collectors.toList()));
     }
 
     @Override

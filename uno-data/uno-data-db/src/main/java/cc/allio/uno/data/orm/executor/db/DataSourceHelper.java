@@ -46,11 +46,11 @@ public final class DataSourceHelper {
      * @return username or null
      */
     public static String getUsername(DataSource dataSource) {
-        if (dataSource instanceof DruidDataSource druidDataSource) {
-            return druidDataSource.getUsername();
+        if (dataSource instanceof DruidDataSource) {
+            return ((DruidDataSource) dataSource).getUsername();
         }
-        if (dataSource instanceof HikariDataSource hikariDataSource) {
-            return hikariDataSource.getUsername();
+        if (dataSource instanceof HikariDataSource) {
+            return ((HikariDataSource) dataSource).getUsername();
         }
         return null;
     }
@@ -62,11 +62,11 @@ public final class DataSourceHelper {
      * @return password or null
      */
     public static String getPassword(DataSource dataSource) {
-        if (dataSource instanceof DruidDataSource druidDataSource) {
-            return druidDataSource.getPassword();
+        if (dataSource instanceof DruidDataSource) {
+            return ((DruidDataSource) dataSource).getPassword();
         }
-        if (dataSource instanceof HikariDataSource hikariDataSource) {
-            return hikariDataSource.getPassword();
+        if (dataSource instanceof HikariDataSource) {
+            return ((HikariDataSource) dataSource).getPassword();
         }
         return null;
     }
@@ -80,11 +80,11 @@ public final class DataSourceHelper {
      */
     public static String getAddress(DataSource dataSource) {
         String jdbcUrl = null;
-        if (dataSource instanceof DruidDataSource druidDataSource) {
-            jdbcUrl = druidDataSource.getUrl();
+        if (dataSource instanceof DruidDataSource) {
+            jdbcUrl = ((DruidDataSource) dataSource).getUrl();
         }
-        if (dataSource instanceof HikariDataSource hikariDataSource) {
-            jdbcUrl = hikariDataSource.getJdbcUrl();
+        if (dataSource instanceof HikariDataSource) {
+            jdbcUrl = ((HikariDataSource) dataSource).getJdbcUrl();
         }
         if (StringUtils.isBlank(jdbcUrl)) {
             return null;
@@ -112,11 +112,11 @@ public final class DataSourceHelper {
      */
     public static String getDatabase(DataSource dataSource) {
         String jdbcUrl = null;
-        if (dataSource instanceof DruidDataSource druidDataSource) {
-            jdbcUrl = druidDataSource.getUrl();
+        if (dataSource instanceof DruidDataSource) {
+            jdbcUrl = ((DruidDataSource) dataSource).getUrl();
         }
-        if (dataSource instanceof HikariDataSource hikariDataSource) {
-            jdbcUrl = hikariDataSource.getJdbcUrl();
+        if (dataSource instanceof HikariDataSource) {
+            jdbcUrl = ((HikariDataSource) dataSource).getJdbcUrl();
         }
         if (StringUtils.isBlank(jdbcUrl)) {
             return null;
@@ -149,13 +149,13 @@ public final class DataSourceHelper {
     public static DBType getDbType(DataSource dataSource) {
         DBType dbType = null;
         // druid
-        if (dataSource instanceof DruidDataSource druidDataSource) {
-            DbType druidDbType = DbType.of(druidDataSource.getDbType());
+        if (dataSource instanceof DruidDataSource) {
+            DbType druidDbType = DbType.of(((DruidDataSource) dataSource).getDbType());
             dbType = DruidDbTypeAdapter.getInstance().reverse(druidDbType);
         }
         // hikari
-        if (dataSource instanceof HikariDataSource hikariDataSource) {
-            String driverClassName = hikariDataSource.getDriverClassName();
+        if (dataSource instanceof HikariDataSource) {
+            String driverClassName = ((HikariDataSource) dataSource).getDriverClassName();
             dbType = fetchDriveClassName(driverClassName);
         }
         if (dbType == null) {

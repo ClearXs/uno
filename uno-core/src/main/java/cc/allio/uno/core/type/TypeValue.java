@@ -155,7 +155,8 @@ public class TypeValue {
 
         @Override
         public Object convert(Class<?> maybeType, Object virtualValue) {
-            if (virtualValue instanceof Map<?, ?> mapValue) {
+            if (virtualValue instanceof Map<?, ?>) {
+                Map<?, ?> mapValue = (Map<?, ?>) virtualValue;
                 Object javaObject = ClassUtils.newInstance(maybeType);
                 if (javaObject == null) {
                     return null;

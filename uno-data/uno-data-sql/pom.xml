@@ -5,7 +5,7 @@
     <parent>
         <groupId>cc.allio</groupId>
         <artifactId>uno-data</artifactId>
-        <version>1.1.9</version>
+        <version>1.1.9-jdk8</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -25,7 +25,7 @@
         </dependency>
         <dependency>
             <groupId>cc.allio</groupId>
-            <artifactId>uno-data-test</artifactId>
+            <artifactId>uno-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

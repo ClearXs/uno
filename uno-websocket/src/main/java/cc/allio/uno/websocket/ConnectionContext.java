@@ -1,8 +1,9 @@
 package cc.allio.uno.websocket;
 
-import jakarta.websocket.EndpointConfig;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+
+import javax.websocket.EndpointConfig;
 
 /**
  * 连接上下文

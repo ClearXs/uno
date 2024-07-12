@@ -6,6 +6,7 @@ import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -30,7 +31,7 @@ public class DrawnMethod implements DrawnGeneric<Method> {
                         )
                         .filter(type -> ParameterizedType.class.isAssignableFrom(type.getClass()))
                         .map(ParameterizedType.class::cast)
-                        .toList();
+                        .collect(Collectors.toList());
         return new ParameterizedFinder(reflectType, parameterizedTypes);
     }
 }

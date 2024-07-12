@@ -23,6 +23,7 @@ import java.util.Optional;
 import java.util.function.BooleanSupplier;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * contains DML relativity command operator.
@@ -254,7 +255,7 @@ public interface DMLCommandExecutor extends CommandExecutor {
                             Object pkValue = ValueWrapper.restore(pojoWrapper.getPKValue());
                             return (Serializable) pkValue;
                         })
-                        .toList());
+                        .collect(Collectors.toList()));
     }
 
     /**

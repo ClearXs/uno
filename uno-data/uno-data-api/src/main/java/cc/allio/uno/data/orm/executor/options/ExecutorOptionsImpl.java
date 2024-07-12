@@ -9,10 +9,10 @@ import cc.allio.uno.data.orm.executor.internal.SPIInnerCommandScanner;
 import com.google.common.base.Objects;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import org.springframework.context.ApplicationContext;
 
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;

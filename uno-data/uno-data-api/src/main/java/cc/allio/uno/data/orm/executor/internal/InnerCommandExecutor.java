@@ -53,8 +53,8 @@ public interface InnerCommandExecutor<R, O extends Operator, H> {
      */
     static <O extends Operator<?>> O castTo(Operator<?> original, Class<O> castFor) {
         try {
-            if (original instanceof WrapperOperator wrapperOperator) {
-                Operator<?> actual = wrapperOperator.getActual();
+            if (original instanceof WrapperOperator) {
+                Operator<?> actual = ((WrapperOperator) original).getActual();
                 return castFor.cast(actual);
             } else {
                 return castFor.cast(original);

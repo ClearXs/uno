@@ -8,14 +8,15 @@ import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import jakarta.validation.constraints.NotNull;
 import lombok.extern.slf4j.Slf4j;
 
+import javax.validation.constraints.NotNull;
 import java.util.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * command executor registry
@@ -86,11 +87,11 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
             }
             T commandExecutor;
             if (ifPresent) {
-                commandExecutor = (T) commandExecutorMap.compute(key, (_, _) -> commandExecutorSupplier.get());
-                optionsKeyMap.compute(executorOptions, (_, _) -> key);
+                commandExecutor = (T) commandExecutorMap.compute(key, (k, v) -> commandExecutorSupplier.get());
+                optionsKeyMap.compute(executorOptions, (k, v) -> key);
             } else {
-                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, _ -> commandExecutorSupplier.get());
-                optionsKeyMap.computeIfAbsent(executorOptions, _ -> key);
+                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, v -> commandExecutorSupplier.get());
+                optionsKeyMap.computeIfAbsent(executorOptions, k -> key);
             }
             boolean systemDefault = executorOptions.isSystemDefault();
             if (systemDefault) {
@@ -218,7 +219,7 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         return commandExecutorMap.values()
                 .stream()
                 .filter(commandExecutor -> commandExecutor.getOptions().isSystemDefault())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -267,6 +268,6 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
         return optionsKeyMap.keySet()
                 .stream()
                 .filter(options -> options.getExecutorKey().equals(executorKey))
-                .toList();
+                .collect(Collectors.toList());
     }
 }

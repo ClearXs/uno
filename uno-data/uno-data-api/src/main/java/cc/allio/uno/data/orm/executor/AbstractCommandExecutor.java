@@ -59,24 +59,31 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
             throw new DSLException("inner command executor manager is null, can't execute operator");
         }
         try {
-            return switch (commandType) {
-                case CREATE_TABLE -> manager.getCreateTable().exec(operator, resultSetHandler);
-                case DELETE_TABLE -> manager.getDeleteTable().exec(operator, resultSetHandler);
-                case EXIST_TABLE -> manager.getExistTable().exec(operator, resultSetHandler);
-                case ALERT_TABLE -> manager.getAlter().exec(operator, resultSetHandler);
-                case INSERT -> manager.getInsert().exec(operator, resultSetHandler);
-                case UPDATE -> manager.getUpdate().exec(operator, resultSetHandler);
-                case DELETE -> {
+            switch (commandType) {
+                case CREATE_TABLE:
+                    return manager.getCreateTable().exec(operator, resultSetHandler);
+                case DELETE_TABLE:
+                    return manager.getDeleteTable().exec(operator, resultSetHandler);
+                case EXIST_TABLE:
+                    return manager.getExistTable().exec(operator, resultSetHandler);
+                case ALERT_TABLE:
+                    return manager.getAlter().exec(operator, resultSetHandler);
+                case INSERT:
+                    return manager.getInsert().exec(operator, resultSetHandler);
+                case UPDATE:
+                    return manager.getUpdate().exec(operator, resultSetHandler);
+                case DELETE: {
                     // maybe execute logic delete
                     if (operator instanceof UpdateOperator) {
-                        yield manager.getUpdate().exec(operator, resultSetHandler);
+                        return manager.getUpdate().exec(operator, resultSetHandler);
                     } else {
-                        yield manager.getDelete().exec(operator, resultSetHandler);
+                        return manager.getDelete().exec(operator, resultSetHandler);
                     }
                 }
-                default -> throw new DSLException(String.format("unknown command type in bool %s, accepted " +
-                        "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType));
-            };
+                default:
+                    throw new DSLException(String.format("unknown command type in bool %s, accepted " +
+                            "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType));
+            }
         } catch (Throwable ex) {
             throw new DSLException(String.format("exec operator %s has err", operator.getClass().getName()), ex);
         }
@@ -104,16 +111,16 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
         }
 
         try {
-            return switch (commandType) {
-                case SHOW_TABLES ->
-                        manager.<R, ShowTablesOperator, STInnerCommandExecutor<R, ShowTablesOperator>>getShowTable().exec(operator, resultSetHandler);
-                case SHOW_COLUMNS ->
-                        manager.<R, ShowColumnsOperator, SCOInnerCommandExecutor<R, ShowColumnsOperator>>getShowColumn().exec(operator, resultSetHandler);
-                case SELECT ->
-                        manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(operator, resultSetHandler);
-                default ->
-                        throw new DSLException(String.format("unknown command type in queryList %s, accepted 'SHOW_TABLES', 'SHOW_COLUMNS', 'SELECT'", commandType));
-            };
+            switch (commandType) {
+                case SHOW_TABLES:
+                    return manager.<R, ShowTablesOperator, STInnerCommandExecutor<R, ShowTablesOperator>>getShowTable().exec(operator, resultSetHandler);
+                case SHOW_COLUMNS:
+                    return manager.<R, ShowColumnsOperator, SCOInnerCommandExecutor<R, ShowColumnsOperator>>getShowColumn().exec(operator, resultSetHandler);
+                case SELECT:
+                    return manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(operator, resultSetHandler);
+                default:
+                    throw new DSLException(String.format("unknown command type in queryList %s, accepted 'SHOW_TABLES', 'SHOW_COLUMNS', 'SELECT'", commandType));
+            }
         } catch (Throwable ex) {
             throw new DSLException("exec query list has err", ex);
         }
@@ -131,13 +138,13 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
     <T> T aspect(Operator<?> operator, CommandType commandType, Supplier<T> operate) {
         List<Interceptor> interceptors = options.getInterceptors();
         InterceptorAttributes beforeAttributes = new InterceptorAttributes(this, operator, commandType);
-        var before = Mono.defer(() -> {
+        Mono<InterceptorAttributes> before = Mono.defer(() -> {
             // before interceptor
             List<BeforeInterceptor> beforeInterceptors = interceptors.stream().map(BeforeInterceptor::new).collect(Collectors.toList());
             InterceptorChainImpl beforeChain = new InterceptorChainImpl(beforeInterceptors);
             return beforeChain.proceed(new InterceptorChainContext(beforeAttributes));
         });
-        var after = Mono.defer(() -> {
+        Mono<T> after = Mono.defer(() -> {
             Mono<T> result = Mono.fromSupplier(operate);
             List<AfterInterceptor> afterInterceptors = interceptors.stream().map(AfterInterceptor::new).collect(Collectors.toList());
             InterceptorAttributes afterAttributes = new InterceptorAttributes(beforeAttributes, result);

@@ -2,10 +2,10 @@ package cc.allio.uno.rule.drools;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.drools.base.rule.Declaration;
+import org.drools.compiler.lang.descr.*;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.drl.ast.descr.*;
-import org.kie.internal.definition.GenericTypeDefinition;
+import org.drools.core.factmodel.GenericTypeDefinition;
+import org.drools.core.rule.Declaration;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -158,7 +158,8 @@ public class DroolsPatternDescr extends PatternDescr {
         for (BaseDescr descr : this.constraint.getDescrs()) {
 
             // if it is a ExprConstraintDescr - check the type
-            if (descr instanceof ExprConstraintDescr desc) {
+            if (descr instanceof ExprConstraintDescr) {
+                ExprConstraintDescr desc = (ExprConstraintDescr) descr;
                 if (desc.getType().equals(type)) {
                     returnList.add(desc);
                 }
@@ -175,7 +176,7 @@ public class DroolsPatternDescr extends PatternDescr {
 
     public boolean isInternalFact(RuleBuildContext context) {
         return !(source == null || source instanceof EntryPointDescr ||
-                (source instanceof FromDescr fromDescr) && context.getEntryPointId(fromDescr.getExpression()).isPresent());
+                (source instanceof FromDescr) && context.getEntryPointId(((FromDescr) source).getExpression()).isPresent());
     }
 
     @Override

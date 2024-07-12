@@ -4,9 +4,9 @@ import cc.allio.uno.data.orm.executor.CommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandType;
 import cc.allio.uno.data.orm.executor.interceptor.Interceptor;
 import cc.allio.uno.data.orm.dsl.Operator;
-import org.junit.jupiter.api.Order;
+import org.springframework.core.annotation.Order;
 
-@Order(Integer.MAX_VALUE)
+@Order
 public class PrintInterceptor implements Interceptor {
 
     @Override

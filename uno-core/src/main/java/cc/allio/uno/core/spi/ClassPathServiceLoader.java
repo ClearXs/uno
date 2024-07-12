@@ -13,6 +13,7 @@ import java.net.URLConnection;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.util.*;
+import java.util.function.Supplier;
 
 /**
  * copy from jdk {@link ServiceLoader}.
@@ -24,7 +25,7 @@ import java.util.*;
  * @date 2024/3/15 08:54
  * @since 1.1.7
  */
-public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provider<T>> {
+public class ClassPathServiceLoader<T> implements Iterator<ClassPathServiceLoader.Provider<T>> {
 
     static final String PREFIX = "META-INF/services/";
 
@@ -40,7 +41,7 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
     Enumeration<URL> configs;
     Iterator<String> pending;
 
-    ServiceLoader.Provider<T> nextProvider;
+    ClassPathServiceLoader.Provider<T> nextProvider;
     ServiceConfigurationError nextError;
 
     ClassPathServiceLoader(Class<T> service, ClassLoader loader, Object... createArgs) {
@@ -148,11 +149,6 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
                 if (clazz == null)
                     return false;
 
-                if (clazz.getModule().isNamed()) {
-                    // ignore class if in named module
-                    continue;
-                }
-
                 if (service.isAssignableFrom(clazz)) {
                     Class<? extends T> type = (Class<? extends T>) clazz;
                     nextProvider = new ProviderImpl<>(service, type, null, acc, createdArgs);
@@ -166,11 +162,11 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
         return true;
     }
 
-    private ServiceLoader.Provider<T> nextService() {
+    private ClassPathServiceLoader.Provider<T> nextService() {
         if (!hasNextService())
             throw new NoSuchElementException();
 
-        ServiceLoader.Provider<T> provider = nextProvider;
+        ClassPathServiceLoader.Provider<T> provider = nextProvider;
         if (provider != null) {
             nextProvider = null;
             return provider;
@@ -195,11 +191,11 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
 
     @SuppressWarnings("removal")
     @Override
-    public ServiceLoader.Provider<T> next() {
+    public Provider<T> next() {
         if (acc == null) {
             return nextService();
         } else {
-            PrivilegedAction<ServiceLoader.Provider<T>> action = this::nextService;
+            PrivilegedAction<ClassPathServiceLoader.Provider<T>> action = this::nextService;
             return AccessController.doPrivileged(action, acc);
         }
     }
@@ -209,7 +205,7 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
      * permissions, the static factory to obtain the provider or the
      * provider's no-arg constructor.
      */
-    private static class ProviderImpl<S> implements ServiceLoader.Provider<S> {
+    private static class ProviderImpl<S> implements ClassPathServiceLoader.Provider<S> {
         final Class<S> service;
         final Class<? extends S> type;
         final Method factoryMethod;  // factory method or null
@@ -302,10 +298,14 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
 
         @Override
         public boolean equals(Object ob) {
-            return ob instanceof ProviderImpl<?> that
-                    && this.service == that.service
-                    && this.type == that.type
-                    && Objects.equals(this.acc, that.acc);
+            if (ob instanceof ProviderImpl<?>) {
+                ProviderImpl<?> that = (ProviderImpl<?>) ob;
+                return this.service == that.service
+                        && this.type == that.type
+                        && Objects.equals(this.acc, that.acc);
+            } else {
+                return false;
+            }
         }
     }
 
@@ -333,5 +333,35 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
 
     public static <S> ClassPathServiceLoader<S> load(Class<S> service, ClassLoader classLoader, Object... createdArgs) {
         return new ClassPathServiceLoader<>(service, classLoader, createdArgs);
+    }
+
+    public interface Provider<S> extends Supplier<S> {
+        /**
+         * Returns the provider type. There is no guarantee that this type is
+         * accessible or that it has a public no-args constructor. The {@link
+         * #get() get()} method should be used to obtain the provider instance.
+         *
+         * <p> When a module declares that the provider class is created by a
+         * provider factory then this method returns the return type of its
+         * public static "{@code provider()}" method.
+         *
+         * @return The provider type
+         */
+        Class<? extends S> type();
+
+        /**
+         * Returns an instance of the provider.
+         *
+         * @return An instance of the provider.
+         *
+         * @throws ServiceConfigurationError
+         *         If the service provider cannot be instantiated, or in the
+         *         case of a provider factory, the public static
+         *         "{@code provider()}" method returns {@code null} or throws
+         *         an error or exception. The {@code ServiceConfigurationError}
+         *         will carry an appropriate cause where possible.
+         */
+        @Override
+        S get();
     }
 }

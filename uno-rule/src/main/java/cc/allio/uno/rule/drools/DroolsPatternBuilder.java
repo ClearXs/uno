@@ -1,25 +1,23 @@
 package cc.allio.uno.rule.drools;
 
-import org.drools.base.base.ClassObjectType;
-import org.drools.base.reteoo.SortDeclarations;
-import org.drools.base.rule.Declaration;
-import org.drools.base.rule.Pattern;
-import org.drools.base.rule.PredicateConstraint;
-import org.drools.base.rule.constraint.Constraint;
 import org.drools.compiler.compiler.AnalysisResult;
 import org.drools.compiler.compiler.BoundIdentifiers;
+import org.drools.compiler.lang.descr.OperatorDescr;
+import org.drools.compiler.lang.descr.PredicateDescr;
 import org.drools.compiler.rule.builder.PatternBuilder;
 import org.drools.compiler.rule.builder.PredicateBuilder;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.drl.ast.descr.OperatorDescr;
-import org.drools.drl.ast.descr.PredicateDescr;
+import org.drools.core.reteoo.RuleTerminalNode;
+import org.drools.core.rule.Declaration;
+import org.drools.core.rule.Pattern;
+import org.drools.core.rule.PredicateConstraint;
+import org.drools.core.spi.Constraint;
 
 import java.util.Arrays;
 import java.util.Map;
 
 public class DroolsPatternBuilder extends PatternBuilder {
 
-    @Override
     protected Constraint buildEval(final RuleBuildContext context,
                                    final Pattern pattern,
                                    final PredicateDescr predicateDescr,
@@ -40,8 +38,8 @@ public class DroolsPatternBuilder extends PatternBuilder {
 
         BoundIdentifiers usedIdentifiers = analysis.getBoundIdentifiers();
 
-        Arrays.sort(previousDeclarations, SortDeclarations.instance);
-        Arrays.sort(localDeclarations, SortDeclarations.instance);
+        Arrays.sort(previousDeclarations, RuleTerminalNode.SortDeclarations.instance);
+        Arrays.sort(localDeclarations, RuleTerminalNode.SortDeclarations.instance);
 
         boolean isJavaEval = isEvalExpression && context.getDialect().isJava();
 
@@ -76,9 +74,9 @@ public class DroolsPatternBuilder extends PatternBuilder {
             mvelDeclarations[i++] = context.getDeclarationResolver().getDeclaration(global);
         }
 
-        boolean isDynamic = pattern.getObjectType().isTemplate() ||
-                ( !((ClassObjectType) pattern.getObjectType()).getClassType().isArray() &&
-                        !context.getKnowledgeBuilder().getTypeDeclaration(pattern.getObjectType()).isTypesafe() );
+        boolean isDynamic =
+                !pattern.getObjectType().getClassType().isArray() &&
+                        !context.getKnowledgeBuilder().getTypeDeclaration(pattern.getObjectType().getClassType()).isTypesafe();
 
         return DroolsConstraintBuilder.DROOLS_CONSTRAINT_BUILDER
                 .buildMvelConstraint(context.getPkg().getName(), expr, mvelDeclarations, getOperators(usedIdentifiers.getOperators()),

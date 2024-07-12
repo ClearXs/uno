@@ -72,10 +72,10 @@ public class DefaultCompilationRule implements CompilationRule {
                     if (parent != null) {
                         level = parent.getDepth() + 1;
                     }
-                    if (e instanceof AttrElement attr) {
-                        attr.setDepth(level);
-                    } else if (e instanceof LogicGroup logicGroup) {
-                        logicGroup.setDepth(level);
+                    if (e instanceof AttrElement) {
+                        ((AttrElement) e).setDepth(level);
+                    } else if (e instanceof LogicGroup) {
+                        ((LogicGroup) e).setDepth(level);
                     }
                 });
     }
@@ -85,8 +85,8 @@ public class DefaultCompilationRule implements CompilationRule {
         List<RuleAttr> ruleAttrs = Lists.newArrayList();
         tree.accept(
                 e -> {
-                    if (e instanceof AttrElement attr) {
-                        RuleAttr ruleAttr = attr.getRuleAttr();
+                    if (e instanceof AttrElement) {
+                        RuleAttr ruleAttr = ((AttrElement) e).getRuleAttr();
                         ruleAttrs.add(ruleAttr);
                     }
                 },

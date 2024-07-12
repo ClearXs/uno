@@ -6,10 +6,10 @@ import cc.allio.uno.core.util.template.Tokenizer;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.google.common.collect.Maps;
-import jakarta.websocket.Session;
-import jakarta.websocket.server.ServerEndpoint;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 
+import javax.websocket.Session;
+import javax.websocket.server.ServerEndpoint;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;

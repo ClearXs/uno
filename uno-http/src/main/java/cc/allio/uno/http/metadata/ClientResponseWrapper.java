@@ -1,7 +1,6 @@
 package cc.allio.uno.http.metadata;
 
 import cc.allio.uno.core.serializer.SerializerHolder;
-import cc.allio.uno.core.util.JsonUtils;
 import io.netty.buffer.Unpooled;
 
 import java.net.URI;
@@ -79,37 +78,31 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
     }
 
     @Override
-    public HttpStatusCode getStatus() {
+    public HttpStatus getStatus() {
         return response.statusCode();
     }
 
     @Override
     public <T> Mono<T> toExpect(Class<T> expect) {
         if (getStatus().value() != HttpStatus.OK.value()) {
-            String msg =
-                    String.format("Request url: %s\n Request param: %s\n Request Headers: %s \n Request Body %s",
-                            getUrl(),
-                            supplier.get().getParameters(),
-                            supplier.get().getHttpHeaderMetadata(),
-                            JsonUtils.toJson(supplier.get().getBody()));
             throw WebClientResponseException.create(
                     getStatus().value(),
-                    String.valueOf(getStatus().value()),
+                    getStatus().name(),
                     response.headers().asHttpHeaders(),
-                    msg.getBytes(),
+                    new byte[0],
                     null,
                     new HttpRequest() {
                         @Override
-                        public HttpMethod getMethod() {
-                            return supplier.get().getMethod();
+                        public String getMethodValue() {
+                            return ClientResponseWrapper.this.getMethod().name();
                         }
 
                         @Override
                         public URI getURI() {
                             try {
-                                return new URI(getUrl());
-                            } catch (URISyntaxException ex) {
-                                log.error("create error url has err", ex);
+                                return new URI(ClientResponseWrapper.this.getUrl());
+                            } catch (URISyntaxException e) {
+                                e.printStackTrace();
                             }
                             return null;
                         }

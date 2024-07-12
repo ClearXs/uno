@@ -23,16 +23,15 @@ class SPIOperatorHelperTest extends BaseTestCase {
 
     @Test
     void testMultiOperatorKey() {
-        var insert = SPIOperatorHelper.lazyGet(ShowColumnsOperator.class, OperatorKey.REDIS);
+        ShowColumnsOperator insert = SPIOperatorHelper.lazyGet(ShowColumnsOperator.class, OperatorKey.REDIS);
         assertNotNull(insert);
     }
 
     @Test
     void testSameKeySecondOperator() {
-        var show = SPIOperatorHelper.lazyGet(ShowColumnsOperator.class, OperatorKey.REDIS);
+        ShowColumnsOperator show = SPIOperatorHelper.lazyGet(ShowColumnsOperator.class, OperatorKey.REDIS);
         assertNotNull(show);
-
-        var insertOperator = SPIOperatorHelper.lazyGet(InsertOperator.class, OperatorKey.REDIS);
+        InsertOperator insertOperator = SPIOperatorHelper.lazyGet(InsertOperator.class, OperatorKey.REDIS);
         assertNotNull(insertOperator);
     }
 
@@ -43,7 +42,7 @@ class SPIOperatorHelperTest extends BaseTestCase {
 
     @Test
     void testFindHireachicalOperator() {
-        var show = SPIOperatorHelper.lazyGet(RedisShowColumnsOperator.class, OperatorKey.REDIS);
+        RedisShowColumnsOperator show = SPIOperatorHelper.lazyGet(RedisShowColumnsOperator.class, OperatorKey.REDIS);
         assertNotNull(show);
     }
 }

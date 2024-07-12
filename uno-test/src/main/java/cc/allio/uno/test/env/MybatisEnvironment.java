@@ -2,10 +2,10 @@ package cc.allio.uno.test.env;
 
 import cc.allio.uno.test.env.annotation.properties.MybatisProperties;
 import cc.allio.uno.test.CoreTest;
-import jakarta.annotation.Priority;
 import org.mybatis.spring.boot.autoconfigure.MybatisAutoConfiguration;
 import org.mybatis.spring.boot.autoconfigure.MybatisLanguageDriverAutoConfiguration;
 
+import javax.annotation.Priority;
 import java.lang.annotation.Annotation;
 
 /**

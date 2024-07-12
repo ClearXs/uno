@@ -2,6 +2,7 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
+import com.google.common.collect.Sets;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -20,7 +21,7 @@ import java.util.Set;
  */
 public class EnumTypeOperator<T extends Enum<?>> extends UnsupportedCalculateOperator<T> {
 
-    private static final Set<String> maybeValueTexts = Set.of("value", "label");
+    private static final Set<String> maybeValueTexts = Sets.newHashSet("value", "label");
 
     private final Class<?> enumType;
 

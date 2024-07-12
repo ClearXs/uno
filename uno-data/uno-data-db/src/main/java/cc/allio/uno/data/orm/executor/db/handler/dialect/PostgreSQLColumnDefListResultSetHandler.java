@@ -13,6 +13,7 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * {@link cc.allio.uno.data.orm.dsl.type.DBType#POSTGRESQL}的{@link cc.allio.uno.data.orm.executor.CommandExecutor#showColumns(Table)}结果集处理器
@@ -37,12 +38,11 @@ public class PostgreSQLColumnDefListResultSetHandler extends ColumnDefListResult
                     DBType dbType = obtainExecutorOptions().getDbType();
                     TypeTranslator typeTranslator = TypeTranslatorHolder.getTypeTranslator(dbType);
                     DataType dataType = Optional.ofNullable(typeTranslator.reserve(r.getStringValue(ShowColumnsOperator.DATA_TYPE_FIELD)))
-                            .or(() -> Optional.ofNullable(typeTranslator.reserve(r.getStringValue(UDT_NAME))))
                             .map(d -> buildDataType(d, r))
-                            .orElse(null);
+                            .orElseGet(() -> Optional.ofNullable(typeTranslator.reserve(r.getStringValue(UDT_NAME))).map(d -> buildDataType(d, r)).orElse(null));
                     columnDefBuilder.dataType(dataType);
                     return columnDefBuilder.build();
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 }

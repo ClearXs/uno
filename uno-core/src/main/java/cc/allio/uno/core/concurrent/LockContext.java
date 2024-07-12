@@ -70,7 +70,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
     LockContext(Map<String, Object> parameter, Lock lock) {
         this.optionalContext = new InternalParameterContext();
         this.optionalContext.putAll(parameter);
-        this.lock = Objects.requireNonNullElseGet(lock, ReentrantLock::new);
+        this.lock = Optional.ofNullable(lock).orElse(new ReentrantLock());
         this.errs = Queues.newConcurrentLinkedQueue();
     }
 

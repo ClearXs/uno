@@ -3,8 +3,8 @@ package cc.allio.uno.test.env;
 import cc.allio.uno.test.CoreTest;
 import cc.allio.uno.test.env.annotation.properties.MybatisPlusProperties;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
-import jakarta.annotation.Priority;
 
+import javax.annotation.Priority;
 import java.lang.annotation.Annotation;
 
 /**

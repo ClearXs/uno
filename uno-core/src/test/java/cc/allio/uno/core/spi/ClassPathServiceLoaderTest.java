@@ -13,7 +13,7 @@ public class ClassPathServiceLoaderTest extends BaseTestCase {
         ClassPathServiceLoader<User> load = ClassPathServiceLoader.load(User.class);
         User user = Lists.newArrayList(load)
                 .stream()
-                .map(ServiceLoader.Provider::get)
+                .map(ClassPathServiceLoader.Provider::get)
                 .findFirst()
                 .orElse(null);
         assertNotNull(user);
@@ -24,7 +24,7 @@ public class ClassPathServiceLoaderTest extends BaseTestCase {
         ClassPathServiceLoader<Product> load = ClassPathServiceLoader.load(Product.class, "123");
         Product product = Lists.newArrayList(load)
                 .stream()
-                .map(ServiceLoader.Provider::get)
+                .map(ClassPathServiceLoader.Provider::get)
                 .findFirst()
                 .orElse(null);
         assertNotNull(product);

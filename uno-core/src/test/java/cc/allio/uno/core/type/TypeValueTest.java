@@ -2,6 +2,7 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.BaseTestCase;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.Getter;
@@ -52,7 +53,13 @@ class TypeValueTest extends BaseTestCase {
 
     @Test
     void testCompositeType() {
-        Object o = new TypeValue(Parent.class, Map.of("children", Map.of("name", "n"))).tryConvert();
+
+        Map<String, Map<String, Object>> value = Maps.newHashMap();
+        Map<String, Object> kv = Maps.newHashMap();
+        kv.put("name", "n");
+        value.put("children", kv);
+
+        Object o = new TypeValue(Parent.class, value).tryConvert();
         assertNotNull(o);
         assertEquals(Parent.class, o.getClass());
         Children children = ((Parent) o).getChildren();

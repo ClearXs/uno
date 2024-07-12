@@ -31,23 +31,27 @@ public class DrawnClass implements DrawnGeneric<Class<?>> {
     List<ParameterizedType> drawnClass(Class<?> reflectType) {
         List<ParameterizedType> types = Lists.newArrayList();
         Type genericSuperclass = reflectType.getGenericSuperclass();
-        if (genericSuperclass != null) {
-            if (genericSuperclass instanceof Class<?> superClass && !Object.class.isAssignableFrom(superClass)) {
+        if (genericSuperclass instanceof Class<?>) {
+            Class<?> superClass = (Class<?>) genericSuperclass;
+            if (!Object.class.isAssignableFrom(superClass)) {
                 List<ParameterizedType> superParameterizedType = drawnClass(superClass);
                 types.addAll(superParameterizedType);
             }
-            if (genericSuperclass instanceof ParameterizedType parameterizedSuperclass) {
+            if (genericSuperclass instanceof ParameterizedType) {
+                ParameterizedType parameterizedSuperclass = (ParameterizedType) genericSuperclass;
                 types.add(parameterizedSuperclass);
             }
         }
         Type[] genericInterfaces = reflectType.getGenericInterfaces();
         if (ObjectUtils.isNotEmpty(genericInterfaces)) {
             for (Type genericInterface : genericInterfaces) {
-                if (genericInterface instanceof Class<?> superInterface) {
+                if (genericInterface instanceof Class<?>) {
+                    Class<?> superInterface = (Class<?>) genericInterface;
                     List<ParameterizedType> superParameterizedType = drawnClass(superInterface);
                     types.addAll(superParameterizedType);
                 }
-                if (genericInterface instanceof ParameterizedType parameterizedType) {
+                if (genericInterface instanceof ParameterizedType) {
+                    ParameterizedType parameterizedType = (ParameterizedType) genericInterface;
                     types.add(parameterizedType);
                 }
             }

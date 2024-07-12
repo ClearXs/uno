@@ -8,6 +8,7 @@ import java.lang.annotation.Annotation;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -70,8 +71,8 @@ public class EnvironmentFacade implements Environment {
     public int size() {
         return environments.stream()
                 .reduce(0, (c1, c2) -> {
-                    if (c2 instanceof EnvironmentFacade facade) {
-                        return c1 + facade.size();
+                    if (c2 instanceof EnvironmentFacade) {
+                        return c1 + ((EnvironmentFacade) c2).size();
                     }
                     return c1 + 1;
                 }, Integer::sum);
@@ -85,11 +86,11 @@ public class EnvironmentFacade implements Environment {
     public Collection<Environment> getEnvironments() {
         return environments.stream()
                 .flatMap(env -> {
-                    if (env instanceof EnvironmentFacade facade) {
-                        return facade.getEnvironments().stream();
+                    if (env instanceof EnvironmentFacade) {
+                        return ((EnvironmentFacade) env).getEnvironments().stream();
                     }
                     return Stream.of(env);
                 })
-                .toList();
+                .collect(Collectors.toList());
     }
 }

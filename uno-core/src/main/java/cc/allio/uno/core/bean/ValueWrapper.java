@@ -263,7 +263,7 @@ public interface ValueWrapper {
         Object target = getTarget();
         return Arrays.stream(FieldUtils.getAllFields(target.getClass()))
                 .map(Field::getName)
-                .toList();
+                .collect(Collectors.toList());
     }
 
     /**

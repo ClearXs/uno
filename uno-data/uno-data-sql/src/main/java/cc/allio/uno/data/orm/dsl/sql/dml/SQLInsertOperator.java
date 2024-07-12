@@ -21,6 +21,7 @@ import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import java.util.*;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Druid INSERT
@@ -58,7 +59,7 @@ public class SQLInsertOperator extends PrepareOperatorImpl<SQLInsertOperator> im
         return ParameterizedOutputVisitorUtils.restore(
                 getPrepareDSL(),
                 druidDbType,
-                getPrepareValues().stream().map(PrepareValue::getValue).toList());
+                getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList()));
     }
 
     @Override

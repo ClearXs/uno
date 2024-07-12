@@ -38,12 +38,13 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     public SQLCreateTableOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidType = SQLSupport.translateDb(dbType);
-        this.createTableStatement =
-                switch (druidType) {
-                    case DbType.mysql -> new MySqlCreateTableStatement();
-                    case DbType.oracle -> new OracleCreateTableStatement();
-                    default -> new SQLCreateTableStatement();
-                };
+        if (druidType == DbType.mysql) {
+            this.createTableStatement = new MySqlCreateTableStatement();
+        } else if (druidType == DbType.oracle) {
+            this.createTableStatement = new OracleCreateTableStatement();
+        } else {
+            this.createTableStatement = new SQLCreateTableStatement();
+        }
     }
 
     @Override

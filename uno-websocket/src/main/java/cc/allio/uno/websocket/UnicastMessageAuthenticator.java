@@ -1,8 +1,8 @@
 package cc.allio.uno.websocket;
 
 import com.google.auto.service.AutoService;
-import jakarta.websocket.Session;
 
+import javax.websocket.Session;
 import java.util.function.Predicate;
 
 /**

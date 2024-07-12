@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor.options;
 
 import cc.allio.uno.data.orm.executor.handler.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 import java.util.Map;
@@ -139,9 +140,8 @@ public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOpti
                 handlerClass,
                 k -> {
                     ServiceLoader<H> boolResultHandlers = ServiceLoader.load(handlerClass, classLoader);
-                    H handler = boolResultHandlers.stream()
-                            .findFirst()
-                            .map(ServiceLoader.Provider::get)
+                    H handler = Lists.newArrayList(boolResultHandlers)
+                            .stream().findFirst()
                             .orElse(null);
                     if (handler != null) {
                         handler.setExecutorOptions(this);

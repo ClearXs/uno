@@ -12,6 +12,7 @@ import reactor.util.function.Tuples;
 
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * INSERT Operator。
@@ -43,7 +44,9 @@ public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOper
      * @return self
      */
     default T insert(String fieldName, Object value) {
-        return insert(Map.of(fieldName, getValueIfNull(value)));
+        Map<String, Object> columns = Maps.newHashMap();
+        columns.put(fieldName, getValueIfNull(value));
+        return insert(columns);
     }
 
     /**
@@ -148,7 +151,7 @@ public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOper
     default T inserts(Map<DSLName, Object> values) {
         Set<DSLName> sqlNames = values.keySet();
         Collection<Object> value = values.values();
-        return columns(sqlNames.stream().toList()).values(Lists.newArrayList(value));
+        return columns(new ArrayList<>(sqlNames)).values(Lists.newArrayList(value));
     }
 
     /**
@@ -171,7 +174,7 @@ public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOper
      * @return self
      */
     default T batchInsert(List<String> columns, List<List<Object>> values) {
-        return batchInserts(columns.stream().map(DSLName::of).toList(), values);
+        return batchInserts(columns.stream().map(DSLName::of).collect(Collectors.toList()), values);
     }
 
     /**
@@ -213,7 +216,7 @@ public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOper
      * @return self
      */
     default T columns(String... columns) {
-        return columns(Lists.newArrayList(columns).stream().map(DSLName::of).toList());
+        return columns(Lists.newArrayList(columns).stream().map(DSLName::of).collect(Collectors.toList()));
     }
 
     /**

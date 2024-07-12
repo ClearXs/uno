@@ -1,8 +1,15 @@
 package cc.allio.uno.core.datastructure.tree;
 
+import lombok.AllArgsConstructor;
+
 import java.io.Serializable;
 
-public record DefaultExpand(Serializable id, Serializable parentId) implements Expand {
+@AllArgsConstructor
+public class DefaultExpand implements Expand {
+
+    private final Serializable id;
+    private final Serializable parentId;
+
     @Override
     public Serializable getId() {
         return id;

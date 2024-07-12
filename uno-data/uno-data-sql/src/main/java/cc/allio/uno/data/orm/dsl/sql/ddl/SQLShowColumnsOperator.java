@@ -108,21 +108,24 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<SQLShowColumnsOp
                             .select(DSLName.of(NUMERIC_SCALE_FIELD, DSLName.PLAIN_FEATURE))
                             .select(DSLName.of(DATETIME_PRECISION_FIELD, DSLName.PLAIN_FEATURE));
                     switch (druidDbType) {
-                        case DbType.mysql -> {
+                        case mysql: {
                             Table systemTable = Table.of(DSLName.of("INFORMATION_SCHEMA.COLUMNS", DSLName.PLAIN_FEATURE)).setSchema(null);
                             queryOperator.from(systemTable)
                                     .eq(DSLName.of(TABLE_NAME_FILED, DSLName.PLAIN_FEATURE), table.getName().format());
                             if (database != null) {
                                 queryOperator.eq(DSLName.of(TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName());
                             }
+                            break;
                         }
-                        case DbType.h2, DbType.postgresql -> {
+                        case h2:
+                        case postgresql: {
                             Table systemTable = Table.of(DSLName.of("INFORMATION_SCHEMA.COLUMNS", DSLName.PLAIN_FEATURE)).setSchema(null);
                             queryOperator
                                     .from(systemTable)
                                     .eq(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), table.getName().format());
+                            break;
                         }
-                        case DbType.db2 -> {
+                        case db2: {
                             Table systemTable = Table.of(DSLName.of("SYSCAT.COLUMNS", DSLName.PLAIN_FEATURE)).setSchema(null);
                             queryOperator
                                     .from(systemTable)
@@ -131,8 +134,8 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<SQLShowColumnsOp
                     }
                 })
                 .execute();
-        if (result instanceof DSLException err) {
-            throw err;
+        if (result instanceof DSLException) {
+            throw ((DSLException) result);
         }
         this.table = table;
         return self();

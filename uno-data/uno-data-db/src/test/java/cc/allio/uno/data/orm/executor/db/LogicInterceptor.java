@@ -10,15 +10,15 @@ public class LogicInterceptor implements Interceptor {
 
     @Override
     public void onDeleteBefore(CommandExecutor commandExecutor, Operator<?> operator) {
-        if (operator instanceof UpdateOperator updateOperator) {
-            updateOperator.strictFill("is_deleted", 1);
+        if (operator instanceof UpdateOperator) {
+            ((UpdateOperator) operator).strictFill("is_deleted", 1);
         }
     }
 
     @Override
     public void onQueryBefore(CommandExecutor commandExecutor, Operator<?> operator) {
-        if (operator instanceof QueryOperator queryOperator) {
-            queryOperator.eq("is_deleted", 0);
+        if (operator instanceof QueryOperator) {
+            ((QueryOperator) operator).eq("is_deleted", 0);
         }
     }
 }

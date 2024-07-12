@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.sql.dialect.type;
 
 import cc.allio.uno.data.orm.dsl.type.DSLType;
+import com.google.common.collect.Lists;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -32,11 +33,11 @@ public class PostgreSQLTypeDelegate extends DSLTypeDelegate {
     @Getter
     @AllArgsConstructor
     public enum PostgreSQLLinkType implements DSLLinkType {
-        INT8("int8", Types.BIGINT, null, null, List.of(DSLType.BIGINT)),
-        FLOAT("float8", Types.FLOAT, 12, 2, List.of(DSLType.FLOAT)),
-        NUMERIC("numeric", Types.DOUBLE, 12, 2, List.of(DSLType.DOUBLE, DSLType.NUMBER)),
-        INT4("int4", Types.INTEGER, null, null, List.of(DSLType.INTEGER)),
-        INT2("int2", Types.INTEGER, null, null, List.of(DSLType.SMALLINT));
+        INT8("int8", Types.BIGINT, null, null, Lists.newArrayList(DSLType.BIGINT)),
+        FLOAT("float8", Types.FLOAT, 12, 2, Lists.newArrayList(DSLType.FLOAT)),
+        NUMERIC("numeric", Types.DOUBLE, 12, 2, Lists.newArrayList(DSLType.DOUBLE, DSLType.NUMBER)),
+        INT4("int4", Types.INTEGER, null, null, Lists.newArrayList(DSLType.INTEGER)),
+        INT2("int2", Types.INTEGER, null, null, Lists.newArrayList(DSLType.SMALLINT));
 
         private final String name;
         private final int jdbcType;

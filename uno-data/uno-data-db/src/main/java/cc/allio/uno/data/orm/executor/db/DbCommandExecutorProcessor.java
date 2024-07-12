@@ -30,7 +30,7 @@ public class DbCommandExecutorProcessor implements BeanPostProcessor {
         proxyFactory.addAspect(DbCommandExecutorAspect.class);
         NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
         pointcut.setMappedName("getExecutor");
-        MethodInterceptor methodInterceptor = _ -> CommandExecutorFactory.getDSLExecutor(ExecutorKey.DB);
+        MethodInterceptor methodInterceptor = k -> CommandExecutorFactory.getDSLExecutor(ExecutorKey.DB);
         proxyFactory.addAdvisor(new DefaultPointcutAdvisor(pointcut, methodInterceptor));
         return proxyFactory.getProxy();
     }

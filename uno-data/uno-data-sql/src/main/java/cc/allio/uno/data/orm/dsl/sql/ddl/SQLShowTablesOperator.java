@@ -15,6 +15,7 @@ import com.google.common.collect.Lists;
 
 import java.util.List;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 @AutoService(ShowTablesOperator.class)
 @Operator.Group(OperatorKey.SQL_LITERAL)
@@ -97,16 +98,18 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOper
                 .onDb(druidDbType)
                 .then(() -> {
                     switch (druidDbType) {
-                        case DbType.mysql ->
-                                queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
-                                        .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
-                                        .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
-                                        .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
-                                        .from(formTable)
-                                        .eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName().format())
-                                        .and()
-                                        .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
-                        case DbType.h2, DbType.postgresql -> {
+                        case mysql:
+                            queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
+                                    .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
+                                    .from(formTable)
+                                    .eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName().format())
+                                    .and()
+                                    .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
+                            break;
+                        case h2:
+                        case postgresql: {
                             queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
                                     .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
                                     .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
@@ -124,14 +127,14 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOper
                         if (tables.size() == 1) {
                             queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE), tables.get(0).getName().format());
                         } else {
-                            List<String> tableNames = tables.stream().map(Table::getName).map(DSLName::format).toList();
+                            List<String> tableNames = tables.stream().map(Table::getName).map(DSLName::format).collect(Collectors.toList());
                             queryOperator.in(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE), tableNames);
                         }
                     }
                 })
                 .execute();
-        if (result instanceof DSLException err) {
-            throw err;
+        if (result instanceof DSLException) {
+            throw ((DSLException) result);
         }
     }
 

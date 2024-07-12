@@ -2,7 +2,7 @@ package cc.allio.uno.rule.drools;
 
 import cc.allio.uno.rule.api.Rule;
 import lombok.Getter;
-import org.drools.drl.ast.descr.RuleDescr;
+import org.drools.compiler.lang.descr.RuleDescr;
 
 /**
  * 添加{@link Rule}实例

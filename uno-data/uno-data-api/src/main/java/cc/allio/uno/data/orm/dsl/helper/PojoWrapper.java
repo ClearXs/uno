@@ -22,14 +22,14 @@ import cc.allio.uno.data.orm.dsl.type.DSLType;
 import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import jakarta.persistence.Column;
-import jakarta.persistence.Id;
 import lombok.Getter;
 import org.springframework.core.annotation.AnnotationUtils;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.util.function.Tuple2;
 
+import javax.persistence.Column;
+import javax.persistence.Id;
 import java.beans.PropertyDescriptor;
 import java.lang.reflect.Field;
 import java.util.*;
@@ -119,7 +119,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         this.table = obtainTable();
         this.pkColumn = columnDefs.stream().filter(ColumnDef::isPk).findFirst().orElse(null);
         this.deletedColumn = columnDefs.stream().filter(ColumnDef::isDeleted).findFirst().orElse(null);
-        this.notPkColumns = columnDefs.stream().filter(columnDef -> !columnDef.isPk()).toList();
+        this.notPkColumns = columnDefs.stream().filter(columnDef -> !columnDef.isPk()).collect(Collectors.toList());
         this.columnDefMap = columnDefs.stream().collect(Collectors.toMap(ColumnDef::getDslName, f -> f));
     }
 
@@ -157,7 +157,7 @@ public class PojoWrapper<T> implements ValueWrapper {
      * <ol>
      *     <li>优先从{@link PojoResolver#obtainTableResolver()}中取值,要求{@link #pojo}不为null</li>
      *     <li>再次从{@link TableResolve}中取值</li>
-     *     <li>最后尝试按照jpa {@link jakarta.persistence.Table}注解中取值</li>
+     *     <li>最后尝试按照jpa {@link javax.persistence.Table}注解中取值</li>
      * </ol>
      *
      * @return Table instance
@@ -167,8 +167,8 @@ public class PojoWrapper<T> implements ValueWrapper {
     private Table obtainTable() {
         return Step.<Table>start()
                 .then(() -> {
-                    if (pojo instanceof PojoResolver pojoResolver) {
-                        return Optional.ofNullable(pojoResolver.obtainTableResolver())
+                    if (pojo instanceof PojoResolver) {
+                        return Optional.ofNullable(((PojoResolver) pojo).obtainTableResolver())
                                 .map(c -> c.resolve(pojoClass))
                                 .orElse(null);
                     }
@@ -181,7 +181,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                 TableResolver tableResolver =
                                         TABLE_RESOLVES.computeIfAbsent(
                                                 pojoClass,
-                                                _ -> {
+                                                k -> {
                                                     Class<? extends TableResolver> tableResolverClass = tableResolve.value();
                                                     return Optional.ofNullable(tableResolverClass)
                                                             .map(ClassUtils::newInstance)
@@ -194,7 +194,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                 })
                 .then(() -> {
                     // 取jpa注解
-                    jakarta.persistence.Table tableAnno = AnnotationUtils.findAnnotation(pojoClass, jakarta.persistence.Table.class);
+                    javax.persistence.Table tableAnno = AnnotationUtils.findAnnotation(pojoClass, javax.persistence.Table.class);
                     String indexName = StringPool.EMPTY;
                     Table table = new Table();
                     if (tableAnno != null) {
@@ -230,8 +230,8 @@ public class PojoWrapper<T> implements ValueWrapper {
                 .orElseGet(() ->
                         Step.<List<ColumnDef>>start()
                                 .then(() -> {
-                                    if (pojo instanceof PojoResolver pojoResolver) {
-                                        return Optional.ofNullable(pojoResolver.obtainColumnDefListResolver())
+                                    if (pojo instanceof PojoResolver) {
+                                        return Optional.ofNullable(((PojoResolver) pojo).obtainColumnDefListResolver())
                                                 .map(c -> c.resolve(pojoClass))
                                                 .orElse(null);
                                     }
@@ -244,7 +244,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                                 ColumnDefListResolver columnDefListResolver =
                                                         CLASS_COLUMN_LIST_RESOLVERS.computeIfAbsent(
                                                                 pojoClass,
-                                                                _ -> {
+                                                                k -> {
                                                                     Class<? extends ColumnDefListResolver> columnDefResolverClass = columnDefListResolve.value();
                                                                     return Optional.ofNullable(columnDefResolverClass)
                                                                             .map(ClassUtils::newInstance)
@@ -258,7 +258,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                 .then(() ->
                                         pojoFields.stream()
                                                 .map(this::createColumnDef)
-                                                .toList())
+                                                .collect(Collectors.toList()))
                                 .end());
     }
 
@@ -288,8 +288,8 @@ public class PojoWrapper<T> implements ValueWrapper {
     private ColumnDef createColumnDef(Field field) {
         return Step.<ColumnDef>start()
                 .then(() -> {
-                    if (pojo instanceof PojoResolver pojoResolver) {
-                        return Optional.ofNullable(pojoResolver.obtainColumnDefResolver())
+                    if (pojo instanceof PojoResolver) {
+                        return Optional.ofNullable(((PojoResolver) pojo).obtainColumnDefResolver())
                                 .map(c -> c.resolve(field))
                                 .orElse(null);
                     }
@@ -302,7 +302,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                             .flatMap(c -> {
                                 ColumnDefResolver columnDefResolver = COLUMN_RESOLVES.computeIfAbsent(
                                         field,
-                                        _ -> {
+                                        k -> {
                                             Class<? extends ColumnDefResolver> columnResolverClass = columnDefResolve.value();
                                             return Optional.ofNullable(columnResolverClass)
                                                     .map(ClassUtils::newInstance)
@@ -367,7 +367,7 @@ public class PojoWrapper<T> implements ValueWrapper {
      */
     public Collection<DSLName> getColumnDSLName() {
         if (ObjectUtils.isNotEmpty(columnDefs)) {
-            return columnDefs.stream().map(ColumnDef::getDslName).toList();
+            return columnDefs.stream().map(ColumnDef::getDslName).collect(Collectors.toList());
         }
         return Collections.emptyList();
     }
@@ -380,7 +380,7 @@ public class PojoWrapper<T> implements ValueWrapper {
     public List<Object> getColumnValues() {
         return columnDefs.stream()
                 .map(column -> getForce(column.getDslName().format(DSLName.HUMP_FEATURE)))
-                .toList();
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -408,8 +408,7 @@ public class PojoWrapper<T> implements ValueWrapper {
                                 return Mono.justOrEmpty(Optional.ofNullable(columnDef))
                                         .map(ColumnDef::getDataType)
                                         .map(DataType::getDslType)
-                                        .mapNotNull(dslType -> TypeRegistry.getInstance().findJavaType(dslType.getJdbcType()))
-                                        .map(javaType -> TypeOperatorFactory.translator(javaType.getJavaType()).convert(value));
+                                        .map(dslType -> TypeOperatorFactory.translator(Objects.requireNonNull(TypeRegistry.getInstance().findJavaType(dslType.getJdbcType())).getJavaType()).convert(value));
                             })
                             .cast(fieldType)
                             .onErrorResume(ex -> Mono.just(value))
@@ -500,7 +499,7 @@ public class PojoWrapper<T> implements ValueWrapper {
         return Optional.ofNullable(pojoInspection)
                 .map(p -> {
                     Class<? extends PojoInspect> pojoInspectClass = p.value();
-                    return POJO_INSPECTS.computeIfAbsent(pojoClass, _ -> Optional.ofNullable(pojoInspectClass).map(ClassUtils::newInstance).orElse(null));
+                    return POJO_INSPECTS.computeIfAbsent(pojoClass, v -> Optional.ofNullable(pojoInspectClass).map(ClassUtils::newInstance).orElse(null));
                 })
                 .orElse(DEFAULT_POJO_INSPECT);
     }

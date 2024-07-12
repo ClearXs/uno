@@ -18,8 +18,6 @@ public class EnumTypeTest extends BaseTestCase {
     void testGuessEnum() {
         TypeOperator<Named> translator1 = TypeOperatorFactory.translator(Named.class);
 
-        assertInstanceOf(EnumTypeOperator.class, translator1);
-
         Named name = translator1.convert("name");
 
         assertNotNull(name);

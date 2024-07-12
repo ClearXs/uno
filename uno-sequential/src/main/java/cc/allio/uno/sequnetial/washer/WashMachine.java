@@ -1,23 +1,10 @@
 package cc.allio.uno.sequnetial.washer;
 
-import cc.allio.uno.core.reactive.BufferRate;
-import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
-import cc.allio.uno.data.orm.executor.CommandExecutor;
-import cc.allio.uno.data.orm.executor.CommandExecutorFactory;
-import cc.allio.uno.data.orm.executor.options.ExecutorKey;
-import cc.allio.uno.sequnetial.Sequential;
 import cc.allio.uno.sequnetial.context.SequentialContext;
 import com.google.common.collect.Lists;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.Disposable;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * 清洗机器
@@ -29,9 +16,6 @@ import java.util.stream.Collectors;
 @Slf4j
 public class WashMachine {
 
-    private FluxSink<WasherRecord> recorder;
-    private final Disposable recorderDisposable;
-
     private final Queue<Washer> wightWasher;
     private final SequentialContext context;
 
@@ -41,16 +25,6 @@ public class WashMachine {
             this.wightWasher.addAll(Lists.newArrayList(washers));
         }
         this.context = sequentialContext;
-        this.recorderDisposable =
-                BufferRate.create(Flux.<WasherRecord>create(sink -> recorder = sink))
-                        .doOnNext(records -> {
-                            AggregateCommandExecutor sqlExecutor = CommandExecutorFactory.getDSLExecutor(ExecutorKey.ELASTICSEARCH);
-                            if (sqlExecutor != null) {
-                                sqlExecutor.batchInsertPojos(records);
-                            }
-                        })
-                        .onErrorContinue((err, o) -> log.error("the save wash record is failed", err))
-                        .subscribe();
     }
 
     /**
@@ -79,9 +53,6 @@ public class WashMachine {
      */
     public void stop() {
         this.wightWasher.clear();
-        if (recorderDisposable != null && !recorderDisposable.isDisposed()) {
-            recorderDisposable.dispose();
-        }
     }
 
     /**
@@ -108,39 +79,6 @@ public class WashMachine {
      * @param conditions 达到清洗的条件
      */
     private void record(List<Washer> conditions) {
-        // 构建WasherRecord
-        WasherRecord washerRecord = new WasherRecord();
-        Sequential sequential = context.getRealSequential();
-        washerRecord.setType(sequential.getOriginType().getCode());
-        Map<String, String> conditionsDescription = conditions.stream().collect(Collectors.toMap(v -> v.getClass().getSimpleName(), Washer::description));
-        washerRecord.setConditions(conditionsDescription);
-        washerRecord.setProperties(sequential.getValues());
-        recorder.next(washerRecord);
     }
 
-    /**
-     * 清洗记录
-     */
-    @Data
-    @Table(name = "wash_${type}")
-    public static class WasherRecord {
-
-        @Id
-        private Long id;
-
-        /**
-         * 时序数据类型
-         */
-        private String type;
-
-        /**
-         * 条件集的描述
-         */
-        private Map<String, String> conditions;
-
-        /**
-         * 记录属性
-         */
-        private Map<String, Object> properties;
-    }
 }

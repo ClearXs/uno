@@ -1,13 +1,13 @@
 package cc.allio.uno.rule.drools;
 
-import org.drools.base.definitions.InternalKnowledgePackage;
 import org.drools.compiler.builder.impl.KnowledgeBuilderImpl;
 import org.drools.compiler.compiler.DialectCompiletimeRegistry;
+import org.drools.compiler.lang.descr.PackageDescr;
+import org.drools.compiler.lang.descr.RuleDescr;
 import org.drools.compiler.rule.builder.RuleBuildContext;
-import org.drools.drl.ast.descr.PackageDescr;
-import org.drools.drl.ast.descr.RuleDescr;
-import org.drools.kiesession.rulebase.InternalKnowledgeBase;
-import org.drools.kiesession.rulebase.KnowledgeBaseFactory;
+import org.drools.core.definitions.InternalKnowledgePackage;
+import org.drools.core.impl.InternalKnowledgeBase;
+import org.drools.core.impl.KnowledgeBaseFactory;
 import org.drools.mvel.builder.MVELDialect;
 import org.junit.jupiter.api.Test;
 import org.kie.api.runtime.KieSession;

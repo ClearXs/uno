@@ -25,7 +25,8 @@ public class MultiCheckedException extends Exception {
      * @param <T> 受检查的类型
      */
     public <T extends Throwable> void appendException(T ex) {
-        if (ex instanceof RuntimeException runtimeException) {
+        if (ex instanceof RuntimeException) {
+            RuntimeException runtimeException = (RuntimeException) ex;
             unchecked.put(runtimeException.getClass(), runtimeException);
         } else {
             checked.put(ex.getClass(), ex);
@@ -43,11 +44,11 @@ public class MultiCheckedException extends Exception {
         if (hasUncheckedException(errType)) {
             return (T) unchecked.get(errType);
         }
-        var err = Single.from(unchecked.entrySet())
+        T err = (T) Single.from(unchecked.entrySet())
                 .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
                 .map(Map.Entry::getValue)
                 .orElse(null);
-        return (T) err;
+        return err;
     }
 
     /**
@@ -61,12 +62,12 @@ public class MultiCheckedException extends Exception {
         if (hasCheckedException(errType)) {
             return (T) checked.get(errType);
         }
-        var err = Single.from(checked.entrySet())
+        T err = (T) Single.from(checked.entrySet())
                 .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
                 .map(Map.Entry::getValue)
                 .orElse(null);
 
-        return (T) err;
+        return err;
     }
 
     /**

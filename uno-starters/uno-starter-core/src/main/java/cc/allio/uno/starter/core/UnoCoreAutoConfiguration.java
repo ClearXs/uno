@@ -34,8 +34,8 @@ public class UnoCoreAutoConfiguration implements ApplicationContextAware {
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
         ConfigurableEnvironment environment = (ConfigurableEnvironment) applicationContext.getEnvironment();
         Env currentEnv = Envs.getCurrentEnv();
-        if (currentEnv instanceof SystemEnv systemEnv) {
-            Envs.reset(new SpringEnv(systemEnv, environment));
+        if (currentEnv instanceof SystemEnv) {
+            Envs.reset(new SpringEnv((SystemEnv) currentEnv, environment));
         }
     }
 }

@@ -3,9 +3,9 @@ package cc.allio.uno.data.orm.dsl.opeartorgroup;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
+import javax.validation.constraints.NotNull;
 import java.util.Collection;
 import java.util.function.UnaryOperator;
 

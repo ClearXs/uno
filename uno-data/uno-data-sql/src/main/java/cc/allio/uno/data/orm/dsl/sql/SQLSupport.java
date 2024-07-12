@@ -21,9 +21,11 @@ import com.google.common.collect.Lists;
 import reactor.util.function.Tuple2;
 import reactor.util.function.Tuples;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.TimeZone;
+import java.util.stream.Collectors;
 
 /**
  * druid sql 相关工具类
@@ -34,7 +36,7 @@ import java.util.TimeZone;
  */
 public class SQLSupport implements Self<SQLSupport> {
 
-    private static final List<DbType> CURRENT_SUPPORT_DB = List.of(DbType.mysql, DbType.postgresql, DbType.db2, DbType.h2);
+    private static final List<DbType> CURRENT_SUPPORT_DB = Lists.newArrayList(DbType.mysql, DbType.postgresql, DbType.db2, DbType.h2);
     private static final Object EMPTY = new Object();
 
     private static final List<SQLBinaryOperator> BINARY_VALUABLE_OPERATOR = Lists.newArrayList();
@@ -305,10 +307,13 @@ public class SQLSupport implements Self<SQLSupport> {
             // 值类型
             String exprColumn = getExprColumn(left);
             Object exprValue = getExprValue(right);
+            Tuple2<String, Object> t2 = Tuples.of(exprColumn, exprValue);
+            List<Tuple2<String, Object>> columnValues = new ArrayList<>();
+            columnValues.add(t2);
             trigger.accept(
                     new SQLBinaryOpExpr(left, operator, PLACEHOLDER),
                     mode,
-                    List.of(Tuples.of(exprColumn, exprValue)));
+                    columnValues);
         } else {
             if (isBetweenExpr(left)) {
                 betweenTrigger((SQLBetweenExpr) left, mode, trigger);
@@ -348,7 +353,7 @@ public class SQLSupport implements Self<SQLSupport> {
         trigger.accept(
                 newBetweenExpr,
                 mode,
-                List.of(begin, end));
+                Lists.newArrayList(begin, end));
     }
 
     /**
@@ -371,7 +376,7 @@ public class SQLSupport implements Self<SQLSupport> {
                             Object exprValue = getExprValue(target);
                             return Tuples.of(exprColumn, exprValue);
                         })
-                        .toList();
+                        .collect(Collectors.toList());
         trigger.accept(newInExpr, mode, consumeResource);
     }
 

@@ -1,9 +1,7 @@
 package cc.allio.uno.core.util.template.mvel;
 
-import cc.allio.uno.core.util.IoUtils;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.TemplateContext;
-import io.protostuff.Input;
 import lombok.extern.slf4j.Slf4j;
 import org.mvel2.ParserContext;
 import org.mvel2.templates.CompiledTemplate;
@@ -11,7 +9,6 @@ import org.mvel2.templates.TemplateCompiler;
 import org.mvel2.templates.TemplateRuntime;
 
 import java.io.*;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.util.Map;
 
@@ -58,7 +55,11 @@ public class MVELExpressionTemplate implements ExpressionTemplate {
         } catch (IOException ex) {
             log.error("Failed to mvel parse template {}", template, ex);
         }
-        return out.toString(StandardCharsets.UTF_8);
+        try {
+            return out.toString(String.valueOf(StandardCharsets.UTF_8));
+        } catch (UnsupportedEncodingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

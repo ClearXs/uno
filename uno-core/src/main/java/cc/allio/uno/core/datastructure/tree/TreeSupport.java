@@ -52,7 +52,7 @@ public final class TreeSupport {
                             }
                             return element;
                         })
-                        .toList();
+                        .collect(Collectors.toList());
         return adjust(expands);
     }
 
@@ -157,14 +157,14 @@ public final class TreeSupport {
      * @param <R> the expand type R
      * @see #doExpandFn(Collection, MethodFunction, Function)
      */
-    public static <T, R> Collection<R> withExpandFn(Collection<T> forest, MethodFunction<T,Collection<T>> childrenFunc, Function<T, R> transfer) {
-        return doExpandFn(forest, childrenFunc, transfer).toList();
+    public static <T, R> Collection<R> withExpandFn(Collection<T> forest, MethodFunction<T, Collection<T>> childrenFunc, Function<T, R> transfer) {
+        return doExpandFn(forest, childrenFunc, transfer).collect(Collectors.toList());
     }
 
     /**
      * through use java stream feature, do expand
      */
-    static <T, R> Stream<R> doExpandFn(Collection<T> forest, MethodFunction<T,Collection<T>> childrenFunc, Function<T, R> transfer) {
+    static <T, R> Stream<R> doExpandFn(Collection<T> forest, MethodFunction<T, Collection<T>> childrenFunc, Function<T, R> transfer) {
         return forest.stream()
                 .flatMap(element -> {
                     String fieldName = childrenFunc.getFieldName();

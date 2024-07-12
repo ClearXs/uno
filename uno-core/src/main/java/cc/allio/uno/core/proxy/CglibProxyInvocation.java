@@ -21,8 +21,8 @@ public class CglibProxyInvocation implements ProxyInvocation {
         Enhancer enhancer = new Enhancer();
         enhancer.setSuperclass(target);
         enhancer.setCallback((MethodInterceptor) (obj, method, args1, proxy) -> {
-            if (interceptor instanceof CglibInvocationInterceptor cglibInvocationInterceptor) {
-                return cglibInvocationInterceptor.invoke(obj, method, args1, proxy);
+            if (interceptor instanceof CglibInvocationInterceptor) {
+                return ((CglibInvocationInterceptor) interceptor).invoke(obj, method, args1, proxy);
             }
             return interceptor.invoke(obj, method, args1);
         });
@@ -49,7 +49,7 @@ public class CglibProxyInvocation implements ProxyInvocation {
         return Arrays.stream(args)
                 .filter(Objects::nonNull)
                 .map(Object::getClass)
-                .toList()
+                .collect(Collectors.toList())
                 .toArray(new Class<?>[]{});
     }
 }

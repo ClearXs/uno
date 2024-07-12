@@ -82,7 +82,8 @@ public class ParameterizedFinder {
         return parameterizedTypes
                 .stream()
                 .filter(p -> {
-                    if (p.getRawType() instanceof Class<?> rawClass) {
+                    if (p.getRawType() instanceof Class<?>) {
+                        Class<?> rawClass = (Class<?>) p.getRawType();
                         return rawType.isAssignableFrom(rawClass);
                     }
                     return false;

@@ -5,12 +5,12 @@ import cc.allio.uno.core.reflect.Instantiation;
 import cc.allio.uno.core.reflect.InstantiationBuilder;
 import cc.allio.uno.core.reflect.InstantiationFeature;
 import com.google.common.collect.Maps;
-import jakarta.annotation.Priority;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+import javax.annotation.Priority;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;

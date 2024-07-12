@@ -401,8 +401,7 @@ public class ResultGroup {
         return Optional.ofNullable(getRow(columnName))
                 .map(ResultRow::getValue)
                 .map(transfer)
-                .or(() -> Optional.ofNullable(defaultValue.get()))
                 .map(adjuster)
-                .orElse(null);
+                .orElseGet(() -> Optional.ofNullable(defaultValue.get()).map(adjuster).orElse(null));
     }
 }

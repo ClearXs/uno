@@ -2,8 +2,8 @@ package cc.allio.uno.core.type;
 
 import cc.allio.uno.core.StringPool;
 import com.google.common.collect.Sets;
-import jakarta.annotation.Nonnull;
 
+import javax.annotation.Nonnull;
 import java.math.BigDecimal;
 import java.util.*;
 import java.util.function.Consumer;

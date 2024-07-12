@@ -5,6 +5,7 @@ import cc.allio.uno.core.function.VoidConsumer;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.type.DBType;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 import lombok.Data;
@@ -18,6 +19,7 @@ import java.util.Set;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
+import java.util.stream.Stream;
 
 /**
  * Helper
@@ -66,8 +68,8 @@ public final class SPIOperatorHelper {
                             throw new DSLException(
                                     String.format(
                                             "On the basis of SPI load operator %s and %s, " +
-                                            "but not found counterpart Impl, " +
-                                            "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
+                                                    "but not found counterpart Impl, " +
+                                                    "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
                         }
                     } finally {
                         readLock.unlock();
@@ -120,8 +122,7 @@ public final class SPIOperatorHelper {
      */
     private static void loadOperatorBySPI(Class<? extends Operator<?>> operatorClass) {
         ServiceLoader<? extends Operator<?>> loader = ServiceLoader.load(operatorClass, ClassLoader.getSystemClassLoader());
-        boolean present = loader.stream().findAny().isPresent();
-        if (!present) {
+        if (!Lists.newArrayList(loader).isEmpty()) {
             Class<?>[] interfaces = operatorClass.getInterfaces();
             for (Class<?> hierachical : interfaces) {
                 // recursion of find parent class
@@ -133,9 +134,9 @@ public final class SPIOperatorHelper {
             }
         } else {
             loader.reload();
-            loader.stream()
+            Lists.newArrayList(loader).stream()
                     .forEach(provider -> {
-                        Class<? extends Operator<?>> type = provider.type();
+                        Class<? extends Operator<?>> type = (Class<? extends Operator<?>>) provider.getClass();
                         Operator.Group group = AnnotationUtils.findAnnotation(type, Operator.Group.class);
                         if (group == null) {
                             throw new IllegalArgumentException(String.format("Operator %s without Annotation @SQLOperator.Group", type.getName()));

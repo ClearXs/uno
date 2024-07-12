@@ -18,6 +18,7 @@ import reactor.util.function.Tuple2;
 
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * DruidSQLDeleteQueryOperator
@@ -52,7 +53,7 @@ public class SQLDeleteOperator extends SQLWhereOperatorImpl<SQLDeleteOperator> i
         return ParameterizedOutputVisitorUtils.restore(
                 getPrepareDSL(),
                 druidDbType,
-                getPrepareValues().stream().map(PrepareValue::getValue).toList());
+                getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList()));
 
     }
 

@@ -15,6 +15,7 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.baomidou.mybatisplus.autoconfigure.MybatisPlusAutoConfiguration;
 import com.baomidou.mybatisplus.extension.spring.MybatisSqlSessionFactoryBean;
+import com.google.common.collect.Lists;
 import com.zaxxer.hikari.HikariDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.beans.factory.ObjectProvider;
@@ -66,19 +67,37 @@ public class DbAutoConfiguration {
                                                       DbProperties dbProperties,
                                                       CommandExecutorRegistry commandExecutorRegistry,
                                                       ObjectProvider<List<Interceptor>> interceptorProvider) {
-        List<Interceptor> interceptors = interceptorProvider.getIfAvailable(List::of);
+        List<Interceptor> interceptors = interceptorProvider.getIfAvailable(Lists::newArrayList);
         DbProperties.DbType dbType = dbProperties.getDbType();
-        DBType systemDBType = switch (dbType) {
-            case MYSQL -> DBType.MYSQL;
-            case ORACLE -> DBType.ORACLE;
-            case SQLITE -> DBType.SQLITE;
-            case MARIADB -> DBType.MARIADB;
-            case SQLSERVER -> DBType.SQLSERVER;
-            case DB2 -> DBType.DB2;
-            case POSTGRESQL -> DBType.POSTGRESQL;
-            case OPEN_GAUSS -> DBType.OPEN_GAUSS;
-            case null, default -> DBType.H2;
-        };
+        DBType systemDBType;
+        switch (dbType) {
+            case MYSQL:
+                systemDBType = DBType.MYSQL;
+                break;
+            case ORACLE:
+                systemDBType = DBType.ORACLE;
+                break;
+            case SQLITE:
+                systemDBType = DBType.SQLITE;
+                break;
+            case MARIADB:
+                systemDBType = DBType.MARIADB;
+                break;
+            case SQLSERVER:
+                systemDBType = DBType.SQLSERVER;
+                break;
+            case DB2:
+                systemDBType = DBType.DB2;
+                break;
+            case POSTGRESQL:
+                systemDBType = DBType.POSTGRESQL;
+                break;
+            case OPEN_GAUSS:
+                systemDBType = DBType.OPEN_GAUSS;
+                break;
+            default:
+                systemDBType = DBType.H2;
+        }
         ExecutorOptions executorOptions =
                 ExecutorOptionsBuilder.create(systemDBType, dbType.name())
                         .address(dbProperties.getAddress())

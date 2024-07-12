@@ -7,6 +7,7 @@ import org.springframework.util.ClassUtils;
 
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.stream.Collectors;
 
 public class JoinPointDelegate {
 
@@ -44,7 +45,7 @@ public class JoinPointDelegate {
         String name = point.getSignature().getName();
         Class<?>[] argClasses = Arrays.stream(point.getArgs())
                 .map(Object::getClass)
-                .toList()
+                .collect(Collectors.toList())
                 .toArray(new Class<?>[]{});
         // 尝试知道获取AOP原始Class对象
         Class<?> maybeOriginClass = AopUtils.getTargetClass(point.getTarget());

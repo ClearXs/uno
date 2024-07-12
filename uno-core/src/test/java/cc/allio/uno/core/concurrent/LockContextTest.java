@@ -18,7 +18,7 @@ public class LockContextTest extends BaseTestCase {
                         .lockReturn(() -> 1 / 0)
                         .except(ArithmeticException.class));
 
-        var except = LockContext.lock()
+        Integer except = LockContext.lock()
                 .lockReturn(() -> 1 / 0)
                 .unwrapOrElse(err -> {
                     assertEquals(1, err.size());

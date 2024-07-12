@@ -9,6 +9,7 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -119,7 +120,7 @@ public interface Single<E> {
 
         @Override
         public Optional<E> forReturn(Predicate<E> predicate) {
-            List<E> elements = stream.toList();
+            List<E> elements = stream.collect(Collectors.toList());
             for (E element : elements) {
                 if (predicate.test(element)) {
                     return Optional.ofNullable(element);

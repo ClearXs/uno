@@ -15,7 +15,6 @@ import org.springframework.core.io.buffer.DataBufferFactory;
 import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.MediaType;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -47,7 +46,7 @@ class HttpInvokeTest extends BaseTestCase {
         String url = "http://localhost:8081/http/get?unknown=123";
         WebClient.RequestBodySpec spec = WebClient.create(url).method(HttpMethod.GET).contentType(MediaType.APPLICATION_JSON);
         StepVerifier.create(spec.exchange().flatMap(res -> {
-                    HttpStatusCode httpStatus = res.statusCode();
+                    HttpStatus httpStatus = res.statusCode();
                     if (httpStatus.value() != HttpStatus.OK.value()) {
                         return Mono.error(new UnknownError());
                     }
@@ -85,7 +84,7 @@ class HttpInvokeTest extends BaseTestCase {
                         spec
                                 .exchange()
                                 .flatMap(res -> {
-                                    HttpStatusCode httpStatus = res.statusCode();
+                                    HttpStatus httpStatus = res.statusCode();
                                     if (httpStatus.value() != HttpStatus.OK.value()) {
                                         return Mono.error(new UnknownError());
                                     }
@@ -117,7 +116,7 @@ class HttpInvokeTest extends BaseTestCase {
         StepVerifier.create(
                         spec.exchange()
                                 .flatMap(res -> {
-                                    HttpStatusCode status = res.statusCode();
+                                    HttpStatus status = res.statusCode();
                                     if (status.value() != HttpStatus.OK.value()) {
                                         return Mono.error(new UnknownError());
                                     }

@@ -10,8 +10,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.annotation.OrderUtils;
 import reactor.core.publisher.Mono;
 
-import java.lang.reflect.AnnotatedElement;
-
 /**
  * {@link Interceptor}装饰器，确定调用事件方法
  *
@@ -39,19 +37,23 @@ public abstract class InternalInterceptor implements Interceptor, Ordered {
             log.debug("Internal Interceptor [{}] intercept actual Interceptor [{}] the command [{}]", getClass().getSimpleName(), interceptor.getClass().getSimpleName(), commandType);
         }
         switch (commandType) {
-            case INSERT -> this.onSave(commandExecutor, operator, result);
-            case UPDATE -> this.onUpdate(commandExecutor, operator, result);
-            case DELETE -> this.onDelete(commandExecutor, operator, result);
-            case SELECT -> this.onQuery(commandExecutor, operator, result);
-            default -> interceptor.onUnknownCommand(commandExecutor, commandType, operator);
+            case INSERT:
+                this.onSave(commandExecutor, operator, result);
+            case UPDATE:
+                this.onUpdate(commandExecutor, operator, result);
+            case DELETE:
+                this.onDelete(commandExecutor, operator, result);
+            case SELECT:
+                this.onQuery(commandExecutor, operator, result);
+            default:
+                interceptor.onUnknownCommand(commandExecutor, commandType, operator);
         }
         return chain.proceed(context);
     }
 
     @Override
     public int getOrder() {
-        AnnotatedElement element = (interceptor instanceof AnnotatedElement ae ? ae : interceptor.getClass());
-        Integer order = OrderUtils.getOrder(element);
+        Integer order = OrderUtils.getOrder(interceptor.getClass());
         if (order == null) {
             return 0;
         }

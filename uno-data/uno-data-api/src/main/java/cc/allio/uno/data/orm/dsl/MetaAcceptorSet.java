@@ -120,7 +120,7 @@ public interface MetaAcceptorSet {
      */
     default <T extends Meta<T>> void adapt(T meta) {
         if (meta != null) {
-            MetaAcceptor<T> acceptor = customizeMetaAcceptorGetter(meta.getClass());
+            MetaAcceptor acceptor = customizeMetaAcceptorGetter(meta.getClass());
             meta.accept(acceptor);
         }
     }

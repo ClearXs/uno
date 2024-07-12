@@ -5,7 +5,7 @@
     <parent>
         <groupId>cc.allio</groupId>
         <artifactId>uno-data</artifactId>
-        <version>1.1.9</version>
+        <version>1.1.9-jdk8</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -32,11 +32,6 @@
             <artifactId>uno-data-sql</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio</groupId>
-            <artifactId>uno-data-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <scope>provided</scope>
@@ -54,6 +49,11 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>cc.allio</groupId>
+            <artifactId>uno-test</artifactId>
             <scope>test</scope>
         </dependency>
     </dependencies>

@@ -12,8 +12,6 @@ import cc.allio.uno.test.listener.CoreTestListener;
 import cc.allio.uno.test.listener.Listener;
 import cc.allio.uno.test.listener.WebListener;
 import cc.allio.uno.test.runner.*;
-import cc.allio.uno.test.testcontainers.SetupContainer;
-import cc.allio.uno.test.testcontainers.ShutdownContainer;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
@@ -26,6 +24,7 @@ import org.springframework.core.annotation.MergedAnnotations;
 import java.util.*;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -94,7 +93,7 @@ public class RunTestAttributes {
 
         ExtensionInitialization<Runner> runnerInitialization
                 = new ExtensionInitializationImpl<>(Runner.class)
-                .initialDefaultExtension(InjectRunner.class, AnnoMetadataRunner.class, SetupContainer.class, ShutdownContainer.class)
+                .initialDefaultExtension(InjectRunner.class, AnnoMetadataRunner.class)
                 .initialExtensionBySPI();
 
         ExtensionInitialization<Listener> listenerInitialization
@@ -291,7 +290,7 @@ public class RunTestAttributes {
                         }
                         return Stream.of(value);
                     })
-                    .toList();
+                    .collect(Collectors.toList());
             registryComps.addAll(loadComps);
             coreTest.registerComponent(ClassUtils.toClassArray(registryComps));
         }

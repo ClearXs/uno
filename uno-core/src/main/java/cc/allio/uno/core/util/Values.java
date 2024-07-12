@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -46,7 +47,7 @@ public final class Values {
      */
     @SafeVarargs
     public static <V> Collection<V> collectionExpand(V... values) {
-        return streamExpand(values).toList();
+        return streamExpand(values).collect(Collectors.toList());
     }
 
     /**

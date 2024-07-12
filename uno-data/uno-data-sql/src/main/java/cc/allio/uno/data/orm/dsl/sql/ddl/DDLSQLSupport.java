@@ -7,6 +7,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.data.orm.dsl.type.DruidDataTypeAdapter;
 import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
+import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.expr.SQLValuableExpr;
 import com.alibaba.druid.sql.ast.statement.*;
@@ -31,7 +32,7 @@ public class DDLSQLSupport extends SQLSupport {
      * @return SQLExprTableSource
      */
     public static SQLExprTableSource createTableSource(Table table, DBType dbType) {
-        var druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        DbType druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
         SQLExprTableSource tableSource = new UnoSQLExprTableSource(druidType);
         tableSource.setExpr(table.getName().getName());
         tableSource.setSchema(table.getSchema());
@@ -47,7 +48,7 @@ public class DDLSQLSupport extends SQLSupport {
      * @return SQLColumnDefinition
      */
     public static SQLColumnDefinition createColumnDefinition(ColumnDef columnDef, DBType dbType) {
-        var druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        DbType druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
         SQLColumnDefinition sqlColumnDefinition = new SQLColumnDefinition();
         sqlColumnDefinition.setComment(columnDef.getComment());
         sqlColumnDefinition.setName(columnDef.getDslName().format());

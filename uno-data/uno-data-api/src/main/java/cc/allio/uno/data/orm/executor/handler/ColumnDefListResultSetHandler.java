@@ -15,6 +15,7 @@ import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import com.google.common.collect.Lists;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * {@link ColumnDef}结果集处理器
@@ -33,7 +34,7 @@ public class ColumnDefListResultSetHandler extends ExecutorOptionsAwareImpl impl
         return Lists.newArrayList(resultSet)
                 .stream()
                 .map(r -> commonFieldBuilder(r).build())
-                .toList();
+                .collect(Collectors.toList());
     }
 
     protected ColumnDef.ColumnDefBuilder commonFieldBuilder(ResultGroup r) {

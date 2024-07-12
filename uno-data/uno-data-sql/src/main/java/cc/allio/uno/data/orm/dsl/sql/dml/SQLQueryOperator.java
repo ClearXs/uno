@@ -30,6 +30,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * Druid Query Operator
@@ -85,14 +86,14 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<SQLQueryOperator> imp
 
     @Override
     public String getDSL() {
-        List<Object> values = getPrepareValues().stream().map(PrepareValue::getValue).toList();
+        List<Object> values = getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList());
         if (CollectionUtils.isEmpty(values)) {
             return getPrepareDSL();
         }
         return ParameterizedOutputVisitorUtils.restore(
                 getPrepareDSL(),
                 druidDbType,
-                getPrepareValues().stream().map(PrepareValue::getValue).toList());
+                getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList()));
     }
 
     /**
@@ -101,7 +102,7 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<SQLQueryOperator> imp
      * @return the where dsl
      */
     public String getWhereDSL() {
-        List<Object> parameters = getPrepareValues().stream().map(PrepareValue::getValue).toList();
+        List<Object> parameters = getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList());
         StringBuilder out = new StringBuilder();
         SQLASTOutputVisitor visitor = SQLUtils.createOutputVisitor(out, druidDbType);
         visitor.setInputParameters(parameters);

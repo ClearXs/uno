@@ -17,6 +17,7 @@ import java.security.AccessController;
 import java.security.PrivilegedAction;
 import java.util.*;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 /**
  * 与{@link Class}有关的工具集
@@ -37,11 +38,11 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
      * @deprecated
      */
-    @Deprecated(since = "1.1.7")
+    @Deprecated
     public static <T> String getSingleGenericClassName(@NonNull Class<? extends T> clazz) {
         Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType pt) {
-            Type[] typeArguments = pt.getActualTypeArguments();
+        if (type instanceof ParameterizedType) {
+            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
             if (typeArguments.length == 0) {
                 throw new NullPointerException(String.format("Target %s can't find generic", clazz.getName()));
             }
@@ -58,14 +59,14 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
      * @deprecated
      */
-    @Deprecated(since = "1.1.7")
+    @Deprecated
     public static String[] getMultiGenericClassName(Class<?> clazz) {
         if (clazz == null) {
             return new String[0];
         }
         Type type = clazz.getGenericSuperclass();
-        if (type instanceof ParameterizedType pt) {
-            Type[] typeArguments = pt.getActualTypeArguments();
+        if (type instanceof ParameterizedType) {
+            Type[] typeArguments = ((ParameterizedType) type).getActualTypeArguments();
             if (typeArguments.length == 0) {
                 throw new NullPointerException(String.format("Target %s can't find generic", clazz.getName()));
             }
@@ -82,7 +83,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
      * @deprecated
      */
-    @Deprecated(since = "1.1.7")
+    @Deprecated
     public static Class<?> getSingleActualGenericType(Class<?> clazz) throws ClassNotFoundException {
         String expectClassname = getSingleGenericClassName(clazz);
         Object exceptType = AccessController.doPrivileged(
@@ -93,8 +94,8 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
                         return e;
                     }
                 });
-        if (exceptType instanceof ClassNotFoundException notfound) {
-            throw new ClassNotFoundException(notfound.getMessage());
+        if (exceptType instanceof ClassNotFoundException) {
+            throw new ClassNotFoundException(((ClassNotFoundException) exceptType).getMessage());
         }
         return (Class<?>) exceptType;
     }
@@ -107,7 +108,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
      * @deprecated
      */
-    @Deprecated(since = "1.1.7")
+    @Deprecated
     public static Class<?>[] getMultiActualGenericType(Class<?> clazz) throws ClassNotFoundException {
         List<Class<?>> actualTypes = Lists.newArrayList();
         String[] multiGenericClassName = getMultiGenericClassName(clazz);
@@ -119,8 +120,8 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
                     return e;
                 }
             });
-            if (exceptType instanceof ClassNotFoundException notfound) {
-                throw new ClassNotFoundException(notfound.getMessage());
+            if (exceptType instanceof ClassNotFoundException) {
+                throw new ClassNotFoundException(((ClassNotFoundException) exceptType).getMessage());
             }
             actualTypes.add((Class<?>) exceptType);
         }
@@ -135,7 +136,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @see ReflectTools#getGenericTypeByIndex(Class, Class, int)
      * @deprecated
      */
-    @Deprecated(since = "1.1.7")
+    @Deprecated
     public static Type[] getFieldGenericType(Field field) {
         Type maybeType = field.getGenericType();
         if (maybeType instanceof ParameterizedType) {
@@ -180,7 +181,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
     public static Class<?>[] objectToClass(Object... args) {
         return Arrays.stream(args)
                 .map(Object::getClass)
-                .toList()
+                .collect(Collectors.toList())
                 .toArray(new Class<?>[]{});
     }
 
@@ -223,7 +224,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
             List<Method> targetMethods =
                     allMethods.stream()
                             .filter(m -> targetMethodName.equals(m.getName()) && argsClass.length == m.getParameterCount())
-                            .toList();
+                            .collect(Collectors.toList());
             if (CollectionUtils.isNotEmpty(targetMethods)) {
                 method = targetMethods.get(0);
             }
@@ -297,7 +298,7 @@ public class ClassUtils extends org.springframework.util.ClassUtils {
      * @return true 存在 false 不存在
      * @deprecated 1.1.4版本后删除，使用{@link AnnotatedElementUtils#hasAnnotation(AnnotatedElement, Class)}
      */
-    @Deprecated(since = "1.1.4", forRemoval = true)
+    @Deprecated
     public static <T extends Annotation> boolean containsAnnotation(Class<?> instanceClass, Class<T> annotationType) {
         try {
             getAnnotation(instanceClass, annotationType);

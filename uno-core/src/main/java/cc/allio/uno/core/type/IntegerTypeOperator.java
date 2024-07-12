@@ -11,14 +11,14 @@ public class IntegerTypeOperator implements TypeOperator<Integer> {
 
     @Override
     public Integer convert(Object target, Class<?> maybeType) {
-        if (target instanceof Integer i) {
-            return i;
-        } else if (target instanceof Double d) {
-            return d.intValue();
-        } else if (target instanceof Float f) {
-            return f.intValue();
-        } else if (target instanceof Short s) {
-            return s.intValue();
+        if (target instanceof Integer) {
+            return (Integer) target;
+        } else if (target instanceof Double) {
+            return ((Double) target).intValue();
+        } else if (target instanceof Float) {
+            return ((Float) target).intValue();
+        } else if (target instanceof Short) {
+            return ((Short) target).intValue();
         }
         throw new IllegalArgumentException(String.format("target %s can't cast type %s", target, maybeType));
     }

@@ -5,6 +5,7 @@ import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.type.DSLType;
 import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.test.BaseTestCase;
+import com.google.common.collect.Lists;
 import lombok.Data;
 import org.junit.jupiter.api.Test;
 
@@ -66,7 +67,7 @@ public class PojoWrapperTest extends BaseTestCase {
 
         @Override
         public List<ColumnDef> resolve(Class<?> pojoClass) {
-            return List.of(id, userName);
+            return Lists.newArrayList(id, userName);
         }
     }
 

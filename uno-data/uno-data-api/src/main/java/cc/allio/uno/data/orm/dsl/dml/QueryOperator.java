@@ -11,6 +11,7 @@ import com.google.common.collect.Lists;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Query Operator
@@ -110,7 +111,7 @@ public interface QueryOperator<T extends QueryOperator<T>> extends PrepareOperat
      * @return self
      */
     default T select(Collection<String> fieldNames) {
-        return selects(fieldNames.stream().map(DSLName::of).toList());
+        return selects(fieldNames.stream().map(DSLName::of).collect(Collectors.toList()));
     }
 
     /**
@@ -725,7 +726,7 @@ public interface QueryOperator<T extends QueryOperator<T>> extends PrepareOperat
      * @return self
      */
     default T groupByOne(Collection<String> fieldNames) {
-        return groupByOnes(fieldNames.stream().map(DSLName::of).toList());
+        return groupByOnes(fieldNames.stream().map(DSLName::of).collect(Collectors.toList()));
     }
 
     /**

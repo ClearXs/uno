@@ -5,13 +5,13 @@
     <parent>
         <artifactId>uno</artifactId>
         <groupId>cc.allio</groupId>
-        <version>1.1.9</version>
+        <version>1.1.9-jdk8</version>
     </parent>
     <packaging>pom</packaging>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>uno-data</artifactId>
-    <version>1.1.9</version>
+    <version>1.1.9-jdk8</version>
     <description>
         summary: uno数据层操作，包含于数据源、mybatis-plus、reactive-jpa、elasticsearch、influxdb等
         features: 提供数据聚合等操作
@@ -20,12 +20,6 @@
     <modules>
         <module>uno-data-api</module>
         <module>uno-data-db</module>
-        <module>uno-data-elasticsearch</module>
-        <module>uno-data-influxdb</module>
-        <module>uno-data-mongodb</module>
-        <module>uno-data-neo4j</module>
-        <module>uno-data-redis</module>
-        <module>uno-data-test</module>
         <module>uno-data-sql</module>
     </modules>
 

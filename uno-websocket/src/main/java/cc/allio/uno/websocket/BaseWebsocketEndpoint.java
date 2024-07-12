@@ -5,11 +5,11 @@ import cc.allio.uno.core.task.ProxyBufferTimerSegmentTask;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.JsonUtils;
-import jakarta.websocket.*;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 
+import javax.websocket.*;
 import java.io.IOException;
 import java.text.ParseException;
 import java.util.ArrayList;

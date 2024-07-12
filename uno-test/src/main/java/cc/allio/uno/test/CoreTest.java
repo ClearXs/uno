@@ -7,7 +7,6 @@ import cc.allio.uno.test.env.EnvironmentFacade;
 import cc.allio.uno.test.env.Visitor;
 import cc.allio.uno.test.runner.CoreRunner;
 import cc.allio.uno.test.runner.Runner;
-import cc.allio.uno.test.testcontainers.Container;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import lombok.Getter;
@@ -53,18 +52,16 @@ public class CoreTest extends BaseSpringTest implements Self<CoreTest> {
     @Setter
     private Set<Visitor> visitors;
 
-    /**
-     * test run in container environment
-     */
-    @Setter
-    private Container container;
-
     public CoreTest() {
         this(null);
     }
 
     public CoreTest(Class<?> testClass) {
-        this.testClass = Objects.requireNonNullElseGet(testClass, this::getClass);
+        if (testClass != null) {
+            this.testClass = testClass;
+        } else {
+            this.testClass = this.getClass();
+        }
     }
 
     @Override

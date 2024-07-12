@@ -26,6 +26,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
+import java.util.stream.Collectors;
 
 /**
  * DruidSQLUpdateOperator
@@ -70,7 +71,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<SQLUpdateOperator> i
         return ParameterizedOutputVisitorUtils.restore(
                 getPrepareDSL(),
                 druidDbType,
-                getPrepareValues().stream().map(PrepareValue::getValue).toList());
+                getPrepareValues().stream().map(PrepareValue::getValue).collect(Collectors.toList()));
     }
 
     @Override
@@ -89,7 +90,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<SQLUpdateOperator> i
                         updateSetItem.setValue(new SQLVariantRefExpr(StringPool.QUESTION_MARK));
                         return updateSetItem;
                     })
-                    .toList();
+                    .collect(Collectors.toList());
             items.clear();
             items.addAll(newItems);
         }
@@ -192,7 +193,7 @@ public class SQLUpdateOperator extends SQLWhereOperatorImpl<SQLUpdateOperator> i
                         .stream()
                         .map(SQLUpdateSetItem::getColumn)
                         .map(SQLSupport::getExprColumn)
-                        .toList();
+                        .collect(Collectors.toList());
         Object value = v == null ? null : v.get();
         int index = columns.indexOf(f);
         if (index < 0) {

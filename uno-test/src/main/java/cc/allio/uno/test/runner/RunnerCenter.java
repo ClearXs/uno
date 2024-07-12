@@ -4,6 +4,7 @@ import com.google.common.collect.Lists;
 import org.springframework.util.Assert;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * {@link Runner}列表中心
@@ -78,7 +79,7 @@ public class RunnerCenter {
             Assert.notNull(clazz, String.format("Runner Clazz %s is not empty", clazz.getName()));
             return stream()
                     .filter(clazz::isInstance)
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
         /**
@@ -104,7 +105,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> RegisterRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
         /**
@@ -116,7 +117,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> RefreshCompleteRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .toList();
+                    .collect(Collectors.toList());
         }
 
         /**
@@ -128,7 +129,7 @@ public class RunnerCenter {
             return stream()
                     // 共享的
                     .filter(runner -> CloseRunner.class.isAssignableFrom(runner.getClass()) && runner.shared())
-                    .toList();
+                    .collect(Collectors.toList());
         }
     }
 }

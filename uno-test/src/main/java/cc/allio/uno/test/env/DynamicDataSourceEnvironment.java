@@ -3,8 +3,8 @@ package cc.allio.uno.test.env;
 import cc.allio.uno.test.CoreTest;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DruidDynamicDataSourceConfiguration;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DynamicDataSourceAutoConfiguration;
-import jakarta.annotation.Priority;
 
+import javax.annotation.Priority;
 import java.lang.annotation.Annotation;
 
 @Priority(Integer.MIN_VALUE + 1)

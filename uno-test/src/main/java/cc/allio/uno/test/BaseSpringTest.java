@@ -12,7 +12,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
-import org.springframework.boot.context.config.ConfigDataEnvironmentPostProcessor;
+import org.springframework.boot.context.config.ConfigFileApplicationListener;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigRegistry;
@@ -72,15 +72,20 @@ public abstract class BaseSpringTest extends BaseTestCase {
         if (runTestAttributes != null) {
             runTestAttributes.apply(this);
         }
-        ConfigDataEnvironmentPostProcessor.applyTo(context.getEnvironment());
+        new ConfigFileApplicationListener() {
+            public void apply() {
+                addPropertySources(context.getEnvironment(), context);
+                addPostProcessors(context);
+            }
+        }.apply();
         // spring环境初始化，回调接口
         onInitSpringEnv();
 
         // 构建spring环境
         ConfigurableEnvironment environment = context.getEnvironment();
         Env env = Envs.getCurrentEnv();
-        if (env instanceof SystemEnv systemEnv) {
-            Envs.reset(new SpringEnv(systemEnv, environment));
+        if (env instanceof SystemEnv) {
+            Envs.reset(new SpringEnv((SystemEnv) env, environment));
         }
         context.refresh();
 
