@@ -7,7 +7,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.Objects;
 import java.util.regex.Pattern;
 
 /**
@@ -47,12 +46,15 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
     private static final String NAME_FORM_LOWER_CASE = "lower-case";
     // 名称以大写
     private static final String NAME_FORM_UPPER_CASE = "upper-case";
+    // first upper case of name
+    private static final String FIRST_CHAR_UPPER_CASE = "first-upper-case";
 
     public static final NameFeature UNDERLINE_FEATURE = new UnderlineFeature();
     public static final NameFeature HUMP_FEATURE = new HumpFeature();
     public static final NameFeature PLAIN_FEATURE = new PlainFeature();
     public static final NameFeature LOWER_CASE_FEATURE = new LowerCaseFeature();
     public static final NameFeature UPPER_CASE_FEATURE = new UpperCaseFeature();
+    public static final NameFeature FIRST_CHAR_UPPER_CASE_FEATURE = new FirstCharUpperCaseFeature();
 
     public DSLName() {
 
@@ -91,7 +93,7 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
      * @return underline string
      * @see #UNDERLINE_FEATURE
      */
-    public String formatUnderlie() {
+    public String formatUnderline() {
         return format(UNDERLINE_FEATURE);
     }
 
@@ -123,6 +125,16 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
      */
     public String formatUpperCase() {
         return format(UPPER_CASE_FEATURE);
+    }
+
+    /**
+     * format dsl name to first upper case
+     *
+     * @return first upper case name string
+     * @see #FIRST_CHAR_UPPER_CASE_FEATURE
+     */
+    public String formatFirstNameUpperCase() {
+        return format(FIRST_CHAR_UPPER_CASE_FEATURE);
     }
 
     /**
@@ -163,11 +175,11 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
     }
 
     /**
-     * 创建SQLName 实例
+     * 创建{@link DSLName} 实例
      *
      * @param name    name
      * @param feature feature
-     * @return SQLName
+     * @return {@link DSLName}
      */
     public static DSLName of(String name, NameFeature feature) {
         DSLName sqlName = new DSLName();
@@ -177,15 +189,28 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
     }
 
     /**
-     * 创建SQLName 实例
+     * 创建{@link DSLName} 实例
      *
-     * @param sqlName sqlName
+     * @param name name
      * @param feature feature
-     * @return SQLName
+     * @return {@link DSLName}
      */
-    public static DSLName of(DSLName sqlName, NameFeature... feature) {
+    public static DSLName of(String name, NameFeature... feature) {
+        DSLName newName = new DSLName(name);
+        newName.setFeature(feature);
+        return newName;
+    }
+
+    /**
+     * 创建{@link DSLName} 实例
+     *
+     * @param dslName sqlName
+     * @param feature feature
+     * @return {@link DSLName}
+     */
+    public static DSLName of(DSLName dslName, NameFeature... feature) {
         DSLName newName = new DSLName();
-        newName.name = sqlName.name;
+        newName.name = dslName.name;
         newName.setFeature(feature);
         return newName;
     }
@@ -321,6 +346,17 @@ public class DSLName implements Comparable<DSLName>, EqualsTo<DSLName>, Meta<DSL
         @Override
         public String format(String o) {
             return o.toUpperCase();
+        }
+    }
+
+    static class FirstCharUpperCaseFeature implements NameFeature {
+
+        @Override
+        public String format(String o) {
+            if (StringUtils.isBlank(o) || o.length() < 2) {
+                return o;
+            }
+            return o.substring(0, 1).toUpperCase() + o.substring(1);
         }
     }
 }

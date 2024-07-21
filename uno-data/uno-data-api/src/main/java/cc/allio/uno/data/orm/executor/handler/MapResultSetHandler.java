@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor.handler;
 
 import cc.allio.uno.data.orm.executor.ResultGroup;
 
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -16,5 +17,10 @@ public class MapResultSetHandler extends ExecutorOptionsAwareImpl implements Res
     @Override
     public Map<String, Object> apply(ResultGroup resultGroup) {
         return resultGroup.toMap();
+    }
+
+    @Override
+    public Class<Map<String, Object>> getResultType() {
+        return (Class<Map<String, Object>>) Collections.EMPTY_MAP.getClass();
     }
 }

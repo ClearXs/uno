@@ -20,6 +20,7 @@ public interface ShowColumnsOperator<T extends ShowColumnsOperator<T>> extends P
     String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
     String TABLE_NAME_FILED = "TABLE_NAME";
     String COLUMN_NAME_FIELD = "COLUMN_NAME";
+    String COLUMN_COMMENT_FIELD = "COLUMN_COMMENT";
     String ORDINAL_POSITION_FIELD = "ORDINAL_POSITION";
     String COLUMN_DEFAULT_FIELD = "COLUMN_DEFAULT";
     String IS_NULLABLE_FIELD = "IS_NULLABLE";

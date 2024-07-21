@@ -37,4 +37,9 @@ public class BoolResultHandler extends ExecutorOptionsAwareImpl implements Resul
         }
         return Boolean.FALSE;
     }
+
+    @Override
+    public Class<Boolean> getResultType() {
+        return Boolean.class;
+    }
 }

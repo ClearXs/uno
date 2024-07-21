@@ -22,6 +22,7 @@ public interface DSLType extends EqualsTo<DSLType> {
 
     DSLType BIGINT = DefaultDSLType.BIGINT;
     DSLType SMALLINT = DefaultDSLType.SMALLINT;
+    DSLType INT = DefaultDSLType.INT;
     DSLType INTEGER = DefaultDSLType.INTEGER;
     DSLType BIT = DefaultDSLType.BIT;
     DSLType TINYINT = DefaultDSLType.TINYINT;
@@ -43,6 +44,9 @@ public interface DSLType extends EqualsTo<DSLType> {
     DSLType LONGNVARCHAR = DefaultDSLType.LONGNVARCHAR;
     DSLType VARBINARY = DefaultDSLType.VARBINARY;
     DSLType LONGVARBINARY = DefaultDSLType.LONGVARBINARY;
+
+    // ====================== 其他类型 ======================
+    DSLType BOOLEAN = DefaultDSLType.BOOLEAN;
 
     // ====================== 高级类型 ======================
     DSLType OBJECT = DefaultDSLType.OBJECT;
@@ -102,7 +106,7 @@ public interface DSLType extends EqualsTo<DSLType> {
      */
     @Override
     default boolean equalsTo(DSLType other) {
-        return java.util.Objects.equals(this.getName(), other.getName());
+        return other != null && this.getJdbcType() == other.getJdbcType();
     }
 
     /**
@@ -167,7 +171,8 @@ public interface DSLType extends EqualsTo<DSLType> {
         // ====================== 数字型 ======================
         BIGINT("bigint", Types.BIGINT, 64, null),
         SMALLINT("smallint", Types.SMALLINT, 32, null),
-        INTEGER("int", Types.INTEGER, 64, null),
+        INT("int", Types.INTEGER, 64, null),
+        INTEGER("integer", Types.INTEGER, 64, null),
         BIT("bit", Types.BIT, 4, null),
         TINYINT("tinyint", Types.TINYINT, 16, null),
         NUMBER("number", Types.NUMERIC, 12, 2),
@@ -189,6 +194,9 @@ public interface DSLType extends EqualsTo<DSLType> {
         LONGNVARCHAR("longnvarchar", Types.LONGNVARCHAR, 1024, null),
         VARBINARY("varbinary", Types.VARBINARY, 1024, null),
         LONGVARBINARY("longvarchar", Types.LONGVARBINARY, 2048, null),
+
+        // ====================== 其他类型 ======================
+        BOOLEAN("char", Types.BOOLEAN, 0, null),
 
         // ====================== 高级类型 ======================
         OBJECT("object", Types.JAVA_OBJECT, null, null),

@@ -46,7 +46,7 @@
         <druid.version>1.2.20</druid.version>
         <mysql-connector.version>8.0.22</mysql-connector.version>
         <oracle-connector.version>12.2.0.1</oracle-connector.version>
-        <postgresql-connector.version>42.2.22</postgresql-connector.version>
+        <postgresql-connector.version>42.7.3</postgresql-connector.version>
         <sqlserver-connector.version>8.4.1.jre8</sqlserver-connector.version>
         <mybatis-plus-dynamic.version>4.3.0</mybatis-plus-dynamic.version>
         <!-- 空间数据处理 -->

@@ -18,7 +18,12 @@ public class ShortJavaType implements JavaType<Short> {
 
     @Override
     public boolean equalsTo(Class<?> otherJavaType) {
-        return Short.class.isAssignableFrom(otherJavaType)
-                || short.class.isAssignableFrom(otherJavaType);
+        if (otherJavaType == null) {
+            return false;
+        }
+        if (otherJavaType.isPrimitive()) {
+            return short.class.isAssignableFrom(otherJavaType);
+        }
+        return Short.class.isAssignableFrom(otherJavaType);
     }
 }

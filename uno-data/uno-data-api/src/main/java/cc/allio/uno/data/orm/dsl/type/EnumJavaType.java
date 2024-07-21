@@ -8,6 +8,7 @@ package cc.allio.uno.data.orm.dsl.type;
  * @since 1.1.4
  */
 public class EnumJavaType extends JavaTypeImpl<Enum> {
+
     @Override
     public Class<Enum> getJavaType() {
         return Enum.class;

@@ -25,6 +25,7 @@ import java.sql.JDBCType;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 解决值无法映射到一个抽象对象上的问题
@@ -47,6 +48,9 @@ public class DbStatementSetHandler extends DefaultResultSetHandler implements Re
         DefaultResultContext<Object> resultContext = new DefaultResultContext<>();
         ResultSet resultSet = rsw.getResultSet();
         skipRows(resultSet, rowBounds);
+        List<ResultMapping> resultMappings = resultMap.getResultMappings();
+        var propertyMappings = resultMappings.stream().collect(Collectors.toMap(ResultMapping::getProperty, v -> v));
+
         while (shouldProcessMoreRows(resultContext, rowBounds) && !resultSet.isClosed() && resultSet.next()) {
             ResultGroup resultGroup = new ResultGroup();
             List<String> columnNames = rsw.getColumnNames();
@@ -55,13 +59,29 @@ public class DbStatementSetHandler extends DefaultResultSetHandler implements Re
                 resultRowBuilder.index(i);
                 String columnName = columnNames.get(i);
                 // 字段名称自动为驼峰
-                resultRowBuilder.column(DSLName.of(columnName, DSLName.HUMP_FEATURE));
-                JdbcType mybatisJdbcType = rsw.getJdbcType(columnName);
-                JDBCType jdbcType = JDBCType.valueOf(mybatisJdbcType.TYPE_CODE);
+                DSLName column = DSLName.of(columnName, DSLName.HUMP_FEATURE);
+                resultRowBuilder.column(column);
+
+                JDBCType jdbcType;
+                JavaType<?> javaType;
+                TypeHandler<?> typeHandler;
+                // if column contains mappings, then use mappings description.
+                // ensure data type is consistency (because like as pg bool type transfer to java type is bit, it will be failed to bool value 't' or 'f' get bit type.)
+                if (propertyMappings.containsKey(column.format())) {
+                    ResultMapping mapping = propertyMappings.get(column.format());
+                    JdbcType mbJdbcType = mapping.getJdbcType();
+                    jdbcType = JDBCType.valueOf(mbJdbcType.TYPE_CODE);
+                    Class<?> type = mapping.getJavaType();
+                    javaType = TypeRegistry.obtainJavaTypeByClassType(type);
+                    typeHandler = rsw.getTypeHandler(type, columnName);
+                } else {
+                    JdbcType mybatisJdbcType = rsw.getJdbcType(columnName);
+                    jdbcType = JDBCType.valueOf(mybatisJdbcType.TYPE_CODE);
+                    javaType = TypeRegistry.obtainJavaType(jdbcType.getVendorTypeNumber());
+                    typeHandler = rsw.getTypeHandler(javaType.getJavaType(), columnName);
+                }
                 resultRowBuilder.jdbcType(jdbcType);
-                JavaType<?> javaType = TypeRegistry.getInstance().findJavaType(jdbcType.getVendorTypeNumber());
                 resultRowBuilder.javaType(javaType);
-                TypeHandler<?> typeHandler = rsw.getTypeHandler(javaType.getJavaType(), columnName);
                 Object value = typeHandler.getResult(rsw.getResultSet(), columnName);
                 resultRowBuilder.value(value);
                 resultGroup.addRow(resultRowBuilder.build());

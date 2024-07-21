@@ -35,4 +35,9 @@ public class ListBeanResultSetHandler<R> extends ExecutorOptionsAwareImpl implem
     public Class<R> getBeanType() {
         return handler.getBeanType();
     }
+
+    @Override
+    public Class<R> getResultType() {
+        return handler.getBeanType();
+    }
 }

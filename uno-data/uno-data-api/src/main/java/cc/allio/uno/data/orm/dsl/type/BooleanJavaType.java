@@ -10,6 +10,7 @@ import cc.allio.uno.core.type.Types;
  * @since 1.1.4
  */
 public class BooleanJavaType extends JavaTypeImpl<Boolean> {
+
     @Override
     public Class<Boolean> getJavaType() {
         return Types.BOOLEAN;
@@ -17,7 +18,12 @@ public class BooleanJavaType extends JavaTypeImpl<Boolean> {
 
     @Override
     public boolean equalsTo(Class<?> otherJavaType) {
-        return Boolean.class.isAssignableFrom(otherJavaType)
-                || boolean.class.isAssignableFrom(otherJavaType);
+        if (otherJavaType == null) {
+            return false;
+        }
+        if (otherJavaType.isPrimitive()) {
+            return boolean.class.isAssignableFrom(otherJavaType);
+        }
+        return Boolean.class.isAssignableFrom(otherJavaType);
     }
 }

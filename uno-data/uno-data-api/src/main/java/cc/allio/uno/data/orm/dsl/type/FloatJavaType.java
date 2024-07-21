@@ -18,7 +18,12 @@ public class FloatJavaType extends JavaTypeImpl<Float> {
 
     @Override
     public boolean equalsTo(Class<?> otherJavaType) {
-        return Float.class.isAssignableFrom(otherJavaType)
-                || float.class.isAssignableFrom(otherJavaType);
+        if (otherJavaType == null) {
+            return false;
+        }
+        if (otherJavaType.isPrimitive()) {
+            return float.class.isAssignableFrom(otherJavaType);
+        }
+        return Float.class.isAssignableFrom(otherJavaType);
     }
 }

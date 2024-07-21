@@ -39,8 +39,15 @@ public class ColumnDefListResultSetHandler extends ExecutorOptionsAwareImpl impl
     protected ColumnDef.ColumnDefBuilder commonFieldBuilder(ResultGroup r) {
         ColumnDef.ColumnDefBuilder builder = ColumnDef.builder();
         // column name
-        DSLName dslName = r.getStringValue(ShowColumnsOperator.COLUMN_NAME_FIELD, () -> StringPool.EMPTY, columnName -> DSLName.of(columnName, DSLName.PLAIN_FEATURE));
+        DSLName dslName = r.getStringValue(
+                ShowColumnsOperator.COLUMN_NAME_FIELD,
+                () -> StringPool.EMPTY,
+                columnName -> DSLName.of(columnName, DSLName.PLAIN_FEATURE));
         builder.dslName(dslName);
+
+        String comment = r.getStringValue(ShowColumnsOperator.COLUMN_COMMENT_FIELD, () -> StringPool.EMPTY);
+        builder.comment(comment);
+
         // column type
         ExecutorOptions executorOptions = obtainExecutorOptions();
         DBType dbType = executorOptions.getDbType();
@@ -75,5 +82,10 @@ public class ColumnDefListResultSetHandler extends ExecutorOptionsAwareImpl impl
             dataType.setScale(numericScale.intValue());
         }
         return dataType;
+    }
+
+    @Override
+    public Class<ColumnDef> getResultType() {
+        return ColumnDef.class;
     }
 }
