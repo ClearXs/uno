@@ -12,6 +12,7 @@ import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
+import cc.allio.uno.data.orm.executor.handler.CohesionListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import com.google.common.collect.Lists;
@@ -526,9 +527,8 @@ public interface DMLCommandExecutor extends CommandExecutor {
      * @throws DSLException 当结果集大于1时抛出
      */
     default <R> R queryOne(QueryOperator<?> queryOperator, ResultSetHandler<R> resultSetHandler) {
-        List<ResultGroup> resultGroups = queryList(queryOperator);
-        ResultGroup resultGroup = checkCollectionIsOneAndGet(resultGroups);
-        return Optional.ofNullable(resultGroup).map(resultSetHandler).orElse(null);
+        List<R> resultGroups = queryList(queryOperator, new CohesionListResultSetHandler<>(resultSetHandler));
+        return checkCollectionIsOneAndGet(resultGroups);
     }
 
     /**

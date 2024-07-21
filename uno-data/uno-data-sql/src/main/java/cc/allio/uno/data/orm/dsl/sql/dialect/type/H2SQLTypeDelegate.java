@@ -43,5 +43,11 @@ public class H2SQLTypeDelegate extends DSLTypeDelegate {
         private final Integer precision;
         private final Integer scale;
         private final List<DSLType> parent;
+
+
+        @Override
+        public boolean equalsTo(DSLType other) {
+            return this.parent.contains((other));
+        }
     }
 }

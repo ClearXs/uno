@@ -57,6 +57,11 @@ public abstract class DSLTypeDelegate implements DSLType {
         return sqlType.getScale();
     }
 
+    @Override
+    public boolean equalsTo(DSLType other) {
+        return this.sqlType.equalsTo(other);
+    }
+
     /**
      * 子类实现，获取{@link DSLLinkType}数组，得到某个{@link DefaultDSLType}关联到不同数据实例的数据类型
      *

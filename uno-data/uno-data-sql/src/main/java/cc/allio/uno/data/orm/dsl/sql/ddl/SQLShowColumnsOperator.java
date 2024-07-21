@@ -31,6 +31,27 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<SQLShowColumnsOp
     private Database database;
     private final SQLQueryOperator queryOperator;
 
+    private static final String PG_SHOW_COLUMN_SQL = "SELECT\n" +
+            "\tTABLE_CATALOG,\n" +
+            "\tTABLE_SCHEMA,\n" +
+            "\tTABLE_NAME,\n" +
+            "\tCOLUMN_NAME,\n" +
+            "\td.DESCRIPTION AS COLUMN_COMMENT,\n" +
+            "\tORDINAL_POSITION,\n" +
+            "\tCOLUMN_DEFAULT,\n" +
+            "\tIS_NULLABLE,\n" +
+            "\tUDT_NAME AS DATA_TYPE,\n" +
+            "\tCHARACTER_MAXIMUM_LENGTH,\n" +
+            "\tCHARACTER_OCTET_LENGTH,\n" +
+            "\tNUMERIC_PRECISION,\n" +
+            "\tNUMERIC_SCALE,\n" +
+            "\tDATETIME_PRECISION \n" +
+            "FROM\n" +
+            "\tINFORMATION_SCHEMA.COLUMNS col\n" +
+            "\tLEFT JOIN PG_CLASS C ON C.relname = col.\n" +
+            "\tTABLE_NAME LEFT JOIN PG_DESCRIPTION d ON d.objoid = C.oid \n" +
+            "\tAND d.objsubid = col.ordinal_position ";
+
     public SQLShowColumnsOperator() {
         this(DBType.getSystemDbType());
     }
@@ -116,10 +137,14 @@ public class SQLShowColumnsOperator extends PrepareOperatorImpl<SQLShowColumnsOp
                                 queryOperator.eq(DSLName.of(TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName());
                             }
                         }
-                        case DbType.h2, DbType.postgresql -> {
+                        case DbType.h2 -> {
                             Table systemTable = Table.of(DSLName.of("INFORMATION_SCHEMA.COLUMNS", DSLName.PLAIN_FEATURE)).setSchema(null);
                             queryOperator
                                     .from(systemTable)
+                                    .eq(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), table.getName().format());
+                        }
+                        case postgresql -> {
+                            queryOperator.customize(PG_SHOW_COLUMN_SQL)
                                     .eq(DSLName.of("TABLE_NAME", DSLName.PLAIN_FEATURE), table.getName().format());
                         }
                         case DbType.db2 -> {

@@ -32,16 +32,24 @@ public class PostgreSQLTypeDelegate extends DSLTypeDelegate {
     @Getter
     @AllArgsConstructor
     public enum PostgreSQLLinkType implements DSLLinkType {
+
         INT8("int8", Types.BIGINT, null, null, List.of(DSLType.BIGINT)),
         FLOAT("float8", Types.FLOAT, 12, 2, List.of(DSLType.FLOAT)),
         NUMERIC("numeric", Types.DOUBLE, 12, 2, List.of(DSLType.DOUBLE, DSLType.NUMBER)),
         INT4("int4", Types.INTEGER, null, null, List.of(DSLType.INTEGER)),
-        INT2("int2", Types.INTEGER, null, null, List.of(DSLType.SMALLINT));
+        INT2("int2", Types.INTEGER, null, null, List.of(DSLType.SMALLINT)),
+        TEXT("text", Types.LONGVARCHAR, null, null, List.of(DSLType.LONGVARCHAR)),
+        BOOL("bool", Types.BOOLEAN, null, null, List.of(DSLType.BOOLEAN));
 
         private final String name;
         private final int jdbcType;
         private final Integer precision;
         private final Integer scale;
         private final List<DSLType> parent;
+
+        @Override
+        public boolean equalsTo(DSLType other) {
+            return parent.contains(other);
+        }
     }
 }

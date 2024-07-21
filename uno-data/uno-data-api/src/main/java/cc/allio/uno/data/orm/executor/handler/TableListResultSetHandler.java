@@ -21,6 +21,7 @@ public class TableListResultSetHandler extends ExecutorOptionsAwareImpl implemen
     public static final DSLName TABLE_SCHEMA_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.HUMP_FEATURE);
     public static final DSLName TABLE_NAME_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.HUMP_FEATURE);
     public static final DSLName TABLE_TYPE_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.HUMP_FEATURE);
+    public static final DSLName TABLE_COMMENT_DSL_NAME = DSLName.of(ShowTablesOperator.TABLE_COMMENT_FILED, DSLName.HUMP_FEATURE);
 
     @Override
     public List<Table> apply(ResultSet resultSet) {
@@ -32,8 +33,14 @@ public class TableListResultSetHandler extends ExecutorOptionsAwareImpl implemen
                     r.getOptionStringValue(TABLE_SCHEMA_DSL_NAME, table::setSchema);
                     r.getOptionStringValue(TABLE_NAME_DSL_NAME, name -> table.setName(DSLName.of(name, DSLName.PLAIN_FEATURE)));
                     r.getOptionStringValue(TABLE_TYPE_DSL_NAME, table::setType);
+                    r.getOptionStringValue(TABLE_COMMENT_DSL_NAME, table::setComment);
                     return table;
                 })
                 .toList();
+    }
+
+    @Override
+    public Class<Table> getResultType() {
+        return Table.class;
     }
 }

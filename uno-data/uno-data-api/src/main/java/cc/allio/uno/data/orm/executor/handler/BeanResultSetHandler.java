@@ -26,4 +26,9 @@ public class BeanResultSetHandler<R> extends ExecutorOptionsAwareImpl implements
     public Class<R> getBeanType() {
         return beanClass;
     }
+
+    @Override
+    public Class<R> getResultType() {
+        return getBeanType();
+    }
 }

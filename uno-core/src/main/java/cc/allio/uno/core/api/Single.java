@@ -1,7 +1,6 @@
 package cc.allio.uno.core.api;
 
 import cc.allio.uno.core.exception.Exceptions;
-import cc.allio.uno.core.util.CollectionUtils;
 
 import java.util.List;
 import java.util.Map;
@@ -28,7 +27,7 @@ public interface Single<E> {
      * @return the {@link Single} instance
      */
     static <E> Single<E> from(List<E> list) {
-        if (CollectionUtils.isEmpty(list)) {
+        if (list == null) {
             throw Exceptions.unNull("list");
         }
         return new InternalSingle<>(list.stream());
@@ -41,7 +40,7 @@ public interface Single<E> {
      * @return the {@link Single} instance
      */
     static <E> Single<E> from(Set<E> set) {
-        if (CollectionUtils.isEmpty(set)) {
+        if (set == null) {
             throw Exceptions.unNull("set");
         }
         return new InternalSingle<>(set.stream());
@@ -54,7 +53,7 @@ public interface Single<E> {
      * @return the {@link Single} instance
      */
     static <E, K, V> Single<E> from(Map<K, V> map) {
-        if (CollectionUtils.isEmpty(map)) {
+        if (map == null) {
             throw Exceptions.unNull("map");
         }
         return (Single<E>) new InternalSingle<>(map.entrySet().stream());

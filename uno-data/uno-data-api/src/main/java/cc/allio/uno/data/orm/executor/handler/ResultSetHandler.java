@@ -1,5 +1,6 @@
 package cc.allio.uno.data.orm.executor.handler;
 
+import cc.allio.uno.core.reflect.ReflectTools;
 import cc.allio.uno.data.orm.executor.ResultGroup;
 
 import java.util.function.Function;
@@ -13,4 +14,13 @@ import java.util.function.Function;
  */
 public interface ResultSetHandler<R> extends Function<ResultGroup, R>, ResultHandler {
 
+    /**
+     * get result type
+     *
+     * @since 1.1.9
+     * @return the result type
+     */
+   default Class<R> getResultType() {
+       return (Class<R>) ReflectTools.getGenericType(this, ResultSetHandler.class);
+   }
 }

@@ -30,4 +30,9 @@ public class ListMapResultHandler extends ExecutorOptionsAwareImpl implements Li
         }
         return r;
     }
+
+    @Override
+    public Class<Map<String, Object>> getResultType() {
+        return handler.getResultType();
+    }
 }

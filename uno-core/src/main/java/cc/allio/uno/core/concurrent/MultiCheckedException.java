@@ -44,9 +44,10 @@ public class MultiCheckedException extends Exception {
             return (T) unchecked.get(errType);
         }
         var err = Single.from(unchecked.entrySet())
-                .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
+                .forReturn(errEntry -> errType.isAssignableFrom(errEntry.getKey()))
                 .map(Map.Entry::getValue)
                 .orElse(null);
+
         return (T) err;
     }
 
@@ -62,7 +63,7 @@ public class MultiCheckedException extends Exception {
             return (T) checked.get(errType);
         }
         var err = Single.from(checked.entrySet())
-                .forReturn(errEntry -> errEntry.getKey().isAssignableFrom(errType))
+                .forReturn(errEntry -> errType.isAssignableFrom(errEntry.getKey()))
                 .map(Map.Entry::getValue)
                 .orElse(null);
 

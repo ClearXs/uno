@@ -23,4 +23,9 @@ public class DefaultListResultSetHandler extends ExecutorOptionsAwareImpl implem
         }
         return r;
     }
+
+    @Override
+    public Class<ResultGroup> getResultType() {
+        return ResultGroup.class;
+    }
 }

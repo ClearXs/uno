@@ -18,7 +18,12 @@ public class LongJavaType implements JavaType<Long> {
 
     @Override
     public boolean equalsTo(Class<?> otherJavaType) {
-        return Long.class.isAssignableFrom(otherJavaType)
-                || long.class.isAssignableFrom(otherJavaType);
+        if (otherJavaType == null) {
+            return false;
+        }
+        if (otherJavaType.isPrimitive()) {
+            return long.class.isAssignableFrom(otherJavaType);
+        }
+        return Long.class.isAssignableFrom(otherJavaType);
     }
 }

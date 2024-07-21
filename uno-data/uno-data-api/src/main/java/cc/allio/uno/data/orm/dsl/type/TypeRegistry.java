@@ -5,14 +5,21 @@ import com.google.common.collect.*;
 
 import java.sql.Types;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
- * type register
+ * Type Registry is about of {@link JavaType} and {@link JdbcType} registry. it description relation of {@link JavaType} and {@link JdbcType}
+ * <p>
+ *     first, it will be registration abound of {@link JavaType} and {@link JdbcType} instance to current class.
+ *     then build relation of {@link JavaType} and {@link JdbcType}.
+ * </p>
+ * <p>
+ *     {@link TypeRegistry} supply abundant method about of find {@link JavaType} and {@link JdbcType}, like as {@link #findJdbcType(Integer)}, {@link #findJavaType(Integer)} etc.
+ * </p>
  *
  * @author j.x
  * @date 2023/1/13 16:00
  * @since 1.1.4
+ * @modify 1.1.9
  */
 public final class TypeRegistry {
 
@@ -42,6 +49,7 @@ public final class TypeRegistry {
         initNumericTypes();
         initCharTypes();
         initDateTypes();
+        initOtherTypes();
         initComplexTypes();
         initUnknownTypes();
     }
@@ -345,10 +353,6 @@ public final class TypeRegistry {
      */
     private void initNumericTypes() {
         // ----------- numeric types -----------
-        registerRelation(
-                getJdbcType(Types.BOOLEAN),
-                getJavaType(ByteJavaType.class)
-        );
         // smallint
         registerRelation(
                 getJdbcType(Types.SMALLINT),
@@ -476,6 +480,16 @@ public final class TypeRegistry {
     }
 
     /**
+     * init other types, like boolean
+     */
+    private void initOtherTypes() {
+        registerRelation(
+                getJdbcType(Types.BOOLEAN),
+                getJavaType(BooleanJavaType.class)
+        );
+    }
+
+    /**
      * 初始化复杂类型，如blob、clob
      */
     private void initComplexTypes() {
@@ -548,6 +562,36 @@ public final class TypeRegistry {
         );
     }
 
+
+    /**
+     * 注册java type
+     *
+     * @param javaType javaType INSTANCE
+     */
+    void registerJavaType(JavaType<?> javaType) {
+        javaTypes.put((Class<? extends JavaType<?>>) javaType.getClass(), javaType);
+    }
+
+    /**
+     * 注册 jdbc type
+     *
+     * @param jdbcType jdbcType INSTANCE
+     */
+    void registerJdbcType(JdbcType jdbcType) {
+        jdbcTypes.put(jdbcType.getJdbcCode(), jdbcType);
+    }
+
+    /**
+     * key = jdbcType
+     * value = javaType
+     *
+     * @param jdbcType jdbc type
+     * @param javaType java type
+     */
+    void registerRelation(JdbcType jdbcType, JavaType<?> javaType) {
+        jdbcTypesMappings.put(jdbcType.getJdbcCode(), javaType);
+        javaTypeMappings.put(javaType, jdbcType.getJdbcCode());
+    }
 
     /**
      * 获取jdbc types
@@ -638,7 +682,7 @@ public final class TypeRegistry {
     public JavaType<?> findJavaType(Integer jdbcCode) {
         Collection<JavaType<?>> types = jdbcTypesMappings.get(jdbcCode);
         if (CollectionUtils.isNotEmpty(types)) {
-            return Lists.newArrayList(types).get(0);
+            return Lists.newArrayList(types).getFirst();
         }
         return null;
     }
@@ -651,39 +695,7 @@ public final class TypeRegistry {
      */
     public Collection<JdbcType> findJdbcTypeFindJavaType(JavaType<?> javaType) {
         Collection<Integer> jdbcCodes = javaTypeMappings.get(javaType);
-        return Collections.unmodifiableCollection(
-                jdbcCodes.stream().map(jdbcTypes::get).collect(Collectors.toList())
-        );
-    }
-
-    /**
-     * 注册java type
-     *
-     * @param javaType javaType INSTANCE
-     */
-    public void registerJavaType(JavaType<?> javaType) {
-        javaTypes.put((Class<? extends JavaType<?>>) javaType.getClass(), javaType);
-    }
-
-    /**
-     * 注册 jdbc type
-     *
-     * @param jdbcType jdbcType INSTANCE
-     */
-    public void registerJdbcType(JdbcType jdbcType) {
-        jdbcTypes.put(jdbcType.getJdbcCode(), jdbcType);
-    }
-
-    /**
-     * key = jdbcType
-     * value = javaType
-     *
-     * @param jdbcType jdbc type
-     * @param javaType java type
-     */
-    public void registerRelation(JdbcType jdbcType, JavaType<?> javaType) {
-        jdbcTypesMappings.put(jdbcType.getJdbcCode(), javaType);
-        javaTypeMappings.put(javaType, jdbcType.getJdbcCode());
+        return jdbcCodes.stream().map(jdbcTypes::get).toList();
     }
 
     /**
@@ -739,10 +751,7 @@ public final class TypeRegistry {
      */
     public Collection<JdbcType> guessJdbcType(Object value) {
         JavaType<?> javaType = guessJavaType(value);
-        if (javaType != null) {
-            return findJdbcTypeFindJavaType(javaType);
-        }
-        return Collections.emptyList();
+        return findJdbcTypeFindJavaType(javaType);
     }
 
     /**
@@ -753,10 +762,7 @@ public final class TypeRegistry {
      */
     public Collection<JdbcType> guessJdbcType(Class<?> valueType) {
         JavaType<?> javaType = guessJavaType(valueType);
-        if (javaType != null) {
-            return findJdbcTypeFindJavaType(javaType);
-        }
-        return Collections.emptyList();
+        return findJdbcTypeFindJavaType(javaType);
     }
 
     /**
@@ -768,4 +774,54 @@ public final class TypeRegistry {
         return INSTANCE;
     }
 
+    // ----------------------------- static method -----------------------------
+
+    /**
+     * @see #getJdbcTypes()
+     */
+    public static Collection<JdbcType> obtainJdbcTypes() {
+        return getInstance().getJdbcTypes();
+    }
+
+    /**
+     * @see #getJdbcType(Integer)
+     */
+    public static JdbcType obtainJdbcType(Integer code) {
+        return getInstance().getJdbcType(code);
+    }
+
+    /**
+     * @see #getJavaTypes()
+     */
+    public static Collection<JavaType<?>> obtainJavaTypes() {
+        return getInstance().getJavaTypes();
+    }
+
+    /**
+     * @see #getJavaTypeByClassType(Class)
+     */
+    public static JavaType<?> obtainJavaTypeByClassType(Class<?> classType) {
+        return getInstance().getJavaTypeByClassType(classType);
+    }
+
+    /**
+     * @see #getJavaType(Class)
+     */
+    public static JavaType<?> obtainJavaType(Class<? extends JavaType<?>> javaTypeClass) {
+        return getInstance().getJavaType(javaTypeClass);
+    }
+
+    /**
+     * @see #findJavaType(Integer)
+     */
+    public static JavaType<?> obtainJavaType(Integer jdbcCode) {
+        return getInstance().findJavaType(jdbcCode);
+    }
+
+    /**
+     * @see #findJdbcTypeFindJavaType(JavaType)
+     */
+    public static Collection<JdbcType> obtainJdbcTypeFindJavaType(JavaType<?> javaType) {
+        return getInstance().findJdbcTypeFindJavaType(javaType);
+    }
 }

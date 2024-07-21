@@ -11,7 +11,15 @@ import java.util.function.Function;
  * @author j.x
  * @date 2023/4/18 13:29
  * @since 1.1.4
+ * @see ResultSetHandler
  */
 public interface ListResultSetHandler<R> extends Function<ResultSet, List<R>>, ResultHandler {
 
+    /**
+     * get result type
+     *
+     * @since 1.1.9
+     * @return the result type
+     */
+    Class<R> getResultType();
 }

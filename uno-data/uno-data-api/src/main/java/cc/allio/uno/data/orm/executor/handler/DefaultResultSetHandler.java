@@ -15,4 +15,9 @@ public class DefaultResultSetHandler extends ExecutorOptionsAwareImpl implements
     public ResultGroup apply(ResultGroup resultGroup) {
         return resultGroup;
     }
+
+    @Override
+    public Class<ResultGroup> getResultType() {
+        return ResultGroup.class;
+    }
 }

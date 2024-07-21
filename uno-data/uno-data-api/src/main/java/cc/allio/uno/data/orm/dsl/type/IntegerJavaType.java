@@ -18,7 +18,12 @@ public class IntegerJavaType extends JavaTypeImpl<Integer> {
 
     @Override
     public boolean equalsTo(Class<?> otherJavaType) {
-        return Integer.class.isAssignableFrom(otherJavaType)
-                || int.class.isAssignableFrom(otherJavaType);
+        if (otherJavaType == null) {
+            return false;
+        }
+        if (otherJavaType.isPrimitive()) {
+            return int.class.isAssignableFrom(otherJavaType);
+        }
+        return Integer.class.isAssignableFrom(otherJavaType);
     }
 }

@@ -18,6 +18,7 @@ public interface ShowTablesOperator<T extends ShowTablesOperator<T>> extends Tab
     String TABLE_SCHEMA_FILED = "TABLE_SCHEMA";
     String TABLE_NAME_FILED = "TABLE_NAME";
     String TABLE_TYPE_FILED = "TABLE_TYPE";
+    String TABLE_COMMENT_FILED = "TABLE_COMMENT";
 
     /**
      * 转换为{@link QueryOperator}

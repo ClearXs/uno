@@ -27,6 +27,18 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOper
     private List<Table> tables;
     private SQLQueryOperator queryOperator;
 
+    public static final String PG_SHOW_TABLES = "SELECT\n" +
+            "\tTABLE_CATALOG,\n" +
+            "\tTABLE_SCHEMA,\n" +
+            "\tTABLE_NAME,\n" +
+            "\tTABLE_TYPE,\n" +
+            "\td.description AS TABLE_COMMENT \n" +
+            "FROM\n" +
+            "\tINFORMATION_SCHEMA.TABLES\n" +
+            "\tT LEFT JOIN PG_CLASS C ON C.relname = T.\n" +
+            "\tTABLE_NAME LEFT JOIN PG_DESCRIPTION d ON d.objoid = C.oid \n" +
+            "\tAND d.objsubid = 0 ";
+
     public SQLShowTablesOperator() {
         this(DBType.getSystemDbType());
     }
@@ -106,19 +118,16 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOper
                                         .eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), database.getName().format())
                                         .and()
                                         .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
-                        case DbType.h2, DbType.postgresql -> {
-                            queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
-                                    .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
-                                    .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
-                                    .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
-                                    .from(formTable)
-                                    .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE");
-                            if (DbType.h2 == druidDbType) {
-                                queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema);
-                            } else if (DbType.postgresql == druidDbType) {
-                                queryOperator.eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema.toLowerCase());
-                            }
-                        }
+                        case DbType.h2 ->
+                                queryOperator.select(DSLName.of(ShowTablesOperator.TABLE_CATALOG_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_NAME_FILED, DSLName.PLAIN_FEATURE))
+                                        .select(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE))
+                                        .from(formTable)
+                                        .eq(DSLName.of(ShowTablesOperator.TABLE_TYPE_FILED, DSLName.PLAIN_FEATURE), "BASE TABLE")
+                                        .eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema);
+                        case DbType.postgresql ->
+                                queryOperator.customize(PG_SHOW_TABLES).eq(DSLName.of(ShowTablesOperator.TABLE_SCHEMA_FILED, DSLName.PLAIN_FEATURE), schema.toLowerCase());
                     }
                     if (CollectionUtils.isNotEmpty(tables)) {
                         if (tables.size() == 1) {

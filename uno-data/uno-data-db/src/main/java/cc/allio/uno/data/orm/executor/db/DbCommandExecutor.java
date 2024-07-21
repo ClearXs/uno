@@ -8,10 +8,11 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
+import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.type.*;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
-import cc.allio.uno.data.orm.dsl.type.IntegerJavaType;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
@@ -19,6 +20,7 @@ import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptionsImpl;
+import com.google.common.collect.Lists;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.ibatis.executor.Executor;
 import org.apache.ibatis.executor.SimpleExecutor;
@@ -30,6 +32,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.apache.ibatis.session.TransactionIsolationLevel;
 import org.apache.ibatis.transaction.Transaction;
 import org.apache.ibatis.transaction.TransactionFactory;
+import org.apache.ibatis.type.JdbcType;
 
 import java.lang.reflect.Field;
 import java.net.SocketTimeoutException;
@@ -152,26 +155,23 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
 
     @Override
     protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        Class<?> resultType = resultSetHandler.getResultType();
+        if (resultType == null) {
+            resultType = ResultGroup.class;
+        }
+        // get sql
         QueryOperator<?> queryOperator;
-        if (commandType == CommandType.SELECT) {
-            queryOperator = (QueryOperator<?>) operator;
-        } else if (commandType == CommandType.SHOW_TABLES) {
-            queryOperator = ((ShowTablesOperator<?>) operator).toQueryOperator();
-        } else if (commandType == CommandType.SHOW_COLUMNS) {
-            queryOperator = ((ShowColumnsOperator<?>) operator).toQueryOperator();
-        } else {
-            throw new DSLException(String.format("un accept command to Db query list %s", commandType));
+        switch (commandType) {
+            case CommandType.SELECT -> queryOperator = (QueryOperator<?>) operator;
+            case CommandType.SHOW_TABLES -> queryOperator = ((ShowTablesOperator<?>) operator).toQueryOperator();
+            case CommandType.SHOW_COLUMNS -> queryOperator = ((ShowColumnsOperator<?>) operator).toQueryOperator();
+            default -> throw new DSLException(String.format("un accept command to Db query list %s", commandType));
         }
 
         String querySQL = queryOperator.getPrepareDSL();
         SqlSource sqlSource = languageDriver.createSqlSource(configuration, querySQL, null);
-        // 构建ResultMap对象
-        ResultMap resultMap =
-                new ResultMap.Builder(
-                        configuration,
-                        IdGenerator.defaultGenerator().getNextIdAsString(),
-                        ResultGroup.class,
-                        Collections.emptyList()).build();
+
+        ResultMap resultMap = getResultMap(configuration, resultType);
         ParameterMap parameterMap = getParameterMap(queryOperator);
         String cacheId = getCacheId();
         MappedStatement statement =
@@ -230,11 +230,11 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
     /**
      * getParameterMap
      *
-     * @param sqlOperator sqlOperator
+     * @param operator sqlOperator
      * @return ParameterMap
      */
-    private ParameterMap getParameterMap(Operator<?> sqlOperator) {
-        if (sqlOperator instanceof PrepareOperator<?> prepareOperator) {
+    private ParameterMap getParameterMap(Operator<?> operator) {
+        if (operator instanceof PrepareOperator<?> prepareOperator) {
             List<PrepareValue> prepareValues = prepareOperator.getPrepareValues();
             List<ParameterMapping> parameterMappings = prepareValues.stream()
                     .map(prepareValue -> {
@@ -255,6 +255,51 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
                     .build();
         }
         return new ParameterMap.Builder(configuration, "defaultParameterMap", null, new ArrayList<>()).build();
+    }
+
+    /**
+     * get Mybatis {@link ResultMap} instance
+     *
+     * @param configuration the mybatis {@link Configuration} instance
+     * @param resultType return type
+     * @return the {@link ResultMap} instance
+     */
+    private ResultMap getResultMap(Configuration configuration, Class<?> resultType) {
+        List<ResultMapping> resultMappings = Lists.newArrayList();
+        Class<?> mapperType;
+        if (ResultGroup.class.isAssignableFrom(resultType)
+                || Table.class.isAssignableFrom(resultType)
+                || ColumnDef.class.isAssignableFrom(resultType)) {
+            mapperType = ResultGroup.class;
+        } else {
+            mapperType = resultType;
+            List<ColumnDef> columnDefs = PojoWrapper.getInstance(mapperType).getColumnDefs();
+            for (ColumnDef columnDef : columnDefs) {
+                var property = columnDef.getDslName().formatHump();
+                ResultMapping.Builder mb = new ResultMapping.Builder(configuration, property);
+                // build column
+                var column = columnDef.getDslName().formatUnderline();
+                mb.column(column);
+                // build java type and jdbc
+                DataType dataType = columnDef.getDataType();
+                DSLType dslType = dataType.getDslType();
+                int jdbcType = dslType.getJdbcType();
+                JavaType<?> javaType = TypeRegistry.obtainJavaType(jdbcType);
+                if (javaType != null) {
+                    mb.javaType(javaType.getJavaType());
+                }
+                mb.jdbcType(JdbcType.forCode(jdbcType));
+                mb.lazy(false);
+                ResultMapping mapping = mb.build();
+                resultMappings.add(mapping);
+            }
+        }
+
+        return new ResultMap.Builder(
+                configuration,
+                IdGenerator.defaultGenerator().getNextIdAsString(),
+                mapperType,
+                resultMappings).build();
     }
 
     /**
