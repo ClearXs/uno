@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor.internal;
 
 import cc.allio.uno.data.orm.dsl.Operator;
+import cc.allio.uno.data.orm.dsl.UnrecognizedOperator;
 import cc.allio.uno.data.orm.dsl.ddl.*;
 import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
@@ -227,6 +228,18 @@ public class InnerCommandExecutorManager {
     public <O extends AlterTableOperator, E extends ATOInnerCommandExecutor<O>> E getAlter() {
         if (commandExecutorMap.containsKey(CommandType.ALERT_TABLE)) {
             return (E) commandExecutorMap.get(CommandType.ALERT_TABLE);
+        }
+        return null;
+    }
+
+    /**
+     * get {@link UnknownInnerCommandExecutor} if exist
+     *
+     * @return ATOInnerCommandExecutor instance or null
+     */
+    public <R> UnknownInnerCommandExecutor<R, UnrecognizedOperator<?>> getUnknown() {
+        if (commandExecutorMap.containsKey(CommandType.UNKNOWN)) {
+            return (UnknownInnerCommandExecutor<R, UnrecognizedOperator<?>>) commandExecutorMap.get(CommandType.UNKNOWN);
         }
         return null;
     }

@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.sql.ddl;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.exception.DDLException;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
@@ -13,8 +14,10 @@ import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLValuableExpr;
 import com.alibaba.druid.sql.ast.statement.*;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
+import com.google.common.collect.Lists;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -32,6 +35,8 @@ public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOp
     private DBType dbType;
     private DbType druidDbType;
     private Table from;
+
+    private final List<ColumnDef> commentColumnDefList = Lists.newArrayList();
 
     public SQLAlterTableOperator() {
         this(DBType.getSystemDbType());
@@ -92,7 +97,12 @@ public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOp
     public SQLAlterTableOperator alertColumns(Collection<ColumnDef> columnDefs) {
         for (ColumnDef columnDef : columnDefs) {
             SQLColumnDefinition columnDefinition = new SQLColumnDefinition();
-            columnDefinition.setComment(columnDef.getComment());
+            String comment = columnDef.getComment();
+            if (dbType == DBType.POSTGRESQL) {
+                commentColumnDefList.add(columnDef);
+            } else {
+                columnDefinition.setComment(comment);
+            }
             columnDefinition.setName(columnDef.getDslName().format());
             columnDefinition.setDbType(druidDbType);
             if (columnDef.getDataType() != null) {
@@ -122,8 +132,10 @@ public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOp
     @Override
     public SQLAlterTableOperator addColumns(Collection<ColumnDef> columnDefs) {
         for (ColumnDef columnDef : columnDefs) {
+            if (DBType.POSTGRESQL == dbType) {
+                commentColumnDefList.add(columnDef);
+            }
             SQLAlterTableAddColumn alterTableAddColumn = new SQLAlterTableAddColumn();
-            alterTableAddColumn.toString();
             SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
             alterTableAddColumn.addColumn(columnDefinition);
             this.alterTableStatement.addItem(alterTableAddColumn);
@@ -160,5 +172,19 @@ public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOp
     @Override
     public Table getTable() {
         return from;
+    }
+
+    @Override
+    public List<Operator<?>> getPostOperatorList() {
+        List<Operator<?>> commentOperatorList = Lists.newArrayList();
+        for (ColumnDef columnDef : commentColumnDefList) {
+            String columnCommentInfo = columnDef.getComment();
+            if (StringUtils.isNotBlank(columnCommentInfo)) {
+                SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, from, druidDbType);
+                String columnCommentSQL = SQLUtils.toSQLString(commentStatement, druidDbType);
+                commentOperatorList.add(Operator.from(columnCommentSQL));
+            }
+        }
+        return commentOperatorList;
     }
 }

@@ -8,6 +8,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -82,5 +83,20 @@ public class MetaAcceptorDropTableOperator implements DropTableOperator<MetaAcce
     @Override
     public <T extends Operator<T>> T getActual() {
         return (T) actual;
+    }
+
+    @Override
+    public List<Operator<?>> getBeforeOperatorList() {
+        return actual.getBeforeOperatorList();
+    }
+
+    @Override
+    public List<Operator<?>> getCompensateOperatorList() {
+        return actual.getCompensateOperatorList();
+    }
+
+    @Override
+    public List<Operator<?>> getPostOperatorList() {
+        return actual.getPostOperatorList();
     }
 }

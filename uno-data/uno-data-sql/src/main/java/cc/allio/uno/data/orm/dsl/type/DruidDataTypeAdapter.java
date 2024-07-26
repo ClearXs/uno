@@ -46,7 +46,15 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
         Integer precision = dbSQLType.getPrecision();
         Integer scale = dbSQLType.getScale();
         switch (sqlTypeConstant) {
-            case DefaultDSLType.BIGINT, DefaultDSLType.SMALLINT, DefaultDSLType.TINYINT, DefaultDSLType.BIT, DefaultDSLType.INTEGER, DefaultDSLType.DOUBLE, DefaultDSLType.NUMBER, DefaultDSLType.FLOAT:
+            case DefaultDSLType.BIGINT,
+                 DefaultDSLType.SMALLINT,
+                 DefaultDSLType.TINYINT,
+                 DefaultDSLType.BIT,
+                 DefaultDSLType.INTEGER,
+                 DefaultDSLType.INT,
+                 DefaultDSLType.DOUBLE,
+                 DefaultDSLType.NUMBER,
+                 DefaultDSLType.FLOAT:
                 if (precision == null) {
                     return new SQLDataTypeImpl(dbSQLType.getName());
                 } else if (scale == null) {
@@ -63,7 +71,9 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
                     decimalDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
                 }
                 return decimalDataType;
-            case DefaultDSLType.DATE, DefaultDSLType.TIME, DefaultDSLType.TIMESTAMP:
+            case DefaultDSLType.DATE,
+                 DefaultDSLType.TIME,
+                 DefaultDSLType.TIMESTAMP:
                 SQLDataTypeImpl dateDataType = new SQLDataTypeImpl(dbSQLType.getName());
                 if (precision != null) {
                     dateDataType.addArgument(new SQLIntegerExpr(precision));

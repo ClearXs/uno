@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.executor.mongodb;
 
 import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.executor.AbstractCommandExecutor;
 import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
@@ -31,7 +31,7 @@ public class MongodbCommandExecutor extends AbstractCommandExecutor implements A
 
     private final MongoClient mongoClient;
     private final MongoDatabase database;
-    private final OperatorGroup operatorGroup;
+    private final Operators operatorGroup;
 
     private final InnerCommandExecutorManager manager;
 
@@ -49,7 +49,7 @@ public class MongodbCommandExecutor extends AbstractCommandExecutor implements A
         String databaseName = options.getDatabase();
         this.mongoClient = MongoClients.create(url);
         this.database = mongoClient.getDatabase(databaseName);
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.MONGODB, options);
+        this.operatorGroup = Operators.getOperatorGroup(OperatorKey.MONGODB, options);
         SPIInnerCommandScanner scanner = options.getScanner();
         this.manager = scanner.scan(database, mongoClient);
     }
@@ -65,7 +65,7 @@ public class MongodbCommandExecutor extends AbstractCommandExecutor implements A
     }
 
     @Override
-    public OperatorGroup getOperatorGroup() {
+    public Operators getOperatorGroup() {
         return operatorGroup;
     }
 

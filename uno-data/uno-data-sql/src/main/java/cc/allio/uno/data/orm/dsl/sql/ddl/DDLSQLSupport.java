@@ -7,7 +7,11 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.data.orm.dsl.type.DruidDataTypeAdapter;
 import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
+import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLDataType;
+import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
+import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
+import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.expr.SQLValuableExpr;
 import com.alibaba.druid.sql.ast.statement.*;
 
@@ -49,7 +53,10 @@ public class DDLSQLSupport extends SQLSupport {
     public static SQLColumnDefinition createColumnDefinition(ColumnDef columnDef, DBType dbType) {
         var druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
         SQLColumnDefinition sqlColumnDefinition = new SQLColumnDefinition();
-        sqlColumnDefinition.setComment(columnDef.getComment());
+        // exclude pg DB type
+        if (dbType != DBType.POSTGRESQL) {
+            sqlColumnDefinition.setComment(columnDef.getComment());
+        }
         sqlColumnDefinition.setName(columnDef.getDslName().format());
         sqlColumnDefinition.setDbType(druidType);
         DataType dataType = columnDef.getDataType();
@@ -83,5 +90,39 @@ public class DDLSQLSupport extends SQLSupport {
             sqlColumnDefinition.setDefaultExpr(defaultValueExpr);
         }
         return sqlColumnDefinition;
+    }
+
+    /**
+     * create druid {@link SQLCommentStatement} instance
+     *
+     * @param columnDef the {@link ColumnDef} instance
+     * @param table     the {@link Table} instance
+     * @param dbType    the {@link DbType}
+     * @return the {@link SQLCommentStatement} instance
+     */
+    public static SQLCommentStatement createCommentStatement(ColumnDef columnDef, Table table, DbType dbType) {
+        String columnCommentInfo = columnDef.getComment();
+        SQLCommentStatement columnComment = new SQLCommentStatement();
+        SQLExprTableSource tableSource = new SQLExprTableSource();
+        SQLPropertyExpr columnExpr = new SQLPropertyExpr();
+
+        // set comment from table
+        SQLPropertyExpr tableExpr = new SQLPropertyExpr();
+        tableExpr.setOwner(new SQLIdentifierExpr(table.getSchema()));
+        tableExpr.setName(table.getName().format());
+
+        // set comment column name
+        columnExpr.setName(columnDef.getDslName().format());
+        // set own
+        columnExpr.setOwner(tableExpr);
+
+        tableSource.setExpr(columnExpr);
+
+        columnComment.setComment(new SQLCharExpr(columnCommentInfo));
+        columnComment.setOn(tableSource);
+        columnComment.setType(SQLCommentStatement.Type.COLUMN);
+        columnComment.setDbType(dbType);
+
+        return columnComment;
     }
 }

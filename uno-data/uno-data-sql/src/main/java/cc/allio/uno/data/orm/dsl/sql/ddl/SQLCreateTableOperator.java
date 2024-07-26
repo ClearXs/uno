@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.sql.ddl;
 
 import cc.allio.uno.auto.service.AutoService;
+import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
 import cc.allio.uno.data.orm.dsl.type.DBType;
@@ -12,7 +13,9 @@ import com.alibaba.druid.sql.ast.statement.*;
 import com.alibaba.druid.sql.dialect.mysql.ast.statement.MySqlCreateTableStatement;
 import com.alibaba.druid.sql.dialect.oracle.ast.stmt.OracleCreateTableStatement;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
+import com.google.common.collect.Lists;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -30,6 +33,8 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     private DbType druidType;
     private Table table;
     private SQLCreateTableStatement createTableStatement;
+    private String comment;
+    private final List<ColumnDef> columnDefs = Lists.newArrayList();
 
     public SQLCreateTableOperator() {
         this(DBType.getSystemDbType());
@@ -100,6 +105,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
 
     @Override
     public SQLCreateTableOperator column(ColumnDef columnDef) {
+        columnDefs.add(columnDef);
         SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
         createTableStatement.addColumn(columnDefinition);
         return self();
@@ -107,7 +113,34 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
 
     @Override
     public SQLCreateTableOperator comment(String comment) {
+        this.comment = comment;
         createTableStatement.setComment(new SQLIdentifierExpr(comment));
         return self();
+    }
+
+    @Override
+    public List<Operator<?>> getPostOperatorList() {
+        List<Operator<?>> commentOperatorList = Lists.newArrayList();
+        if (DBType.POSTGRESQL == dbType) {
+            if (StringUtils.isNotBlank(comment)) {
+                SQLCommentStatement tableComment = new SQLCommentStatement();
+                tableComment.setComment(new SQLIdentifierExpr(comment));
+                tableComment.setType(SQLCommentStatement.Type.TABLE);
+                SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
+                tableComment.setOn(tableSource);
+                String tableCommentSQL = SQLUtils.toSQLString(tableSource, druidType);
+                commentOperatorList.add(Operator.from(tableCommentSQL));
+            }
+
+            for (ColumnDef columnDef : columnDefs) {
+                String columnCommentInfo = columnDef.getComment();
+                if (StringUtils.isNotBlank(columnCommentInfo)) {
+                    SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, table, druidType);
+                    String columnCommentSQL = SQLUtils.toSQLString(commentStatement, druidType);
+                    commentOperatorList.add(Operator.from(columnCommentSQL));
+                }
+            }
+        }
+        return commentOperatorList;
     }
 }

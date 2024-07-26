@@ -3,6 +3,7 @@ package cc.allio.uno.data.orm.dsl;
 import cc.allio.uno.core.api.Key;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.StringUtils;
+import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -34,6 +35,7 @@ public interface OperatorKey extends Key {
      * 获取系统配置下的operator key
      *
      * @return operator key or default  DRUID_OPERATOR_KEY
+     * @see ExecutorOptions#setSystemDefault(boolean)
      */
     static OperatorKey getSystemOperatorKey() {
         String operatorKey = Envs.getProperty(OPERATOR_METADATA_KEY);

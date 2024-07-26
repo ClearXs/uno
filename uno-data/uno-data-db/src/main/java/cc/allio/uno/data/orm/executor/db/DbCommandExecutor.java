@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.executor.db;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.api.Adapter;
+import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.data.orm.dsl.ddl.ShowColumnsOperator;
@@ -9,7 +10,7 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.type.*;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
@@ -57,7 +58,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
     private final LanguageDriver languageDriver;
     private final DbMybatisConfiguration configuration;
     private final MybatisSQLCommandAdapter sqlCommandAdapter;
-    private final OperatorGroup operatorGroup;
+    private final Operators operatorGroup;
     private static final String PACKAGE_NAME = DbCommandExecutor.class.getPackage().getName();
 
     public DbCommandExecutor(DbMybatisConfiguration configuration) {
@@ -79,7 +80,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
         this.executor = new SimpleExecutor(configuration, tx);
         this.languageDriver = new RawLanguageDriver();
         this.sqlCommandAdapter = new MybatisSQLCommandAdapter();
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.SQL, options);
+        this.operatorGroup = Operators.getOperatorGroup(OperatorKey.SQL, options);
     }
 
     @Override
@@ -218,7 +219,7 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
     }
 
     @Override
-    public OperatorGroup getOperatorGroup() {
+    public Operators getOperatorGroup() {
         return operatorGroup;
     }
 
@@ -269,7 +270,8 @@ public class DbCommandExecutor extends AbstractCommandExecutor implements Aggreg
         Class<?> mapperType;
         if (ResultGroup.class.isAssignableFrom(resultType)
                 || Table.class.isAssignableFrom(resultType)
-                || ColumnDef.class.isAssignableFrom(resultType)) {
+                || ColumnDef.class.isAssignableFrom(resultType)
+                || !Types.isBean(resultType)) {
             mapperType = ResultGroup.class;
         } else {
             mapperType = resultType;

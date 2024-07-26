@@ -12,7 +12,7 @@ import java.util.Queue;
  * @date 2023/4/27 09:17
  * @since 1.1.4
  */
-public class BreadthTraversalMode implements TraversalMode {
+public class BreadthTraversalMode implements TraversalMethod {
 
     @Override
     public <T extends TraversalElement<T>> void doTraversal(T e, Visitor<T> visitor) {
@@ -28,7 +28,7 @@ public class BreadthTraversalMode implements TraversalMode {
     }
 
     @Override
-    public Traversal getMode() {
-        return Traversal.BREADTH;
+    public String getMode() {
+        return Traversal.BREADTH.getValue();
     }
 }

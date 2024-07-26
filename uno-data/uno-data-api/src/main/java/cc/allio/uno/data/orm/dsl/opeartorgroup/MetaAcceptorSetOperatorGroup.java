@@ -10,7 +10,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
 import lombok.Data;
 
 /**
- * base on aspectj implementation {@link OperatorGroup}.
+ * base on aspectj implementation {@link Operators}.
  * <p>enhance {@link Operator#obtainMetaAcceptorSet()} load by proxy</p>
  *
  * @author j.x
@@ -18,7 +18,7 @@ import lombok.Data;
  * @since 1.1.8
  */
 @Data
-public class MetaAcceptorSetOperatorGroup implements OperatorGroup {
+public class MetaAcceptorSetOperatorGroup implements Operators {
 
     private final OperatorKey key;
     private MetaAcceptorSet metaAcceptorSet;
@@ -90,5 +90,10 @@ public class MetaAcceptorSetOperatorGroup implements OperatorGroup {
     public AlterTableOperator<?> alterTables(DBType dbType) {
         AlterTableOperator<?> alterTableOperator = SPIOperatorHelper.lazyGet(AlterTableOperator.class, key, dbType);
         return new MetaAcceptorAlterTableOperator(alterTableOperator, metaAcceptorSet);
+    }
+
+    @Override
+    public UnrecognizedOperator<?> unrecognized(DBType dbType) {
+        return SPIOperatorHelper.lazyGet(UnrecognizedOperator.class, key, dbType);
     }
 }

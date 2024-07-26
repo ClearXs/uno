@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor.elasticsearch;
 
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.executor.*;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.executor.internal.InnerCommandExecutorManager;
@@ -30,7 +30,7 @@ import java.net.SocketTimeoutException;
 @Slf4j
 public class EsCommandExecutor extends AbstractCommandExecutor implements AggregateCommandExecutor {
 
-    private final OperatorGroup operatorGroup;
+    private final Operators operatorGroup;
     private final RestClient restClient;
     private final InnerCommandExecutorManager manager;
 
@@ -39,7 +39,7 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Aggreg
         this.restClient = restClientBuilder.build();
         JsonpMapper mapper = new JacksonJsonpMapper();
         RestClientTransport transport = new RestClientTransport(restClient, mapper);
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.ELASTICSEARCH, options);
+        this.operatorGroup = Operators.getOperatorGroup(OperatorKey.ELASTICSEARCH, options);
         SPIInnerCommandScanner scanner = options.getScanner();
         this.manager = scanner.scan(new ElasticsearchIndicesClient(transport), new ElasticsearchClient(transport));
     }
@@ -55,7 +55,7 @@ public class EsCommandExecutor extends AbstractCommandExecutor implements Aggreg
     }
 
     @Override
-    public OperatorGroup getOperatorGroup() {
+    public Operators getOperatorGroup() {
         return operatorGroup;
     }
 

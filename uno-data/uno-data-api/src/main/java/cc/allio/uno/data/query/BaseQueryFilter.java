@@ -3,7 +3,7 @@ package cc.allio.uno.data.query;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
@@ -28,7 +28,7 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator<BaseQueryFilt
     public BaseQueryFilter(DBType dbType, OperatorKey operatorMetadataKey) {
         this.dbType = dbType;
         this.operatorMetadataKey = operatorMetadataKey;
-        this.queryOperator = OperatorGroup.getOperator(QueryOperator.class, operatorMetadataKey, dbType);
+        this.queryOperator = Operators.getOperator(QueryOperator.class, operatorMetadataKey, dbType);
     }
 
     @Override

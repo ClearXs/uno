@@ -1,5 +1,8 @@
 package cc.allio.uno.core.datastructure.tree;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * 规则树遍历方式
  * <ul>
@@ -8,6 +11,13 @@ package cc.allio.uno.core.datastructure.tree;
  *     <li>{@link #BREADTH}：广度优先</li>
  * </ul>
  */
+@AllArgsConstructor
+@Getter
 public enum Traversal {
-    NONE, DEEP, BREADTH;
+
+    NONE("NONE"),
+    DEEP("NONE"),
+    BREADTH("NONE");
+
+    private final String value;
 }

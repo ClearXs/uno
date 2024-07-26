@@ -9,10 +9,10 @@ import cc.allio.uno.core.exception.Exceptions;
  * @date 2023/4/27 09:12
  * @since 1.1.4
  */
-public interface TraversalMode {
-    TraversalMode NONE = new NoneTraversalMode();
-    TraversalMode DEEP = new DeepTraversalMode();
-    TraversalMode BREADTH = new BreadthTraversalMode();
+public interface TraversalMethod {
+    TraversalMethod NONE = new NoneTraversalMode();
+    TraversalMethod DEEP = new DeepTraversalMode();
+    TraversalMethod BREADTH = new BreadthTraversalMode();
 
     /**
      * 根据遍历的方式获取对应的遍历实例
@@ -20,12 +20,12 @@ public interface TraversalMode {
      * @param traversal traversal
      * @return TraversalMode实例
      */
-    static TraversalMode get(Traversal traversal) {
-        if (NONE.getMode() == traversal) {
+    static TraversalMethod get(Traversal traversal) {
+        if (NONE.getMode().equals(traversal.getValue())) {
             return NONE;
-        } else if (DEEP.getMode() == traversal) {
+        } else if (DEEP.getMode().equals(traversal.getValue())) {
             return DEEP;
-        } else if (BREADTH.getMode() == traversal) {
+        } else if (BREADTH.getMode().equals(traversal.getValue())) {
             return BREADTH;
         }
         throw Exceptions.eee("unknown traversal", NullPointerException.class);
@@ -44,5 +44,7 @@ public interface TraversalMode {
      *
      * @return Traversal
      */
-    Traversal getMode();
+    default String getMode() {
+        return "custom";
+    }
 }

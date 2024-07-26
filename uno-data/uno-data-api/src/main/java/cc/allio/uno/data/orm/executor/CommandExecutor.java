@@ -4,7 +4,7 @@ import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.executor.handler.*;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
 import cc.allio.uno.data.orm.executor.options.ExecutorOptions;
@@ -109,9 +109,9 @@ public interface CommandExecutor {
     /**
      * 获取DSL操作元数据。
      *
-     * @return the {@link OperatorGroup} instance
+     * @return the {@link Operators} instance
      */
-    OperatorGroup getOperatorGroup();
+    Operators getOperatorGroup();
 
     /**
      * 获取执行器参数

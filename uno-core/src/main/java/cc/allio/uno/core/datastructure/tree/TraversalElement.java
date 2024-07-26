@@ -10,8 +10,8 @@ package cc.allio.uno.core.datastructure.tree;
 public abstract class TraversalElement<T extends TraversalElement<T>> implements Element<T> {
 
     @Override
-    public void accept(Visitor<T> visitor, Traversal traversal) {
-        TraversalMode.get(traversal).doTraversal((T) this, visitor);
+    public void accept(Visitor<T> visitor, TraversalMethod method) {
+        method.doTraversal((T) this, visitor);
     }
 
     /**

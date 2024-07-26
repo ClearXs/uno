@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.sql.ddl;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
 import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
@@ -36,7 +36,7 @@ public class SQLExistTableOperator extends PrepareOperatorImpl<SQLExistTableOper
     public SQLExistTableOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
-        this.queryOperator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
+        this.queryOperator = Operators.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
     }
 
     @Override

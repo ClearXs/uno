@@ -2,14 +2,14 @@ package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 
 /**
  * Show Tables Operator
  *
  * @author j.x
  * @date 2024/1/4 16:56
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.7
  */
 public interface ShowTablesOperator<T extends ShowTablesOperator<T>> extends TableOperator<T>, PrepareOperator<T>, DataBaseOperator<T> {

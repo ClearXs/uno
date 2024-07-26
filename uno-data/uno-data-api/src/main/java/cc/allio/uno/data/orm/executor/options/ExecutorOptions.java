@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor.options;
 
 import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.data.orm.dsl.MetaAcceptorSet;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.type.DBType;
@@ -141,8 +142,23 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
 
     /**
      * set system default
+     * <p>
+     *     it will be change system {@link OperatorKey} and {@link ExecutorKey}
+     * </p>
      */
     default void setSystemDefault(boolean systemDefault) {
+        if (systemDefault) {
+            OperatorKey operatorKey = getOperatorKey();
+            if (operatorKey != null) {
+                Envs.setProperty(OperatorKey.OPERATOR_METADATA_KEY, operatorKey.key());
+            }
+
+            ExecutorKey executorKey = getExecutorKey();
+            if (executorKey != null) {
+                Envs.setProperty(ExecutorKey.DSL_EXECUTOR_TYPE_KEY, executorKey.key());
+            }
+        }
+
         putAttribute(SYSTEM_DEFAULT_MARK, systemDefault);
     }
 

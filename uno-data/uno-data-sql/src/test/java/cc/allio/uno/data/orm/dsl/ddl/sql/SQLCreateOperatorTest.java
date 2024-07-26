@@ -2,7 +2,7 @@ package cc.allio.uno.data.orm.dsl.ddl.sql;
 
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
@@ -16,7 +16,7 @@ public class SQLCreateOperatorTest extends BaseTestCase {
 
     @Test
     void testCreateTable() {
-        CreateTableOperator<?> createTableOperator = OperatorGroup.getOperator(CreateTableOperator.class, OperatorKey.SQL);
+        CreateTableOperator<?> createTableOperator = Operators.getOperator(CreateTableOperator.class, OperatorKey.SQL);
         String sql = createTableOperator.from("dual")
                 .column(
                         ColumnDef.builder()
@@ -34,7 +34,7 @@ public class SQLCreateOperatorTest extends BaseTestCase {
 
     @Test
     void testParseCreateTableSQL() {
-        CreateTableOperator<?> createTableOperator = OperatorGroup.getOperator(CreateTableOperator.class, OperatorKey.SQL);
+        CreateTableOperator<?> createTableOperator = Operators.getOperator(CreateTableOperator.class, OperatorKey.SQL);
         String sql = "CREATE TABLE dual (\n" +
                 "\tname char(9) PRIMARY KEY NOT NULL UNIQUE\n" +
                 ")";
@@ -46,7 +46,7 @@ public class SQLCreateOperatorTest extends BaseTestCase {
 
     @Test
     void testPgCreateComplexTypeTable() {
-        CreateTableOperator<?> createTableOperator = OperatorGroup.getOperator(CreateTableOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        CreateTableOperator<?> createTableOperator = Operators.getOperator(CreateTableOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
         createTableOperator.from("dual");
         ColumnDef d1 = ColumnDef.builder()
                 .dslName(DSLName.of("d1"))
@@ -78,7 +78,7 @@ public class SQLCreateOperatorTest extends BaseTestCase {
 
     @Test
     void testPgParsePojoCreateTableSQL() {
-        CreateTableOperator<?> createTableOperator = OperatorGroup.getOperator(CreateTableOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        CreateTableOperator<?> createTableOperator = Operators.getOperator(CreateTableOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
         String sql = createTableOperator.fromPojo(User.class).getDSL();
         assertEquals("CREATE TABLE t_users (\n" +
                 "\tid int8 PRIMARY KEY,\n" +

@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.influxdb.dml;
 
 import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.WhereOperator;
 import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
@@ -18,7 +18,7 @@ public class InfluxdbSQLWhereOperatorImpl<T extends WhereOperator<T>> implements
     protected SQLQueryOperator sqlQueryOperator;
 
     public InfluxdbSQLWhereOperatorImpl() {
-        this.sqlQueryOperator = OperatorGroup.getQueryOperator(SQLQueryOperator.class, OperatorKey.SQL);
+        this.sqlQueryOperator = Operators.getQueryOperator(SQLQueryOperator.class, OperatorKey.SQL);
     }
 
     @Override
