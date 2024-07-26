@@ -76,6 +76,7 @@ public interface ExecutorKey extends Key {
      * 获取系统默认executor key
      *
      * @return ExecutorKey
+     * @see ExecutorOptions#setSystemDefault(boolean)
      */
     static ExecutorKey getSystemExecutorKey() {
         String executorKey = Envs.getProperty(DSL_EXECUTOR_TYPE_KEY);

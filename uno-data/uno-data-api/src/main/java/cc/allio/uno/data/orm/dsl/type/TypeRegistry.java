@@ -568,7 +568,7 @@ public final class TypeRegistry {
      *
      * @param javaType javaType INSTANCE
      */
-    void registerJavaType(JavaType<?> javaType) {
+    public void registerJavaType(JavaType<?> javaType) {
         javaTypes.put((Class<? extends JavaType<?>>) javaType.getClass(), javaType);
     }
 
@@ -577,7 +577,7 @@ public final class TypeRegistry {
      *
      * @param jdbcType jdbcType INSTANCE
      */
-    void registerJdbcType(JdbcType jdbcType) {
+    public void registerJdbcType(JdbcType jdbcType) {
         jdbcTypes.put(jdbcType.getJdbcCode(), jdbcType);
     }
 
@@ -588,7 +588,7 @@ public final class TypeRegistry {
      * @param jdbcType jdbc type
      * @param javaType java type
      */
-    void registerRelation(JdbcType jdbcType, JavaType<?> javaType) {
+    public void registerRelation(JdbcType jdbcType, JavaType<?> javaType) {
         jdbcTypesMappings.put(jdbcType.getJdbcCode(), javaType);
         javaTypeMappings.put(javaType, jdbcType.getJdbcCode());
     }

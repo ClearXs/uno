@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.dsl.ddl;
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -14,7 +14,7 @@ import java.util.function.UnaryOperator;
  *
  * @author j.x
  * @date 2023/6/8 19:21
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.4
  */
 public interface AlterTableOperator<T extends AlterTableOperator<T>> extends Operator<T>, Self<T>, TableOperator<T> {

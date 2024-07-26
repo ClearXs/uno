@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl.mongodb.ddl;
 
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.test.BaseTestCase;
@@ -11,7 +11,7 @@ public class MongodbDropCollectionOperatorTest extends BaseTestCase {
     @Test
     void testDropCollection() {
 
-        MongodbDropCollectionOperator dropTableOperator = OperatorGroup.getDropTableOperator(MongodbDropCollectionOperator.class, OperatorKey.MONGODB);
+        MongodbDropCollectionOperator dropTableOperator = Operators.getDropTableOperator(MongodbDropCollectionOperator.class, OperatorKey.MONGODB);
 
         assertNotNull(dropTableOperator);
 

@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.data.orm.dsl.DataBaseOperator;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.PrepareOperator;
 import cc.allio.uno.data.orm.dsl.TableOperator;
@@ -11,7 +11,7 @@ import cc.allio.uno.data.orm.dsl.TableOperator;
  *
  * @author j.x
  * @date 2023/6/8 19:19
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.4
  */
 public interface ShowColumnsOperator<T extends ShowColumnsOperator<T>> extends PrepareOperator<T>, TableOperator<T>, DataBaseOperator<T> {

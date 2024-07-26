@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl.mongodb.dml;
 
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
@@ -10,7 +10,7 @@ class MongodbInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testSimplyInsert() {
-        MongodbInsertOperator insertOperator = OperatorGroup.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
+        MongodbInsertOperator insertOperator = Operators.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
         String dsl = insertOperator.insert("a", "a", "b", "b").getDSL();
         assertEquals("[ {\n" +
                 "  \"a\" : \"a\",\n" +
@@ -21,7 +21,7 @@ class MongodbInsertOperatorTest extends BaseTestCase {
     @Test
     void testBatchInsert() {
 
-        MongodbInsertOperator insertOperator = OperatorGroup.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
+        MongodbInsertOperator insertOperator = Operators.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
         for (int i = 0; i < 5; i++) {
             insertOperator.insert(Tuples.of("a" + i, "a" + i));
         }
@@ -42,7 +42,7 @@ class MongodbInsertOperatorTest extends BaseTestCase {
 
     @Test
     void testStrictFill() {
-        MongodbInsertOperator insertOperator = OperatorGroup.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
+        MongodbInsertOperator insertOperator = Operators.getInsertOperator(MongodbInsertOperator.class, OperatorKey.MONGODB);
         String dsl = insertOperator.insert("a", "a").strictFill("a", "b").getDSL();
 
         assertEquals("[ {\n" +

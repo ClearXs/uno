@@ -89,4 +89,19 @@ public class MetaAcceptorExistTableOperator implements ExistTableOperator<MetaAc
     public <T extends Operator<T>> T getActual() {
         return (T) actual;
     }
+
+    @Override
+    public List<Operator<?>> getBeforeOperatorList() {
+        return actual.getBeforeOperatorList();
+    }
+
+    @Override
+    public List<Operator<?>> getCompensateOperatorList() {
+        return actual.getCompensateOperatorList();
+    }
+
+    @Override
+    public List<Operator<?>> getPostOperatorList() {
+        return actual.getPostOperatorList();
+    }
 }

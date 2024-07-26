@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.influxdb;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.data.orm.config.influxdb.InfluxdbProperties;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.influxdb.InfluxDbTableAcceptor;
@@ -33,7 +33,7 @@ public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements 
 
     private final InfluxDBClient influxDBClient;
     private final InnerCommandExecutorManager manager;
-    private final OperatorGroup operatorGroup;
+    private final Operators operatorGroup;
 
     public InfluxdbCommandExecutor(ExecutorOptions options) {
         super(options);
@@ -66,7 +66,7 @@ public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements 
         InfluxdbCommandExecutorAdaptation adaptation = new InfluxdbCommandExecutorAdaptation(influxDBClient, clientOptions);
         this.manager = scanner.scan(influxDBClient, clientOptions, adaptation);
 
-        this.operatorGroup = OperatorGroup.getOperatorGroup(OperatorKey.INFLUXDB, options);
+        this.operatorGroup = Operators.getOperatorGroup(OperatorKey.INFLUXDB, options);
         options.customizeMetaAcceptorSetter(Table.class, new InfluxDbTableAcceptor());
     }
 
@@ -85,7 +85,7 @@ public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements 
     }
 
     @Override
-    public OperatorGroup getOperatorGroup() {
+    public Operators getOperatorGroup() {
         return operatorGroup;
     }
 

@@ -152,7 +152,17 @@ public interface Element<T extends Element<T>> extends Serializable {
      * @param visitor   visitor
      * @param traversal 遍历原则
      */
-    void accept(Visitor<T> visitor, Traversal traversal);
+    default void accept(Visitor<T> visitor, Traversal traversal) {
+        accept(visitor, TraversalMethod.get(traversal));
+    }
+
+    /**
+     * 树的访问
+     *
+     * @param visitor   visitor
+     * @param method    traversal method
+     */
+    void accept(Visitor<T> visitor, TraversalMethod method);
 
     /**
      * 获取Sentinel结点

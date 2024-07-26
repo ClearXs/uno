@@ -2,7 +2,7 @@ package cc.allio.uno.data.test.executor;
 
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.data.orm.dsl.Operator;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.executor.AggregateCommandExecutor;
 import cc.allio.uno.data.orm.executor.CommandType;
 import cc.allio.uno.data.orm.executor.handler.ListResultSetHandler;
@@ -36,7 +36,7 @@ public class FakeCommandExecutor implements AggregateCommandExecutor {
     }
 
     @Override
-    public OperatorGroup getOperatorGroup() {
+    public Operators getOperatorGroup() {
         return null;
     }
 

@@ -2,20 +2,58 @@ package cc.allio.uno.data.orm.dsl;
 
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.bean.ValueWrapper;
+import cc.allio.uno.data.orm.dsl.ddl.*;
+import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
+import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
+import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
+import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.opeartorgroup.WrapperOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
 import java.lang.annotation.*;
+import java.util.Collections;
+import java.util.List;
 import java.util.Objects;
 import java.util.function.Supplier;
 import java.util.function.UnaryOperator;
 
 /**
- * DSL操作
+ * DSL Operator
+ *
+ * <p>
+ *     DSL means Domain Specific Language. description Data Operation.
+ * </p>
+ *
+ * <p>
+ *     it fulfil before-current-catch-post model.
+ *     <ol>
+ *         <li>the before {@link #getBeforeOperatorList()}</li>
+ *         <li>the current</li>
+ *         <li>the error compensate operator {@link #getCompensateOperatorList()}</li>
+ *         <li>the success post operator {@link #getPostOperatorList()} </li>
+ *     </ol>
+ * </p>
+ * <p>
+ *     through
+ * </p>
  *
  * @author j.x
  * @date 2023/4/12 19:44
  * @since 1.1.4
+ * @modify 1.1.9
+ * @see DeleteOperator
+ * @see InsertOperator
+ * @see QueryOperator
+ * @see UpdateOperator
+ * @see AlterTableOperator
+ * @see CreateTableOperator
+ * @see DropTableOperator
+ * @see ExistTableOperator
+ * @see ShowColumnsOperator
+ * @see ShowTablesOperator
+ * @see UnrecognizedOperator
+ * @see Operators
  */
 public interface Operator<T extends Operator<T>> extends Self<T> {
 
@@ -136,6 +174,45 @@ public interface Operator<T extends Operator<T>> extends Self<T> {
             }
         }
         return operatorType;
+    }
+
+    // ----------------------- executing enhance -----------------------
+
+    /**
+     * get current {@link Operator} before execute {@link Operator} list
+     *
+     * @return the pre {@link Operator} list
+     */
+    default List<Operator<?>> getBeforeOperatorList() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * get current {@link Operator} after execute {@link Operator} list
+     *
+     * @return the post {@link Operator} list
+     */
+    default List<Operator<?>> getPostOperatorList() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * when failure to execute current {@link Operator}, then in capture error execute compensate {@link Operator} list
+     *
+     * @return the compensation {@link Operator} list
+     */
+    default List<Operator<?>> getCompensateOperatorList() {
+        return Collections.emptyList();
+    }
+
+    /**
+     * from 'dsl' build new {@link Operator}
+     *
+     * @param dsl the dsl
+     * @return the {@link Operator} instance
+     */
+    static Operator<?> from(String dsl) {
+        return Operators.getUnrecognizedOperator().customize(dsl);
     }
 
     /**

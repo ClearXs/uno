@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.dsl.ddl;
 
 import cc.allio.uno.core.util.CollectionUtils;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.Operator;
@@ -15,7 +15,7 @@ import java.util.function.UnaryOperator;
  *
  * @author j.x
  * @date 2023/4/12 19:42
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.4
  */
 public interface CreateTableOperator<T extends CreateTableOperator<T>> extends Operator<T>, TableOperator<T> {

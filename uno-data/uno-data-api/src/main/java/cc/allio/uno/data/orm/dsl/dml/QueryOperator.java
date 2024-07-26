@@ -5,7 +5,7 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.Func;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.word.Distinct;
 import com.google.common.collect.Lists;
 
@@ -17,7 +17,7 @@ import java.util.List;
  *
  * @author j.x
  * @date 2023/4/12 23:02
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.4
  */
 public interface QueryOperator<T extends QueryOperator<T>> extends PrepareOperator<T>, TableOperator<T>, WhereOperator<T> {

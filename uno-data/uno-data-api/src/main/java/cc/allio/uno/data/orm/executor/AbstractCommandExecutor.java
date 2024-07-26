@@ -19,6 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -41,7 +42,33 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
 
     @Override
     public boolean bool(Operator<?> operator, CommandType commandType, ResultSetHandler<Boolean> resultSetHandler) {
-        return aspect(operator, commandType, () -> doBool(operator, commandType, resultSetHandler));
+        return aspect(operator, commandType, () -> aroundBool(operator, commandType, resultSetHandler));
+    }
+
+    /**
+     * wrap up {@link Operator}. realize before-execute-catch-post model
+     *
+     * @param operator the current {@link Operator}
+     * @param commandType the {@link CommandType}
+     * @param resultSetHandler the {@link ResultSetHandler}
+     * @return true 成功 false 失败
+     * @throws DSLException invoke process has error
+     * @see #doBool(Operator, CommandType, ResultSetHandler)
+     */
+    boolean aroundBool(Operator<?> operator, CommandType commandType, ResultSetHandler<Boolean> resultSetHandler) {
+        Consumer<Operator<?>> internalHandler = o -> doBool(o, CommandType.getByOperatorClass(o.getClass()), resultSetHandler);
+        // do before execute operator
+        doBefore(operator.getBeforeOperatorList(), internalHandler);
+        // do current operator
+        try {
+            return doBool(operator, commandType, resultSetHandler);
+        } catch (DSLException ex) {
+            // execute compensate operator
+            doCompensate(operator.getCompensateOperatorList(), internalHandler);
+            throw ex;
+        } finally {
+            doPost(operator.getPostOperatorList(), internalHandler);
+        }
     }
 
     /**
@@ -74,48 +101,14 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
                         yield manager.getDelete().exec(operator, resultSetHandler);
                     }
                 }
-                default -> throw new DSLException(String.format("unknown command type in bool %s, accepted " +
-                        "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType));
+                default -> {
+                    log.warn("unknown command type in bool {}, accepted " +
+                            "'CREATE_TABLE', 'DELETE_TABLE', 'EXIST_TABLE', 'ALERT_TABLE', 'INSERT', 'UPDATE', 'DELETE'", commandType);
+                    yield manager.<Boolean>getUnknown().exec(operator, resultSetHandler);
+                }
             };
         } catch (Throwable ex) {
             throw new DSLException(String.format("exec operator %s has err", operator.getClass().getName()), ex);
-        }
-    }
-
-    @Override
-    public <R> List<R> queryList(Operator<?> queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
-        return aspect(queryOperator, commandType, () -> doQueryList(queryOperator, commandType, resultSetHandler));
-    }
-
-    /**
-     * 子类实现
-     *
-     * @param <R>              返回结果类型
-     * @param operator         operator
-     * @param commandType      命令类型
-     * @param resultSetHandler 结果集处理器
-     * @return List
-     * @throws DSLException query failed throw
-     */
-    protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
-        InnerCommandExecutorManager manager = getInnerCommandExecutorManager();
-        if (manager == null) {
-            throw new DSLException("inner command executor manager is null, can't execute operator");
-        }
-
-        try {
-            return switch (commandType) {
-                case SHOW_TABLES ->
-                        manager.<R, ShowTablesOperator, STInnerCommandExecutor<R, ShowTablesOperator>>getShowTable().exec(operator, resultSetHandler);
-                case SHOW_COLUMNS ->
-                        manager.<R, ShowColumnsOperator, SCOInnerCommandExecutor<R, ShowColumnsOperator>>getShowColumn().exec(operator, resultSetHandler);
-                case SELECT ->
-                        manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(operator, resultSetHandler);
-                default ->
-                        throw new DSLException(String.format("unknown command type in queryList %s, accepted 'SHOW_TABLES', 'SHOW_COLUMNS', 'SELECT'", commandType));
-            };
-        } catch (Throwable ex) {
-            throw new DSLException("exec query list has err", ex);
         }
     }
 
@@ -147,10 +140,137 @@ public abstract class AbstractCommandExecutor implements CommandExecutor {
         return before.then(after).block();
     }
 
+    @Override
+    public <R> List<R> queryList(Operator<?> queryOperator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        return aspect(queryOperator, commandType, () -> aroundQueryList(queryOperator, commandType, resultSetHandler));
+    }
+
     /**
-     * sub-class implementation, must be not null
+     * wrap up {@link Operator}. realize before-execute-catch-post model
+     *
+     * @param operator the current {@link Operator}
+     * @param commandType the {@link CommandType}
+     * @param resultSetHandler the {@link ListResultSetHandler}
+     * @return true 成功 false 失败
+     * @throws DSLException invoke process has error
+     * @see #doQueryList(Operator, CommandType, ListResultSetHandler)
+     */
+    <R> List<R> aroundQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        Consumer<Operator<?>> internalHandler = o -> doQueryList(o, CommandType.getByOperatorClass(o.getClass()), resultSetHandler);
+        // do before execute operator
+        doBefore(operator.getBeforeOperatorList(), internalHandler);
+        // do current operator
+        try {
+            return doQueryList(operator, commandType, resultSetHandler);
+        } catch (DSLException ex) {
+            // execute compensate operator
+            doCompensate(operator.getCompensateOperatorList(), internalHandler);
+            throw ex;
+        } finally {
+            doPost(operator.getPostOperatorList(), internalHandler);
+        }
+    }
+
+    /**
+     * 子类实现
+     *
+     * @param <R>              返回结果类型
+     * @param operator         operator
+     * @param commandType      命令类型
+     * @param resultSetHandler 结果集处理器
+     * @return List
+     * @throws DSLException query failed throw
+     */
+    protected <R> List<R> doQueryList(Operator<?> operator, CommandType commandType, ListResultSetHandler<R> resultSetHandler) {
+        InnerCommandExecutorManager manager = getInnerCommandExecutorManager();
+        if (manager == null) {
+            throw new DSLException("inner command executor manager is null, can't execute operator");
+        }
+
+        try {
+            return switch (commandType) {
+                case SHOW_TABLES ->
+                        manager.<R, ShowTablesOperator, STInnerCommandExecutor<R, ShowTablesOperator>>getShowTable().exec(operator, resultSetHandler);
+                case SHOW_COLUMNS ->
+                        manager.<R, ShowColumnsOperator, SCOInnerCommandExecutor<R, ShowColumnsOperator>>getShowColumn().exec(operator, resultSetHandler);
+                case SELECT ->
+                        manager.<R, QueryOperator, QOInnerCommandExecutor<R, QueryOperator>>getQuery().exec(operator, resultSetHandler);
+                default -> {
+                    log.warn("unknown command type in queryList {}, accepted 'SHOW_TABLES', 'SHOW_COLUMNS', 'SELECT'", commandType);
+                    yield manager.<List<R>>getUnknown().exec(operator, null);
+                }
+            };
+        } catch (Throwable ex) {
+            throw new DSLException("exec query list has err", ex);
+        }
+    }
+
+    /**
+     * do before {@link Operator}
+     *
+     * @param beforeOperatorList the before {@link Operator} list
+     * @param handler            the handler
+     */
+    void doBefore(List<? extends Operator<?>> beforeOperatorList, Consumer<Operator<?>> handler) {
+        for (Operator<?> operator : beforeOperatorList) {
+            if (log.isDebugEnabled()) {
+                log.debug("it will be execute pre Operator {}", operator.getClass().getName());
+            }
+            try {
+                handler.accept(operator);
+            } catch (Throwable ex) {
+                // ignore
+                log.warn("Failed to execute pre Operator", ex);
+            }
+        }
+    }
+
+    /**
+     * do post {@link Operator}
+     *
+     * @param postOperatorList the post {@link Operator} list
+     * @param handler          the handler
+     */
+    void doPost(List<? extends Operator<?>> postOperatorList, Consumer<Operator<?>> handler) {
+        for (Operator<?> postOperator : postOperatorList) {
+            if (log.isDebugEnabled()) {
+                log.debug("it will be execute post Operator {}", postOperator.getClass().getName());
+            }
+            try {
+                handler.accept(postOperator);
+            } catch (Throwable ex) {
+                // ignore
+                log.warn("Failed to execute post Operator", ex);
+            }
+        }
+    }
+
+    /**
+     * do catch compensation {@link Operator}
+     *
+     * @param compensateOperatorList the {@link Operator} list
+     * @param handler                the handler
+     */
+    void doCompensate(List<? extends Operator<?>> compensateOperatorList, Consumer<Operator<?>> handler) {
+        // execute compensate operator
+        for (Operator<?> compensateOperator : compensateOperatorList) {
+            if (log.isDebugEnabled()) {
+                log.debug("it will be execute compensate Operator {}", compensateOperator.getClass().getName());
+            }
+            try {
+                handler.accept(compensateOperator);
+            } catch (Throwable ex) {
+                // ignore
+                log.warn("Failed to execute post Operator", ex);
+            }
+        }
+    }
+
+    /**
+     * subclass implementation, must be not null
      *
      * @return InnerCommandExecutorManager
      */
     protected abstract InnerCommandExecutorManager getInnerCommandExecutorManager();
+
 }

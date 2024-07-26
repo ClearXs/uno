@@ -4,7 +4,7 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import reactor.util.function.Tuple2;
@@ -19,7 +19,7 @@ import java.util.function.Supplier;
  *
  * @author j.x
  * @date 2023/4/13 15:25
- * @see OperatorGroup
+ * @see Operators
  * @since 1.1.4
  */
 public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOperator<T>, TableOperator<T> {

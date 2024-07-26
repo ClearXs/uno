@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.dsl.mongodb.ddl;
 
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.test.BaseTestCase;
@@ -10,7 +10,7 @@ class MongodbExistCollectionOperatorTest extends BaseTestCase {
 
     @Test
     void testExistCollection() {
-        MongodbExistCollectionOperator existTableOperator = OperatorGroup.getExistTableOperator(MongodbExistCollectionOperator.class, OperatorKey.MONGODB);
+        MongodbExistCollectionOperator existTableOperator = Operators.getExistTableOperator(MongodbExistCollectionOperator.class, OperatorKey.MONGODB);
 
         assertNotNull(existTableOperator);
 

@@ -1,9 +1,6 @@
 package cc.allio.uno.data.orm.dsl.opeartorgroup;
 
-import cc.allio.uno.data.orm.dsl.MetaAcceptorSet;
-import cc.allio.uno.data.orm.dsl.Operator;
-import cc.allio.uno.data.orm.dsl.OperatorKey;
-import cc.allio.uno.data.orm.dsl.SPIOperatorHelper;
+import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.*;
 import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
@@ -19,7 +16,7 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
  * @see Operator
  * @since 1.1.4
  */
-public interface OperatorGroup {
+public interface Operators {
 
     // ======================== DML ========================
 
@@ -336,11 +333,34 @@ public interface OperatorGroup {
     }
 
     /**
-     * base on operator key gain {@link OperatorGroup}
+     * base on {@link DBType#getSystemDbType()} get {@link UnrecognizedOperator}
      *
-     * @return {@link OperatorGroup} or null
+     * @return the {@link UnrecognizedOperator} instance
      */
-    static OperatorGroup getOperatorGroup(OperatorKey operatorKey, MetaAcceptorSet metaAcceptorSet) {
+    default UnrecognizedOperator<?> unrecognized() {
+        return unrecognized(DBType.getSystemDbType());
+    }
+
+    /**
+     * base on {@link DBType} get {@link UnrecognizedOperator}
+     *
+     * @return the {@link UnrecognizedOperator} instance
+     */
+    UnrecognizedOperator<?> unrecognized(DBType dbType);
+
+    /**
+     * @see #getOperator(Class, OperatorKey, DBType)
+     */
+    static <T extends UnrecognizedOperator<T>> T getUnrecognizedOperator() {
+        return (T) getOperator(UnrecognizedOperator.class);
+    }
+
+    /**
+     * base on operator key gain {@link Operators}
+     *
+     * @return {@link Operators} or null
+     */
+    static Operators getOperatorGroup(OperatorKey operatorKey, MetaAcceptorSet metaAcceptorSet) {
         if (operatorKey != null) {
             return new MetaAcceptorSetOperatorGroup(operatorKey, metaAcceptorSet);
         }

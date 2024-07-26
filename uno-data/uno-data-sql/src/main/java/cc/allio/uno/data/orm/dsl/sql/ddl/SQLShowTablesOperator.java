@@ -6,7 +6,7 @@ import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
 import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
 import cc.allio.uno.data.orm.dsl.exception.DSLException;
-import cc.allio.uno.data.orm.dsl.opeartorgroup.OperatorGroup;
+import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.sql.SQLSupport;
 import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
@@ -46,7 +46,7 @@ public class SQLShowTablesOperator extends PrepareOperatorImpl<SQLShowTablesOper
     public SQLShowTablesOperator(DBType dbType) {
         this.dbType = dbType;
         this.druidDbType = SQLSupport.translateDb(dbType);
-        this.queryOperator = OperatorGroup.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
+        this.queryOperator = Operators.getOperator(SQLQueryOperator.class, OperatorKey.SQL, dbType);
         this.schema = "PUBLIC";
         this.tables = Lists.newArrayList();
     }

@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.executor;
 
 import cc.allio.uno.data.orm.dsl.Operator;
+import cc.allio.uno.data.orm.dsl.UnrecognizedOperator;
 import cc.allio.uno.data.orm.dsl.ddl.*;
 import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
@@ -19,7 +20,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public enum CommandType {
-    UNKNOWN(null),
+    UNKNOWN(UnrecognizedOperator.class),
     ALERT_TABLE(AlterTableOperator.class),
     CREATE_TABLE(CreateTableOperator.class),
     DELETE_TABLE(DropTableOperator.class),
@@ -39,7 +40,7 @@ public enum CommandType {
      *
      * @param o   the operatorClass
      * @param <O> the operator type
-     * @return CommandType or null
+     * @return CommandType or {@link #UNKNOWN}
      */
     public static <O extends Operator<?>> CommandType getByOperatorClass(Class<O> o) {
         if (o == null) {
@@ -55,6 +56,6 @@ public enum CommandType {
                 return commandType;
             }
         }
-        return null;
+        return UNKNOWN;
     }
 }
