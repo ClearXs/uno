@@ -63,6 +63,11 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<SQLQueryOperator> imp
     private final List<String> columns = Lists.newArrayList();
 
     /**
+     * 非递归的
+     */
+    static final String NON_RECURSIVE_QUERY_TEMPLATE = "WITH RECURSIVE biz_tree AS (#{query}) SELECT #{columns} FROM biz_tree";
+
+    /**
      * tree query template, like as
      * <p>
      * WITH RECURSIVE biz_tree AS (SELECT xxx FROM dual WHERE xxx UNION (SELECT sub.* FROM ((SELECT xxx FROM dual WHERE xxx) sub INNER JOIN biz_tree P ON P.ID = sub.parent_id))) SELECT xxx FROM biz_tree
@@ -304,6 +309,17 @@ public class SQLQueryOperator extends SQLWhereOperatorImpl<SQLQueryOperator> imp
                 .map(sqlName -> new SQLIdentifierExpr(sqlName.format()))
                 .forEach(getGroupBy()::addItem);
         return self();
+    }
+
+    @Override
+    public SQLQueryOperator tree(QueryOperator<?> query) {
+        String baseQueryDsl = query.getDSL();
+        String treeQuery =
+                ExpressionTemplate.parse(
+                        NON_RECURSIVE_QUERY_TEMPLATE,
+                        "query", baseQueryDsl,
+                        "columns", String.join(StringPool.COMMA, query.obtainSelectColumns()));
+        return customize(treeQuery);
     }
 
     @Override

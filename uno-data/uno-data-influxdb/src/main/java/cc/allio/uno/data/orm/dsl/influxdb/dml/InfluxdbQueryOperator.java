@@ -122,6 +122,11 @@ public class InfluxdbQueryOperator extends InfluxdbSQLWhereOperatorImpl<Influxdb
     }
 
     @Override
+    public InfluxdbQueryOperator tree(QueryOperator<?> query) {
+        return self();
+    }
+
+    @Override
     public InfluxdbQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         throw Exceptions.unOperate("tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery)");
     }

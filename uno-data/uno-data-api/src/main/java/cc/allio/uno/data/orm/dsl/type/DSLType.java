@@ -196,7 +196,7 @@ public interface DSLType extends EqualsTo<DSLType> {
         LONGVARBINARY("longvarchar", Types.LONGVARBINARY, 2048, null),
 
         // ====================== 其他类型 ======================
-        BOOLEAN("char", Types.BOOLEAN, 0, null),
+        BOOLEAN("boolean", Types.BOOLEAN, 0, null),
 
         // ====================== 高级类型 ======================
         OBJECT("object", Types.JAVA_OBJECT, null, null),

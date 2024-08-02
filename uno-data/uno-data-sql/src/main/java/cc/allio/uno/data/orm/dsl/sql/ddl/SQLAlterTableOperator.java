@@ -180,7 +180,7 @@ public class SQLAlterTableOperator implements AlterTableOperator<SQLAlterTableOp
         for (ColumnDef columnDef : commentColumnDefList) {
             String columnCommentInfo = columnDef.getComment();
             if (StringUtils.isNotBlank(columnCommentInfo)) {
-                SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, from, druidDbType);
+                SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, from, dbType);
                 String columnCommentSQL = SQLUtils.toSQLString(commentStatement, druidDbType);
                 commentOperatorList.add(Operator.from(columnCommentSQL));
             }

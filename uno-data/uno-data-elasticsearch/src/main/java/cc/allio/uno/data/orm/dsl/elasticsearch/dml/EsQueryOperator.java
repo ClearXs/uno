@@ -214,6 +214,11 @@ public class EsQueryOperator extends EsWhereOperatorImpl<EsQueryOperator> implem
     }
 
     @Override
+    public EsQueryOperator tree(QueryOperator<?> query) {
+        return self();
+    }
+
+    @Override
     public EsQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         // nothing to do
         return self();

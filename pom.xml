@@ -39,7 +39,7 @@
     </modules>
 
     <properties>
-        <java.version>22</java.version>
+        <java.version>21</java.version>
         <drools.version>9.44.0.Final</drools.version>
         <reactor-bom>2023.0.6</reactor-bom>
         <spring.boot.version>3.3.0</spring.boot.version>

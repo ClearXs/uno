@@ -304,6 +304,11 @@ public class BaseQueryFilter implements QueryFilter, QueryOperator<BaseQueryFilt
     }
 
     @Override
+    public BaseQueryFilter tree(QueryOperator<?> query) {
+        return null;
+    }
+
+    @Override
     public BaseQueryFilter tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         queryOperator.tree(baseQuery, subQuery);
         return self();

@@ -193,7 +193,12 @@ public class MongodbQueryOperator extends MongodbWhereOperatorImpl<MongodbQueryO
     }
 
     @Override
+    public MongodbQueryOperator tree(QueryOperator<?> query) {
+        return self();
+    }
+
+    @Override
     public MongodbQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
-        throw Exceptions.unOperate("tree");
+        return self();
     }
 }

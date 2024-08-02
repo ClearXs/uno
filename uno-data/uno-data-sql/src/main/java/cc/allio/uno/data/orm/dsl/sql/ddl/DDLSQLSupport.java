@@ -95,12 +95,32 @@ public class DDLSQLSupport extends SQLSupport {
     /**
      * create druid {@link SQLCommentStatement} instance
      *
+     * @param comment the table comment
+     * @param table the {@link Table} instance
+     * @param dbType the {@link DBType}
+     * @return the table {@link SQLCommentStatement} instance
+     */
+    public static SQLCommentStatement createTableCommentStatement(String comment, Table table, DBType dbType) {
+        var druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
+        SQLCommentStatement tableComment = new SQLCommentStatement();
+        SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
+        tableComment.setComment(new SQLCharExpr(comment));
+        tableComment.setType(SQLCommentStatement.Type.TABLE);
+        tableComment.setOn(tableSource);
+        tableComment.setDbType(druidType);
+        return tableComment;
+    }
+
+    /**
+     * create druid {@link SQLCommentStatement} instance
+     *
      * @param columnDef the {@link ColumnDef} instance
      * @param table     the {@link Table} instance
      * @param dbType    the {@link DbType}
-     * @return the {@link SQLCommentStatement} instance
+     * @return the column {@link SQLCommentStatement} instance
      */
-    public static SQLCommentStatement createCommentStatement(ColumnDef columnDef, Table table, DbType dbType) {
+    public static SQLCommentStatement createCommentStatement(ColumnDef columnDef, Table table, DBType dbType) {
+        var druidType = DruidDbTypeAdapter.getInstance().adapt(dbType);
         String columnCommentInfo = columnDef.getComment();
         SQLCommentStatement columnComment = new SQLCommentStatement();
         SQLExprTableSource tableSource = new SQLExprTableSource();
@@ -121,7 +141,7 @@ public class DDLSQLSupport extends SQLSupport {
         columnComment.setComment(new SQLCharExpr(columnCommentInfo));
         columnComment.setOn(tableSource);
         columnComment.setType(SQLCommentStatement.Type.COLUMN);
-        columnComment.setDbType(dbType);
+        columnComment.setDbType(druidType);
 
         return columnComment;
     }
