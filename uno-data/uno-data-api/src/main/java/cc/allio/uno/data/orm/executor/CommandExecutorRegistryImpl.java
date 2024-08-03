@@ -86,16 +86,16 @@ public class CommandExecutorRegistryImpl implements CommandExecutorRegistry {
             }
             T commandExecutor;
             if (ifPresent) {
-                commandExecutor = (T) commandExecutorMap.compute(key, (_, _) -> commandExecutorSupplier.get());
-                optionsKeyMap.compute(executorOptions, (_, _) -> key);
+                commandExecutor = (T) commandExecutorMap.compute(key, (k, v) -> commandExecutorSupplier.get());
+                optionsKeyMap.compute(executorOptions, (k, v) -> key);
             } else {
-                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, _ -> commandExecutorSupplier.get());
-                optionsKeyMap.computeIfAbsent(executorOptions, _ -> key);
+                commandExecutor = (T) commandExecutorMap.computeIfAbsent(key, v -> commandExecutorSupplier.get());
+                optionsKeyMap.computeIfAbsent(executorOptions, k -> key);
             }
             boolean systemDefault = executorOptions.isSystemDefault();
             if (systemDefault) {
                 Envs.setProperty(ExecutorKey.DSL_EXECUTOR_TYPE_KEY, executorOptions.getExecutorKey().key());
-                Envs.setProperty(AggregateCommandExecutor.DEFAULT_KEY, key);
+                Envs.setProperty(CommandExecutor.DEFAULT_KEY, key);
             }
             return commandExecutor;
         } finally {

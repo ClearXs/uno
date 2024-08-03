@@ -34,7 +34,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     private Table table;
     private SQLCreateTableStatement createTableStatement;
     private String comment;
-    private final List<ColumnDef> columnDefs = Lists.newArrayList();
+    private final List<ColumnDef> commentColumnDefList = Lists.newArrayList();
 
     public SQLCreateTableOperator() {
         this(DBType.getSystemDbType());
@@ -93,6 +93,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     @Override
     public SQLCreateTableOperator from(Table table) {
         this.table = table;
+        comment(table.getComment());
         SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
         createTableStatement.setTableSource(tableSource);
         return self();
@@ -105,7 +106,9 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
 
     @Override
     public SQLCreateTableOperator column(ColumnDef columnDef) {
-        columnDefs.add(columnDef);
+        if (DBType.POSTGRESQL == dbType) {
+            commentColumnDefList.add(columnDef);
+        }
         SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
         createTableStatement.addColumn(columnDefinition);
         return self();
@@ -113,7 +116,10 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
 
     @Override
     public SQLCreateTableOperator comment(String comment) {
-        this.comment = comment;
+        if (DBType.POSTGRESQL == dbType) {
+            this.comment = comment;
+        }
+
         createTableStatement.setComment(new SQLIdentifierExpr(comment));
         return self();
     }
@@ -121,24 +127,18 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     @Override
     public List<Operator<?>> getPostOperatorList() {
         List<Operator<?>> commentOperatorList = Lists.newArrayList();
-        if (DBType.POSTGRESQL == dbType) {
-            if (StringUtils.isNotBlank(comment)) {
-                SQLCommentStatement tableComment = new SQLCommentStatement();
-                tableComment.setComment(new SQLIdentifierExpr(comment));
-                tableComment.setType(SQLCommentStatement.Type.TABLE);
-                SQLExprTableSource tableSource = DDLSQLSupport.createTableSource(table, dbType);
-                tableComment.setOn(tableSource);
-                String tableCommentSQL = SQLUtils.toSQLString(tableSource, druidType);
-                commentOperatorList.add(Operator.from(tableCommentSQL));
-            }
+        if (StringUtils.isNotBlank(comment)) {
+            SQLCommentStatement tableComment = DDLSQLSupport.createTableCommentStatement(comment, table, dbType);
+            String tableCommentSQL = SQLUtils.toSQLString(tableComment, druidType);
+            commentOperatorList.add(Operator.from(tableCommentSQL));
+        }
 
-            for (ColumnDef columnDef : columnDefs) {
-                String columnCommentInfo = columnDef.getComment();
-                if (StringUtils.isNotBlank(columnCommentInfo)) {
-                    SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, table, druidType);
-                    String columnCommentSQL = SQLUtils.toSQLString(commentStatement, druidType);
-                    commentOperatorList.add(Operator.from(columnCommentSQL));
-                }
+        for (ColumnDef columnDef : commentColumnDefList) {
+            String columnCommentInfo = columnDef.getComment();
+            if (StringUtils.isNotBlank(columnCommentInfo)) {
+                SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, table, dbType);
+                String columnCommentSQL = SQLUtils.toSQLString(commentStatement, druidType);
+                commentOperatorList.add(Operator.from(columnCommentSQL));
             }
         }
         return commentOperatorList;

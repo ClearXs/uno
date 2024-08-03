@@ -65,10 +65,10 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
             case DefaultDSLType.DECIMAL:
                 SQLDataTypeImpl decimalDataType = new SQLDataTypeImpl(dbSQLType.getName());
                 if (precision != null) {
-                    decimalDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
+                    decimalDataType.addArgument(new SQLIntegerExpr(precision));
                 }
                 if (scale != null) {
-                    decimalDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
+                    decimalDataType.addArgument(new SQLIntegerExpr(precision));
                 }
                 return decimalDataType;
             case DefaultDSLType.DATE,
@@ -81,7 +81,9 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
                 return dateDataType;
             default:
                 SQLDataTypeImpl charDataType = new SQLDataTypeImpl(dbSQLType.getName());
-                charDataType.addArgument(new SQLIntegerExpr(dataType.getPrecision()));
+                if (precision != null) {
+                    charDataType.addArgument(new SQLIntegerExpr(precision));
+                }
                 return charDataType;
         }
     }

@@ -25,9 +25,8 @@ public abstract class DSLTypeDelegate implements DSLType {
             List<DSLType> parent = linkType.getParent();
             if (parent.stream().anyMatch(p -> p.getName().equals(sqlType.getName()))) {
                 dslType = linkType;
-                // 优先取link的定义
-                precision = dslType.getPrecision();
-                scale = dslType.getScale();
+                precision = linkType.getPrecision();
+                scale = linkType.getScale();
                 break;
             }
         }

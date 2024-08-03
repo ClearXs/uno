@@ -106,6 +106,12 @@ public class MetaAcceptorQueryOperator implements QueryOperator<MetaAcceptorQuer
     }
 
     @Override
+    public MetaAcceptorQueryOperator tree(QueryOperator<?> query) {
+        actual.tree(query);
+        return self();
+    }
+
+    @Override
     public MetaAcceptorQueryOperator tree(QueryOperator<?> baseQuery, QueryOperator<?> subQuery) {
         actual.tree(baseQuery, subQuery);
         return self();

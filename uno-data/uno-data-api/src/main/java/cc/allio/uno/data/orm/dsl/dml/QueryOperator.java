@@ -740,6 +740,16 @@ public interface QueryOperator<T extends QueryOperator<T>> extends PrepareOperat
 
     /**
      * build tree query operator
+     *
+     * @param query the build tree query base query operator
+     * @return self
+     */
+    T tree(QueryOperator<?> query);
+
+    /**
+     * <b>recursive tree select</b>
+     *
+     * build tree query operator
      * <p><b>the entity field muse contains id and parent_id</b></p>
      *
      * @param baseQuery the build tree query base query operator
