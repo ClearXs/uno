@@ -1,9 +1,7 @@
 package cc.allio.uno.http.openapi;
 
-import cc.allio.uno.http.openapi.v2.SwaggerParser;
 import cc.allio.uno.http.openapi.v3.OpenApiParser;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import io.swagger.models.Swagger;
 import io.swagger.v3.oas.models.OpenAPI;
 
 /**
@@ -25,8 +23,6 @@ public class OpenApiSpecificationParser {
         context = new DefaultParserContext(mapper, execution);
         // 注册OpenApi v3版本解析器
         execution.register(new OpenApiParser(), context);
-        // 注册OpenApi v2版本解析器
-        execution.register(new SwaggerParser(), context);
     }
 
     /**
@@ -39,18 +35,6 @@ public class OpenApiSpecificationParser {
     public OpenAPI parseV3(String apiJson) {
         ParserExecution execution = context.execution();
         return execution.execute(OpenApiParser.class, apiJson, context);
-    }
-
-    /**
-     * 解析v2版本OpenApi
-     *
-     * @param apiJson OpenApi json串
-     * @return 解析完成的Swagger对象
-     * @see Swagger
-     */
-    public Swagger parseV2(String apiJson) {
-        ParserExecution execution = context.execution();
-        return execution.execute(SwaggerParser.class, apiJson, context);
     }
 
     public static OpenApiSpecificationParser holder() {
