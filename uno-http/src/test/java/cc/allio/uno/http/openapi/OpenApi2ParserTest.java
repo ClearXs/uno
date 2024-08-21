@@ -2,11 +2,8 @@ package cc.allio.uno.http.openapi;
 
 import cc.allio.uno.core.util.FileUtils;
 import cc.allio.uno.test.BaseTestCase;
-import io.swagger.models.Swagger;
 
 import java.util.concurrent.atomic.AtomicReference;
-
-import org.junit.jupiter.api.Test;
 
 class OpenApi2ParserTest extends BaseTestCase {
 
@@ -19,9 +16,4 @@ class OpenApi2ParserTest extends BaseTestCase {
         assertNotNull(example.get());
     }
 
-    @Test
-    void parserV2Test() {
-        Swagger swagger = OpenApiSpecificationParser.holder().parseV2(example.get());
-        System.out.println(swagger);
-    }
 }
