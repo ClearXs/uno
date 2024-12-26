@@ -8,7 +8,6 @@ import java.util.function.UnaryOperator;
  * Table Operator (xxxx xxx)
  *
  * @author j.x
- * @date 2023/4/16 18:07
  * @since 1.1.4
  */
 public interface TableOperator<T extends TableOperator<T>> extends Operator<T> {

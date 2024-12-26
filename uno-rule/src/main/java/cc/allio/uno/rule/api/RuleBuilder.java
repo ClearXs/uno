@@ -8,7 +8,6 @@ import java.util.List;
  * drools rule builder
  *
  * @author j.x
- * @date 2023/4/23 17:02
  * @since 1.1.4
  */
 public interface RuleBuilder {

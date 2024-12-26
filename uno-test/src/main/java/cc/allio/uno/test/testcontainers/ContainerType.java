@@ -8,7 +8,6 @@ import org.testcontainers.utility.DockerImageName;
  * describe to docker container
  *
  * @author j.x
- * @date 2024/3/18 22:54
  * @since 1.1.7
  */
 @Getter

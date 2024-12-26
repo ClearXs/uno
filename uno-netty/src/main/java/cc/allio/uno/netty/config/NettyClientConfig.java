@@ -6,8 +6,7 @@ import cc.allio.uno.netty.transport.UnresolvedAddress;
  * netty-Client的一些配置项
  * 1.地址
  * 2.工作线程核心数
- * @author jiangw
- * @date 2020/11/26 9:30
+ * @author j.x
  * @since 1.0
  */
 public class NettyClientConfig {

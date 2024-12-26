@@ -3,8 +3,7 @@ package cc.allio.uno.test;
 /**
  * 基准测试
  *
- * @author jw
- * @date 2021/12/15 23:24
+ * @author j.x
  */
 public interface BenchmarkTest {
 

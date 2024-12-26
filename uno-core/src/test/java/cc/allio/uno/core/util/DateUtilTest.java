@@ -10,7 +10,6 @@ import java.util.Date;
  * 时间工具类测试
  *
  * @author j.x
- * @date 2022/7/6 11:56
  * @since 1.0
  */
 class DateUtilTest extends BaseTestCase {

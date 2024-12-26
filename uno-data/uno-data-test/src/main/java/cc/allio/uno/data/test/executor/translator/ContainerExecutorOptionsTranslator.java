@@ -13,7 +13,6 @@ import java.util.Map;
  * translate {@link Container} to {@link ExecutorOptions}
  *
  * @author j.x
- * @date 2024/3/20 01:02
  * @since 1.1.7
  */
 public interface ContainerExecutorOptionsTranslator {

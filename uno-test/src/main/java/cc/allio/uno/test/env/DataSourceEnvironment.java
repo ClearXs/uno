@@ -12,7 +12,6 @@ import java.lang.annotation.Annotation;
  * 数据源测试环境类
  *
  * @author j.x
- * @date 2022/2/14 14:11
  * @since 1.0
  */
 @Priority(Integer.MIN_VALUE)

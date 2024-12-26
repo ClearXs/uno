@@ -6,8 +6,7 @@ import lombok.NoArgsConstructor;
 
 /**
  * 失败body
- * @author jiangw
- * @date 2020/12/10 17:30
+ * @author j.x
  * @since 1.0
  */
 @Data

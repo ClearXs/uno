@@ -5,8 +5,7 @@ import java.lang.reflect.Proxy;
 /**
  * jdk代理对象实现
  *
- * @author jiangw
- * @date 2021/8/12 16:37
+ * @author j.x
  * @since 1.1
  */
 class JDKProxyInvocation implements ProxyInvocation {

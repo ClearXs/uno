@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * mongodb delete document operator
  *
  * @author j.x
- * @date 2024/3/14 00:31
  * @since 1.1.7
  */
 @AutoService(DeleteOperator.class)

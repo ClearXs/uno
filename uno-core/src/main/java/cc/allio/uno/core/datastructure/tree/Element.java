@@ -9,7 +9,6 @@ import java.util.List;
  * 抽象树结点定义
  *
  * @author j.x
- * @date 2023/4/26 11:31
  * @since 1.1.4
  */
 public interface Element<T extends Element<T>> extends Serializable {

@@ -31,7 +31,6 @@ import java.util.Map;
  * mongodb query command executor
  *
  * @author j.x
- * @date 2024/3/15 11:34
  * @since 1.1.7
  */
 @Slf4j

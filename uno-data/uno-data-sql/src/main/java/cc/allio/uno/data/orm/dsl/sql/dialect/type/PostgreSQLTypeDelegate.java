@@ -11,7 +11,6 @@ import java.util.List;
  * 对pg库的字段类型进行处理
  *
  * @author j.x
- * @date 2023/4/18 11:14
  * @since 1.1.4
  */
 public class PostgreSQLTypeDelegate extends DSLTypeDelegate {

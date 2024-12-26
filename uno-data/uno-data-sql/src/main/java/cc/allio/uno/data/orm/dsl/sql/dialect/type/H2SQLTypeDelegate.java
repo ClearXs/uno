@@ -11,7 +11,6 @@ import java.util.List;
  * h2数据库字段类型二次转换
  *
  * @author j.x
- * @date 2024/1/8 19:42
  * @since 1.1.7
  */
 public class H2SQLTypeDelegate extends DSLTypeDelegate {

@@ -19,7 +19,6 @@ import java.util.function.UnaryOperator;
  * mongodb insert document operator
  *
  * @author j.x
- * @date 2024/3/14 00:32
  * @since 1.1.7
  */
 @AutoService(InsertOperator.class)

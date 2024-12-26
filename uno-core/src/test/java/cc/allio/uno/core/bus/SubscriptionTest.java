@@ -12,7 +12,6 @@ import java.util.List;
  * 订阅信息单元测试
  *
  * @author j.x
- * @date 2022/2/7 17:53
  * @since 1.0
  */
 class SubscriptionTest extends BaseTestCase {

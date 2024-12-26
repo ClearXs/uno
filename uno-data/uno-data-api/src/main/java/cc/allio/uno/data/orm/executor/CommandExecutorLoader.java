@@ -10,7 +10,6 @@ import java.util.List;
  * {@link CommandExecutor}实例加载器
  *
  * @author j.x
- * @date 2024/1/10 16:02
  * @since 1.1.7
  */
 public interface CommandExecutorLoader<E extends AggregateCommandExecutor> {

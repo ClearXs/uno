@@ -13,7 +13,6 @@ import java.util.Collection;
  * 预处理SQL值对象
  *
  * @author j.x
- * @date 2023/4/16 15:47
  * @since 1.1.4
  */
 @Data

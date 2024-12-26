@@ -9,8 +9,7 @@ import reactor.core.publisher.Mono;
 /**
  * 基于WebFlux的响应
  *
- * @author jw
- * @date 2021/12/6 23:14
+ * @author j.x
  */
 public interface HttpResponseMetadata extends HttpMetadata {
 

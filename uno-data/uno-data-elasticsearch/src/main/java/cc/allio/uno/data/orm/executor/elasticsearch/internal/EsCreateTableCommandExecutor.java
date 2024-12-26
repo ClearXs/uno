@@ -16,7 +16,6 @@ import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient;
  * {@link CommandType#CREATE_TABLE}
  *
  * @author j.x
- * @date 2023/5/29 21:56
  * @since 1.1.4
  */
 @AutoService(CTOInnerCommandExecutor.class)

@@ -13,7 +13,6 @@ import java.lang.annotation.Annotation;
  * <p><b>优先级需要低于{@link DataSourceEnvironment}</b></p>
  *
  * @author j.x
- * @date 2022/2/14 14:27
  * @since 1.0
  */
 @Priority(0)

@@ -11,7 +11,6 @@ package cc.allio.uno.data.orm.dsl;
  * </ul>
  *
  * @author j.x
- * @date 2024/4/16 15:03
  * @since 1.1.8
  */
 public interface MetaAcceptor<T extends Meta<T>> {

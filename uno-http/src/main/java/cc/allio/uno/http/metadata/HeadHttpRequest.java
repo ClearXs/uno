@@ -5,8 +5,7 @@ import org.springframework.http.HttpMethod;
 /**
  * 基于WebFlux的Head Http请求
  *
- * @author jw
- * @date 2021/12/8 23:21
+ * @author j.x
  */
 public class HeadHttpRequest extends BaseHttpRequest {
 

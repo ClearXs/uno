@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for void method
  *
  * @author j.x
- * @date 2024/2/18 16:03
  * @see MethodVoid
  * @since 1.1.7
  */

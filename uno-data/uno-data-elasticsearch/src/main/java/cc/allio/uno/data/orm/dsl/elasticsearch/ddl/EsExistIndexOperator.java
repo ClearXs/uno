@@ -14,7 +14,6 @@ import java.util.function.UnaryOperator;
  * 判断索引是否存在{@link co.elastic.clients.elasticsearch.indices.ExistsRequest}
  *
  * @author j.x
- * @date 2023/5/29 18:59
  * @since 1.1.4
  */
 @AutoService(ExistTableOperator.class)

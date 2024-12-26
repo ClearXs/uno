@@ -11,7 +11,6 @@ import java.util.function.Predicate;
  * 复合类型时序数据
  *
  * @author j.x
- * @date 2022/11/22 10:33
  * @since 1.1.1
  */
 public interface CompositeSequential extends CompositeMetadata<Sequential>, Sequential {

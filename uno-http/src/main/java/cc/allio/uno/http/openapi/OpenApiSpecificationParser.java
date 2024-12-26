@@ -7,8 +7,7 @@ import io.swagger.v3.oas.models.OpenAPI;
 /**
  * Open Api解析器，可以用来解析v2，v3的OpenApi。OpenApi规范可以看<a href="https://github.com/OAI/OpenAPI-Specification">OpenAPI-Specification</a>
  *
- * @author jw
- * @date 2021/12/4 22:51
+ * @author j.x
  */
 public class OpenApiSpecificationParser {
 

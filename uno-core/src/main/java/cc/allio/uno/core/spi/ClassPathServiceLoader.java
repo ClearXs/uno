@@ -21,7 +21,6 @@ import java.util.*;
  * <b>enhanced create instance by constructor create service instance</b>
  *
  * @author j.x
- * @date 2024/3/15 08:54
  * @since 1.1.7
  */
 public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provider<T>> {

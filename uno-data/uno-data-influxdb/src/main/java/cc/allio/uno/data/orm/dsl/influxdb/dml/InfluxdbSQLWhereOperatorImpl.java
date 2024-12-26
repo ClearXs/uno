@@ -10,7 +10,6 @@ import cc.allio.uno.data.orm.dsl.sql.dml.SQLQueryOperator;
  * use SQL as for InfluxQL
  *
  * @author j.x
- * @date 2024/4/14 15:14
  * @since 1.1.8
  */
 public class InfluxdbSQLWhereOperatorImpl<T extends WhereOperator<T>> implements WhereOperator<T> {

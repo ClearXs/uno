@@ -16,7 +16,6 @@ import java.util.function.UnaryOperator;
  * influx query operator use by <a href="https://docs.influxdata.com/influxdb/v2/query-data/influxql/">InfluxQL</a>
  *
  * @author j.x
- * @date 2024/4/14 16:51
  * @since 1.1.8
  */
 @AutoService(QueryOperator.class)

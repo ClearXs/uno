@@ -31,7 +31,6 @@ import java.util.stream.Collectors;
  * 解决值无法映射到一个抽象对象上的问题
  *
  * @author j.x
- * @date 2023/4/14 18:00
  * @since 1.1.4
  */
 public class DbStatementSetHandler extends DefaultResultSetHandler implements ResultSetHandler {

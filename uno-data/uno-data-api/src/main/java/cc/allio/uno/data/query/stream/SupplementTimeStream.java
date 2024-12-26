@@ -30,7 +30,6 @@ import java.util.concurrent.atomic.AtomicLong;
  * </ol>
  *
  * @author j.x
- * @date 2022/11/16 13:20
  * @see SupplementList
  * @since 1.1.0
  */

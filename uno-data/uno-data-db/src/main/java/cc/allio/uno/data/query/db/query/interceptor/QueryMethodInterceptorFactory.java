@@ -12,7 +12,6 @@ import java.util.Objects;
  * 查询拦截器静态工厂
  *
  * @author j.x
- * @date 2022/9/30 16:59
  * @since 1.1.0
  */
 public class QueryMethodInterceptorFactory {

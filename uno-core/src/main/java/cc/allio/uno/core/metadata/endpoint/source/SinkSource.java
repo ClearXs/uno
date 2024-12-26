@@ -8,7 +8,6 @@ import reactor.core.publisher.FluxSink;
  * 基于{@link reactor.core.publisher.FluxSink}的数据源
  *
  * @author j.x
- * @date 2022/12/6 17:42
  * @since 1.1.2
  */
 public class SinkSource extends JsonSource {

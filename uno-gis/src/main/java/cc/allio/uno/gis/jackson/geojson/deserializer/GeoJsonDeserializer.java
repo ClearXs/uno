@@ -19,11 +19,6 @@ import java.util.Map;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName GeoJsonDeserializer
- * @Date 2022-03-05 13:44
- * @Version 1.0
  */
 public class GeoJsonDeserializer<T> extends JsonDeserializer<T> implements ContextualDeserializer {
 

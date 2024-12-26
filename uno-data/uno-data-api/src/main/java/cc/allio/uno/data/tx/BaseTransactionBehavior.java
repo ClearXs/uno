@@ -8,7 +8,6 @@ import org.springframework.transaction.TransactionDefinition;
  * 基于{@link InternalTransactionBehavior}实现
  *
  * @author j.x
- * @date 2024/2/11 12:39
  * @since 1.1.7
  */
 public abstract class BaseTransactionBehavior<T extends BaseTransactionBehavior<T>> implements TxDefinition<T> {

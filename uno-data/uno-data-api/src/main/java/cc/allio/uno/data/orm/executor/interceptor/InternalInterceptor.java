@@ -16,7 +16,6 @@ import java.lang.reflect.AnnotatedElement;
  * {@link Interceptor}装饰器，确定调用事件方法
  *
  * @author j.x
- * @date 2024/1/8 10:51
  * @since 1.1.7
  */
 @Slf4j

@@ -3,8 +3,7 @@ package cc.allio.uno.netty.event;
 /**
  * 连接发生的事件
  *
- * @author jiangw
- * @date 2021/4/16 15:09
+ * @author j.x
  * @since 1.0
  */
 public class ConnectionEvent extends BaseEvent {

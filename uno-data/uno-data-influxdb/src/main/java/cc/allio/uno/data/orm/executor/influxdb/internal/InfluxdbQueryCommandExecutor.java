@@ -28,7 +28,6 @@ import java.util.Optional;
  * influxdb query command executor
  *
  * @author j.x
- * @date 2024/4/14 17:53
  * @since 1.1.8
  */
 @Slf4j

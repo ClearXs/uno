@@ -6,7 +6,6 @@ import cc.allio.uno.core.type.Types;
  * long java type
  *
  * @author j.x
- * @date 2023/1/13 17:52
  * @since 1.1.4
  */
 public class LongJavaType implements JavaType<Long> {

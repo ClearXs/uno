@@ -4,7 +4,6 @@ package cc.allio.uno.http.metadata.interceptor;
  * Token管理器
  *
  * @author j.x
- * @date 2022/8/25 09:26
  * @since 1.0
  */
 public interface TokenManager {

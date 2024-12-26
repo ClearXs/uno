@@ -15,7 +15,6 @@ import org.kie.api.runtime.KieSession;
  * 基于drools的规则引擎
  *
  * @author j.x
- * @date 2023/4/23 17:43
  * @since 1.1.4
  */
 @Slf4j

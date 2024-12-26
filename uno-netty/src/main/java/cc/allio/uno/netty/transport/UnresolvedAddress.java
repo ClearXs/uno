@@ -2,8 +2,7 @@ package cc.allio.uno.netty.transport;
 
 /**
  * screw
- * @author jiangw
- * @date 2020/12/10 17:31
+ * @author j.x
  * @since 1.0
  */
 public interface UnresolvedAddress {

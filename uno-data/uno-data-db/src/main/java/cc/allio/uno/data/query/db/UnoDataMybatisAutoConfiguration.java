@@ -9,7 +9,6 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
  * UNO-DATA配置
  *
  * @author j.x
- * @date 2022/11/22 15:11
  * @since 1.1.2
  */
 @Configuration(proxyBeanMethods = false)

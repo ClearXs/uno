@@ -17,8 +17,7 @@ import reactor.core.publisher.Mono;
 /**
  * 基于Spring的事件总线
  *
- * @author jw
- * @date 2021/12/16 11:22
+ * @author j.x
  */
 @Slf4j
 public class SequentialEventBus extends BaseEventBus<SequentialContext> implements InitializingBean, DisposableBean, ApplicationContextAware {

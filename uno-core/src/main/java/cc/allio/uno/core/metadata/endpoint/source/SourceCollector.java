@@ -6,7 +6,6 @@ import cc.allio.uno.core.metadata.Metadata;
  * 数据源收集器
  *
  * @author j.x
- * @date 2022/9/27 15:18
  * @since 1.1.0
  */
 public interface SourceCollector<T extends Metadata> {

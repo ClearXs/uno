@@ -11,7 +11,6 @@ import java.util.Map;
  * 高阶查询Impl
  *
  * @author j.x
- * @date 2023/4/17 18:19
  * @since 1.1.4
  */
 public class BaseHigherQuery implements HigherQuery {

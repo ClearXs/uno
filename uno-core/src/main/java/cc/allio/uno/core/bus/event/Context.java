@@ -8,7 +8,6 @@ import lombok.Data;
  * 事件上下文
  *
  * @author j.x
- * @date 2022/8/5 09:11
  * @since 1.0
  */
 @Data

@@ -12,7 +12,6 @@ import java.util.Map;
  * 基于{@link CommandExecutor}的流
  *
  * @author j.x
- * @date 2023/4/21 13:21
  * @since 1.1.4
  */
 public class SQLCommandExecutorStream implements CollectionTimeStream<Map<String, Object>> {

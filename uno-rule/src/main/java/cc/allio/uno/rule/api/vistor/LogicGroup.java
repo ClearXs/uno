@@ -17,7 +17,6 @@ import java.util.List;
  * logic
  *
  * @author j.x
- * @date 2023/4/26 11:53
  * @since 1.1.4
  */
 public class LogicGroup extends TraversalElement<LogicGroup> implements GroupElement<LogicGroup> {

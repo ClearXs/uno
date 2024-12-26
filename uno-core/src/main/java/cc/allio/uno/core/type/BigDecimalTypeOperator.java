@@ -7,7 +7,6 @@ import java.math.RoundingMode;
  * BigDecimal类型转换器，可能抛出NumberFormatException异常
  *
  * @author j.x
- * @date 2021/12/23 20:18
  * @since 1.0
  */
 public class BigDecimalTypeOperator implements TypeOperator<BigDecimal> {

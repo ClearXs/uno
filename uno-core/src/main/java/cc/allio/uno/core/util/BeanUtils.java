@@ -26,7 +26,6 @@ import java.util.Collections;
  * Bean实用的工具方法
  *
  * @author j.x
- * @date 2022/1/29 16:05
  * @since 1.0
  */
 @Slf4j
@@ -236,11 +235,9 @@ public final class BeanUtils extends org.springframework.beans.BeanUtils impleme
      * <p>
      * 支持 map bean copy
      * </p>
-     * <note>
      * <b>
      * 复制的目标对象的CLass不能是匿名类
      * </b>
-     * </note>
      *
      * @param source 源对象
      * @param clazz  类名

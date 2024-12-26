@@ -11,7 +11,6 @@ import java.util.stream.Stream;
  * bool
  *
  * @author j.x
- * @date 2024/2/11 12:42
  * @since 1.1.7
  */
 public class BoolTransactionBehavior extends BaseTransactionBehavior<BoolTransactionBehavior> {

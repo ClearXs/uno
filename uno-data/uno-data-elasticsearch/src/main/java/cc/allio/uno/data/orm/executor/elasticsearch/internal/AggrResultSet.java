@@ -9,7 +9,6 @@ import java.util.Map;
  * es聚合结果集
  *
  * @author j.x
- * @date 2023/5/28 21:42
  * @since 1.1.4
  */
 public class AggrResultSet {

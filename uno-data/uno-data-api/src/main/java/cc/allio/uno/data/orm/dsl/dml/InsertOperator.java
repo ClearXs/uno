@@ -18,7 +18,6 @@ import java.util.function.Supplier;
  * <p><b>值得注意的是每调用一次{@link #insert(String, Object)}API，都会生成一个VALUES。建议调用{@link #batchInserts(List, List)}API批量生成</b></p>
  *
  * @author j.x
- * @date 2023/4/13 15:25
  * @see Operators
  * @since 1.1.4
  */

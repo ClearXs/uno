@@ -22,7 +22,6 @@ import java.util.*;
  * cc.allio.uno.core.spi.Demo2Impl<br/>
  *
  * @author j.x
- * @date 2022/3/31 19:32
  * @since 1.0.6
  */
 @Slf4j

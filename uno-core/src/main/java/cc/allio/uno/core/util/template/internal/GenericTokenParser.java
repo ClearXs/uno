@@ -7,7 +7,6 @@ import cc.allio.uno.core.util.template.Tokenizer;
  * 通用Token解析器，指定Token解析成指定的内容，比如说：#{token}替换成指定的内容
  *
  * @author j.x
- * @date 2022/1/29 16:40
  * @see TokenHandler
  * @since 1.0
  */

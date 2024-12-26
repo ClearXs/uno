@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl;
  * SQL join
  *
  * @author j.x
- * @date 2023/4/13 12:05
  * @since 1.1.4
  */
 public enum JoinType {

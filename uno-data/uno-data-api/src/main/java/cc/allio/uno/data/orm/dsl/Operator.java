@@ -39,9 +39,7 @@ import java.util.function.UnaryOperator;
  * </p>
  *
  * @author j.x
- * @date 2023/4/12 19:44
  * @since 1.1.4
- * @modify 1.1.9
  * @see DeleteOperator
  * @see InsertOperator
  * @see QueryOperator

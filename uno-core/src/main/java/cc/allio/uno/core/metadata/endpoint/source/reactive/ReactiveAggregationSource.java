@@ -9,7 +9,6 @@ import java.util.Optional;
  * 可批量订阅数据源
  *
  * @author j.x
- * @date 2023/4/27 17:59
  * @since 1.1.4
  */
 public interface ReactiveAggregationSource<T, C extends ReactiveSource<?>> extends ReactiveSource<T> {

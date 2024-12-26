@@ -14,11 +14,6 @@ import java.util.List;
 /**
  * 〈功能简述〉<br>
  * 〈封装Geometry集合〉
- *
- * @author Mr.QL
- * @ClassName GeometryCollection
- * @Date 2022-03-13 0:13
- * @Version 1.0
  */
 @GeoJsonType(type = FeatureType.GEOMETRY_COLLECTION)
 @JsonSerialize(using = GeoJsonSerializer.class)

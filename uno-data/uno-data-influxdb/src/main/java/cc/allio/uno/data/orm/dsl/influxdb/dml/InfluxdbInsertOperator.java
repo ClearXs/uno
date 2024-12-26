@@ -21,7 +21,6 @@ import java.util.function.UnaryOperator;
  * <p>when invoke relevant {@link #columns(String...)} api, means create influxdb fields, if create tags, please use </p>
  *
  * @author j.x
- * @date 2024/4/14 15:19
  * @since 1.1.8
  */
 @AutoService(InsertOperator.class)

@@ -10,7 +10,6 @@ import java.util.List;
  * void transaction behavior
  *
  * @author j.x
- * @date 2024/2/11 12:37
  * @since 1.1.7
  */
 public class VoidTransactionBehavior extends BaseTransactionBehavior<VoidTransactionBehavior> {

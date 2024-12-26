@@ -8,7 +8,6 @@ import org.locationtech.jts.geom.MultiPolygon;
  * MultiPolygon
  *
  * @author j.x
- * @date 2023/4/18 16:01
  * @since 1.1.4
  */
 public class MultiPolygonJavaType extends JavaTypeImpl<MultiPolygon> {

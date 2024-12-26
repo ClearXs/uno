@@ -8,7 +8,6 @@ import java.util.function.Predicate;
  * 消息发布认证器，当需要发布某个消息时，对它发布的消息作认证
  *
  * @author j.x
- * @date 2022/8/2 16:47
  * @see Authentication
  * @see Globe
  * @see GlobeAuthenticator

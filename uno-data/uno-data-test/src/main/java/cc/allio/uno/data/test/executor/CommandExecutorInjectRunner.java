@@ -31,7 +31,6 @@ import java.util.ServiceLoader;
  * <p>and set {@link CommandExecutor} if test class implementation {@link CommandExecutorSetter}</p>
  *
  * @author j.x
- * @date 2024/3/20 00:44
  * @since 1.1.7
  */
 @Slf4j

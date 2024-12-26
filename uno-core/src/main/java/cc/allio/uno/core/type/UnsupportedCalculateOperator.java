@@ -4,7 +4,6 @@ package cc.allio.uno.core.type;
  * 不受支持的计算操作
  *
  * @author j.x
- * @date 2022/10/10 22:21
  * @since 1.1.0
  */
 public abstract class UnsupportedCalculateOperator<T> implements TypeOperator<T> {

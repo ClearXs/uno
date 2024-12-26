@@ -19,7 +19,6 @@ import org.junit.jupiter.api.Test;
  * 测试清洁装备器
  *
  * @author j.x
- * @date 2022/5/19 16:17
  * @since 1.0
  */
 @RunTest(components = UnoElasticSearchAutoConfiguration.class)

@@ -11,7 +11,6 @@ import java.util.List;
  * Drawn to class
  *
  * @author j.x
- * @date 2024/4/4 17:59
  * @since 1.1.8
  */
 public class DrawnClass implements DrawnGeneric<Class<?>> {

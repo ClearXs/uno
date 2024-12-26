@@ -11,7 +11,6 @@ import java.lang.annotation.*;
  * </p>
  *
  * @author j.x
- * @date 2023/3/3 11:51
  * @see AnnoPropertiesParser
  * @since 1.1.4
  */

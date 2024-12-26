@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl.type;
  * java type impl
  *
  * @author j.x
- * @date 2023/1/13 15:58
  * @since 1.1.4
  */
 public abstract class JavaTypeImpl<T> implements JavaType<T> {

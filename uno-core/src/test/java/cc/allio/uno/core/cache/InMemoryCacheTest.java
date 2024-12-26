@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
  * 内容缓存测试
  *
  * @author j.x
- * @date 2022/2/9 16:46
  * @since 1.0
  */
 class InMemoryCacheTest extends BaseTestCase {

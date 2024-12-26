@@ -10,7 +10,6 @@ import java.util.List;
  * 结果集
  *
  * @author j.x
- * @date 2023/5/28 23:11
  * @since 1.1.4
  */
 @Setter

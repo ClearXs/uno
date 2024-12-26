@@ -10,7 +10,6 @@ import java.lang.annotation.Annotation;
  * 基于注解配置的抽取器，动态生成Bean Definition。能够
  *
  * @author j.x
- * @date 2023/3/2 17:54
  * @since 1.1.4
  */
 public interface EnvConfigure {

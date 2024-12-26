@@ -12,7 +12,6 @@ import java.util.List;
  * bool 转换
  *
  * @author j.x
- * @date 2023/4/18 13:38
  * @since 1.1.4
  */
 public class BoolResultHandler extends ExecutorOptionsAwareImpl implements ResultSetHandler<Boolean> {

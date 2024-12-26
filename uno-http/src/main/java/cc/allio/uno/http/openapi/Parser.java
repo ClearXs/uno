@@ -6,8 +6,7 @@ package cc.allio.uno.http.openapi;
  * 2.次解析器
  * 主解析器关联者次解析器，在主的解析器的生命周期内，将会调用次解析器的生命周期。
  *
- * @author jw
- * @date 2021/12/5 9:55
+ * @author j.x
  */
 public interface Parser<T> {
 

@@ -15,7 +15,6 @@ import java.util.List;
  * reactive kafka source
  *
  * @author j.x
- * @date 2023/4/27 18:09
  * @since 1.1.4
  */
 @Slf4j

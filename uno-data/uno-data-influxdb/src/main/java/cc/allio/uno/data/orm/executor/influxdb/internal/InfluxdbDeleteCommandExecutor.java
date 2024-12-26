@@ -28,7 +28,6 @@ import java.util.Map;
  * influxdb delete command
  *
  * @author j.x
- * @date 2024/4/14 17:06
  * @see InfluxdbDeleteOperator
  * @since 1.1.8
  */

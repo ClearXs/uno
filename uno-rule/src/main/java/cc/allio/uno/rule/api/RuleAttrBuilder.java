@@ -6,7 +6,6 @@ import cc.allio.uno.rule.exception.RuleBuilderException;
  * rule index builder
  *
  * @author j.x
- * @date 2023/4/23 17:28
  * @see RuleAttr
  * @since 1.1.4
  */

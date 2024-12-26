@@ -3,13 +3,13 @@ package cc.allio.uno.gis.mybatis.type;
 import cc.allio.uno.gis.SRID;
 import cc.allio.uno.gis.config.UnoGisProperties;
 import lombok.extern.slf4j.Slf4j;
+import net.postgis.jdbc.PGgeometry;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 import org.locationtech.jts.geom.Geometry;
 import org.locationtech.jts.io.ParseException;
 import org.locationtech.jts.io.WKTReader;
 import org.locationtech.jts.io.WKTWriter;
-import org.postgis.PGgeometry;
 
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
@@ -43,7 +43,7 @@ public abstract class AbstractGeometryTypeHandler<T extends Geometry> extends Ba
     @Override
     public void setNonNullParameter(PreparedStatement ps, int i, T parameter, JdbcType jdbcType) throws SQLException {
         PGgeometry pGgeometry = new PGgeometry(WRITER_POOL.get().write(parameter));
-        org.postgis.Geometry geometry = pGgeometry.getGeometry();
+        net.postgis.jdbc.geometry.Geometry geometry = pGgeometry.getGeometry();
         geometry.setSrid(gisProperties.getDefaultSrid());
         ps.setObject(i, pGgeometry);
     }

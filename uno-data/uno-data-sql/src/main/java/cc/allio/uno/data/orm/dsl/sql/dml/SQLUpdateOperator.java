@@ -31,7 +31,6 @@ import java.util.function.UnaryOperator;
  * DruidSQLUpdateOperator
  *
  * @author j.x
- * @date 2023/4/16 18:18
  * @since 1.1.4
  */
 @AutoService(UpdateOperator.class)

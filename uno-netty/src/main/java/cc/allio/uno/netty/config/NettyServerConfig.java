@@ -11,8 +11,7 @@ import java.net.UnknownHostException;
  * 1.端口
  * 2.工作反应器的线程数
  * 3.注册中心地址
- * @author jiangw
- * @date 2020/11/26 9:20
+ * @author j.x
  * @since 1.0
  */
 public class NettyServerConfig {

@@ -13,8 +13,7 @@ import java.util.List;
 /**
  * OpenApi v3解析器
  *
- * @author jw
- * @date 2021/12/5 10:12
+ * @author j.x
  */
 public class OpenApiParser extends AbstractPrimaryParser<OpenAPI> {
 

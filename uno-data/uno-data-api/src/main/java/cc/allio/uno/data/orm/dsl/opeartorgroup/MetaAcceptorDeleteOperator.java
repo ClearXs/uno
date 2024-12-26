@@ -13,7 +13,6 @@ import java.util.function.UnaryOperator;
  * wrapper for {@link DeleteOperator} from {@link MetaAcceptorSet}
  *
  * @author j.x
- * @date 2024/4/21 16:11
  * @since 1.1.8
  */
 @AllArgsConstructor

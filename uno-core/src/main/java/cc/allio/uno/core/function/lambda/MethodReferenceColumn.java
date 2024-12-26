@@ -12,7 +12,6 @@ import java.lang.reflect.Field;
  * </pre>
  *
  * @author j.x
- * @date 2023/1/5 15:36
  * @since 1.1.4
  */
 public interface MethodReferenceColumn<T> extends StaticMethodReference<T> {
@@ -37,7 +36,6 @@ public interface MethodReferenceColumn<T> extends StaticMethodReference<T> {
      * 获取Column名称
      *
      * @return Column名称
-     * @throws java.io.NotSerializableException 当实体没有实现{@link java.io.Serializable}时抛出
      */
     default String getColumn() {
         return SerializedLambda.of(this).getFieldName();

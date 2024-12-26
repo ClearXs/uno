@@ -6,7 +6,6 @@ import cc.allio.uno.test.TestContext;
  * 对CoreTest进行注册
  *
  * @author j.x
- * @date 2023/3/2 20:37
  * @since 1.1.4
  */
 public class CoreTestListener implements Listener {

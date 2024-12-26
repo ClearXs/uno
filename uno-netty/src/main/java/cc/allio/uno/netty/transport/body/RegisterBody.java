@@ -7,8 +7,7 @@ import java.util.List;
 
 /**
  * 服务注册body
- * @author jiangw
- * @date 2020/12/10 17:30
+ * @author j.x
  * @since 1.0
  */
 @Data

@@ -4,8 +4,7 @@ import cc.allio.uno.netty.exception.ExceptionTraceStack;
 
 /**
  * 响应body
- * @author jiangw
- * @date 2020/12/10 17:30
+ * @author j.x
  * @since 1.0
  */
 public class ResponseBody extends AbstractBody {

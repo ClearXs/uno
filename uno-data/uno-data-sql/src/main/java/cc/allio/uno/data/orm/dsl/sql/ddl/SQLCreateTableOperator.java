@@ -22,7 +22,6 @@ import java.util.function.UnaryOperator;
  * 基于Druid registry operator
  *
  * @author j.x
- * @date 2023/4/12 19:45
  * @since 1.1.4
  */
 @AutoService(CreateTableOperator.class)

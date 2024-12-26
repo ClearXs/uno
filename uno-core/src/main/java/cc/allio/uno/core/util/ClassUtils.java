@@ -21,8 +21,7 @@ import java.util.function.Supplier;
 /**
  * 与{@link Class}有关的工具集
  *
- * @author jw
- * @date 2021/12/5 11:00
+ * @author j.x
  */
 @Slf4j
 public class ClassUtils extends org.springframework.util.ClassUtils {

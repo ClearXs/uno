@@ -13,7 +13,6 @@ import java.util.function.Supplier;
  * 数据抽稀相关常量
  *
  * @author j.x
- * @date 2022/10/9 11:25
  * @since 1.0
  */
 @Getter

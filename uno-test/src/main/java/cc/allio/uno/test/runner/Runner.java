@@ -14,7 +14,6 @@ import org.springframework.core.Ordered;
  * </ul>
  *
  * @author j.x
- * @date 2022/10/28 16:24
  * @since 1.1.0
  */
 @FunctionalInterface

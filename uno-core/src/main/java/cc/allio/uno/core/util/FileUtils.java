@@ -20,8 +20,7 @@ import java.util.function.Consumer;
 /**
  * 文件相关的工具集合
  *
- * @author jw
- * @date 2021/12/4 22:54
+ * @author j.x
  */
 public class FileUtils {
 
@@ -109,7 +108,6 @@ public class FileUtils {
      *
      * @param classPath 类文件路径
      * @return FileReadResult mono
-     * @throws FileNotFoundException 文件找不到时抛出
      */
     public static Mono<FileReadResult> readSingleClassFile(String classPath) {
         return readSingleFile(CLASS_PATH + classPath);
@@ -120,7 +118,6 @@ public class FileUtils {
      *
      * @param path 文件路径
      * @return FileReadResult mono
-     * @throws FileNotFoundException 文件找不到时抛出
      */
     public static Mono<FileReadResult> readSingleFile(String path) {
         // 判断是否包含

@@ -11,7 +11,6 @@ import java.util.function.BiPredicate;
  * 默认实现
  *
  * @author j.x
- * @date 2023/4/28 18:27
  * @since 1.1.4
  */
 public class DefaultBufferRateTask<T> extends AbstractBufferRateTask<T> {

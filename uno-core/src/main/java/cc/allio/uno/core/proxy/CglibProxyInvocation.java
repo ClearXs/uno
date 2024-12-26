@@ -10,8 +10,7 @@ import java.util.stream.Collectors;
 /**
  * cglib代理实现
  *
- * @author jiangw
- * @date 2021/8/12 16:53
+ * @author j.x
  * @since 1.1
  */
 public class CglibProxyInvocation implements ProxyInvocation {

@@ -4,7 +4,6 @@ package cc.allio.uno.http.metadata.exception;
  * HTTP Swapper过程中发生错误抛出该异常
  *
  * @author j.x
- * @date 2022/8/25 09:54
  * @since 1.0
  */
 public class SwapperException extends RuntimeException {

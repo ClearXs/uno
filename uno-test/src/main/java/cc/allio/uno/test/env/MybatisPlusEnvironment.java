@@ -11,7 +11,6 @@ import java.lang.annotation.Annotation;
  * Mybatis-plus测试环境类
  *
  * @author j.x
- * @date 2022/2/14 14:36
  * @since 1.0
  */
 @Priority(Integer.MAX_VALUE)

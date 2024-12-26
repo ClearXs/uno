@@ -13,7 +13,6 @@ import java.util.function.LongConsumer;
  * 事件总线，定义于不同组件之间进行通信，设计是基于Topic-Event，即主题事件。
  *
  * @author j.x
- * @date 2021/12/15 15:44
  * @see BusEvent
  * @see DefaultEventBus
  */
@@ -292,4 +291,6 @@ public interface EventBus<C extends EventContext> {
      * @return true 存在 false 不存在
      */
     Mono<Boolean> contains(String topic);
+
+    // ================= static method =================
 }

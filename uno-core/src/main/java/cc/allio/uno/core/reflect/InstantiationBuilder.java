@@ -9,7 +9,6 @@ import java.util.function.Supplier;
  * Instantiation Builder
  *
  * @author j.x
- * @date 2024/3/15 09:49
  * @since 1.1.7
  */
 public class InstantiationBuilder<I> implements Self<InstantiationBuilder<I>> {

@@ -15,7 +15,6 @@ import java.util.function.UnaryOperator;
  * wrapper for {@link DropTableOperator} from {@link MetaAcceptorSet}
  *
  * @author j.x
- * @date 2024/4/21 16:17
  * @since 1.1.8
  */
 @AllArgsConstructor

@@ -9,7 +9,6 @@ import lombok.Getter;
  * logic谓词
  *
  * @author j.x
- * @date 2023/4/22 11:47
  * @since 1.1.4
  */
 @Getter

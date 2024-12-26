@@ -3,8 +3,7 @@ package cc.allio.uno.core.proxy;
 /**
  * 代理实例的创建工厂
  *
- * @author jiangw
- * @date 2021/8/13 11:11
+ * @author j.x
  * @since 1.0
  */
 public class ProxyFactory {

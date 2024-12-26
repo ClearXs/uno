@@ -18,7 +18,6 @@ import java.util.function.UnaryOperator;
  * mongodb create collection operator
  *
  * @author j.x
- * @date 2024/3/12 00:57
  * @since 1.1.7
  */
 @Getter

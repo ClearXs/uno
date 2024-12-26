@@ -15,7 +15,6 @@ import java.util.Set;
  * </ul>
  *
  * @author j.x
- * @date 2021/12/24 00:59
  * @since 1.0
  */
 public class EnumTypeOperator<T extends Enum<?>> extends UnsupportedCalculateOperator<T> {

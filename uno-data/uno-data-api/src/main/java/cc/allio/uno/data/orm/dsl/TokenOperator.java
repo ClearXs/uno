@@ -7,7 +7,6 @@ import lombok.Getter;
  * SQL相关的操作符
  *
  * @author j.x
- * @date 2023/4/13 13:10
  * @since 1.1.4
  */
 @Getter

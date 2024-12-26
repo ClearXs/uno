@@ -21,11 +21,6 @@ import java.util.List;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName FeatureGeoJsonParser
- * @Date 2022-03-12 22:38
- * @Version 1.0
  */
 public class FeatureGeoJsonParser<T> extends BaseIgnoreDeserializerObjectMapper<T> implements GeoJsonBaseParser<T> {
 

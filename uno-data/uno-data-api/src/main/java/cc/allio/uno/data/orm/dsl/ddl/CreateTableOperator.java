@@ -14,7 +14,6 @@ import java.util.function.UnaryOperator;
  * Create Operator
  *
  * @author j.x
- * @date 2023/4/12 19:42
  * @see Operators
  * @since 1.1.4
  */

@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Float Comparator
  *
  * @author j.x
- * @date 2022/7/10 17:41
  * @since 1.0
  */
 public class FloatComparator implements Comparator<Float> {

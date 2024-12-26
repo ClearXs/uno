@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * DruidSQLDropTableOperator
  *
  * @author j.x
- * @date 2023/4/16 13:02
  * @since 1.1.4
  */
 @AutoService(DropTableOperator.class)

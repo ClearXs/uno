@@ -29,7 +29,6 @@ import java.util.List;
  * configuration for elasticsearch
  *
  * @author j.x
- * @date 2023/3/14 20:01
  * @since 1.1.4
  */
 @Configuration(proxyBeanMethods = false)

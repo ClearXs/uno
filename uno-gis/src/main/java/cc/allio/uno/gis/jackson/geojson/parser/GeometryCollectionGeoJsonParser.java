@@ -21,11 +21,6 @@ import static cc.allio.uno.gis.jackson.geojson.GeoJson.GEOMETRIES;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName FeatureCollectionGeoJsonParser
- * @Date 2022-03-12 23:13
- * @Version 1.0
  */
 public class GeometryCollectionGeoJsonParser<T> extends BaseIgnoreDeserializerObjectMapper<T> implements GeoJsonBaseParser<T> {
 	public GeometryCollectionGeoJsonParser(JavaType valueType, Class<? extends GeoJsonDeserializer> deserializeClazz) {

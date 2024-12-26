@@ -3,8 +3,7 @@ package cc.allio.uno.netty.model;
 import java.io.Serializable;
 
 /**
- * @author jiangw
- * @date 2020/11/25 17:51
+ * @author j.x
  * @since 1.0
  */
 public class Byte implements Serializable {

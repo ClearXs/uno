@@ -35,7 +35,6 @@ import java.util.List;
  * configuration for db
  *
  * @author j.x
- * @date 2023/4/14 19:29
  * @since 1.1.4
  */
 @Configuration(proxyBeanMethods = false)

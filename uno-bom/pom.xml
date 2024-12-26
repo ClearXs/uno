@@ -2,398 +2,257 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>org.springframework.boot</groupId>
-        <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
-    </parent>
 
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>cc.allio</groupId>
+    <groupId>cc.allio.uno</groupId>
     <artifactId>uno-bom</artifactId>
-    <version>1.1.9</version>
     <packaging>pom</packaging>
+    <version>1.2.0</version>
+    <description>Bill of material of uno</description>
+    <modelVersion>4.0.0</modelVersion>
+    <url>${official.url}</url>
+
+    <licenses>
+        <license>
+            <name>The Apache License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>${scm.connection}</connection>
+        <developerConnection>${scm.developerConnection}</developerConnection>
+        <url>${scm.url}</url>
+        <tag>${scm.tag}</tag>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>j.x</name>
+            <email>jiangw1027@gmail.com</email>
+        </developer>
+    </developers>
 
     <properties>
-        <!-- 统一版本管理 -->
-        <uno.version>1.1.9</uno.version>
-        <!-- 序列化框架 -->
-        <protostuff.version>1.5.9</protostuff.version>
-        <!-- google SPI -->
-        <auto-service.version>1.1.0</auto-service.version>
-        <!-- 代理相关 -->
-        <byte-buddy.version>1.12.2</byte-buddy.version>
-        <cglib.version>3.3.0</cglib.version>
-        <lombok.version>1.18.22</lombok.version>
-        <!-- 单元测试框架 -->
-        <junit-jupiter.version>5.11.0</junit-jupiter.version>
-        <mockito.version>5.12.0</mockito.version>
-        <!-- 多线程单元测试 -->
-        <concurrentunit.version>0.4.6</concurrentunit.version>
-        <guava.version>33.0.0-jre</guava.version>
-        <!-- 状态机 -->
-        <spring-statemachine.version>4.0.0</spring-statemachine.version>
-        <!-- jakarta规范 -->
-        <jakarta.version>2.0.1</jakarta.version>
-        <!-- swagger -->
-        <swagger-v3.version>2.2.17</swagger-v3.version>
-        <mybatis-spring-boot.version>3.0.3</mybatis-spring-boot.version>
-        <mybatis-plus-boot.version>3.5.5</mybatis-plus-boot.version>
-        <!-- 数据库 -->
-        <druid.version>1.2.23</druid.version>
-        <mysql-connector.version>8.0.33</mysql-connector.version>
-        <postgresql-connector.version>42.7.3</postgresql-connector.version>
-        <sqlserver-connector.version>8.4.1.jre8</sqlserver-connector.version>
-        <mybatis-plus-dynamic.version>4.3.0</mybatis-plus-dynamic.version>
-        <!-- 空间数据处理 -->
-        <geotools.version>30.2</geotools.version>
-        <gdal.version>3.8.0</gdal.version>
-        <postgis-jdbc.version>2.5.1</postgis-jdbc.version>
-        <!-- elasticsearch -->
-        <elasticsearch-client.version>8.12.2</elasticsearch-client.version>
-        <!-- influxdb -->
-        <influxdb-client.version>7.2.0</influxdb-client.version>
-        <!-- mongodb -->
-        <mongodb.version>5.1.3</mongodb.version>
-        <!-- neo4j -->
-        <neo4j.version>5.22.0</neo4j.version>
-        <!-- redisson -->
-        <redisson.version>3.34.1</redisson.version>
-        <mvel.version>2.5.0.Final</mvel.version>
+        <scm.url>https://github.com/ClearXs/uno</scm.url>
+        <scm.connection>scm:git:https://github.com/ClearXs/uno.git</scm.connection>
+        <scm.developerConnection>scm:git:ssh://github.com/ClearXs/uno.git</scm.developerConnection>
+        <scm.tag>HEAD</scm.tag>
+        <official.url>https://github.com/ClearXs/uno</official.url>
+
+        <uno.version>1.2.0</uno.version>
+        <maven.compiler.source>21</maven.compiler.source>
+        <maven.compiler.target>21</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+        <!-- plugins  -->
+        <maven-central-publishing.version>0.6.0</maven-central-publishing.version>
+        <maven-java-doc.version>3.6.3</maven-java-doc.version>
+        <maven-source-plugin.version>3.3.0</maven-source-plugin.version>
+        <maven-gpp-verson>3.2.4</maven-gpp-verson>
+        <maven-plugin.version>3.13.0</maven-plugin.version>
+        <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- uno工程依赖 -->
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-core</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-auto</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-test</artifactId>
                 <version>${uno.version}</version>
                 <scope>test</scope>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-http</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-sequential</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-kafka</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-netty</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- uno-starters -->
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-starter-core</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-starter-kafka</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-starter-websocket</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-starter-sequential</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <!-- UNO feature -->
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-test</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-api</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-db</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-elasticsearch</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-influxdb</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-mongodb</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-neo4j</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-redis</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-sql</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-web</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-gis</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>
-                <groupId>cc.allio</groupId>
+                <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-rule</artifactId>
                 <version>${uno.version}</version>
-            </dependency>
-            <!-- 基本依赖包 -->
-            <dependency>
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>${guava.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.springframework.statemachine</groupId>
-                <artifactId>spring-statemachine-core</artifactId>
-                <version>${spring-statemachine.version}</version>
-            </dependency>
-            <!-- cglib -->
-            <dependency>
-                <groupId>cglib</groupId>
-                <artifactId>cglib</artifactId>
-                <version>${cglib.version}</version>
-            </dependency>
-            <!--  ======================== test framework ======================== -->
-            <!-- junit -->
-            <dependency>
-                <groupId>org.junit.jupiter</groupId>
-                <artifactId>junit-jupiter</artifactId>
-                <version>${junit-jupiter.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- mock -->
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-core</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-junit-jupiter</artifactId>
-                <version>${mockito.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>net.jodah</groupId>
-                <artifactId>concurrentunit</artifactId>
-                <version>${concurrentunit.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <!-- auto -->
-            <dependency>
-                <groupId>com.google.auto.service</groupId>
-                <artifactId>auto-service</artifactId>
-                <version>${auto-service.version}</version>
-            </dependency>
-            <!-- protostuff序列化 -->
-            <dependency>
-                <groupId>io.protostuff</groupId>
-                <artifactId>protostuff-core</artifactId>
-                <version>${protostuff.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>io.protostuff</groupId>
-                <artifactId>protostuff-runtime</artifactId>
-                <version>${protostuff.version}</version>
-            </dependency>
-            <!-- swagger -->
-            <dependency>
-                <groupId>io.swagger.core.v3</groupId>
-                <artifactId>swagger-models</artifactId>
-                <version>${swagger-v3.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter</artifactId>
-                <version>${mybatis-spring-boot.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.mybatis.spring.boot</groupId>
-                <artifactId>mybatis-spring-boot-starter-test</artifactId>
-                <version>${mybatis-spring-boot.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>mybatis-plus-boot-starter</artifactId>
-                <version>${mybatis-plus-boot.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <!-- 数据库 -->
-            <!-- Druid -->
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid</artifactId>
-                <version>${druid.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.alibaba</groupId>
-                <artifactId>druid-spring-boot-starter</artifactId>
-                <version>${druid.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <!-- MySql -->
-            <dependency>
-                <groupId>mysql</groupId>
-                <artifactId>mysql-connector-java</artifactId>
-                <version>${mysql-connector.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <!-- PostgreSql -->
-            <dependency>
-                <groupId>org.postgresql</groupId>
-                <artifactId>postgresql</artifactId>
-                <version>${postgresql-connector.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <!-- SqlServer -->
-            <dependency>
-                <groupId>com.microsoft.sqlserver</groupId>
-                <artifactId>mssql-jdbc</artifactId>
-                <version>${sqlserver-connector.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.h2database</groupId>
-                <artifactId>h2</artifactId>
-                <version>${h2.version}</version>
-                <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>com.baomidou</groupId>
-                <artifactId>dynamic-datasource-spring-boot-starter</artifactId>
-                <version>${mybatis-plus-dynamic.version}</version>
-                <scope>provided</scope>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-geojson</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-epsg-extension</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.geotools</groupId>
-                <artifactId>gt-epsg-wkt</artifactId>
-                <version>${geotools.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>net.postgis</groupId>
-                <artifactId>postgis-jdbc</artifactId>
-                <version>${postgis-jdbc.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.influxdb</groupId>
-                <artifactId>influxdb-client-java</artifactId>
-                <version>${influxdb-client.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.gdal</groupId>
-                <artifactId>gdal</artifactId>
-                <version>${gdal.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>jakarta.json</groupId>
-                <artifactId>jakarta.json-api</artifactId>
-                <version>${jakarta.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mongodb</groupId>
-                <artifactId>mongodb-driver-sync</artifactId>
-                <version>${mongodb.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.neo4j.driver</groupId>
-                <artifactId>neo4j-java-driver</artifactId>
-                <version>${neo4j.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.redisson</groupId>
-                <artifactId>redisson</artifactId>
-                <version>${redisson.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>org.mvel</groupId>
-                <artifactId>mvel2</artifactId>
-                <version>${mvel.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
 
-    <distributionManagement>
-        <repository>
-            <id>rdc-releases</id>
-            <name>User Project Release</name>
-            <url>https://packages.aliyun.com/maven/repository/2300285-release-cAc7WJ/</url>
-        </repository>
-        <snapshotRepository>
-            <id>rdc-snapshots</id>
-            <name>User ProjectSNAPSHOTS</name>
-            <url>https://packages.aliyun.com/maven/repository/2300285-snapshot-JAW5GT/</url>
-        </snapshotRepository>
-    </distributionManagement>
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <!-- maven central publishing plugin -->
+                    <plugin>
+                        <groupId>org.sonatype.central</groupId>
+                        <artifactId>central-publishing-maven-plugin</artifactId>
+                        <version>${maven-central-publishing.version}</version>
+                        <extensions>true</extensions>
+                        <configuration>
+                            <publishingServerId>central</publishingServerId>
+                            <autoPublish>true</autoPublish>
+                        </configuration>
+                    </plugin>
+                    <!-- build source code -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                        <version>${maven-source-plugin.version}</version>
+                        <configuration>
+                            <attach>true</attach>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>jar-no-fork</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <!-- build javadoc -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                        <version>${maven-java-doc.version}</version>
+                        <executions>
+                            <execution>
+                                <id>attach-javadocs</id>
+                                <goals>
+                                    <goal>jar</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <doclint>none</doclint>
+                        </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>${maven-gpp-verson}</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>

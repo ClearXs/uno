@@ -14,7 +14,6 @@ import java.util.Map;
  * influxdb describe executor options
  *
  * @author j.x
- * @date 2024/4/1 16:47
  * @see org.testcontainers.containers.InfluxDBContainer
  * @since 1.1.8
  */

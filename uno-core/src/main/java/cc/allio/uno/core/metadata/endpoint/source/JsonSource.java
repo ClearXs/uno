@@ -9,7 +9,6 @@ import java.util.function.Consumer;
  * 数据源封装为Json数据
  *
  * @author j.x
- * @date 2022/9/27 16:52
  * @since 1.1.0
  */
 public abstract class JsonSource implements Source<JsonNode> {

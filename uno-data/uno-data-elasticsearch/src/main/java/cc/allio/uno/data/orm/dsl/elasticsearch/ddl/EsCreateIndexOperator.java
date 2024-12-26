@@ -18,7 +18,6 @@ import java.util.function.UnaryOperator;
  * 创建索引
  *
  * @author j.x
- * @date 2023/5/29 14:00
  * @see <a href="https://blog.csdn.net/C1041067258/article/details/127311699">索引的settings</a>
  * @since 1.1.4
  */

@@ -14,7 +14,6 @@ import java.util.stream.Stream;
  * description 'single' value transfer and filter.
  *
  * @author j.x
- * @date 2024/7/6 17:57
  * @since 0.1.1
  * @see Stream
  */

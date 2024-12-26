@@ -27,7 +27,6 @@ import static cc.allio.uno.data.orm.executor.handler.TableListResultSetHandler.*
  * mongodb show collections command executor
  *
  * @author j.x
- * @date 2024/3/15 11:23
  * @since 1.1.7
  */
 @Slf4j

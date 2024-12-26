@@ -13,7 +13,6 @@ import java.util.function.BiPredicate;
  * 缓存
  *
  * @author j.x
- * @date 2022/1/5 00:55
  * @see InMemoryCache
  * @see ConcurrentMemoryCache
  * @since 1.0

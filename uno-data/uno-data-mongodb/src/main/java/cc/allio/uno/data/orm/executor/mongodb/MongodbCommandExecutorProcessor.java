@@ -14,7 +14,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * handle take on {@link MongodbCommandExecutorAware} interface object, set proxy obtain {@link MongodbCommandExecutor}
  *
  * @author j.x
- * @date 2024/3/15 11:51
  * @see MongodbCommandExecutorAware
  * @since 1.1.7
  */

@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * describe mongodb properties
  *
  * @author j.x
- * @date 2024/4/14 19:35
  * @since 1.1.8
  */
 @Data

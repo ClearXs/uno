@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
  * 实现自{@link CommandExecutor}的基本的类，所有的具体实现类都需要继承该类。
  *
  * @author j.x
- * @date 2024/1/8 10:45
  * @since 1.1.7
  */
 @Slf4j

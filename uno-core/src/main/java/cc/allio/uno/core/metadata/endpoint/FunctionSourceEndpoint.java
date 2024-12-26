@@ -11,7 +11,6 @@ import java.util.function.Consumer;
  * 数据源函数接收
  *
  * @author j.x
- * @date 2023/4/11 12:34
  * @since 1.1.4
  */
 public class FunctionSourceEndpoint<T extends Metadata> implements SourceEndpoint<T> {

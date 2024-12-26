@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for que function apply method
  *
  * @author j.x
- * @date 2024/2/18 15:58
  * @see MethodQueFunction
  * @since 1.1.7
  */

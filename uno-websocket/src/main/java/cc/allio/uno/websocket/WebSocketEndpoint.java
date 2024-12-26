@@ -19,7 +19,6 @@ import java.util.Optional;
  * 定义WebSocket-Endpoint抽象方法
  *
  * @author j.x
- * @date 2021/12/30 23:48
  * @since 1.0
  */
 public interface WebSocketEndpoint {

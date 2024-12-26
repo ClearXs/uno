@@ -8,7 +8,6 @@ import cc.allio.uno.test.testcontainers.Container;
  * default implementation translator get executor key and translator operator key
  *
  * @author j.x
- * @date 2024/3/20 01:11
  * @since 1.1.7
  */
 public abstract class RDBTranslator implements ContainerExecutorOptionsTranslator {

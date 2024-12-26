@@ -9,7 +9,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * describe influxdb properties
  *
  * @author j.x
- * @date 2024/4/14 18:16
  * @since 1.1.8
  */
 @Data

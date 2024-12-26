@@ -12,7 +12,6 @@ import java.util.function.BiPredicate;
  * <b>需要放入的缓存实现{@link Object#equals(Object)}</b>
  *
  * @author j.x
- * @date 2022/2/9 15:15
  * @since 1.0
  */
 public class ConcurrentMemoryCache<T> implements Cache<T> {

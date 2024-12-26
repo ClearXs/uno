@@ -12,7 +12,6 @@ import java.util.Properties;
  * Kafka管理器
  *
  * @author j.x
- * @date 2022/6/23 16:42
  * @since 1.0
  */
 public class UnoKafkaManagement {

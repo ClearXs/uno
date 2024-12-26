@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.Operator;
  * 内置拦截器，在Command操作执行之前进行拦截
  *
  * @author j.x
- * @date 2024/1/8 12:11
  * @since 1.1.7
  */
 public class AfterInterceptor extends InternalInterceptor {

@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * 加在实体类，决定该pojo如何进行检查
  *
  * @author j.x
- * @date 2024/2/6 20:39
  * @since 1.1.7
  */
 @Documented

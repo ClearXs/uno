@@ -10,7 +10,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * {@link java.util.List}进行替换
  *
  * @author j.x
- * @date 2022/12/3 19:38
  * @since 1.1.2
  */
 public class ListInterchange extends BaseInterchange implements ListableInterchange {

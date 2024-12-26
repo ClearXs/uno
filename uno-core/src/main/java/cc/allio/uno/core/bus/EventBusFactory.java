@@ -4,7 +4,6 @@ package cc.allio.uno.core.bus;
  * {@link EventBus}Factory。L
  *
  * @author j.x
- * @date 2023/4/28 13:22
  * @since 1.1.4
  */
 public class EventBusFactory {

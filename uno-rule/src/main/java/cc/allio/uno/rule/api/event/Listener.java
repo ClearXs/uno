@@ -9,7 +9,6 @@ import java.util.Set;
  * 规则触发的监听器
  *
  * @author j.x
- * @date 2023/4/24 14:02
  * @since 1.1.4
  */
 public interface Listener {

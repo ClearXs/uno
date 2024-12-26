@@ -14,7 +14,6 @@ import java.util.Optional;
  * <p><b>建议通过{@link TypeTranslatorHolder#getTypeTranslator()}在进行包装，否则获取的{@link DSLType}实例无法满足指定数据库方言</b></p>
  *
  * @author j.x
- * @date 2023/4/12 20:03
  * @see DataType
  * @since 1.1.4
  */

@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * druid
  *
  * @author j.x
- * @date 2023/4/17 09:47
  * @since 1.1.4
  */
 @AutoService(ExistTableOperator.class)

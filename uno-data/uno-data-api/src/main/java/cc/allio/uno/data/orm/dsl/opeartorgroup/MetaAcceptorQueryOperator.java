@@ -15,7 +15,6 @@ import java.util.function.UnaryOperator;
  * wrapper for {@link QueryOperator} from {@link MetaAcceptorSet}
  *
  * @author j.x
- * @date 2024/4/21 15:54
  * @since 1.1.8
  */
 @AllArgsConstructor

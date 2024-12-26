@@ -3,8 +3,7 @@ package cc.allio.uno.core.exception;
 /**
  * 调用Future产生的异常
  *
- * @author jiangw
- * @date 2020/12/8 18:00
+ * @author j.x
  * @since 1.0
  */
 public class InvokeFutureException extends Exception {

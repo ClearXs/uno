@@ -15,11 +15,6 @@ import java.util.List;
 /**
  * 〈功能简述〉<br>
  * 〈封装Feature集合〉
- *
- * @author Mr.QL
- * @ClassName FeatureCollection
- * @Date 2022-03-13 0:12
- * @Version 1.0
  */
 @GeoJsonType(type = FeatureType.FEATURE_COLLECTION)
 @JsonSerialize(using = GeoJsonSerializer.class)

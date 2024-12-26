@@ -24,7 +24,6 @@ import java.lang.annotation.*;
  * </p>
  *
  * @author j.x
- * @date 2023/3/2 17:14
  * @since 1.1.4
  */
 @Documented

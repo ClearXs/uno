@@ -12,7 +12,6 @@ import java.util.Arrays;
  * topic key
  *
  * @author j.x
- * @date 2023/4/25 13:31
  * @since 1.1.4
  */
 public interface TopicKey {

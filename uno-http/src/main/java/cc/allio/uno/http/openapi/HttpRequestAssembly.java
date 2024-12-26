@@ -2,8 +2,7 @@ package cc.allio.uno.http.openapi;
 
 /**
  * 根据OpenApi规范组装Http
- * @author jw
- * @date 2021/12/6 23:11
+ * @author j.x
  */
 public class HttpRequestAssembly {
 }

@@ -7,7 +7,6 @@ import java.lang.reflect.ParameterizedType;
  * drawn reflection type to actual generic type
  *
  * @author j.x
- * @date 2024/4/4 17:58
  * @since 1.1.8
  */
 public interface DrawnGeneric<T> {

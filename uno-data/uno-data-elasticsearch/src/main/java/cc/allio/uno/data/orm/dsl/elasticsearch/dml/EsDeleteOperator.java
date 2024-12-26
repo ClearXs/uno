@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * {@link DeleteByQueryRequest}实现删除数据
  *
  * @author j.x
- * @date 2023/5/29 13:49
  * @since 1.1.4
  */
 @AutoService(DeleteOperator.class)

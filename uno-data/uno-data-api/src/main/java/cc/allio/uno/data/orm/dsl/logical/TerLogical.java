@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl.logical;
  * the ternary logical
  *
  * @author j.x
- * @date 2024/3/12 01:42
  * @since 1.1.7
  */
 public interface TerLogical<R, T1, T2> {

@@ -14,7 +14,6 @@ import java.util.List;
  * load influxdb command executor
  *
  * @author j.x
- * @date 2024/4/1 17:21
  * @since 1.1.8
  */
 @AutoService(CommandExecutorLoader.class)

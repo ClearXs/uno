@@ -8,8 +8,7 @@ import java.util.List;
 
 /**
  * 发布的服务的信息体
- * @author jiangw
- * @date 2020/11/29 17:25
+ * @author j.x
  * @since 1.0
  */
 @Data

@@ -7,7 +7,6 @@ import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
  * IO({@link InsertOperator}) inner command executor
  *
  * @author j.x
- * @date 2024/3/15 04:39
  * @since 1.1.7
  */
 public interface IOInnerCommandExecutor<O extends InsertOperator> extends InnerDefaultCommandExecutor<Boolean, O> {

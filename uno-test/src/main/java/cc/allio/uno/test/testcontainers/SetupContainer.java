@@ -20,7 +20,6 @@ import java.util.ServiceLoader;
  * setup test-container if exist {@link RunContainer}
  *
  * @author j.x
- * @date 2024/3/18 23:04
  * @since 1.1.7
  */
 @Slf4j

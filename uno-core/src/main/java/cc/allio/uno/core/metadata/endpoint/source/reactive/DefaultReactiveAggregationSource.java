@@ -13,7 +13,6 @@ import java.util.Optional;
  * aggregation default impl
  *
  * @author j.x
- * @date 2023/4/27 18:00
  * @since 1.1.4
  */
 @Slf4j

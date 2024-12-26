@@ -15,7 +15,6 @@ import java.util.Objects;
  * rule expression。该节点一定是叶子节点
  *
  * @author j.x
- * @date 2023/4/26 11:53
  * @since 1.1.4
  */
 public class AttrElement extends LogicGroup {

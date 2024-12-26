@@ -21,7 +21,6 @@ import java.util.function.Supplier;
  * command executor registry
  *
  * @author j.x
- * @date 2024/1/25 17:07
  * @since 1.1.7
  */
 @Slf4j

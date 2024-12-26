@@ -20,7 +20,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * </pre>
  *
  * @author j.x
- * @date 2022/12/8 10:58
  * @since 1.1.2
  */
 @Documented

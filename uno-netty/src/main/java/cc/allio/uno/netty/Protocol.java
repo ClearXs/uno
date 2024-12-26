@@ -4,7 +4,7 @@ package cc.allio.uno.netty;
  * 4   │   1   │    1   │     8     │      4      │
  * MAGIC    Sign     Type   Invoke Id    Body Length                   Body Content
  *
- * @author jiangw
+ * @author j.x
  */
 public class Protocol {
 

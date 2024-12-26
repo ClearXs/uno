@@ -13,8 +13,7 @@ import java.util.function.Predicate;
 /**
  * 时序数据接口，模版方法（获取有关时序数据操作）。
  *
- * @author jw
- * @date 2021/12/13 14:10
+ * @author j.x
  */
 public interface Sequential extends Metadata {
 

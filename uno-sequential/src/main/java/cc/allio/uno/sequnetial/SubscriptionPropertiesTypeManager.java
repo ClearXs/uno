@@ -12,7 +12,6 @@ import java.util.stream.Collectors;
  * 基于{@link SubscriptionProperties}内存主题
  *
  * @author j.x
- * @date 2023/4/12 11:45
  * @since 1.1.4
  */
 public class SubscriptionPropertiesTypeManager extends MemoryTypeManager {

@@ -14,13 +14,11 @@ import com.google.common.collect.Lists;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 /**
  * es通用条件查询
  *
  * @author j.x
- * @date 2023/5/29 13:22
  * @since 1.1.4
  */
 public abstract class EsWhereOperatorImpl<T extends Self<T>> implements WhereOperator<T> {
@@ -92,13 +90,14 @@ public abstract class EsWhereOperatorImpl<T extends Self<T>> implements WhereOpe
 
     @Override
     public T in(DSLName sqlName, Object... values) {
-        List<FieldValue> fieldValues = Arrays.stream(values).map(this::esValue).collect(Collectors.toList());
+        List<FieldValue> fieldValues = Arrays.stream(values).map(this::esValue).toList();
         return logicQuery(TermsQuery.of(tq -> tq.field(sqlName.format()).terms(TermsQueryField.of(tqf -> tqf.value(fieldValues))))._toQuery());
     }
 
     @Override
     public T between(DSLName sqlName, Object withValue, Object endValue) {
-        return logicQuery(RangeQuery.of(rb -> rb.field(sqlName.format()).gte(JsonData.of(withValue)).lte(JsonData.of(endValue)))._toQuery());
+        return logicQuery(RangeQuery.of(rb -> rb.field(sqlName.format()).gte(JsonData.of(withValue)).lte(JsonData.of(endValue)))._toQuery())
+                ;
     }
 
     @Override

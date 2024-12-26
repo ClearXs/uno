@@ -11,7 +11,6 @@ import java.util.List;
  * 默认树结点
  *
  * @author j.x
- * @date 2023/11/9 11:36
  * @since 1.1.5
  */
 @Getter

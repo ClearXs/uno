@@ -6,11 +6,9 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * <b>Cron表达式是一个字符串，字符串为5个空格隔开，分为6个域，每个域代表一个含义</b>
- * <p/>
  * <b>CronTask</b>使用Cron表达式来指定任务在什么时段定时执行。
  *
  * @author j.x
- * @date 2021/12/30 15:41
  * @see CronExpression
  * @since 1.0
  */

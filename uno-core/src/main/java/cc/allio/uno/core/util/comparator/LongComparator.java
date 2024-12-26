@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Long Comparator
  *
  * @author j.x
- * @date 2022/7/10 15:58
  * @since 1.0
  */
 public class LongComparator implements Comparator<Long> {

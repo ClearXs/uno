@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * rule properties
  *
  * @author j.x
- * @date 2023/4/25 15:54
  * @since 1.1.4
  */
 @Data

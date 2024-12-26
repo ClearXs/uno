@@ -10,7 +10,6 @@ import java.util.function.Predicate;
  *
  * @param <T> 消息实体
  * @author j.x
- * @date 2022/7/29 15:35
  * @since 1.0
  */
 @FunctionalInterface

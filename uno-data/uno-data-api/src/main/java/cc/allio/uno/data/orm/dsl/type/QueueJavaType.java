@@ -8,7 +8,6 @@ import java.util.Queue;
  * queue
  *
  * @author j.x
- * @date 2023/4/16 17:10
  * @since 1.1.4
  */
 public class QueueJavaType extends JavaTypeImpl<Queue> {

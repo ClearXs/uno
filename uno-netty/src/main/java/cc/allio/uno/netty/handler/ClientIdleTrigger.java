@@ -9,7 +9,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * @author jiangw
+ * @author j.x
  */
 @ChannelHandler.Sharable
 @Slf4j

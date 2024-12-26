@@ -25,7 +25,6 @@ import java.util.Map;
  * mongodb insert command executor
  *
  * @author j.x
- * @date 2024/3/15 11:32
  * @since 1.1.7
  */
 @Slf4j

@@ -13,7 +13,6 @@ import java.util.List;
  * loader mongodb
  *
  * @author j.x
- * @date 2024/3/15 11:44
  * @since 1.1.7
  */
 @AutoService(CommandExecutorLoader.class)

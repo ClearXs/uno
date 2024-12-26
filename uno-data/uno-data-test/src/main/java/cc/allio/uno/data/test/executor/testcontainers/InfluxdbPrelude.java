@@ -11,7 +11,6 @@ import org.testcontainers.containers.InfluxDBContainer;
  * prepare influxdb in start before.
  *
  * @author j.x
- * @date 2024/4/16 14:13
  * @see cc.allio.uno.data.test.executor.translator.InfluxdbTranslator
  * @since 1.1.8
  */

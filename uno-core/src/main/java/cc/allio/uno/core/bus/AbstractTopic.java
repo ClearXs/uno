@@ -7,8 +7,7 @@ import java.util.Objects;
 /**
  * 事件总线中某个消息主题，抽象某些公共的方法
  *
- * @author jw
- * @date 2021/12/17 22:52
+ * @author j.x
  */
 public abstract class AbstractTopic<C> implements Topic<C> {
 

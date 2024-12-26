@@ -17,7 +17,6 @@ import java.util.List;
  * impl for elasticsearch command loader
  *
  * @author j.x
- * @date 2024/3/21 00:07
  * @since 1.1.7
  */
 @AutoService(CommandExecutorLoader.class)

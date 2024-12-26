@@ -10,7 +10,6 @@ import java.util.function.Function;
  * </pre>
  *
  * @author j.x
- * @date 2023/1/5 15:06
  * @since 1.1.4
  */
 @FunctionalInterface

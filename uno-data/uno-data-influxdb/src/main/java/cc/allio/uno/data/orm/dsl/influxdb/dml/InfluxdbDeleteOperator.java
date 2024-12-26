@@ -14,7 +14,6 @@ import java.util.function.UnaryOperator;
  * influx delete measurement operator.
  *
  * @author j.x
- * @date 2024/4/13 20:14
  * @see <a href="https://docs.influxdata.com/influxdb/v2/reference/cli/influx/delete/">api</a>
  * @since 1.1.8
  */

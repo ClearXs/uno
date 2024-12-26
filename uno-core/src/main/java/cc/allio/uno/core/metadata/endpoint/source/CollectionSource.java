@@ -9,7 +9,6 @@ import java.util.Collection;
  * 集合数据源
  *
  * @author j.x
- * @date 2022/9/27 18:16
  * @since 1.1.0
  */
 public class CollectionSource extends JsonSource {

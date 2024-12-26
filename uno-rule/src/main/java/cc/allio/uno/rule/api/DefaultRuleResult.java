@@ -36,7 +36,6 @@ import java.util.function.Consumer;
  * 默认规则结果集，基于event-bus与定时器机制进行实现。
  *
  * @author j.x
- * @date 2023/4/25 14:48
  * @since 1.1.4
  */
 @Slf4j

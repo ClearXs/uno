@@ -13,8 +13,7 @@ import java.util.*;
 /**
  * 事件总线数据上下文
  *
- * @author jw
- * @date 2021/12/17 15:47
+ * @author j.x
  */
 public class DefaultSequentialContext extends DefaultEventContext implements SequentialContext {
 

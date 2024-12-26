@@ -23,7 +23,6 @@ import java.util.List;
  * influxdb alter bucket command executor
  *
  * @author j.x
- * @date 2024/4/13 17:15
  * @see InfluxdbAlterBucketOperator
  * @since 1.1.8
  */

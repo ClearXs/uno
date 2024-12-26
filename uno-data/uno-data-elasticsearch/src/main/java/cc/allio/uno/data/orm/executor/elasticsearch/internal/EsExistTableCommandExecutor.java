@@ -16,7 +16,6 @@ import co.elastic.clients.elasticsearch._types.ElasticsearchException;
  * {@link CommandType#EXIST_TABLE}
  *
  * @author j.x
- * @date 2023/5/30 08:54
  * @since 1.1.4
  */
 @AutoService(ETOInnerCommandExecutor.class)

@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Byte
  *
  * @author j.x
- * @date 2022/7/10 16:00
  * @since 1.0
  */
 public class ByteComparator implements Comparator<Byte> {

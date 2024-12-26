@@ -18,7 +18,6 @@ import java.util.function.UnaryOperator;
  * 表结构
  *
  * @author j.x
- * @date 2023/6/8 19:20
  * @since 1.1.4
  */
 @AutoService(ShowColumnsOperator.class)

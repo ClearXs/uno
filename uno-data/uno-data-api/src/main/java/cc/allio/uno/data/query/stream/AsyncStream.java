@@ -14,7 +14,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * Async stream
  *
  * @author j.x
- * @date 2023/1/20 12:05
  * @since 1.1.3
  */
 public class AsyncStream<T> implements DataStream<Collection<T>> {

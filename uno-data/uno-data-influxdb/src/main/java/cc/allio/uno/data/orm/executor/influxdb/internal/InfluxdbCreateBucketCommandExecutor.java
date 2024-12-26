@@ -24,7 +24,6 @@ import java.util.List;
  * influxdb create bucket command executor
  *
  * @author j.x
- * @date 2024/4/13 18:25
  * @see InfluxdbCreateBucketOperator
  * @since 1.1.8
  */

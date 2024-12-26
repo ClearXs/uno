@@ -15,7 +15,6 @@ import java.util.function.Function;
  * 维度标识
  *
  * @author j.x
- * @date 2022/11/16 11:40
  * @since 1.1.0
  */
 @Getter

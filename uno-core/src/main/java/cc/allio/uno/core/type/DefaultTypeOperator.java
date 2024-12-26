@@ -4,7 +4,6 @@ package cc.allio.uno.core.type;
  * 默认转换器
  *
  * @author j.x
- * @date 2021/12/23 20:32
  * @since 1.0
  */
 public class DefaultTypeOperator extends UnsupportedCalculateOperator<Object> {

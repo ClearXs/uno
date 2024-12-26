@@ -16,7 +16,6 @@ import java.util.function.UnaryOperator;
  * wrapper for {@link ExistTableOperator}
  *
  * @author j.x
- * @date 2024/4/21 16:19
  * @since 1.1.8
  */
 @AllArgsConstructor

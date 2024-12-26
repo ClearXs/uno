@@ -29,7 +29,6 @@ import java.util.List;
  * </ul>
  *
  * @author j.x
- * @date 2023/3/2 17:34
  * @see AnnoConfigure
  * @since 1.1.4
  */

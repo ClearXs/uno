@@ -18,7 +18,6 @@ import java.util.function.Consumer;
  * where操作集合归类
  *
  * @author j.x
- * @date 2024/1/5 20:28
  * @since 1.1.7
  */
 public abstract class SQLWhereOperatorImpl<T extends WhereOperator<T> & PrepareOperator<T>>

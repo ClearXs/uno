@@ -11,7 +11,6 @@ import reactor.core.publisher.Flux;
  * <p>其里面包含一个{@link DataStream}实例，其作用是把它作为基本的数据源</p>
  *
  * @author j.x
- * @date 2022/11/16 13:14
  * @since 1.1.0
  */
 public abstract class FunctionalityTimeStream<T> implements CollectionTimeStream<T> {

@@ -13,8 +13,6 @@ import java.util.Map;
  * Definition DSL internal command executor
  *
  * @author j.x
- * @date 2023/5/29 20:41
- * @modify 1.1.7
  * @since 1.1.4
  */
 public interface InnerCommandExecutor<R, O extends Operator, H> {

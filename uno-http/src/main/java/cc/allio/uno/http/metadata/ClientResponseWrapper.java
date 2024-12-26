@@ -7,6 +7,7 @@ import io.netty.buffer.Unpooled;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.ByteBuffer;
+import java.util.Map;
 import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
@@ -19,8 +20,7 @@ import reactor.core.publisher.Mono;
 /**
  * WebFlux{@link ClientResponse}的包装对象
  *
- * @author jw
- * @date 2021/12/7 14:29
+ * @author j.x
  */
 @Slf4j
 public class ClientResponseWrapper implements HttpResponseMetadata {
@@ -112,6 +112,11 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
                                 log.error("create error url has err", ex);
                             }
                             return null;
+                        }
+
+                        @Override
+                        public Map<String, Object> getAttributes() {
+                            return Map.of();
                         }
 
                         @Override

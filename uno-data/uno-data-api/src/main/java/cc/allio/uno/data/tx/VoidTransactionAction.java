@@ -4,7 +4,6 @@ package cc.allio.uno.data.tx;
  * 事物的代码块
  *
  * @author j.x
- * @date 2024/2/11 11:14
  * @since 1.1.7
  */
 @FunctionalInterface

@@ -20,7 +20,6 @@ import lombok.extern.slf4j.Slf4j;
  * influxdb drop bucket command executor
  *
  * @author j.x
- * @date 2024/4/13 18:45
  * @see InfluxdbDropBucketOperator
  * @since 1.1.8
  */

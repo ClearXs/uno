@@ -5,8 +5,7 @@ import java.time.Duration;
 /**
  * Http配置元数据
  *
- * @author jw
- * @date 2021/12/8 10:23
+ * @author j.x
  */
 public interface HttpConfigurationMetadata {
 

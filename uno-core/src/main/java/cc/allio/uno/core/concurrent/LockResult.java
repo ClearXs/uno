@@ -15,7 +15,6 @@ import java.util.function.Supplier;
  * <p><b>非常重要的是，如果通过{@link LockContext#release()}不是立即释放值的话，只有调用终止操作（即获取值的操作）才能获取值</b></p>
  *
  * @author j.x
- * @date 2024/2/29 23:45
  * @since 1.1.7
  */
 @Slf4j
@@ -48,7 +47,6 @@ public class LockResult<T> implements Self<LockResult<T>> {
      *
      * @param acceptor acceptor
      * @return self
-     * @
      */
     public LockResult<T> ok(ThrowingMethodBiConsumer<OptionalContext, T> acceptor) {
         tryReleaseValue();

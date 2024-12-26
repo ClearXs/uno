@@ -7,7 +7,6 @@ import java.util.Comparator;
  * BigDecimal Comparator
  *
  * @author j.x
- * @date 2022/7/10 15:58
  * @since 1.0
  */
 public class BigDecimalComparator implements Comparator<BigDecimal> {

@@ -3,8 +3,7 @@ package cc.allio.uno.core.proxy;
 /**
  * 代理策略
  *
- * @author jiangw
- * @date 2021/8/12 16:33
+ * @author j.x
  * @since 1.0
  */
 interface ProxyInvocation {

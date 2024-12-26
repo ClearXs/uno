@@ -6,7 +6,6 @@ import cc.allio.uno.core.api.Self;
  * database relevant operator
  *
  * @author j.x
- * @date 2024/2/15 11:43
  * @since 1.1.7
  */
 public interface DataBaseOperator<T extends DataBaseOperator<T>> extends Self<T> {

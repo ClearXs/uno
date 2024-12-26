@@ -12,7 +12,6 @@ import java.util.Set;
  * 用于{@link TestComponentScan}的类路径扫描器
  *
  * @author j.x
- * @date 2023/4/20 17:16
  * @since 1.1.4
  */
 public class TestComponentScanner extends ClassPathBeanDefinitionScanner {

@@ -11,7 +11,6 @@ import java.util.stream.Stream;
  * definition how to find {@link ParameterizedType}. and by rawType({@link Class}) and by index and else...
  *
  * @author j.x
- * @date 2024/4/4 17:58
  * @since 1.1.8
  */
 @Getter

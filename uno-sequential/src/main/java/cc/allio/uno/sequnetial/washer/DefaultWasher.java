@@ -12,7 +12,6 @@ import java.util.function.Predicate;
  * 默认数据清洗操作
  *
  * @author j.x
- * @date 2022/5/19 13:59
  * @since 1.0
  */
 @AutoService(Washer.class)

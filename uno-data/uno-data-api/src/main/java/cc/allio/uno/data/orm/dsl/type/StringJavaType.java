@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl.type;
  * string java type
  *
  * @author j.x
- * @date 2023/1/17 18:02
  * @since 1.1.4
  */
 public class StringJavaType implements JavaType<String> {

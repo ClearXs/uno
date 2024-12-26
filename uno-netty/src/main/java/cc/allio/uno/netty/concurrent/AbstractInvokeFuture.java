@@ -11,7 +11,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 参考{@link FutureTask}实现
  *
- * @author jiangw
+ * @author j.x
  */
 public abstract class AbstractInvokeFuture<V> implements InvokeFuture<V> {
 

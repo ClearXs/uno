@@ -15,7 +15,6 @@ import java.util.function.UnaryOperator;
  * influx db update operator (bridge to {@link InfluxdbInsertOperator})
  *
  * @author j.x
- * @date 2024/4/14 15:48
  * @since 1.1.8
  */
 @AutoService(UpdateOperator.class)

@@ -14,8 +14,7 @@ import java.util.function.LongConsumer;
 /**
  * 定义为事件总线上订阅的节点信息
  *
- * @author jw
- * @date 2021/12/16 19:56
+ * @author j.x
  */
 public interface Node<C> {
 

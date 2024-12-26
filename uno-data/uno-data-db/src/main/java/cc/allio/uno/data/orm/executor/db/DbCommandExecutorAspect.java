@@ -6,7 +6,6 @@ import org.aspectj.lang.annotation.Aspect;
  * Aspect
  *
  * @author j.x
- * @date 2024/1/10 18:21
  * @see DbCommandExecutorAware
  * @since 1.1.7
  */

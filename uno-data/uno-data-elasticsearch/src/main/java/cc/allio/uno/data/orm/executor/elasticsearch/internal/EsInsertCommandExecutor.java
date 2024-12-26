@@ -17,7 +17,6 @@ import co.elastic.clients.elasticsearch.core.BulkResponse;
  * {@link CommandType#INSERT}
  *
  * @author j.x
- * @date 2023/5/30 08:58
  * @since 1.1.4
  */
 @AutoService(IOInnerCommandExecutor.class)

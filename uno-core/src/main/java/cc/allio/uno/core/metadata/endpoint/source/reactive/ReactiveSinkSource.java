@@ -7,7 +7,6 @@ import reactor.core.publisher.FluxSink;
  * reactive sink
  *
  * @author j.x
- * @date 2023/4/27 17:50
  * @since 1.1.4
  */
 public abstract class ReactiveSinkSource<C> implements ReactiveSource<C> {

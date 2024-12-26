@@ -5,8 +5,7 @@ import java.util.concurrent.CopyOnWriteArraySet;
 /**
  * 基本事件
  *
- * @author jiangw
- * @date 2021/4/16 14:59
+ * @author j.x
  * @since 1.0
  */
 public abstract class BaseEvent implements Event {

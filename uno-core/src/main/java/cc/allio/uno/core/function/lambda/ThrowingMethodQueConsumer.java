@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for que consumer accept method
  *
  * @author j.x
- * @date 2024/2/18 15:57
  * @see MethodQueConsumer
  * @since 1.1.7
  */

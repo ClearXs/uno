@@ -16,7 +16,6 @@ import java.util.List;
  * 定义数据库类型
  *
  * @author j.x
- * @date 2023/2/23 16:36
  * @since 1.1.4
  */
 public interface DBType {

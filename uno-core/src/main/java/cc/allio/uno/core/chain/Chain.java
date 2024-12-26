@@ -10,7 +10,6 @@ import java.util.List;
  * @param <IN>  进入链中元素的范型
  * @param <OUT> 出链元素的范型
  * @author j.x
- * @date 2022/8/22 18:47
  * @since 1.0
  */
 public interface Chain<IN, OUT> {
@@ -20,7 +19,6 @@ public interface Chain<IN, OUT> {
      *
      * @param context 入链元素
      * @return 出链数据
-     * @throws Throwable 链中发生异常时抛出
      */
     Mono<OUT> proceed(ChainContext<IN> context);
 

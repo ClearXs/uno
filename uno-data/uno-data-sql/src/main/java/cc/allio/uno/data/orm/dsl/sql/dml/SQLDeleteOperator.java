@@ -23,7 +23,6 @@ import java.util.function.UnaryOperator;
  * DruidSQLDeleteQueryOperator
  *
  * @author j.x
- * @date 2023/4/16 18:43
  * @since 1.1.4
  */
 @AutoService(DeleteOperator.class)

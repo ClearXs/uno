@@ -11,7 +11,6 @@ import java.util.Optional;
  * ues {@link VariableResolve} for specifies type parse, otherwise use {@link MapVariableResolver}
  *
  * @author j.x
- * @date 2024/5/4 14:11
  * @since 1.1.9
  */
 public class TypeVariableResolver extends MapVariableResolver {

@@ -2,8 +2,7 @@ package cc.allio.uno.netty.transport.body;
 
 /**
  * 监听的body
- * @author jiangw
- * @date 2020/12/8 14:15
+ * @author j.x
  * @since 1.0
  */
 public class MonitorBody implements Body {

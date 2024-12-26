@@ -16,7 +16,6 @@ import java.util.function.UnaryOperator;
  * 删除索引{@link DeleteIndexRequest}
  *
  * @author j.x
- * @date 2023/5/29 18:43
  * @since 1.1.4
  */
 @AutoService(DropTableOperator.class)

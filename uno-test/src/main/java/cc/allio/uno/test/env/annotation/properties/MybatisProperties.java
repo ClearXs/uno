@@ -19,7 +19,6 @@ import java.lang.annotation.*;
  * {@link org.mybatis.spring.boot.autoconfigure.MybatisProperties}注解描述
  *
  * @author j.x
- * @date 2023/3/3 12:13
  * @since 1.1.4
  */
 @Documented
@@ -67,7 +66,6 @@ public @interface MybatisProperties {
      * {@link org.apache.ibatis.session.Configuration}注解描述
      *
      * @author j.x
-     * @date 2023/3/9 15:14
      * @since 1.1.4
      */
     @Documented

@@ -24,7 +24,6 @@ import java.util.Map;
  * mongodb delete command executor
  *
  * @author j.x
- * @date 2024/3/15 11:30
  * @since 1.1.7
  */
 @Slf4j

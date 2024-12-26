@@ -12,7 +12,6 @@ import java.util.regex.Pattern;
  * 时序数据的类型管理器，针对不同类型的数据，不同类型的来源管理并查询
  *
  * @author j.x
- * @date 2023/4/11 19:52
  * @see MemoryTypeManager
  * @since 1.1.4
  */
@@ -85,7 +84,6 @@ public interface TypeManager {
      * 类型Matchers
      *
      * @author j.x
-     * @date 2023/4/12 13:28
      * @since 1.1.4
      */
     class Matchers {
@@ -118,7 +116,6 @@ public interface TypeManager {
      * 类型匹配器定义
      *
      * @author j.x
-     * @date 2023/4/12 13:14
      * @since 1.1.4
      */
     interface TypeMatcher {
@@ -145,7 +142,6 @@ public interface TypeManager {
      * 简单的类型匹配器，通过{@link Object#equals(Object)}进行匹配
      *
      * @author j.x
-     * @date 2023/4/12 13:18
      * @since 1.1.4
      */
     class DefaultTypeMatcher implements TypeMatcher {
@@ -171,7 +167,6 @@ public interface TypeManager {
      * 通配符类型匹配器
      *
      * @author j.x
-     * @date 2023/4/12 13:19
      * @since 1.1.4
      */
     class PatternTypeMatcher implements TypeMatcher {

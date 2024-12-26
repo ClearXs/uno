@@ -6,7 +6,6 @@ import cc.allio.uno.core.exception.Exceptions;
  * 定义树遍历模式
  *
  * @author j.x
- * @date 2023/4/27 09:12
  * @since 1.1.4
  */
 public interface TraversalMethod {

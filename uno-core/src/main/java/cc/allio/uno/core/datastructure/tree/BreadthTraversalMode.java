@@ -9,7 +9,6 @@ import java.util.Queue;
  * 树广度优先
  *
  * @author j.x
- * @date 2023/4/27 09:17
  * @since 1.1.4
  */
 public class BreadthTraversalMode implements TraversalMethod {

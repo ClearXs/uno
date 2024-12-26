@@ -13,7 +13,6 @@ import java.util.regex.Pattern;
  * dsl name 如 xxxx name、column name...根据指定格式化转换对应的name
  *
  * @author j.x
- * @date 2023/4/17 16:16
  * @since 1.1.4
  */
 @Getter

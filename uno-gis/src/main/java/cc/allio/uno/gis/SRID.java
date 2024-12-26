@@ -7,7 +7,6 @@ import lombok.Getter;
  * Spatial Reference System Identifier <a href="https://epsg.io/">check</a>
  *
  * @author j.x
- * @date 2022/12/8 15:07
  * @since 1.1.2
  */
 @Getter

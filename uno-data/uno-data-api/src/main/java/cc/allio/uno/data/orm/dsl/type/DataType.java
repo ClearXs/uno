@@ -7,7 +7,6 @@ import lombok.Data;
  * 数据类型
  *
  * @author j.x
- * @date 2023/4/12 19:54
  * @since 1.1.4
  */
 @Data

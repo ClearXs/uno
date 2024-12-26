@@ -11,7 +11,6 @@ import java.util.function.Supplier;
  * 基于SPI机制，获取每一个类型处理器的实例，如果没有值则采用默认处理器
  *
  * @author j.x
- * @date 2024/2/14 16:12
  * @since 1.1.7
  */
 public abstract class SPIExecutorOptionsResultHandlerSet implements ExecutorOptions {

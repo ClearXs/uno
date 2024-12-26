@@ -13,7 +13,6 @@ package cc.allio.uno.data.orm.executor;
  * </p>
  *
  * @author j.x
- * @date 2024/1/10 18:00
  * @since 1.1.7
  */
 public interface CommandExecutorAware<E extends AggregateCommandExecutor> {

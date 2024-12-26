@@ -12,8 +12,7 @@ import io.netty.channel.ChannelHandlerContext;
 import java.util.concurrent.ExecutorService;
 
 /**
- * @author jiangw
- * @date 2020/12/7 21:02
+ * @author j.x
  * @since 1.0
  */
 public interface RemoteService {

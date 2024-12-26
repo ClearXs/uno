@@ -6,8 +6,7 @@ import cc.allio.uno.sequnetial.process.handle.ProcessHandler;
 /**
  * 处理流水线，在时序数据处理中
  *
- * @author jw
- * @date 2021/12/13 14:13
+ * @author j.x
  */
 public interface ProcessPipeline {
 

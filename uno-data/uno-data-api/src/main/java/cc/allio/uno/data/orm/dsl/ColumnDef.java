@@ -15,7 +15,6 @@ import java.util.Optional;
  * DSL字段定义
  *
  * @author j.x
- * @date 2023/4/12 19:35
  * @see ColumnDefBuilder
  * @since 1.1.4
  */

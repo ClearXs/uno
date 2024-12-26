@@ -47,7 +47,6 @@ import java.util.List;
  * 基于MybatisSQL执行器
  *
  * @author j.x
- * @date 2023/4/14 13:45
  * @see CommandExecutorFactory
  * @since 1.1.4
  */

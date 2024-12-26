@@ -18,7 +18,6 @@ import java.util.Map;
  * 基于db的多类型，构建一个代理类，按照不同的{@link DBType}构建对应的{@link ColumnDefListResultSetHandler}
  *
  * @author j.x
- * @date 2024/2/14 22:58
  * @since 1.1.7
  */
 @AutoService(ColumnDefListResultSetHandler.class)

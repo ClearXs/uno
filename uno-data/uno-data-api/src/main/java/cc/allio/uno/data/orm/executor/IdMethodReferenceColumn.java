@@ -11,7 +11,6 @@ import java.util.Optional;
  * pojo的id方法
  *
  * @author j.x
- * @date 2023/7/11 12:34
  * @since 1.1.4
  */
 public class IdMethodReferenceColumn<P> implements MethodReferenceColumn<P> {

@@ -8,7 +8,6 @@ import java.util.Date;
  * date java type
  *
  * @author j.x
- * @date 2023/4/14 18:49
  * @since 1.1.4
  */
 public class DateJavaType extends JavaTypeImpl<Date> {

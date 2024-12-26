@@ -16,7 +16,6 @@ import java.util.function.Consumer;
  * </p>
  *
  * @author j.x
- * @date 2022/9/27 15:14
  * @since 1.1.0
  */
 public interface Endpoint<T extends Metadata> extends AggregationSource<T, JsonSource>, InitializingBean, DisposableBean, ApplicationContextAware {

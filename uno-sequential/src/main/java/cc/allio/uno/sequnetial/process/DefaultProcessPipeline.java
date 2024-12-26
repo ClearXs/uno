@@ -16,8 +16,7 @@ import reactor.core.publisher.Flux;
 /**
  * 默认流水实例对象，handler对象采取优先级队列存储，
  *
- * @author jw
- * @date 2021/12/13 14:46
+ * @author j.x
  */
 @Slf4j
 public class DefaultProcessPipeline implements ProcessPipeline {

@@ -29,7 +29,6 @@ import java.util.TimeZone;
  * druid sql 相关工具类
  *
  * @author j.x
- * @date 2024/1/4 17:06
  * @since 1.1.7
  */
 public class SQLSupport implements Self<SQLSupport> {

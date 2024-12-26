@@ -6,7 +6,6 @@ import cc.allio.uno.core.type.Types;
  * boolean java type
  *
  * @author j.x
- * @date 2023/1/16 09:49
  * @since 1.1.4
  */
 public class BooleanJavaType extends JavaTypeImpl<Boolean> {

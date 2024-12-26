@@ -24,7 +24,6 @@ import java.util.stream.Stream;
  * 封装{@link KafkaReceiver}
  *
  * @author j.x
- * @date 2022/6/23 16:38
  * @since 1.0
  */
 @Slf4j

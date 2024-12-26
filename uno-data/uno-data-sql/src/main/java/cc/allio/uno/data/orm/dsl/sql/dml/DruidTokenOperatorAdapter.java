@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.TokenOperatorAdapter;
  * BinaryOperator
  *
  * @author j.x
- * @date 2023/4/13 13:21
  * @since 1.1.4
  */
 public class DruidTokenOperatorAdapter implements TokenOperatorAdapter<SQLBinaryOperator> {

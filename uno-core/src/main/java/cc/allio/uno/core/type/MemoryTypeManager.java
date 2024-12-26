@@ -12,7 +12,6 @@ import java.util.Set;
  * 基于内存的类型管理器
  *
  * @author j.x
- * @date 2023/4/11 19:57
  * @since 1.1.4
  */
 public class MemoryTypeManager implements TypeManager {

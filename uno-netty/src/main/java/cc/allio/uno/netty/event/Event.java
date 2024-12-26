@@ -7,7 +7,6 @@ package cc.allio.uno.netty.event;
  * </pre>
  *
  * @author j.x
- * @date 2023/1/29 13:44
  * @see ConnectionEvent
  * @see Observer
  * @since 1.1.4

@@ -15,7 +15,6 @@ import static cc.allio.uno.data.orm.dsl.type.DSLType.DefaultDSLType.*;
  * JDBC数据类型转换为es类型
  *
  * @author j.x
- * @date 2023/7/4 15:25
  * @since 1.1.4
  */
 public class EsPropertyAdapter implements DataTypeAdapter<Property> {

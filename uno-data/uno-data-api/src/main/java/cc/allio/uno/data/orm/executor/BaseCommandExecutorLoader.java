@@ -18,7 +18,6 @@ import java.util.List;
  * </p>
  *
  * @author j.x
- * @date 2024/4/12 18:05
  * @since 1.1.8
  */
 public abstract class BaseCommandExecutorLoader<E extends AggregateCommandExecutor> implements CommandExecutorLoader<E> {

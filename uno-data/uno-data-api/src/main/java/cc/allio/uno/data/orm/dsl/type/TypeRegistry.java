@@ -17,9 +17,7 @@ import java.util.*;
  * </p>
  *
  * @author j.x
- * @date 2023/1/13 16:00
  * @since 1.1.4
- * @modify 1.1.9
  */
 public final class TypeRegistry {
 

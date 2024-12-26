@@ -35,7 +35,6 @@ import java.util.function.UnaryOperator;
  * </ul>
  *
  * @author j.x
- * @date 2024/3/15 08:27
  * @since 1.1.7
  */
 public interface DMLCommandExecutor extends CommandExecutor {

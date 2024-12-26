@@ -12,7 +12,6 @@ import cc.allio.uno.data.orm.dsl.type.DBType;
  * 操作管理接口
  *
  * @author j.x
- * @date 2023/4/13 18:52
  * @see Operator
  * @since 1.1.4
  */

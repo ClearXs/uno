@@ -7,7 +7,6 @@ import cc.allio.uno.core.util.ClassUtils;
  * definition 'Meta data'
  *
  * @author j.x
- * @date 2024/4/16 15:05
  * @since 1.1.8
  */
 public interface Meta<T extends Meta<T>> {

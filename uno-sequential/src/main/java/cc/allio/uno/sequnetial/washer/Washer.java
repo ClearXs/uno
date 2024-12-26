@@ -10,7 +10,6 @@ import java.util.function.Predicate;
  * 数据清洗器，子类必须有一个无参构造器
  *
  * @author j.x
- * @date 2022/5/19 13:55
  * @since 1.0
  */
 public interface Washer {

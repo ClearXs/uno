@@ -15,7 +15,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * {@link CommandExecutorAware}的ES实现
  *
  * @author j.x
- * @date 2024/1/10 22:26
  * @since 1.1.7
  */
 public class EsCommandExecutorProcessor implements BeanPostProcessor {

@@ -12,7 +12,6 @@ import java.util.Optional;
  * 默认实现
  *
  * @author j.x
- * @date 2022/9/13 13:30
  * @since 1.1.0
  */
 public class DefaultMappingMetadata extends LinkedHashMap<MappingField, MappingField> implements MappingMetadata {

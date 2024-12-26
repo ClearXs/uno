@@ -12,8 +12,7 @@ import java.util.Set;
 
 /**
  * ProtoStuff序列化器
- * @author jw
- * @date 2021/12/3 11:10
+ * @author j.x
  */
 @AutoService(Serializer.class)
 public class ProtoStuffSerializer extends AbstractSerializer<Schema<?>> {

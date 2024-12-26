@@ -11,7 +11,6 @@ import java.util.Collections;
  * Drawn to {@link Field}
  *
  * @author j.x
- * @date 2024/4/4 18:00
  * @since 1.1.8
  */
 public class DrawnField implements DrawnGeneric<Field> {

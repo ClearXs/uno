@@ -9,8 +9,7 @@ import java.util.List;
 /**
  * 时序数据处理器
  *
- * @author jw
- * @date 2021/12/13 14:05
+ * @author j.x
  */
 public interface Processor {
 

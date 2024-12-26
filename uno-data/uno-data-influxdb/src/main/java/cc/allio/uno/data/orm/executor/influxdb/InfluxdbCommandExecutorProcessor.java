@@ -14,7 +14,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * handle implement {@link InfluxdbCommandExecutorAware}, set a proxy obtain get {@link InfluxdbCommandExecutor}
  *
  * @author j.x
- * @date 2024/4/1 17:23
  * @since 1.1.8
  */
 public class InfluxdbCommandExecutorProcessor implements BeanPostProcessor {

@@ -22,8 +22,7 @@ import java.net.InetSocketAddress;
 /**
  * 一个netty的服务端
  *
- * @author jiangw
- * @date 2020/11/26 11:18
+ * @author j.x
  * @since 1.0
  */
 @Slf4j

@@ -10,7 +10,6 @@ import java.util.List;
  * 深度优先
  *
  * @author j.x
- * @date 2023/4/27 09:16
  * @since 1.1.4
  */
 public class DeepTraversalMode implements TraversalMethod {

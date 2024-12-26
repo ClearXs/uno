@@ -8,7 +8,6 @@ import lombok.EqualsAndHashCode;
  * 拓展{@link ResultGroup}。增加聚合结果集
  *
  * @author j.x
- * @date 2023/5/28 21:41
  * @since 1.1.4
  */
 @Data

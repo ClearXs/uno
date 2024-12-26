@@ -25,7 +25,6 @@ import static cc.allio.uno.data.orm.executor.handler.TableListResultSetHandler.*
  * influxdb show buckets command executor
  *
  * @author j.x
- * @date 2024/4/13 20:00
  * @see InfluxdbShowBucketsOperator
  * @since 1.1.8
  */

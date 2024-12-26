@@ -21,7 +21,6 @@ import java.util.Optional;
  * 执行器相关参数集合
  *
  * @author j.x
- * @date 2024/1/8 10:30
  * @since 1.1.7
  */
 public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet implements ExecutorOptions {
