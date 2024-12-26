@@ -11,7 +11,6 @@ import org.springframework.context.annotation.Configuration;
  * Uno Kafka自动配置类
  *
  * @author j.x
- * @date 2022/2/25 16:58
  * @since 1.0
  */
 @Configuration(proxyBeanMethods = false)

@@ -28,7 +28,6 @@ import java.util.Map;
  * elasticsearch show columns command executor
  *
  * @author j.x
- * @date 2024/3/15 05:18
  * @since 1.1.7
  */
 @Slf4j

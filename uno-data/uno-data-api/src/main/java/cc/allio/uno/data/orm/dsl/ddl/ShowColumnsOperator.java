@@ -10,7 +10,6 @@ import cc.allio.uno.data.orm.dsl.TableOperator;
  * Show Columns
  *
  * @author j.x
- * @date 2023/6/8 19:19
  * @see Operators
  * @since 1.1.4
  */

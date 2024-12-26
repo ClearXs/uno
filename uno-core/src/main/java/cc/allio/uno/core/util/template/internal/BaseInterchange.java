@@ -4,7 +4,6 @@ package cc.allio.uno.core.util.template.internal;
  * 抽象的交换
  *
  * @author j.x
- * @date 2022/12/3 20:19
  * @since 1.1.2
  */
 public abstract class BaseInterchange implements Interchange {

@@ -8,7 +8,6 @@ import java.lang.reflect.Method;
  * 定义查询方法拦截器，基于AOP实现
  *
  * @author j.x
- * @date 2022/9/30 16:29
  * @since 1.1.0
  */
 public interface QueryMethodInterceptor {

@@ -7,7 +7,6 @@ import lombok.experimental.Accessors;
  * 表
  *
  * @author j.x
- * @date 2023/1/9 12:16
  * @since 1.1.4
  */
 @Data

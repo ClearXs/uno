@@ -9,7 +9,6 @@ import cc.allio.uno.test.testcontainers.RunContainer;
  * <p>This interface only one set method, when test class exits {@link RunContainer} annotation will trigger that method.</p>
  *
  * @author j.x
- * @date 2024/3/21 00:04
  * @since 0.1.1
  */
 public interface CommandExecutorSetter<E extends AggregateCommandExecutor> {

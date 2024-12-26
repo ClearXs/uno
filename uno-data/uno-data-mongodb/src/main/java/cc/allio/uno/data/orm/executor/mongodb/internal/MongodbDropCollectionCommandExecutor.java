@@ -23,7 +23,6 @@ import java.util.Map;
  * mongodb drop collection command executor
  *
  * @author j.x
- * @date 2024/3/15 11:17
  * @see DropCollectionOperation
  * @since 1.1.7
  */

@@ -10,7 +10,6 @@ import java.util.List;
  * 初始化{@link CommandExecutor}
  *
  * @author j.x
- * @date 2024/1/10 16:04
  * @since 1.1.7
  */
 @Slf4j

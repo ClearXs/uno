@@ -6,7 +6,6 @@ import java.util.Collection;
  * {@link MetaAcceptor} Set
  *
  * @author j.x
- * @date 2024/4/16 15:36
  * @since 1.1.8
  */
 public interface MetaAcceptorSet {

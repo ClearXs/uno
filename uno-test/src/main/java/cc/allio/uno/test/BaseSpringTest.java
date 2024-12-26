@@ -32,8 +32,7 @@ import java.util.*;
 /**
  * Spring测试，继承于该测试的类，不应该在在加上{@link BeforeEach}与{@link AfterEach}
  *
- * @author jw
- * @date 2021/12/15 23:22
+ * @author j.x
  */
 @Getter
 public abstract class BaseSpringTest extends BaseTestCase {

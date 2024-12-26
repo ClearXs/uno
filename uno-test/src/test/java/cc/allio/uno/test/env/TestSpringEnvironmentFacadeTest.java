@@ -10,7 +10,6 @@ import java.lang.annotation.Annotation;
  * Test环境外观类测试
  *
  * @author j.x
- * @date 2022/9/15 22:36
  * @since 1.1.0
  */
 class TestSpringEnvironmentFacadeTest extends BaseTestCase {

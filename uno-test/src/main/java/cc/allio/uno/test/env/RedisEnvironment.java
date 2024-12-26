@@ -10,7 +10,6 @@ import java.lang.annotation.Annotation;
  * Redis测试环境类
  *
  * @author j.x
- * @date 2022/2/14 14:20
  * @since 1.0
  */
 public class RedisEnvironment extends VisitorEnvironment {

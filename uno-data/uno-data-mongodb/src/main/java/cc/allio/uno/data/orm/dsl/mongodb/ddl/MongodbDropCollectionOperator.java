@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * mongodb drop collection operator
  *
  * @author j.x
- * @date 2024/3/12 00:58
  * @since 1.1.7
  */
 @AutoService(DropTableOperator.class)

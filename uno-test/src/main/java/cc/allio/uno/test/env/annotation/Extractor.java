@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * 注解抽取器
  *
  * @author j.x
- * @date 2023/3/2 18:04
  * @since 1.1.4
  */
 @Documented

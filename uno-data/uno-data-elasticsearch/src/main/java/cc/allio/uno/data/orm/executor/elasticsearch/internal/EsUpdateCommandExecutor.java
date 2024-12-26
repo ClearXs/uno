@@ -16,7 +16,6 @@ import co.elastic.clients.elasticsearch.core.UpdateByQueryResponse;
  * {@link CommandType#UPDATE}
  *
  * @author j.x
- * @date 2023/6/11 20:22
  * @since 1.1.4
  */
 @AutoService(UOInnerCommandExecutor.class)

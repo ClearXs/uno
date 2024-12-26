@@ -8,7 +8,6 @@ import java.util.Comparator;
  * Object Comparator
  *
  * @author j.x
- * @date 2022/7/10 16:02
  * @since 1.0
  */
 @Slf4j

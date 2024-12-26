@@ -5,8 +5,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 远程调用的promisor
- * @author jiangw
- * @date 2020/11/26 10:14
+ * @author j.x
  * @since 1.0
  */
 public class RemotePromisor {

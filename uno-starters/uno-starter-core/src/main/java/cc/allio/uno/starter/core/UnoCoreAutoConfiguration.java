@@ -18,7 +18,6 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * Uno Core自动配置类
  *
  * @author j.x
- * @date 2022/2/7 14:43
  * @since 1.0
  */
 @Configuration(proxyBeanMethods = false)

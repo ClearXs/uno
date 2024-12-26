@@ -4,7 +4,6 @@ package cc.allio.uno.core.datastructure.tree;
  * 优先访问枝干
  *
  * @author j.x
- * @date 2023/4/27 09:13
  * @since 1.1.4
  */
 public class NoneTraversalMode implements TraversalMethod {

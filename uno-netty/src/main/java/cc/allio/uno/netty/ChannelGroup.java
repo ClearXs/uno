@@ -4,8 +4,7 @@ import io.netty.channel.Channel;
 
 /**
  * 连接的管道组
- * @author jiangw
- * @date 2020/11/28 12:08
+ * @author j.x
  * @since 1.0
  */
 public interface ChannelGroup {

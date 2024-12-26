@@ -6,8 +6,7 @@ import org.springframework.http.MediaType;
 /**
  * 每个请求的元数据信息
  *
- * @author jw
- * @date 2021/12/6 19:00
+ * @author j.x
  */
 public interface HttpMetadata {
 

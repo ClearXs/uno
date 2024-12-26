@@ -15,7 +15,6 @@ import java.util.Comparator;
  * </ul>
  *
  * @author j.x
- * @date 2022/7/10 16:01
  * @since 1.0
  */
 public class CollectionComparator<T> implements Comparator<Collection<T>> {

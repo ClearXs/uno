@@ -24,7 +24,6 @@ import java.util.function.Supplier;
  * Type-Value
  *
  * @author j.x
- * @date 2023/1/3 16:32
  * @since 1.1.4
  */
 @Data

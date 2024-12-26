@@ -14,7 +14,6 @@ import java.util.Map;
  * 参考自{@link java.lang.invoke.SerializedLambda}
  *
  * @author j.x
- * @date 2023/1/5 15:04
  * @see MethodReference
  * @see StaticMethodReference
  * @since 1.1.4

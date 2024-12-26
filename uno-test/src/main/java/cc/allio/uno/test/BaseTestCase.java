@@ -14,7 +14,6 @@ import org.junit.jupiter.api.*;
  * 除此之后还支持不同框架（如Redis、Spring）的环境支持
  *
  * @author j.x
- * @date 2022/1/30 10:09
  * @see BaseSpringTest
  * @since 1.0
  */

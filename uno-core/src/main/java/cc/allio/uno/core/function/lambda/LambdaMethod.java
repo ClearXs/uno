@@ -4,7 +4,6 @@ package cc.allio.uno.core.function.lambda;
  * 继承或实现都需要实现{@link java.io.Serializable}，{@link java.io.NotSerializableException} 当实体没有实现{@link java.io.Serializable}时抛出
  *
  * @author j.x
- * @date 2024/1/26 18:26
  * @since 1.1.7
  */
 public interface LambdaMethod {

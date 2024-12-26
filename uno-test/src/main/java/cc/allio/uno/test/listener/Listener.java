@@ -6,7 +6,6 @@ import cc.allio.uno.test.TestContext;
  * 测试回调监听器
  *
  * @author j.x
- * @date 2023/3/2 20:08
  * @since 1.1.4
  */
 public interface Listener {

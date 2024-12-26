@@ -17,7 +17,6 @@ import java.util.function.Supplier;
  * Update Operator
  *
  * @author j.x
- * @date 2023/4/16 15:19
  * @see Operators
  * @since 1.1.4
  */

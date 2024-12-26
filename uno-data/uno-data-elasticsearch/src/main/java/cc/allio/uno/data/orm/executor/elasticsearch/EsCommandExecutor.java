@@ -24,7 +24,6 @@ import java.net.SocketTimeoutException;
  * 基于es的SQL执行器
  *
  * @author j.x
- * @date 2023/4/19 11:45
  * @since 1.1.4
  */
 @Slf4j

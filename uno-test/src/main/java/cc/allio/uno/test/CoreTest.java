@@ -26,7 +26,6 @@ import java.util.stream.Collectors;
  * 提供uno.core下基础的Spring环境
  *
  * @author j.x
- * @date 2022/2/14 14:03
  * @since 1.0
  */
 @Getter

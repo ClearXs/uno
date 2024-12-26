@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
  * 对象数据源
  *
  * @author j.x
- * @date 2022/10/12 16:52
  * @since 1.1.0
  */
 public class ObjectSource extends JsonSource {

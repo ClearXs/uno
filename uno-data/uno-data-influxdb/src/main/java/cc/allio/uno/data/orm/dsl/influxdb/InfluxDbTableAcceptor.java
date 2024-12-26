@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.Table;
  * in influxdb {@link Table#getSchema()} is empty, but for compatible other data service. so this {@link MetaAcceptor} solution problem
  *
  * @author j.x
- * @date 2024/4/20 19:30
  * @since 1.1.8
  */
 public class InfluxDbTableAcceptor implements MetaAcceptor<Table> {

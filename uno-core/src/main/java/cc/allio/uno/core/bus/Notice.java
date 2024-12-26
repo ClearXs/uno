@@ -10,7 +10,6 @@ import java.util.function.Supplier;
  *
  * @param <C> 通知者通知泛型
  * @author j.x
- * @date 2021/12/19 12:41 PM
  * @since 1.0
  */
 public class Notice<C> {
@@ -39,7 +38,6 @@ public class Notice<C> {
      * 当发布者向事件总线发布数据，某个Topic订阅该数据时，触发这个事件
      *
      * @param supplier 事件总线传递的数据
-     * @see Topic#exchange(C)
      */
     public Mono<C> notify(Supplier<C> supplier) {
         return load(EmitEvent.class, supplier.get());

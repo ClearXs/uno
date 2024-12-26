@@ -10,7 +10,6 @@ import lombok.Getter;
  * <p>if {@link Tokenizer#AT_BRACE} then use {@link MVELExpressionTemplate} otherwise {@link PlaceholderExpressionTemplate}</p>
  *
  * @author j.x
- * @date 2024/5/3 21:32
  * @since 1.1.9
  */
 public class ExpressionTemplateNavigator implements ExpressionTemplate {

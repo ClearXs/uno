@@ -23,7 +23,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * Helper
  *
  * @author j.x
- * @date 2024/1/3 22:25
  * @since 1.1.7
  */
 @Slf4j
@@ -57,6 +56,9 @@ public final class SPIOperatorHelper {
         return ifNullThenAgain(
                 () -> {
                     OperatorTraitGroup operatorTraitGroup = OTG_CACHES.get(operatorKey);
+                    if (operatorTraitGroup == null) {
+                        throw new DSLException(String.format("From Operator %s not found any OperatorTraitGroup", operatorKey.key()));
+                    }
                     OperatorTrait operatorTrait;
                     Lock readLock = lock.readLock();
                     try {
@@ -66,8 +68,8 @@ public final class SPIOperatorHelper {
                             throw new DSLException(
                                     String.format(
                                             "On the basis of SPI load operator %s and %s, " +
-                                            "but not found counterpart Impl, " +
-                                            "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
+                                                    "but not found counterpart Impl, " +
+                                                    "Please Check the Impl Has Annotation @AutoService", operatorKey.key(), operatorClass.getName()));
                         }
                     } finally {
                         readLock.unlock();
@@ -119,7 +121,7 @@ public final class SPIOperatorHelper {
      * 基于SPI加载{@link Operator}的类型，放入缓存
      */
     private static void loadOperatorBySPI(Class<? extends Operator<?>> operatorClass) {
-        ServiceLoader<? extends Operator<?>> loader = ServiceLoader.load(operatorClass, ClassLoader.getSystemClassLoader());
+        ServiceLoader<? extends Operator<?>> loader = ServiceLoader.load(operatorClass);
         boolean present = loader.stream().findAny().isPresent();
         if (!present) {
             Class<?>[] interfaces = operatorClass.getInterfaces();

@@ -6,7 +6,6 @@ import cc.allio.uno.core.metadata.Metadata;
  * rich Converter操作.
  *
  * @author j.x
- * @date 2022/9/13 11:28
  * @since 1.1.0
  */
 public interface RichConverter<T extends Metadata> extends Converter<T> {

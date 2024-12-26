@@ -8,7 +8,6 @@ import java.io.Serializable;
  * java type定义
  *
  * @author j.x
- * @date 2023/1/13 09:10
  * @see TypeRegistry
  * @since 1.1.4
  */

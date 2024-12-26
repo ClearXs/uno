@@ -17,8 +17,7 @@ import java.util.concurrent.ExecutorService;
  *     使用{@link AbstractNettyService#registerProcessors(byte, NettyProcessor, ExecutorService)}对某一类{@link NettyProcessor}进行注册
  * </p>
  * @see Protocol
- * @author jiangw
- * @date 2020/11/26 17:08
+ * @author j.x
  * @since 1.0
  */
 public interface NettyProcessor {

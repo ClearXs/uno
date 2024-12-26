@@ -6,7 +6,6 @@ import cc.allio.uno.test.listener.Listener;
  * 通过Log打印测试花费事件
  *
  * @author j.x
- * @date 2023/3/2 20:40
  * @since 1.1.4
  */
 public class PrintTimingListener implements Listener {

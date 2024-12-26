@@ -13,7 +13,6 @@ import java.lang.reflect.Method;
  * {@link QueryMapper#queryListForValueTime(QueryFilter)} 方法拦截器，调用{@link QueryListQueryMethodInterceptor}结果进行{@link ValueTime}的封装
  *
  * @author j.x
- * @date 2022/11/18 13:10
  * @since 1.1.0
  */
 final class QueryListForValueTimeQueryMethodInterceptor implements QueryMethodInterceptorDelegate {

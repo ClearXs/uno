@@ -7,7 +7,6 @@ import cc.allio.uno.data.orm.dsl.dml.DeleteOperator;
  * DO({@link DeleteOperator}) inner command executor
  *
  * @author j.x
- * @date 2024/3/15 04:38
  * @since 1.1.7
  */
 public interface DOInnerCommandExecutor<O extends DeleteOperator> extends InnerDefaultCommandExecutor<Boolean, O> {

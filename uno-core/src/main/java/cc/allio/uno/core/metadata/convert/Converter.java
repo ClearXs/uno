@@ -6,7 +6,6 @@ import org.springframework.context.ApplicationContext;
  * 时序数据转换器
  *
  * @author j.x
- * @date 2022/9/13 11:16
  * @see ConverterFactory
  * @since 1.1.0
  */

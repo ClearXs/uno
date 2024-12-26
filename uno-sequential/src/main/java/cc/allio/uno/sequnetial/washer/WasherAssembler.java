@@ -11,7 +11,6 @@ import java.util.*;
  * 清洁器装配器
  *
  * @author j.x
- * @date 2022/5/19 14:33
  * @since 1.0
  */
 public class WasherAssembler {

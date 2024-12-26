@@ -7,8 +7,7 @@ import java.util.concurrent.atomic.AtomicLong;
 /**
  * Ack确认消息
  *
- * @author jiangw
- * @date 2020/11/30 13:37
+ * @author j.x
  * @since 1.0
  */
 @Data

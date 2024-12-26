@@ -23,7 +23,6 @@ import java.util.stream.Collectors;
  * 清洗机器
  *
  * @author j.x
- * @date 2022/5/19 14:34
  * @since 1.0
  */
 @Slf4j

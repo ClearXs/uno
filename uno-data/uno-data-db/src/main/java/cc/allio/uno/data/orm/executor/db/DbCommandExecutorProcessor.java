@@ -15,7 +15,6 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
  * {@link CommandExecutorAware}实现
  *
  * @author j.x
- * @date 2024/1/10 18:35
  * @since 1.1.7
  */
 public class DbCommandExecutorProcessor implements BeanPostProcessor {

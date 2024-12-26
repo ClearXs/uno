@@ -8,7 +8,6 @@ import lombok.Setter;
  * es结果集
  *
  * @author j.x
- * @date 2023/5/28 22:46
  * @since 1.1.4
  */
 @Getter

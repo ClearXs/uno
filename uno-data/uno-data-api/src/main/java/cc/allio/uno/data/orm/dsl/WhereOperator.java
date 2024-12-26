@@ -32,7 +32,6 @@ import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
  * </ol>
  *
  * @author j.x
- * @date 2023/4/16 18:14
  * @since 1.1.4
  */
 public interface WhereOperator<T extends Self<T>> extends Self<T> {

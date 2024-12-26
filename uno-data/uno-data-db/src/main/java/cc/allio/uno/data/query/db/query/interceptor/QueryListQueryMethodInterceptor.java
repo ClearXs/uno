@@ -12,7 +12,6 @@ import java.lang.reflect.Method;
  * {@link QueryMapper#queryList(QueryFilter) }方法拦截器
  *
  * @author j.x
- * @date 2022/11/18 13:08
  * @since 1.1.0
  */
 final class QueryListQueryMethodInterceptor implements QueryMethodInterceptor {

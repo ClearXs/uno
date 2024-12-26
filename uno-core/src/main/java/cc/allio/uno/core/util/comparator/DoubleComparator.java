@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Double Comparator
  *
  * @author j.x
- * @date 2022/7/10 14:59
  * @since 1.0
  */
 public class DoubleComparator implements Comparator<Double> {

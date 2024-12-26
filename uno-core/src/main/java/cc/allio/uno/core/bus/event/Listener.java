@@ -8,7 +8,6 @@ import java.util.Objects;
  * 监听事件
  *
  * @author j.x
- * @date 2021/12/19 12:27 PM
  * @since 1.0
  */
 public interface Listener<C> {
@@ -18,7 +17,6 @@ public interface Listener<C> {
      *
      * @param event 监听的事件对象
      * @param obj   监听参数
-     * @throws Throwable 监听回调过程发生异常抛出
      */
     void listen(Node<C> event, C obj) ;
 

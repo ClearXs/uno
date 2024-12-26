@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Boolean Comparator
  *
  * @author j.x
- * @date 2022/7/10 15:57
  * @since 1.0
  */
 public class BooleanComparator implements Comparator<Boolean> {

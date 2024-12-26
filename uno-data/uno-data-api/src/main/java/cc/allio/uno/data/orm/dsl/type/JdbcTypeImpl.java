@@ -11,7 +11,6 @@ import java.util.Objects;
  * 默认实现
  *
  * @author j.x
- * @date 2023/1/13 14:48
  * @since 1.1.4
  */
 public class JdbcTypeImpl implements JdbcType {

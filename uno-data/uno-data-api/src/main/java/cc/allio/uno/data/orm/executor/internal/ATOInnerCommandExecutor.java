@@ -9,7 +9,6 @@ import org.slf4j.Logger;
  * ATO({@link AlterTableOperator}) inner command type
  *
  * @author j.x
- * @date 2024/3/15 10:49
  * @since 1.1.7
  */
 public interface ATOInnerCommandExecutor<O extends AlterTableOperator> extends InnerDefaultCommandExecutor<Boolean, O> {

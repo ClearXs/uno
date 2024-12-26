@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
  * 默认实现端点
  *
  * @author j.x
- * @date 2022/9/27 17:46
  * @since 1.1.0
  */
 public class DefaultEndpoint<T extends Metadata> implements Endpoint<T> {

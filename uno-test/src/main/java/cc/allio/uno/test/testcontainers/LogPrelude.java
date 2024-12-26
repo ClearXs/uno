@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
  * log for {@link Container} information
  *
  * @author j.x
- * @date 2024/4/16 14:37
  * @since 1.1.8
  */
 @Slf4j

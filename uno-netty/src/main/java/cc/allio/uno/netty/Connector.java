@@ -7,8 +7,7 @@ import io.netty.channel.ChannelFuture;
 
 /**
  * screw连接器
- * @author jiangw
- * @date 2020/12/22 13:54
+ * @author j.x
  * @since 1.0
  */
 public interface Connector extends Comparable<Connector>{

@@ -5,8 +5,7 @@ import org.springframework.http.HttpMethod;
 /**
  * 基于WebFlux的DELETE Http请求
  *
- * @author jw
- * @date 2021/12/8 0:49
+ * @author j.x
  */
 public class DeleteHttpRequest extends BaseHttpRequest {
 

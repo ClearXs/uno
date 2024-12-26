@@ -12,7 +12,6 @@ import java.util.List;
  * RuleBuilderImpl 默认实现
  *
  * @author j.x
- * @date 2023/4/23 17:05
  * @since 1.1.4
  */
 public class RuleBuilderImpl implements RuleBuilder {

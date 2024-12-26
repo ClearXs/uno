@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
  * 基于{@link UpdateByQueryRequest}做数据更新
  *
  * @author j.x
- * @date 2023/5/29 13:03
  * @since 1.1.4
  */
 @AutoService(UpdateOperator.class)
@@ -101,7 +100,8 @@ public class EsUpdateOperator extends EsWhereOperatorImpl<EsUpdateOperator> impl
         String source = values.keySet().stream().map(o -> "ctx._source['" + o.format() + "'] = params['" + o.format() + "']").collect(Collectors.joining(StringPool.SEMICOLON));
         // params
         Map<String, JsonData> params = values.entrySet().stream().collect(Collectors.toMap(k -> k.getKey().format(), v -> JsonData.of(v.getValue())));
-        this.updateBuilder = updateBuilder.script(s -> s.inline(i -> i.params(params).source(source)));
+        // TODO 替换script inline
+//        this.updateBuilder = updateBuilder.script(s -> s.inline(i -> i.params(params).source(source)));
         return self();
     }
 

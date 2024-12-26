@@ -7,7 +7,6 @@ import java.util.Comparator;
  * comparable tree element base on {@link Comparator}
  *
  * @author j.x
- * @date 2023/4/11 22:21
  * @since 1.1.4
  */
 public class ComparableElement<T extends ComparableElement<T>> extends DefaultElement<T> {

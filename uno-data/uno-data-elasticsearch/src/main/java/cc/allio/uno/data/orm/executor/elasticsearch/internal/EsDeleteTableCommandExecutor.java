@@ -16,7 +16,6 @@ import co.elastic.clients.elasticsearch.indices.ElasticsearchIndicesClient;
  * {@link CommandType#DELETE_TABLE}
  *
  * @author j.x
- * @date 2023/5/30 08:53
  * @since 1.1.4
  */
 @AutoService(DTOInnerCommandExecutor.class)

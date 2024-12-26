@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Equals Comparator。<b>基于{@link Object#equals(Object)}</b>
  *
  * @author j.x
- * @date 2022/7/10 16:16
  * @since 1.0
  */
 public class EqualsComparator implements Comparator<Object> {

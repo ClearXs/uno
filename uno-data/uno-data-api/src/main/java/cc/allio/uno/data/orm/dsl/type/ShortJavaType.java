@@ -6,7 +6,6 @@ import cc.allio.uno.core.type.Types;
  * short java type
  *
  * @author j.x
- * @date 2023/1/13 18:00
  * @since 1.1.4
  */
 public class ShortJavaType implements JavaType<Short> {

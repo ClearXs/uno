@@ -6,7 +6,7 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 心跳
- * @author jiangw
+ * @author j.x
  */
 public class HeartBeats {
 

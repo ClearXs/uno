@@ -18,7 +18,6 @@ import java.util.Map;
  * influxdb update command (bridge to {@link InfluxdbInsertCommandExecutor})
  *
  * @author j.x
- * @date 2024/4/14 17:45
  * @see InfluxdbUpdateOperator
  * @since 1.1.8
  */

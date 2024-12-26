@@ -8,7 +8,6 @@ import org.locationtech.jts.geom.Geometry;
  * Geometry
  *
  * @author j.x
- * @date 2023/4/18 16:08
  * @since 1.1.4
  */
 public class GeometryJavaType extends JavaTypeImpl<Geometry> {

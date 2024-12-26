@@ -8,7 +8,6 @@ import java.util.*;
  * 常用时间工具
  *
  * @author j.x
- * @date 2022/7/6 14:18
  * @since 1.0
  */
 public class CalendarUtils {
@@ -451,8 +450,6 @@ public class CalendarUtils {
 
     /**
      * 给指定日期加上指定天数
-     *
-     * @param
      */
     public static String addDay(String date, int day, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
@@ -472,8 +469,6 @@ public class CalendarUtils {
 
     /**
      * 给指定日期加上指定月
-     *
-     * @param
      */
     public static String addMonth(String date, int month, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
@@ -493,8 +488,6 @@ public class CalendarUtils {
 
     /**
      * 给指定日期加上指定年
-     *
-     * @param
      */
     public static String addYear(String date, int year, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);
@@ -530,8 +523,6 @@ public class CalendarUtils {
 
     /**
      * 把日期类转换为字符串
-     *
-     * @param
      */
     public static String switchDate(Date date, String pattern) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(pattern);

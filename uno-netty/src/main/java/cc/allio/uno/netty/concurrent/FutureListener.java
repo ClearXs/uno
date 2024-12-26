@@ -2,8 +2,7 @@ package cc.allio.uno.netty.concurrent;
 
 /**
  * TDD
- * @author jiangw
- * @date 2020/12/4 15:55
+ * @author j.x
  * @since 1.0
  */
 public interface FutureListener<V> {

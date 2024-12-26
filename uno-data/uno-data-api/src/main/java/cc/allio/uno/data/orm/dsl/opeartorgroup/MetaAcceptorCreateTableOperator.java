@@ -16,7 +16,6 @@ import java.util.function.UnaryOperator;
  * wrapper for {@link CreateTableOperator} from {@link MetaAcceptorSet}
  *
  * @author j.x
- * @date 2024/4/21 16:14
  * @since 1.1.8
  */
 @AllArgsConstructor

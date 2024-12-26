@@ -35,7 +35,6 @@ import java.util.function.UnaryOperator;
  * Druid Query Operator
  *
  * @author j.x
- * @date 2023/4/12 23:08
  * @since 1.1.4
  */
 @AutoService(QueryOperator.class)

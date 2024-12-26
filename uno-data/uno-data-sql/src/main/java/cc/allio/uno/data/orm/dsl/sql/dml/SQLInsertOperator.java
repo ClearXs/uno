@@ -26,7 +26,6 @@ import java.util.function.UnaryOperator;
  * Druid INSERT
  *
  * @author j.x
- * @date 2023/4/13 16:25
  * @since 1.1.4
  */
 @AutoService(InsertOperator.class)

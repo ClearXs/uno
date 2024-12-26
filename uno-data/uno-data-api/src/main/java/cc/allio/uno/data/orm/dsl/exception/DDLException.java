@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl.exception;
  * DDL exception 是一个运行时异常
  *
  * @author j.x
- * @date 2024/2/8 13:57
  * @since 1.1.7
  */
 public class DDLException extends RuntimeException {

@@ -10,7 +10,6 @@ import java.util.List;
  * decorate {@link ListBeanResultSetHandler} from {@link ResultSetHandler}
  *
  * @author j.x
- * @date 2024/7/21 17:33
  * @since 0.1.1
  */
 public class CohesionListResultSetHandler<R> implements ListResultSetHandler<R> {

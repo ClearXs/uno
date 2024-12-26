@@ -10,7 +10,6 @@ import java.util.List;
  * 返回 list ResultGroup
  *
  * @author j.x
- * @date 2023/4/18 13:33
  * @since 1.1.4
  */
 public class DefaultListResultSetHandler extends ExecutorOptionsAwareImpl implements ListResultSetHandler<ResultGroup> {

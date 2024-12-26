@@ -6,7 +6,6 @@ import java.time.Duration;
  * rule engine 定义
  *
  * @author j.x
- * @date 2023/4/23 17:20
  * @since 1.1.4
  */
 public interface RuleEngine {

@@ -17,7 +17,6 @@ import co.elastic.clients.elasticsearch.core.DeleteByQueryResponse;
  * {@link CommandType#DELETE}
  *
  * @author j.x
- * @date 2023/7/4 15:59
  * @since 1.1.4
  */
 @AutoService(DOInnerCommandExecutor.class)

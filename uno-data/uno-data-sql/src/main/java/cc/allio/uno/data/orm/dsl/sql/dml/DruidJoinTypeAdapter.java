@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.JoinTypeAdapter;
  * DruidJoinTypeAdapter
  *
  * @author j.x
- * @date 2023/4/13 13:25
  * @since 1.1.4
  */
 public final class DruidJoinTypeAdapter implements JoinTypeAdapter<SQLJoinTableSource.JoinType> {

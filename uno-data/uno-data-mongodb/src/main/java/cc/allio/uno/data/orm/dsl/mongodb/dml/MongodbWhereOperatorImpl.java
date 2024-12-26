@@ -18,7 +18,6 @@ import java.util.List;
  * The {@link WhereOperator} default implementation for mongodb
  *
  * @author j.x
- * @date 2024/3/12 01:22
  * @since 1.1.7
  */
 public class MongodbWhereOperatorImpl<T extends WhereOperator<T>> implements WhereOperator<T> {

@@ -21,8 +21,7 @@ import java.util.concurrent.TimeUnit;
 /**
  * 客户端重连检测
  *
- * @author jiangw
- * @date 2020/11/25 22:42
+ * @author j.x
  * @since 1.0
  */
 @ChannelHandler.Sharable

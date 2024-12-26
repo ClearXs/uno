@@ -35,8 +35,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /**
  * 一个netty的客户端
  *
- * @author jiangw
- * @date 2020/11/26 11:44
+ * @author j.x
  * @since 1.0
  */
 @Slf4j

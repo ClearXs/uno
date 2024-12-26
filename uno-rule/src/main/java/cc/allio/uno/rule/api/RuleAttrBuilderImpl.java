@@ -9,7 +9,6 @@ import cc.allio.uno.rule.exception.RuleBuilderException;
  * 默认实现
  *
  * @author j.x
- * @date 2023/4/23 17:33
  * @since 1.1.4
  */
 public class RuleAttrBuilderImpl implements RuleAttrBuilder {

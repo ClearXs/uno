@@ -16,8 +16,7 @@ import java.util.stream.Collectors;
 /**
  * 订阅信息
  *
- * @author jw
- * @date 2021/12/17 14:32
+ * @author j.x
  */
 @Data
 @AllArgsConstructor(staticName = "of")

@@ -7,8 +7,7 @@ import java.io.Serializable;
 /**
  * 服务器元数据
  *
- * @author jiangw
- * @date 2020/11/28 13:58
+ * @author j.x
  * @since 1.0
  */
 @Data

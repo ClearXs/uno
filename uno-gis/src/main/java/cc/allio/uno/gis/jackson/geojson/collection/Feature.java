@@ -12,11 +12,6 @@ import org.locationtech.jts.geom.Geometry;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName Feature
- * @Date 2022-03-18 17:11
- * @Version 1.0
  */
 @GeoJsonType(type = FeatureType.FEATURE)
 @JsonSerialize(using = GeoJsonSerializer.class)

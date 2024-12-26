@@ -16,7 +16,6 @@ import java.util.List;
  * Query Operator
  *
  * @author j.x
- * @date 2023/4/12 23:02
  * @see Operators
  * @since 1.1.4
  */

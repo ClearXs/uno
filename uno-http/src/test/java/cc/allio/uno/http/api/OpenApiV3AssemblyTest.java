@@ -17,8 +17,7 @@ import reactor.test.StepVerifier;
 /**
  * OpenApiV3Assembly测试
  *
- * @author jw
- * @date 2021/12/8 23:19
+ * @author j.x
  */
 class OpenApiV3AssemblyTest extends BaseTestCase {
 

@@ -8,7 +8,6 @@ import java.util.Optional;
  * <p>另外一个目的是提供显示的接口来实现{@code equals}方法，避免在调试环节不知道为何两个对象相等。</p>
  *
  * @author j.x
- * @date 2024/2/16 20:17
  * @since 1.1.7
  */
 public interface EqualsTo<T> {

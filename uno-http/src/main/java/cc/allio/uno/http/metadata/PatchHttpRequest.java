@@ -5,8 +5,7 @@ import org.springframework.http.HttpMethod;
 /**
  * 基于WebFlux的Patch Http请求
  *
- * @author jw
- * @date 2021/12/8 23:20
+ * @author j.x
  */
 public class PatchHttpRequest extends PutHttpRequest {
 

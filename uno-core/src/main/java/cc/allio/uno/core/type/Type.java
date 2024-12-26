@@ -8,7 +8,6 @@ package cc.allio.uno.core.type;
  * </ul>
  *
  * @author j.x
- * @date 2022/5/20 10:26
  * @since 1.0
  */
 public interface Type {

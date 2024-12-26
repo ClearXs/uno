@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for predicate test method
  *
  * @author j.x
- * @date 2024/2/18 16:04
  * @see MethodVoidPredicate
  * @since 1.1.7
  */

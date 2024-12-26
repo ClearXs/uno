@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for ter function apply method
  *
  * @author j.x
- * @date 2024/2/18 16:01
  * @see MethodTerFunction
  * @since 1.1.7
  */

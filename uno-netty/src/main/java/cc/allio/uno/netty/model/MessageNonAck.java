@@ -6,8 +6,7 @@ import lombok.Data;
 
 /**
  * 还未确认的消息
- * @author jiangw
- * @date 2020/12/10 17:32
+ * @author j.x
  * @since 1.0
  */
 @Data

@@ -5,8 +5,7 @@ import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeoutException;
 
 /**
- * @author jiangw
- * @date 2020/12/4 15:54
+ * @author j.x
  * @since 1.0
  */
 public interface InvokeFuture<V> extends RunnableFuture<V> {

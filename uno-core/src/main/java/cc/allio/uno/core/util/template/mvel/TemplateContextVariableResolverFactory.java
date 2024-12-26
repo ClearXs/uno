@@ -10,7 +10,6 @@ import org.mvel2.integration.impl.MapVariableResolverFactory;
  * {@link TemplateContext}
  *
  * @author j.x
- * @date 2024/5/4 14:11
  * @since 1.1.9
  */
 public class TemplateContextVariableResolverFactory extends MapVariableResolverFactory {

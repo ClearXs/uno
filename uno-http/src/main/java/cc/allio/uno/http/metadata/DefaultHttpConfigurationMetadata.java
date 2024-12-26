@@ -5,8 +5,7 @@ import java.time.Duration;
 /**
  * Http配置默认实现
  *
- * @author jw
- * @date 2021/12/8 10:29
+ * @author j.x
  */
 public class DefaultHttpConfigurationMetadata implements HttpConfigurationMetadata {
 

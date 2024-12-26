@@ -11,7 +11,6 @@ import java.util.List;
  * describe {@link org.testcontainers.containers.Container}
  *
  * @author j.x
- * @date 2024/3/20 00:40
  * @since 1.1.7
  */
 @Data

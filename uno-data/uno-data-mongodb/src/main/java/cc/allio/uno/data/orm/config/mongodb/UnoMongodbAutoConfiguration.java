@@ -24,7 +24,6 @@ import java.util.List;
  * configuration for mongodb
  *
  * @author j.x
- * @date 2024/3/14 19:37
  * @since 1.1.7
  */
 @Configuration

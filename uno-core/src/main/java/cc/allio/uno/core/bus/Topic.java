@@ -17,8 +17,7 @@ import reactor.core.publisher.FluxSink;
 /**
  * 消息主题，订阅者与数据源之间的联系，他是一个桥接器
  *
- * @author jw
- * @date 2021/12/15 15:44
+ * @author j.x
  */
 public interface Topic<C> {
 

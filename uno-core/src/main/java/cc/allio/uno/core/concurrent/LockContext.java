@@ -28,7 +28,6 @@ import java.util.function.Supplier;
  * <p>值得注意的是：{@link #thenApply(ThrowingMethodSupplier)}返回的值优先级是最高的</p>
  *
  * @author j.x
- * @date 2024/2/6 20:17
  * @since 1.1.7
  */
 @Slf4j

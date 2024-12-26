@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for bi function apply method
  *
  * @author j.x
- * @date 2024/2/18 15:49
  * @see MethodBiFunction
  * @since 1.1.7
  */

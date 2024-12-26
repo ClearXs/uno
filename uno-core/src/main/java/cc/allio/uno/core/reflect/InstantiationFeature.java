@@ -9,7 +9,6 @@ import java.util.stream.Stream;
  * instantiation strategy
  *
  * @author j.x
- * @date 2024/3/15 09:44
  * @since 1.1.7
  */
 public interface InstantiationFeature<I> {

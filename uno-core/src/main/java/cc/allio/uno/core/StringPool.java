@@ -3,8 +3,7 @@ package cc.allio.uno.core;
 /**
  * 一些常用的字符串
  *
- * @author jiangw
- * @date 2020/12/7 20:58
+ * @author j.x
  * @since 1.0
  */
 public interface StringPool {

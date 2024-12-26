@@ -4,7 +4,6 @@ package cc.allio.uno.core.type;
  * String类型转换器
  *
  * @author j.x
- * @date 2021/12/23 20:14
  * @since 1.0
  */
 public class StringTypeOperator extends UnsupportedCalculateOperator<String> {

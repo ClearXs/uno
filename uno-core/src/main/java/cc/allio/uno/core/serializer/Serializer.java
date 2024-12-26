@@ -9,8 +9,7 @@ import java.util.Set;
 /**
  * 序列化器接口，通过spi进行获取实例对象，目前可以支持protostuff与jackson两种方式
  *
- * @author jw
- * @date 2021/12/2 16:05
+ * @author j.x
  */
 public interface Serializer {
 

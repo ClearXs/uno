@@ -7,8 +7,7 @@ import java.util.*;
 /**
  * 集合常用工具方法
  *
- * @author jw
- * @date 2021/12/5 11:02
+ * @author j.x
  */
 public class CollectionUtils extends org.springframework.util.CollectionUtils {
 

@@ -6,7 +6,6 @@ import java.util.List;
  * 组合的计算任务
  *
  * @author j.x
- * @date 2021/12/22 15:30
  * @since 1.0
  */
 public abstract class BaseComposedComputeTask<T> implements BatchComputingTask<T> {

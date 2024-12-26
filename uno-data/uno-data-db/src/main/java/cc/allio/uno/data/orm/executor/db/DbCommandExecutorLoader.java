@@ -23,7 +23,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 实例化{@link CommandExecutor}
  *
  * @author j.x
- * @date 2024/1/10 18:27
  * @since 1.1.7
  */
 @AutoService(CommandExecutorLoader.class)

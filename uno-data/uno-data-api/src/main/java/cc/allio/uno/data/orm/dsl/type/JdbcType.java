@@ -14,7 +14,6 @@ import java.util.stream.Stream;
  * jdbc type定义。与{@link JavaType}成映射关系。
  *
  * @author j.x
- * @date 2023/1/13 09:15
  * @see java.sql.SQLType
  * @see TypeRegistry
  * @since 1.1.4
@@ -86,7 +85,6 @@ public interface JdbcType extends SQLType, Serializable {
      * {@link JdbcType}构建器
      *
      * @author j.x
-     * @date 2023/1/13 15:01
      * @since 1.1.4
      */
     class JdbcTypeBuilder {

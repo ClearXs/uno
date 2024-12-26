@@ -8,7 +8,6 @@ import reactor.core.publisher.Flux;
  * 如果不产生订阅数据源时不会进行产生
  *
  * @author j.x
- * @date 2023/4/27 17:43
  * @since 1.1.4
  */
 public interface ReactiveSource<C> {

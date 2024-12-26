@@ -33,8 +33,7 @@ import reactor.util.function.Tuples;
  * <p>外部调用{@link #process(SequentialContext)}把数据转发到主题{@link #DISPATCH_TOPIC}上，调用{@link #onDispatch(SequentialContext)}。</p>
  * <p>随后通过{@link TypeManager}判断时序数据是否存在于类型管理器中，如果存在则推送{@link #TOPIC_TEMPLATE}+时序数据类型的主题。在{@link #onProcess(SequentialContext)}在进行具体处理</p>
  *
- * @author jw
- * @date 2021/12/13 16:46
+ * @author j.x
  */
 @Slf4j
 public class DefaultProcessor implements Processor, InitializingBean, DisposableBean {

@@ -15,7 +15,6 @@ import java.util.Set;
  * scan include annotation {@link cc.allio.uno.data.orm.executor.CommandExecutor.Group} the {@link InnerCommandExecutor}
  *
  * @author j.x
- * @date 2024/3/15 08:36
  * @since 1.1.7
  */
 public final class SPIInnerCommandScanner {

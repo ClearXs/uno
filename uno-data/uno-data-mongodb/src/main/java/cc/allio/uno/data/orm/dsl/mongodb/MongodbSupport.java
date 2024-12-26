@@ -15,7 +15,6 @@ import java.util.List;
  * Help build mongodb application
  *
  * @author j.x
- * @date 2024/3/14 01:06
  * @since 1.1.7
  */
 public final class MongodbSupport {

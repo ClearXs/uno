@@ -6,7 +6,6 @@ import cc.allio.uno.core.api.Adapter;
  * join type adapter
  *
  * @author j.x
- * @date 2023/4/13 13:23
  * @since 1.1.4
  */
 public interface JoinTypeAdapter<T> extends Adapter<T, JoinType> {

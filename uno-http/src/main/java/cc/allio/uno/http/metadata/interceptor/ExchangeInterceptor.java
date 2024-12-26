@@ -21,7 +21,6 @@ import java.nio.charset.Charset;
  * 数据交换Interceptor
  *
  * @author j.x
- * @date 2022/8/24 16:53
  * @since 1.0
  */
 @Slf4j

@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
  * 数据源转换
  *
  * @author j.x
- * @date 2022/9/27 15:13
  * @since 1.0
  */
 public interface SourceConverter<T extends Metadata> extends Converter<T> {

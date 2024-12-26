@@ -18,7 +18,6 @@ import java.util.function.UnaryOperator;
  * es 查询所有映射.{@link GetMappingRequest}
  *
  * @author j.x
- * @date 2023/6/11 20:07
  * @since 1.1.4
  */
 @AutoService(ShowColumnsOperator.class)

@@ -7,7 +7,6 @@ import java.util.concurrent.atomic.AtomicInteger;
  * 通过在类加载时把{@link SnowflakeIdWorker}根据数据中心ID值创建好，通过CAS获取每一个数据中心的分布式ID
  *
  * @author j.x
- * @date 2022/1/26 09:43
  * @since 1.0
  */
 public class InternalDataCenterIdGenerator implements IdGenerator {

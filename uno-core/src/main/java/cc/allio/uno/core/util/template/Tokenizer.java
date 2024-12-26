@@ -9,8 +9,7 @@ import lombok.Getter;
  * 用于{@link TokenParser}解析的Token解析
  *
  * @author j.x
- * @date 2022/12/3 16:24
- * @since 1.1.1.RELEASE
+ * @since 1.1.1
  */
 @FunctionalInterface
 public interface Tokenizer {

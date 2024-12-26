@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * 给定于测试注解中，标识使用何种{@link Runner}进行测试环境构建
  *
  * @author j.x
- * @date 2022/10/28 16:32
  * @since 1.1.0
  * @deprecated 自1.1.4版本后删除
  */

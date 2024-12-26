@@ -18,7 +18,6 @@ import java.util.List;
  * Command Executor
  *
  * @author j.x
- * @date 2023/4/14 13:43
  * @since 1.1.4
  */
 public interface CommandExecutor {

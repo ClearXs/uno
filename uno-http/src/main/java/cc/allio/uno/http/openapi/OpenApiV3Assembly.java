@@ -18,8 +18,7 @@ import reactor.util.function.Tuples;
 /**
  * 组装Open Api V3，转换成对应的{@link HttpSwapper}
  *
- * @author jw
- * @date 2021/12/6 19:36
+ * @author j.x
  */
 public class OpenApiV3Assembly implements OpenApiConverter {
 

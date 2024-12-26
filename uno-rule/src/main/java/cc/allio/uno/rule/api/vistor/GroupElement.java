@@ -6,7 +6,6 @@ import java.util.List;
  * group node. tag for element
  *
  * @author j.x
- * @date 2023/4/26 12:04
  * @since 1.1.4
  */
 public interface GroupElement<T extends LiteralElement<T>> extends LiteralElement<T> {

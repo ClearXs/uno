@@ -7,8 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  * 序列化对象持有者，通过使用spi来获取对象。
  *
- * @author jw
- * @date 2021/12/2 16:23
+ * @author j.x
  */
 public class SerializerHolder {
 

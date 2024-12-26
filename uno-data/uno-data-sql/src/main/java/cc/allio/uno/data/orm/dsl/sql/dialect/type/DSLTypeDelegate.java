@@ -8,7 +8,6 @@ import java.util.List;
  * 内置DSLType基类，实现通用的方法
  *
  * @author j.x
- * @date 2024/2/1 19:56
  * @since 1.1.7
  */
 public abstract class DSLTypeDelegate implements DSLType {

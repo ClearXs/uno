@@ -22,7 +22,6 @@ import java.util.function.Supplier;
  * 构建一颗主题订阅森林
  *
  * @author j.x
- * @date 2022/6/27 10:39
  * @since 1.0
  */
 @EqualsAndHashCode(of = "part")

@@ -4,9 +4,9 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
-        <groupId>cc.allio</groupId>
-        <artifactId>uno</artifactId>
-        <version>1.1.9</version>
+        <groupId>cc.allio.uno</groupId>
+        <artifactId>uno-parent</artifactId>
+        <version>1.2.0</version>
     </parent>
 
     <artifactId>uno-rule</artifactId>
@@ -27,11 +27,11 @@
         </dependency>
         <!-- UNO -->
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-starter-core</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-test</artifactId>
             <scope>test</scope>
         </dependency>

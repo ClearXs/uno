@@ -7,7 +7,6 @@ import cc.allio.uno.data.orm.dsl.dml.QueryOperator;
  * QO({@link QueryOperator}) inner command executor
  *
  * @author j.x
- * @date 2024/3/15 04:41
  * @since 1.1.7
  */
 public interface QOInnerCommandExecutor<R, O extends QueryOperator> extends InnerListCommandExecutor<R, O> {

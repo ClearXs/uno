@@ -8,7 +8,6 @@ import java.util.Map;
  *
  * @param <IN> 进入链中元素的范型
  * @author j.x
- * @date 2022/8/24 16:25
  * @since 1.0
  */
 public interface ChainContext<IN> {

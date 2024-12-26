@@ -20,7 +20,6 @@ import java.net.SocketTimeoutException;
  * command executor for document database mongodb implementation
  *
  * @author j.x
- * @date 2024/3/10 23:32
  * @since 1.1.7
  */
 public class MongodbCommandExecutor extends AbstractCommandExecutor implements AggregateCommandExecutor {

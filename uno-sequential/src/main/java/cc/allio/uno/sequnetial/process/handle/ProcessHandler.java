@@ -10,8 +10,7 @@ import java.util.function.Predicate;
  * 执行链的处理器<br/>
  * 在具体实现类中加上{@link com.google.auto.service.AutoService}注解
  *
- * @author jw
- * @date 2021/12/13 14:28
+ * @author j.x
  * @see AbstractProcessHandler
  */
 public interface ProcessHandler {

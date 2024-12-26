@@ -9,7 +9,6 @@ import java.util.Date;
  * Date类型转换器，以yyyy-MM-dd HH:mm:ss解析
  *
  * @author j.x
- * @date 2021/12/23 20:24
  * @since 1.0
  */
 public class DateCalculateOperator extends UnsupportedCalculateOperator<Date> {

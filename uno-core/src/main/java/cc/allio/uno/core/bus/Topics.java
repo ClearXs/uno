@@ -11,8 +11,7 @@ import reactor.core.publisher.Mono;
 /**
  * 消息主题
  *
- * @author jw
- * @date 2021/12/16 10:50
+ * @author j.x
  */
 @Slf4j
 public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {

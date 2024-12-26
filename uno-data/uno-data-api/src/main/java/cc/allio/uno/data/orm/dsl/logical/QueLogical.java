@@ -4,7 +4,6 @@ package cc.allio.uno.data.orm.dsl.logical;
  * the quaternary logical
  *
  * @author j.x
- * @date 2024/3/12 01:44
  * @since 1.1.7
  */
 public interface QueLogical<R, T1, T2, T3> {

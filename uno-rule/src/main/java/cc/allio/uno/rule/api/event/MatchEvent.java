@@ -8,7 +8,6 @@ import cc.allio.uno.rule.api.RuleResult;
  * 匹配事件
  *
  * @author j.x
- * @date 2023/4/24 20:04
  * @since 1.1.4
  */
 public class MatchEvent extends BaseEvent {

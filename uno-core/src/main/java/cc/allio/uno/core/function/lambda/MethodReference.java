@@ -11,7 +11,6 @@ import java.util.function.Supplier;
  * </pre>
  *
  * @author j.x
- * @date 2023/1/5 15:07
  * @since 1.1.4
  */
 public interface MethodReference<T> extends Supplier<T>, Serializable {

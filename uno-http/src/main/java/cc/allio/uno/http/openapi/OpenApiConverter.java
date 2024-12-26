@@ -9,8 +9,7 @@ import reactor.core.publisher.Mono;
 /**
  * 解析Open Api规范，转换成能够支撑请求与响应的{@link HttpSwapper}
  *
- * @author jw
- * @date 2021/12/8 22:54
+ * @author j.x
  */
 public interface OpenApiConverter {
 

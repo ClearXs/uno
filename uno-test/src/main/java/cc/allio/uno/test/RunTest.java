@@ -18,7 +18,6 @@ import java.lang.annotation.*;
  * 运行的测试环境
  *
  * @author j.x
- * @date 2022/9/15 17:39
  * @see RunTestAttributes
  * @see TestManager
  * @since 1.1.0

@@ -21,7 +21,6 @@ import java.util.function.UnaryOperator;
  * mongodb update document operator implementation
  *
  * @author j.x
- * @date 2024/3/14 01:34
  * @since 1.1.7
  */
 @AutoService(UpdateOperator.class)

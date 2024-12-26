@@ -5,8 +5,7 @@ import lombok.Data;
 
 /**
  * 订阅body
- * @author jiangw
- * @date 2020/12/10 17:31
+ * @author j.x
  * @since 1.0
  */
 @Data

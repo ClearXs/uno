@@ -9,8 +9,7 @@ import java.util.Optional;
  * 抽象解析器，泛化一些操作，实现解耦，复用。<br/>
  * 实现抽象类的字类必须提供SimpleModule的支持，也就是说在具体解析的过程中需要自定义序列化器与反序列化器。<br/>
  *
- * @author jw
- * @date 2021/12/5 12:34
+ * @author j.x
  */
 public abstract class AbstractPrimaryParser<T> implements Parser<T> {
 

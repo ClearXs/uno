@@ -18,7 +18,6 @@ import static cc.allio.uno.test.TestContext.WEB_SERVER;
  * 设计思路参考于SpringBootTestContextBootstrapper
  *
  * @author j.x
- * @date 2023/3/9 18:30
  * @since 1.1.4
  */
 @Priority(Integer.MIN_VALUE)

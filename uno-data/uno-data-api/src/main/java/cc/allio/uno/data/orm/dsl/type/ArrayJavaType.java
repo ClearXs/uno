@@ -6,7 +6,6 @@ import java.util.Objects;
  * java array
  *
  * @author j.x
- * @date 2023/4/14 18:58
  * @since 1.1.4
  */
 public class ArrayJavaType extends JavaTypeImpl<Object> {

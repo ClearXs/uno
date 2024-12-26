@@ -5,8 +5,7 @@ import java.lang.annotation.*;
 /**
  * 模拟接口返回的数据，在test环境下有效
  *
- * @author jw
- * @date 2021/12/15 19:52
+ * @author j.x
  */
 @Documented
 @Retention(RetentionPolicy.RUNTIME)

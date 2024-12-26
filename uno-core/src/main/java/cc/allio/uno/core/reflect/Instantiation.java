@@ -29,7 +29,6 @@ import java.util.function.Supplier;
  * </p>
  *
  * @author j.x
- * @date 2024/3/15 09:43
  * @since 1.1.7
  */
 @Slf4j

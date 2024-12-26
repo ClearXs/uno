@@ -6,7 +6,6 @@ import java.io.Serializable;
  * exception for ter predicate test method
  *
  * @author j.x
- * @date 2024/2/18 16:02
  * @see MethodTerPredicate
  * @since 1.1.7
  */

@@ -22,7 +22,6 @@ import java.util.Map;
  * mongodb alter collection command executor
  *
  * @author j.x
- * @date 2024/3/15 10:51
  * @see RenameCollectionOperation
  * @since 1.1.7
  */

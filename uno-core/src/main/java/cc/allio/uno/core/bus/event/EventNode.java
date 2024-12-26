@@ -11,19 +11,18 @@ import lombok.extern.slf4j.Slf4j;
 /**
  * 主题中事件节点
  *
- * @author jw
- * @date 2021/12/17 9:40
+ * @author j.x
  */
 @Slf4j
 public abstract class EventNode<C> extends AbstractEventNode<C> {
 
     /**
-     * 当前Node唯一订阅id，由{@link Subscription#getSubscribeId()}定义
+     * 当前Node唯一订阅id
      */
     protected final Long subscriberId;
 
     /**
-     * 当前Node订阅的Topic，由{@link Subscription#getPath()}定义
+     * 当前Node订阅的Topic
      */
     protected final String topic;
 

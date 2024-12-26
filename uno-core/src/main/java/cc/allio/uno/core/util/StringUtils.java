@@ -14,6 +14,7 @@ import reactor.util.function.Tuples;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
@@ -24,8 +25,7 @@ import java.util.stream.Collectors;
 /**
  * 字符串工具
  *
- * @author jw
- * @date 2021/12/5 10:59
+ * @author j.x
  */
 public class StringUtils extends org.springframework.util.StringUtils {
 
@@ -68,7 +68,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
 
     /**
      * 裁剪带有请求参数的url。<br/>
-     * example：https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866<br/>
+     * example：<a href="https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866">...</a><br/>
      * or<br/>
      * https://passport.baidu.com/passApi/{id}/{name}<br/>
      * <b>给定规则：</b><br/>
@@ -145,7 +145,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
 
     /**
      * 向url链接中拼接vars的内容<br/>
-     * example：https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866<br/>
+     * example：<a href="https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866">...</a><br/>
      * or<br/>
      * https://passport.baidu.com/passApi/{id}/{name}<br/>
      * <b>拼接分为两部分：</b><br/>
@@ -176,11 +176,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
                     Object value = vars.get(placeholder);
                     vars.remove(placeholder);
                     String encodeOfParameter = String.valueOf(value);
-                    try {
-                        encodeOfParameter = URLEncoder.encode(encodeOfParameter, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        // ignore
-                    }
+                    encodeOfParameter = URLEncoder.encode(encodeOfParameter, StandardCharsets.UTF_8);
                     String replace = join.get().replace(StringPool.LEFT_BRACE.concat(placeholder).concat(StringPool.RIGHT_BRACE), encodeOfParameter);
                     join.set(replace);
                 })
@@ -188,11 +184,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
                 // ?par=1&par=2 请求参数的拼接
                 .map(entity -> {
                     String encodeOfParameter = String.valueOf(entity.getValue());
-                    try {
-                        encodeOfParameter = URLEncoder.encode(encodeOfParameter, "UTF-8");
-                    } catch (UnsupportedEncodingException e) {
-                        // ignore
-                    }
+                    encodeOfParameter = URLEncoder.encode(encodeOfParameter, StandardCharsets.UTF_8);
                     return entity.getKey().concat(StringPool.EQUALS).concat(encodeOfParameter);
                 })
                 .doOnNext(compose -> {
@@ -210,7 +202,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
 
     /**
      * 获取url中基础的地址<br/>
-     * example: https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866<br/>
+     * example: <a href="https://passport.baidu.com/passApi/js/wrapper.js?cdnversion=1638804235178&_=1638804234866">...</a><br/>
      * result：passport.baidu.com
      *
      * @param templateUrl 请求链接
@@ -232,7 +224,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
 
     /**
      * 获取url中api的地址
-     * example: https://passport.baidu.com/passApi/js/wrapper.js<br/>
+     * example: <a href="https://passport.baidu.com/passApi/js/wrapper.js">...</a><br/>
      * result：/passApi/js/wrapper.js
      *
      * @param templateUrl 请求链接
@@ -278,10 +270,6 @@ public class StringUtils extends org.springframework.util.StringUtils {
     @Data
     private static class PlaceholderParameter {
 
-        private PlaceholderParameter() {
-
-        }
-
         /**
          * 占位符名称
          */
@@ -314,7 +302,7 @@ public class StringUtils extends org.springframework.util.StringUtils {
                         placeholderParameter.setKey(placeholderUrl);
                         return placeholderParameter;
                     })
-                    .collect(Collectors.toList());
+                    .toList();
         }
     }
 

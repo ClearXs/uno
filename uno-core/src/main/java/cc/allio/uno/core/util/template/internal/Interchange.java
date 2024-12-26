@@ -7,7 +7,6 @@ import cc.allio.uno.core.type.Types;
  * 表达式交换定义
  *
  * @author j.x
- * @date 2022/12/3 19:35
  * @since 1.1.2
  */
 public interface Interchange {

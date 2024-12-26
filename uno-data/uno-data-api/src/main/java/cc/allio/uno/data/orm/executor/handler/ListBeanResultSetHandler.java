@@ -10,7 +10,6 @@ import java.util.List;
  * Java Bean 转换为 List
  *
  * @author j.x
- * @date 2023/4/18 13:30
  * @see BeanResultSetHandler
  * @since 1.1.4
  */

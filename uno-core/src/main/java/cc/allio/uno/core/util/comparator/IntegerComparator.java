@@ -6,7 +6,6 @@ import java.util.Comparator;
  * Integer Comparator
  *
  * @author j.x
- * @date 2022/7/10 14:57
  * @since 1.0
  */
 public class IntegerComparator implements Comparator<Integer> {

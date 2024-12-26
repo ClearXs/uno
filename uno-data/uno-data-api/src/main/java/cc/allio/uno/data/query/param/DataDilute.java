@@ -6,7 +6,6 @@ import lombok.Data;
  * 抽稀实体
  *
  * @author j.x
- * @date 2022/10/10 16:28
  * @since 1.1.0
  */
 @Data

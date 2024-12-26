@@ -12,7 +12,6 @@ import java.util.function.Supplier;
  * command executor registry，参考自{@link org.springframework.beans.factory.BeanFactory}
  *
  * @author j.x
- * @date 2024/1/29 13:04
  * @since 1.1.7
  */
 public interface CommandExecutorRegistry {

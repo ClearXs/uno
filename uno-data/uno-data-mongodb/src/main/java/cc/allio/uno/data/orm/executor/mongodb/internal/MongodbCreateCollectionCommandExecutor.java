@@ -21,7 +21,6 @@ import java.util.Map;
  * mongodb create collection command executor
  *
  * @author j.x
- * @date 2024/3/15 10:59
  * @see CreateCollectionOperation
  * @since 1.1.7
  */

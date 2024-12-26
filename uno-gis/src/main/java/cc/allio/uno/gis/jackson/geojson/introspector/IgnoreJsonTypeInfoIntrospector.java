@@ -11,11 +11,6 @@ import java.util.Map;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName ignoreJsonTypeInfoIntrospector
- * @Date 2022-03-05 18:19
- * @Version 1.0
  */
 public class IgnoreJsonTypeInfoIntrospector extends JacksonAnnotationIntrospector {
 

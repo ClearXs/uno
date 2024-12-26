@@ -7,7 +7,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
  * describe database command executor type properties
  *
  * @author j.x
- * @date 2024/4/14 19:23
  * @since 1.1.8
  */
 @Data

@@ -6,7 +6,6 @@ import cc.allio.uno.data.orm.dsl.Operator;
  * describe how to wrapper {@link Operator}
  *
  * @author j.x
- * @date 2024/4/21 17:24
  * @since 1.1.8
  */
 public interface WrapperOperator {

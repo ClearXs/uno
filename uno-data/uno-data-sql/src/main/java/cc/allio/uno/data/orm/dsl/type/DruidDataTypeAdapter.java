@@ -14,7 +14,6 @@ import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
  * druid的类型转换器
  *
  * @author j.x
- * @date 2023/4/12 20:06
  * @since 1.1.4
  */
 public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {

@@ -7,8 +7,7 @@ import java.util.Map;
 /**
  * 一些关于请求验证的方法
  *
- * @author jw
- * @date 2021/12/6 13:57
+ * @author j.x
  */
 public final class Requires {
 

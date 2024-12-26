@@ -10,9 +10,8 @@ import java.util.function.Predicate;
  * 它将会构建一个责任链
  *
  * @author j.x
- * @date 2022/2/26 22:48
  * @see org.springframework.core.Ordered
- * @see javax.annotation.Priority
+ * @see jakarta.annotation.Priority
  * @since 1.0
  */
 public interface Dispatcher {

@@ -31,8 +31,7 @@ import reactor.util.function.Tuple2;
 /**
  * 基本的Http请求对象
  *
- * @author jw
- * @date 2021/12/6 23:36
+ * @author j.x
  */
 public abstract class BaseHttpRequest implements HttpRequestMetadata {
 

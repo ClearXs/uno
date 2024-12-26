@@ -7,7 +7,6 @@ import cc.allio.uno.core.reflect.ReflectTools;
  *
  * @param <R> bean type
  * @author j.x
- * @date 2024/2/14 16:52
  * @since 1.1.7
  */
 public interface BeanResultHandler<R> extends ResultHandler {

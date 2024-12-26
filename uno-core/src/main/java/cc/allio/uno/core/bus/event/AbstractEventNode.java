@@ -18,7 +18,6 @@ import java.util.concurrent.locks.ReentrantReadWriteLock;
  * 抽象的基于事件的主题Node
  *
  * @author j.x
- * @date 2021/12/19 12:21 PM
  * @since 1.0
  */
 @Slf4j

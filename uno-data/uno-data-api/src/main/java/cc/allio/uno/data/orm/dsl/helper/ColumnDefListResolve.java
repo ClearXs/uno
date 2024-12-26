@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * 加在pojo上，由它自身提供column的定义
  *
  * @author j.x
- * @date 2024/2/6 20:39
  * @since 1.1.7
  */
 @Documented

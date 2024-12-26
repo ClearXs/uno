@@ -11,7 +11,6 @@ import java.lang.annotation.Annotation;
  * 事物环境
  *
  * @author j.x
- * @date 2022/2/14 14:23
  * @since 1.0
  */
 public class TransactionEnvironment extends VisitorEnvironment {

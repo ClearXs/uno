@@ -13,7 +13,6 @@ import org.springframework.web.reactive.function.BodyInserters;
  * HTTP请求Body，包装{@link BodyInserters}
  *
  * @author j.x
- * @date 2022/10/19 15:25
  * @since 1.1.0
  */
 public interface HttpRequestBody {

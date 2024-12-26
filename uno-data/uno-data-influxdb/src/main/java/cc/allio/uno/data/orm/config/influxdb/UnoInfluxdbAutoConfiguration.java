@@ -24,7 +24,6 @@ import java.util.List;
  * configuration for uno influxdb
  *
  * @author j.x
- * @date 2024/4/14 18:17
  * @since 1.1.8
  */
 @Configuration

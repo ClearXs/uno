@@ -6,8 +6,7 @@ import lombok.Data;
 /**
  * 远程地址model
  *
- * @author jiangw
- * @date 2020/12/10 17:31
+ * @author j.x
  * @since 1.0
  */
 @Data

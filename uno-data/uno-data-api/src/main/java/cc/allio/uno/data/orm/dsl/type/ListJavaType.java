@@ -8,7 +8,6 @@ import java.util.List;
  * list
  *
  * @author j.x
- * @date 2023/4/16 16:58
  * @since 1.1.4
  */
 public class ListJavaType extends JavaTypeImpl<List> {

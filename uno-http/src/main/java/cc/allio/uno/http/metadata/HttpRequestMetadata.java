@@ -11,8 +11,7 @@ import org.springframework.util.MultiValueMap;
 /**
  * 基于WebFlux的Http元数据
  *
- * @author jw
- * @date 2021/12/6 23:12
+ * @author j.x
  */
 public interface HttpRequestMetadata extends HttpMetadata {
 

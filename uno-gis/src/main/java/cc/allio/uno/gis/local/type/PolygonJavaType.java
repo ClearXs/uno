@@ -8,7 +8,6 @@ import org.locationtech.jts.geom.Polygon;
  * Polygon
  *
  * @author j.x
- * @date 2023/4/18 16:02
  * @since 1.1.4
  */
 public class PolygonJavaType extends JavaTypeImpl<Polygon> {

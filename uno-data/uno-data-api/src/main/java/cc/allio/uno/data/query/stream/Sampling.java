@@ -13,7 +13,6 @@ import java.util.stream.Stream;
  * <p>基于随机采取指定的样本数据量</p>
  *
  * @author j.x
- * @date 2022/11/17 19:17
  * @since 1.1.1
  */
 public class Sampling {

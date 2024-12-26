@@ -19,7 +19,6 @@ import com.alibaba.druid.sql.ast.statement.*;
  * 与DDL SQL相关的操作
  *
  * @author j.x
- * @date 2024/2/8 13:46
  * @since 1.1.7
  */
 public class DDLSQLSupport extends SQLSupport {

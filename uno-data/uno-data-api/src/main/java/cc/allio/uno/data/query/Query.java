@@ -13,7 +13,6 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
  * 标识注解，使用于Mapper查询
  *
  * @author j.x
- * @date 2022/9/30 16:40
  * @since 1.1.0
  */
 @Inherited

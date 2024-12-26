@@ -16,7 +16,6 @@ import java.util.List;
  * </ul>
  *
  * @author j.x
- * @date 2022/2/14 14:05
  * @see AnnotationAwareOrderComparator#sort(List)
  * @since 1.1.1
  */

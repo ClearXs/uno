@@ -7,8 +7,7 @@ import java.lang.reflect.Method;
  * <b>InvocationInterceptor是统一代理的具体实现</b>
  * <p>实现jdk、cglib、byte-buddy的代理实现</p>
  *
- * @author jiangw
- * @date 2021/8/12 16:06
+ * @author j.x
  * @since 1.1
  */
 @FunctionalInterface

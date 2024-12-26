@@ -8,11 +8,6 @@ import cc.allio.uno.gis.jackson.geojson.deserializer.GeoJsonDeserializer;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName BaseIgnoreDeserializerObjectMapper
- * @Date 2022-03-12 22:28
- * @Version 1.0
  */
 public abstract class BaseIgnoreDeserializerObjectMapper<T> {
 

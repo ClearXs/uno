@@ -6,7 +6,6 @@ import lombok.Data;
  * 数据库信息
  *
  * @author j.x
- * @date 2024/1/4 18:32
  * @since 1.1.7
  */
 @Data

@@ -5,7 +5,6 @@ package cc.allio.uno.test.testcontainers;
  * <p>sub-class should be through SPI mechanism. </p>
  *
  * @author j.x
- * @date 2024/4/16 13:58
  * @since 1.1.8
  */
 public interface Prelude {

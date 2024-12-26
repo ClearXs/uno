@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>cc.allio</groupId>
+        <groupId>cc.allio.uno</groupId>
         <artifactId>uno-data</artifactId>
-        <version>1.1.9</version>
+        <version>1.2.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
@@ -14,11 +14,11 @@
 
     <dependencies>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-data-api</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-data-sql</artifactId>
         </dependency>
         <dependency>
@@ -26,7 +26,7 @@
             <artifactId>influxdb-client-java</artifactId>
         </dependency>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-data-test</artifactId>
             <scope>test</scope>
         </dependency>

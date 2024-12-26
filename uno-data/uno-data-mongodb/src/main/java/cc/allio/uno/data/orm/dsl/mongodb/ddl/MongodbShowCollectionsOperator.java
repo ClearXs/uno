@@ -21,7 +21,6 @@ import java.util.function.UnaryOperator;
  * mongodb show collections operator
  *
  * @author j.x
- * @date 2024/3/12 01:11
  * @since 1.1.7
  */
 @Getter

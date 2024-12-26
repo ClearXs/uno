@@ -9,8 +9,7 @@ import java.util.Set;
 
 /**
  * 注册的元数据
- * @author jiangw
- * @date 2020/11/29 17:08
+ * @author j.x
  * @since 1.0
  */
 @Data

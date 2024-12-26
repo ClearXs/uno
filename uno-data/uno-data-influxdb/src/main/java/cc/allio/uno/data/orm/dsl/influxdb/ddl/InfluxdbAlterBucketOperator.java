@@ -18,7 +18,6 @@ import java.util.function.UnaryOperator;
  * influxdb alter bucket(table) operator
  *
  * @author j.x
- * @date 2024/4/1 16:27
  * @since 1.1.8
  */
 @Getter

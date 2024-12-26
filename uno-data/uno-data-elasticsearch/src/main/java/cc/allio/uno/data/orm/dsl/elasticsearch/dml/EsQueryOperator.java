@@ -27,7 +27,6 @@ import java.util.function.UnaryOperator;
  * 基于{@link SearchRequest}的查询，SQL数据为elasticsearch dsl
  *
  * @author j.x
- * @date 2023/5/28 15:34
  * @since 1.1.4
  */
 @AutoService(QueryOperator.class)

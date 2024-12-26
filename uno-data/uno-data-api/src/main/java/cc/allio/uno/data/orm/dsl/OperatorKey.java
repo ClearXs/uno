@@ -12,7 +12,6 @@ import lombok.EqualsAndHashCode;
  * OperatorKey
  *
  * @author j.x
- * @date 2024/1/3 22:48
  * @since 1.1.7
  */
 public interface OperatorKey extends Key {

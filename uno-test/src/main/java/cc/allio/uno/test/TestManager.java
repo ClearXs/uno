@@ -14,7 +14,6 @@ import java.lang.reflect.UndeclaredThrowableException;
  * <p>通过事件机制，当test经历不同的测试阶段时发布对应的事件。事件使用于{@link EventBus}</p>
  *
  * @author j.x
- * @date 2023/3/2 20:05
  * @since 1.1.4
  */
 @Getter

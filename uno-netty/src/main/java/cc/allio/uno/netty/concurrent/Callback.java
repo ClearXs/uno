@@ -5,8 +5,7 @@ import cc.allio.uno.netty.exception.ConnectionException;
 /**
  * 回调接口
  * 做这个目的是提供一个执行代码时机的策略，即做成消息事件
- * @author jiangw
- * @date 2021/4/15 10:41
+ * @author j.x
  * @since 1.0
  */
 public interface Callback {

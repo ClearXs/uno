@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 /**
  * Protostuff序列化器测试
  *
- * @author jw
- * @date 2021/12/2 16:55
+ * @author j.x
  */
 class ProtoStuffSerializerTest extends BaseTestCase {
 

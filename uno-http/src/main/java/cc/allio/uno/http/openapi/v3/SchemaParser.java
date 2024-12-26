@@ -18,8 +18,7 @@ import reactor.util.function.Tuples;
  * 通过jackson解析成OpenApi时，无法把所有schema对象都尽可能生成。
  * 比如说ArraySchema，ComposedSchema等对象无法解析。因此创建Schema解析目的在于怎么解析这些
  *
- * @author jw
- * @date 2021/12/5 9:52
+ * @author j.x
  */
 public class SchemaParser implements Parser<Schema<?>> {
 

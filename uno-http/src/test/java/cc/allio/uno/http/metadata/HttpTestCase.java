@@ -11,7 +11,6 @@ import java.util.function.Consumer;
  * Http测试
  *
  * @author j.x
- * @date 2022/8/25 16:15
  * @since 1.0
  */
 public abstract class HttpTestCase extends BaseTestCase {

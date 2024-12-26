@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
  * Show Tables Operator
  *
  * @author j.x
- * @date 2024/1/4 16:56
  * @see Operators
  * @since 1.1.7
  */

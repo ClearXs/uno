@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 /**
- * @author jiangw
+ * @author j.x
  */
 public class NonAckScanner implements Runnable {
 

@@ -8,8 +8,7 @@ import io.netty.channel.ChannelFuture;
 /**
  * Netty连接器
  *
- * @author jiangw
- * @date 2020/12/2 14:06
+ * @author j.x
  * @since 1.0
  */
 public abstract class NettyAbstractConnector implements Connector {

@@ -14,7 +14,6 @@ import java.util.Collection;
  * 查询数据的入口流，通过{@link JoinPointDelegate}的代理调用，由定义的{@link QueryMapper}获取入口数据流.
  *
  * @author j.x
- * @date 2022/11/16 12:05
  * @since 1.1.0
  */
 public class MybatisStream<T> implements CollectionTimeStream<T> {

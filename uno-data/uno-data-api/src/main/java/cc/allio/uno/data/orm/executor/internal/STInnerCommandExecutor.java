@@ -8,7 +8,6 @@ import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
  * ST({@link ShowTablesOperator}) command executor
  *
  * @author j.x
- * @date 2024/3/15 11:22
  * @since 1.1.7
  */
 public interface STInnerCommandExecutor<R, O extends ShowTablesOperator> extends InnerListCommandExecutor<R, O> {

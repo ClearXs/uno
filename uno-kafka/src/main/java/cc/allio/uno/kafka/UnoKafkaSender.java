@@ -19,7 +19,6 @@ import java.util.Properties;
  * 自定义Kafka发送者，包含缓冲区速率控制，给定超时时间
  *
  * @author j.x
- * @date 2022/6/23 16:19
  * @since 1.0
  */
 @Slf4j

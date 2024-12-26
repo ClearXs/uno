@@ -15,8 +15,7 @@ import org.springframework.http.HttpMethod;
 /**
  * Http请求元数据生成工厂
  *
- * @author jw
- * @date 2021/12/7 11:17
+ * @author j.x
  */
 public class HttpRequestMetadataFactory {
 

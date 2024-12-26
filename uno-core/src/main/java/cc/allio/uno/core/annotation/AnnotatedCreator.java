@@ -13,7 +13,6 @@ import java.util.Optional;
  * {@link Annotated}生成器
  *
  * @author j.x
- * @date 2022/12/9 15:47
  * @since 1.1.2
  */
 public interface AnnotatedCreator {

@@ -8,7 +8,6 @@ import lombok.extern.slf4j.Slf4j;
  * DSL Executor factory
  *
  * @author j.x
- * @date 2023/4/16 23:38
  * @since 1.1.4
  */
 @Slf4j

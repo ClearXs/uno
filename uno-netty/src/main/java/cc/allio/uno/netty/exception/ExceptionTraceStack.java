@@ -5,8 +5,7 @@ import java.util.List;
 
 /**
  * 自定义异常栈
- * @author jiangw
- * @date 2021/1/16 15:41
+ * @author j.x
  * @since 1.0
  */
 public class ExceptionTraceStack {

@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * influxdb exist bucket(table) operator
  *
  * @author j.x
- * @date 2024/4/13 18:48
  * @since 1.1.8
  */
 @AutoService(ExistTableOperator.class)

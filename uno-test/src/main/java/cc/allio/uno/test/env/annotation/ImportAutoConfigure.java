@@ -11,7 +11,6 @@ import java.util.Set;
  * {@link ImportAutoConfiguration}的属性描述
  *
  * @author j.x
- * @date 2023/7/5 14:35
  * @since 1.1.4
  */
 public class ImportAutoConfigure extends DynamicConfigure {

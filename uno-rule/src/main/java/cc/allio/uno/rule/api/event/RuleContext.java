@@ -14,7 +14,6 @@ import java.util.Set;
  * Rule运行时上下文对象
  *
  * @author j.x
- * @date 2023/4/23 16:38
  * @since 1.1.4
  */
 public class RuleContext extends DefaultEventContext {

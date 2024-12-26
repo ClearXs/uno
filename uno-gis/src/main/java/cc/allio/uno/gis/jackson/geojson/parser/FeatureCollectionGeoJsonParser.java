@@ -23,11 +23,6 @@ import static cc.allio.uno.gis.jackson.geojson.GeoJson.FEATURES;
 /**
  * 〈功能简述〉<br>
  * 〈〉
- *
- * @author Mr.QL
- * @ClassName FeatureCollectionGeoJsonParser
- * @Date 2022-03-12 23:13
- * @Version 1.0
  */
 public class FeatureCollectionGeoJsonParser<T> extends BaseIgnoreDeserializerObjectMapper<T> implements GeoJsonBaseParser<T> {
 

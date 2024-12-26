@@ -21,7 +21,6 @@ import java.util.function.UnaryOperator;
  * </ul>
  *
  * @author j.x
- * @date 2024/3/15 08:26
  * @since 1.1.7
  */
 public interface DDLCommandExecutor extends CommandExecutor {

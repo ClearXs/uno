@@ -16,7 +16,6 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>接受一个入口流{@link DataStream}，根据同期对比的参数数据重新构建入口流的{@link QueryFilter}参数。根据该新参数获取集合流数据，把集合流数据转换为以时间为key的参数</p>
  *
  * @author j.x
- * @date 2022/11/18 14:40
  * @since 1.1.0
  */
 public class ContemporaneousStream implements TimeStream<Map<String, Collection<?>>> {

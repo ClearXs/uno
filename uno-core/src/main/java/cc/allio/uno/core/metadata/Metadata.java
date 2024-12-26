@@ -10,7 +10,6 @@ import java.util.Map;
  * 元数据接口定义
  *
  * @author j.x
- * @date 2022/11/21 22:25
  * @since 1.1.1
  */
 public interface Metadata {
@@ -34,7 +33,7 @@ public interface Metadata {
      *
      * @param fieldName 字段名称
      * @param value     映射值
-     * @return Mono<Object>值
+     * @return {@link Mono}
      */
     default Mono<Object> putMappingValue(String fieldName, Object value) {
         return putMappingValue(MappingField.builder().name(fieldName).build(), value);
@@ -45,7 +44,7 @@ public interface Metadata {
      *
      * @param mappingField 映射字段
      * @param value        映射值
-     * @return Mono<Object>值
+     * @return {@link Mono}
      */
     default Mono<Object> putMappingValue(MappingField mappingField, Object value) {
         return Mono.just(value);
@@ -55,7 +54,7 @@ public interface Metadata {
      * 获取MappingValue
      *
      * @param fieldName 目标映射字段
-     * @return Mono<Object>
+     * @return {@link Mono}
      */
     default Mono<Object> getMappingValue(String fieldName) {
         return getMappingValue(MappingField.builder().name(fieldName).build(), Object.class);
@@ -65,7 +64,7 @@ public interface Metadata {
      * 获取MappingValue
      *
      * @param mappingField MappingField
-     * @return Mono<Object>
+     * @return {@link Mono}
      */
     default Mono<Object> getMappingValue(MappingField mappingField) {
         return getMappingValue(mappingField, Object.class);
@@ -77,7 +76,7 @@ public interface Metadata {
      * @param fieldName 目标映射字段
      * @param type      字段类型
      * @param <T>       字段泛型
-     * @return Mono<T>
+     * @return {@link Mono}
      * @see #getMappingValue(MappingField, Class)
      */
     default <T> Mono<T> getMappingValue(String fieldName, Class<T> type) {
@@ -90,7 +89,7 @@ public interface Metadata {
      * @param mappingField MappingField
      * @param type         字段类型
      * @param <T>          字段泛型
-     * @return Mono<T>
+     * @return {@link Mono}
      * @throws NullPointerException 当mappingField or type为空时抛出
      * @throws ClassCastException   当type转换失败时抛出
      */

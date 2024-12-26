@@ -7,7 +7,6 @@ import java.io.Serializable;
  * <p>该接口包含能够获取Lambda方法名、字段名、Lambda方法的序列化信息等。</p>
  *
  * @author j.x
- * @date 2024/1/26 18:34
  * @see java.util.function.BiConsumer
  * @since 1.1.7
  */

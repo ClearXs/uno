@@ -15,7 +15,6 @@ import java.util.List;
  * 执行器{@link cc.allio.uno.data.orm.executor.CommandExecutor}相关参数
  *
  * @author j.x
- * @date 2024/2/14 21:07
  * @since 1.1.7
  */
 public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorSet, OptionalContext {

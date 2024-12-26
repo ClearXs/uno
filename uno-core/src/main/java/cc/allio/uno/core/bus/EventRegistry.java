@@ -10,7 +10,6 @@ import java.util.Set;
  * 事件注册中心
  *
  * @author j.x
- * @date 2023/4/25 13:42
  * @since 1.1.4
  */
 public class EventRegistry implements Map<Class<? extends TopicEvent>, TopicEvent> {

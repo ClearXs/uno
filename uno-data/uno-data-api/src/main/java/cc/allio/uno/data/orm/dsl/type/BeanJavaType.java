@@ -6,7 +6,6 @@ import lombok.AllArgsConstructor;
  * java bean type
  *
  * @author j.x
- * @date 2024/4/2 18:56
  * @since 1.1.8
  */
 @AllArgsConstructor

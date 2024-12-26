@@ -24,7 +24,6 @@ import java.net.SocketTimeoutException;
  * command executor for time-series database implementation
  *
  * @author j.x
- * @date 2024/4/1 16:38
  * @since 1.1.8
  */
 public class InfluxdbCommandExecutor extends AbstractCommandExecutor implements AggregateCommandExecutor {

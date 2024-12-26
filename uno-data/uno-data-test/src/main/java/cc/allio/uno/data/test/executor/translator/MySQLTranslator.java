@@ -10,7 +10,6 @@ import org.testcontainers.containers.MySQLContainer;
  * mysql impl translator
  *
  * @author j.x
- * @date 2024/3/20 01:07
  * @since 1.1.7
  */
 public class MySQLTranslator extends RDBTranslator {

@@ -17,7 +17,6 @@ import java.util.function.UnaryOperator;
  * mongodb alter collection(table) operator
  *
  * @author j.x
- * @date 2024/3/11 23:12
  * @since 1.1.7
  */
 @Getter

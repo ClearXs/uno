@@ -10,7 +10,6 @@ import cc.allio.uno.data.orm.dsl.type.DSLType;
  * h2
  *
  * @author j.x
- * @date 2024/1/8 19:50
  * @since 1.1.7
  */
 @AutoService(TypeTranslator.class)

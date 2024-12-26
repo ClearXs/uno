@@ -18,8 +18,7 @@ import java.util.concurrent.Callable;
 /**
  * <b>Byte Buddy是一款Java字节码增强框架，可以动态生成Java字节码文件，它他屏蔽了底层细节，提供统一易上手的api，简化字节码增加的难度，性能要强于jdk与cglib</b>
  *
- * @author jiangw
- * @date 2021/8/12 17:46
+ * @author j.x
  * @since 1.1
  */
 class ByteBuddyProxyInvocation implements ProxyInvocation {
@@ -78,8 +77,7 @@ class ByteBuddyProxyInvocation implements ProxyInvocation {
     /**
      * byte buddy方法拦截器，代理对象方法调用时进行拦截，针对接口类型进行拦截
      *
-     * @author jiangw
-     * @date 2021/8/13 14:38
+     * @author j.x
      * @since 1.1
      */
     public static class ByteBuddyInterfaceMethodInterceptor {
@@ -102,8 +100,7 @@ class ByteBuddyProxyInvocation implements ProxyInvocation {
     /**
      * byte buddy方法拦截器，代理对象方法调用时进行拦截
      *
-     * @author jiangw
-     * @date 2021/8/13 10:33
+     * @author j.x
      * @since 1.1
      */
     public static class ByteBuddyMethodInterceptor {

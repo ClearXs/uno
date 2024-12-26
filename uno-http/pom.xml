@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <parent>
-        <groupId>cc.allio</groupId>
-        <artifactId>uno</artifactId>
-        <version>1.1.9</version>
+        <groupId>cc.allio.uno</groupId>
+        <artifactId>uno-parent</artifactId>
+        <version>1.2.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -15,11 +15,12 @@
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mockserver.version>4.12.0</mockserver.version>
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-core</artifactId>
         </dependency>
         <dependency>
@@ -44,10 +45,11 @@
         <dependency>
             <groupId>com.squareup.okhttp3</groupId>
             <artifactId>mockwebserver</artifactId>
+            <version>${mockserver.version}</version>
             <scope>test</scope>
         </dependency>
         <dependency>
-            <groupId>cc.allio</groupId>
+            <groupId>cc.allio.uno</groupId>
             <artifactId>uno-test</artifactId>
             <scope>test</scope>
         </dependency>

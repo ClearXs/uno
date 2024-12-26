@@ -12,7 +12,6 @@ import java.util.function.Consumer;
  * 类型公共方法集
  *
  * @author j.x
- * @date 2022/12/3 17:25
  * @since 1.1.2
  */
 public class Types {

@@ -6,7 +6,6 @@ import java.lang.annotation.*;
  * 在{@link PojoWrapper#findTable(Class)}时使用
  *
  * @author j.x
- * @date 2024/2/6 20:06
  * @since 1.1.7
  */
 @Documented

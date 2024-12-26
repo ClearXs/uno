@@ -5,8 +5,7 @@ import cc.allio.uno.sequnetial.context.SequentialContext;
 /**
  * 处理链
  *
- * @author jw
- * @date 2021/12/13 15:49
+ * @author j.x
  */
 public interface ProcessHandlerChain {
 

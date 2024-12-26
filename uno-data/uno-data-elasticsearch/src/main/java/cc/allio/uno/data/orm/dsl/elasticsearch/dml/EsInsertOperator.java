@@ -25,7 +25,6 @@ import java.util.function.UnaryOperator;
  * 基于{@link BulkRequest}做数据创建
  *
  * @author j.x
- * @date 2023/5/29 12:13
  * @see BulkOperation
  * @since 1.1.4
  */

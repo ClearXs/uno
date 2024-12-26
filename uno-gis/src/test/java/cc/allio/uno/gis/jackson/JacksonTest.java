@@ -40,12 +40,6 @@ import java.util.Map;
  * geojson序列化实体定义
  *
  * @author j.x
- * @GeoJsonType 注解该geojson对象的类型
- * @JsonSerialize(using = {@link GeoJsonSerializer}) 注释该实体使用{@link GeoJsonSerializer}进行序列化
- * @JsonDeserialize(using = GeoJsonDeserializer.class) 注释该实体使用{@link GeoJsonDeserializer}进行反序列化
- * @GeoJsonId、@GeoJsonGeometry适用于字段上或者getxxx()方法，表明该字段进行geojson数据的何种形式
- * @GeoJsonProperties、@GeoJsonProperty是互为互斥的两个注解，都是构建geojson-properties属性，其中@GeoJsonProperties只能出现一次，@GeoJsonProperty在同一个对象中可以多次出现
- * @date 2022/9/26 14:43
  * @since 1.0
  */
 class JacksonTest extends BaseTestCase {

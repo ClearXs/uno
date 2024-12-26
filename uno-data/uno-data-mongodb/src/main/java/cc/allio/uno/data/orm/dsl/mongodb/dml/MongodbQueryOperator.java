@@ -24,7 +24,6 @@ import java.util.function.UnaryOperator;
  * mongodb query document operator implementation
  *
  * @author j.x
- * @date 2024/3/14 00:52
  * @since 1.1.7
  */
 @Slf4j

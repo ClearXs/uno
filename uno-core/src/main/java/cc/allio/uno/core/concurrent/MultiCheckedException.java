@@ -9,7 +9,6 @@ import java.util.Map;
  * 多受检查异常
  *
  * @author j.x
- * @date 2024/2/29 23:56
  * @since 1.1.7
  */
 public class MultiCheckedException extends Exception {

@@ -14,7 +14,6 @@ import static java.util.stream.Collectors.toList;
  * 分页 Page 对象接口，借鉴于mybatis-plus
  *
  * @author j.x
- * @date 2023/5/28 22:34
  * @since 1.1.4
  */
 public interface IPage<T> extends Serializable {

@@ -11,7 +11,6 @@ import java.util.Map;
  * list map
  *
  * @author j.x
- * @date 2023/4/18 13:34
  * @since 1.1.4
  */
 public class ListMapResultHandler extends ExecutorOptionsAwareImpl implements ListResultSetHandler<Map<String, Object>> {

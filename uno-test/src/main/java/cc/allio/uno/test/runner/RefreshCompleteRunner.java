@@ -7,7 +7,6 @@ import org.springframework.context.ConfigurableApplicationContext;
  * <b>标识接口</b>当spring上下文刷新完成后执行
  *
  * @author j.x
- * @date 2022/10/29 10:05
  * @since 1.1.0
  */
 public interface RefreshCompleteRunner extends Runner {

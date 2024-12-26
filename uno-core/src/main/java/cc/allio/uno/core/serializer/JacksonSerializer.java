@@ -16,8 +16,7 @@ import java.util.*;
 /**
  * Jackson序列化器，要求反序列化的对象有<b>默认构造器</b>
  *
- * @author jw
- * @date 2021/12/3 11:10
+ * @author j.x
  */
 @AutoService(Serializer.class)
 public class JacksonSerializer extends AbstractSerializer<ObjectMapper> {

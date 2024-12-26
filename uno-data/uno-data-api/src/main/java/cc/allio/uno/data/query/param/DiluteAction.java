@@ -6,7 +6,6 @@ import cc.allio.uno.data.query.QueryWrapper;
  * 数据抽稀动作
  *
  * @author j.x
- * @date 2022/10/10 16:20
  * @since 1.1.0
  */
 public interface DiluteAction {

@@ -7,7 +7,6 @@ import cc.allio.uno.test.runner.CloseRunner;
  * end test-container
  *
  * @author j.x
- * @date 2024/3/18 23:32
  * @since 1.1.7
  */
 public class ShutdownContainer implements CloseRunner {

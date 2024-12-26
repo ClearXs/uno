@@ -10,8 +10,7 @@ import java.util.function.Consumer;
 /**
  * 增加抽象序列化层，抽出共用方法
  *
- * @author jw
- * @date 2021/12/4 21:18
+ * @author j.x
  */
 public abstract class AbstractSerializer<W> implements Serializer {
 

@@ -14,7 +14,6 @@ import java.util.function.UnaryOperator;
  * influxdb drop bucket(table) operator
  *
  * @author j.x
- * @date 2024/4/13 18:40
  * @since 1.1.8
  */
 @AutoService(DropTableOperator.class)

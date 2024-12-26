@@ -6,7 +6,6 @@ import cc.allio.uno.data.query.QueryWrapper;
  * 默认抽稀动作，不实现任何动作
  *
  * @author j.x
- * @date 2022/11/16 11:40
  * @since 1.1.0
  */
 public class DefaultDiluteAction implements DiluteAction {

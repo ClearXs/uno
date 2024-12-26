@@ -17,7 +17,6 @@ import java.util.function.Predicate;
  * {@link TokenRequest}构建器
  *
  * @author j.x
- * @date 2022/8/25 09:24
  * @since 1.0
  */
 public class TokenRequestBuilder {

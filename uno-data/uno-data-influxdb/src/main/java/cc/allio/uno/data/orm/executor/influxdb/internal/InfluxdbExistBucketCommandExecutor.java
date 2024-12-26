@@ -19,7 +19,6 @@ import lombok.extern.slf4j.Slf4j;
  * influxdb exist bucket command executor
  *
  * @author j.x
- * @date 2024/4/13 19:38
  * @see InfluxdbExistBucketOperator
  * @since 1.1.8
  */

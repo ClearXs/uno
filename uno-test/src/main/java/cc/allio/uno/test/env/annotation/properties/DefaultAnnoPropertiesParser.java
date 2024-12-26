@@ -18,7 +18,6 @@ import java.util.stream.Stream;
  * 默认注解配置解析器。对应注解上必须含有{@link cc.allio.uno.test.env.annotation.properties.Properties}注解
  *
  * @author j.x
- * @date 2023/3/3 14:49
  * @since 1.1.4
  */
 public class DefaultAnnoPropertiesParser implements AnnoPropertiesParser {

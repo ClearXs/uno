@@ -16,7 +16,6 @@ import java.util.Map;
  * manage {@link InnerCommandExecutor} entity
  *
  * @author j.x
- * @date 2024/3/15 04:49
  * @see SPIInnerCommandScanner
  * @since 1.1.7
  */

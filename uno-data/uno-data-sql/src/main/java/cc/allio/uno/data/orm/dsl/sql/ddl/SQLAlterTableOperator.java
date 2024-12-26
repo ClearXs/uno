@@ -24,7 +24,6 @@ import java.util.function.UnaryOperator;
  * druid for modify xxxx structure
  *
  * @author j.x
- * @date 2023/6/8 19:55
  * @since 1.1.4
  */
 @AutoService(AlterTableOperator.class)

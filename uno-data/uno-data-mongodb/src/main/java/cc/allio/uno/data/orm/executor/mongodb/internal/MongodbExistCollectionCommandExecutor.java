@@ -25,7 +25,6 @@ import java.util.Map;
  * mongodb exist collection command executor
  *
  * @author j.x
- * @date 2024/3/15 11:20
  * @see ListCollectionsOperation
  * @since 1.1.7
  */

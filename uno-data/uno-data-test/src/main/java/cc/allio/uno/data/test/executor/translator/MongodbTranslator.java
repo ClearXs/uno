@@ -12,7 +12,6 @@ import org.testcontainers.containers.MongoDBContainer;
  * mongodb impl translator
  *
  * @author j.x
- * @date 2024/3/20 01:19
  * @since 1.1.7
  */
 public class MongodbTranslator implements ContainerExecutorOptionsTranslator {

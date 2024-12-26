@@ -14,7 +14,6 @@ import lombok.Data;
  * <p>enhance {@link Operator#obtainMetaAcceptorSet()} load by proxy</p>
  *
  * @author j.x
- * @date 2024/4/21 15:31
  * @since 1.1.8
  */
 @Data

@@ -10,7 +10,6 @@ import java.util.Comparator;
  * {@link java.util.Comparator}常用类型比较器
  *
  * @author j.x
- * @date 2024/2/13 14:54
  * @since 1.1.7
  */
 public final class Comparators extends org.springframework.util.comparator.Comparators {

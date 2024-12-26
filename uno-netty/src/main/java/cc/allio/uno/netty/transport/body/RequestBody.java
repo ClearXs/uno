@@ -9,8 +9,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * 请求body
  *
- * @author jiangw
- * @date 2020/12/10 17:30
+ * @author j.x
  * @since 1.0
  */
 @Getter

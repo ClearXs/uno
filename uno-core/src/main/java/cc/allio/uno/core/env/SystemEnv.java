@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
  * 基于本地系统默认实现
  *
  * @author j.x
- * @date 2023/4/27 14:02
  * @since 1.1.4
  */
 public class SystemEnv implements Env {

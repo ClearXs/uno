@@ -3,8 +3,7 @@ package cc.allio.uno.test.mock;
 /**
  * Boolean类型mock
  *
- * @author jw
- * @date 2021/12/16 13:19
+ * @author j.x
  */
 public class BooleanMock implements Mock<Boolean> {
     @Override

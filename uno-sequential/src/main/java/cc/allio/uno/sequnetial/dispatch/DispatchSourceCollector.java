@@ -7,7 +7,6 @@ import cc.allio.uno.sequnetial.Sequential;
  * 基于{@link Dispatcher}分派数据源
  *
  * @author j.x
- * @date 2022/11/22 11:26
  * @since 1.1.2
  */
 public class DispatchSourceCollector implements SourceCollector<Sequential> {

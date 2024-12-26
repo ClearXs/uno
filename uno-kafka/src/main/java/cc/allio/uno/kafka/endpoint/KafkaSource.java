@@ -13,7 +13,6 @@ import java.util.List;
  * Kafka数据源
  *
  * @author j.x
- * @date 2022/11/22 10:41
  * @since 1.1.1
  */
 @Slf4j

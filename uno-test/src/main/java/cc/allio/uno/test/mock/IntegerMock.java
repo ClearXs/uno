@@ -3,8 +3,7 @@ package cc.allio.uno.test.mock;
 /**
  * Integer类型mock对象
  *
- * @author jw
- * @date 2021/12/16 13:17
+ * @author j.x
  */
 public class IntegerMock implements Mock<Integer> {
 

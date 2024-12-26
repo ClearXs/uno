@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * Http Header元数据，提供一些数据的操作，如判断某个请求头是否存在，删除某个请求头等
  *
  * @author j.x
- * @date 2022/4/2 10:09
  * @since 1.0.6
  */
 @ToString

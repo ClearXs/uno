@@ -13,7 +13,6 @@ import java.util.stream.Collectors;
  * {@link AutoService}与{@link Type}数据类型加载单例对象，提供的静态方法获取实例数据不做缓存
  *
  * @author j.x
- * @date 2022/5/20 10:42
  * @since 1.0
  */
 public abstract class AutoTypeLoader extends Loader {
@@ -23,7 +22,7 @@ public abstract class AutoTypeLoader extends Loader {
      *
      * @param typeClass 期望的类型
      * @param <T>       返回数据格式的范型
-     * @return 以范型<K>为Key，范型<T>为value的数据
+     * @return 以范型K为Key，范型T为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
     public static <T extends Type> Map<String, List<T>> loadByTypeToMap(Class<T> typeClass) {
@@ -39,7 +38,7 @@ public abstract class AutoTypeLoader extends Loader {
      *
      * @param typeClass 期望的类型
      * @param <T>       返回数据格式的范型
-     * @return 以范型<K>为Key，范型<T>为value的数据
+     * @return 以范型K为Key，范型T为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
     public static <T> List<T> loadToList(Class<T> typeClass) {
@@ -53,7 +52,7 @@ public abstract class AutoTypeLoader extends Loader {
      *
      * @param typeClass 期望的类型
      * @param <T>       返回数据格式的范型
-     * @return 以范型<K>为Key，范型<T>为value的数据
+     * @return 以范型K为Key，范型tz为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
     public static <T extends Type> Flux<GroupedFlux<String, T>> loadByTypeToGroupFlux(Class<T> typeClass) {
@@ -67,7 +66,7 @@ public abstract class AutoTypeLoader extends Loader {
      *
      * @param typeClass 期望的类型
      * @param <T>       返回数据格式的范型
-     * @return 以范型<K>为Key，范型<T>为value的数据
+     * @return 以范型K为Key，范型T为value的数据
      * @throws NullPointerException 提供的入参没有被{@link AutoService}注解注释抛出该异常
      */
     public static <T> Flux<T> loadToFlux(Class<T> typeClass) {

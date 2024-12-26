@@ -17,8 +17,7 @@ import cc.allio.uno.netty.transport.body.Body;
  * <p>
  *     过滤链由{@link FilterChainLoader#loadChain(Filter...)}与{@link FilterChainLoader#loadPriority(FilterChain)}创建
  * </p>
- * @author jiangw
- * @date 2020/11/27 21:50
+ * @author j.x
  * @since 1.0
  */
 public interface FilterChain {

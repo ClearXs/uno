@@ -10,7 +10,6 @@ import java.util.Arrays;
  * 定义数据Query流，设计参考自{@link java.io.InputStream}
  *
  * @author j.x
- * @date 2022/11/16 12:01
  * @since 1.1.0
  */
 @FunctionalInterface

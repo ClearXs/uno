@@ -32,7 +32,6 @@ import java.util.stream.Stream;
  * {@link RunTest}的属性描述。支持能够在其上拓展增加能力
  *
  * @author j.x
- * @date 2023/3/10 09:25
  * @since 1.1.4
  */
 @Slf4j
