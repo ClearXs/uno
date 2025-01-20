@@ -1,6 +1,6 @@
 package cc.allio.uno.core.reflect;
 
-import cc.allio.uno.core.concurrent.LockContext;
+import cc.allio.uno.core.util.concurrent.LockContext;
 import cc.allio.uno.core.exception.Exceptions;
 import com.google.common.collect.Maps;
 import lombok.NonNull;

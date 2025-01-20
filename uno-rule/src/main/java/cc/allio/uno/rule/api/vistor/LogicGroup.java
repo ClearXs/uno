@@ -1,8 +1,7 @@
 package cc.allio.uno.rule.api.vistor;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.datastructure.tree.Element;
-import cc.allio.uno.core.datastructure.tree.TraversalElement;
+import cc.allio.uno.core.util.tree.TraversalElement;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.rule.api.LogicPredicate;

@@ -23,9 +23,9 @@ public interface Listener<C> {
     /**
      * 获取事件类型
      *
-     * @return {@link BusEvent}Class对象
+     * @return {@link Event}Class对象
      */
-    Class<? extends BusEvent> getEventType();
+    Class<? extends Event> getEventType();
 
     /**
      * Listener装饰器，存放ListenerId
@@ -49,7 +49,7 @@ public interface Listener<C> {
         }
 
         @Override
-        public Class<? extends BusEvent> getEventType() {
+        public Class<? extends Event> getEventType() {
             return listener.getEventType();
         }
 

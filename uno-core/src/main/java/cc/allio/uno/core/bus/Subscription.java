@@ -3,6 +3,7 @@ package cc.allio.uno.core.bus;
 import cc.allio.uno.core.util.id.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
  * @author j.x
  */
 @Data
-@AllArgsConstructor(staticName = "of")
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 public class Subscription implements Serializable {
 
     /**
@@ -28,35 +30,25 @@ public class Subscription implements Serializable {
     private Long id;
 
     /**
-     * 订阅消息id
-     */
-    private Long subscribeId;
-
-    /**
      * 订阅的主题
      */
     private String path;
 
 
     public static Subscription of() {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                IdGenerator.defaultGenerator().getNextId(),
-                "");
+        return of(IdGenerator.defaultGenerator().getNextId(), "");
     }
 
     public static Subscription of(String topic) {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                IdGenerator.defaultGenerator().getNextId(),
-                topic);
+        return of(IdGenerator.defaultGenerator().getNextId(), topic);
     }
 
-    public static Subscription of(Long subscribeId, String topic) {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                subscribeId,
-                topic);
+    public static Subscription of(Long id) {
+        return of(id, "");
+    }
+
+    public static Subscription of(Long id, String topic) {
+        return new Subscription(id, topic);
     }
 
     /**
@@ -71,7 +63,7 @@ public class Subscription implements Serializable {
         }
         return topics.stream()
                 .map(topic -> of((long) topic.hashCode(), topic))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -87,6 +79,6 @@ public class Subscription implements Serializable {
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(topic -> of((long) topic.concat(affix).hashCode(), topic.concat(affix)))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

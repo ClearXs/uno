@@ -252,7 +252,7 @@ public class DefaultRuleResult implements RuleResult {
      * publish on rule fire
      */
     void publishFire() {
-        EventBusFactory.get().publish(fireContext.getEventRegistry().get(FireEvent.class));
+        EventBusFactory.current().publish(fireContext.getEventRegistry().get(FireEvent.class));
     }
 
     /**
@@ -262,7 +262,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return EventContext for flux
      */
     Flux<EventContext> subscribeNoMatch(Consumer<EventContext> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(NoMatchEvent.class))
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(NoMatchEvent.class))
                 .flatMap(Node::onNext)
                 .doOnNext(eventContext -> {
                     resultLock.lock();
@@ -288,7 +288,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return MatchIndex for mono list
      */
     Flux<EventContext> subscribeMatch(Consumer<Set<MatchIndex>> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(MatchEvent.class))
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(MatchEvent.class))
                 .flatMap(Node::onNext)
                 .doOnNext(eventContext ->
                         eventContext.get(RuleContext.MATCH_INDEX, Set.class)
@@ -321,7 +321,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return Throwable for flux
      */
     Flux<EventContext> subscribeErr(Consumer<Throwable> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(ErrorEvent.class))
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(ErrorEvent.class))
                 .flatMap(Node::onNext)
                 .doOnNext(eventContext ->
                         eventContext.get(RuleContext.ERROR, Throwable.class)

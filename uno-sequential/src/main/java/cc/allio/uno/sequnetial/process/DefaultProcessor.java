@@ -68,7 +68,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
         // 初始化加载追加处理器
         appendProcessHandlers.addAll(Loader.loadList(AppendProcessHandler.class));
         // 订阅基础处理器，转发处理.
-        EventBusFactory.<SequentialContext>get()
+        EventBusFactory.<SequentialContext>current()
                 .subscribeOnRepeatable(DISPATCH_TOPIC)
                 .flatMap(Node::onNext)
                 .subscribe(this::onDispatch);
@@ -80,7 +80,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
         if (context == null) {
             throw new IllegalArgumentException("sequential context not null");
         }
-        EventBusFactory.get().publish(DISPATCH_TOPIC, context);
+        EventBusFactory.current().publish(DISPATCH_TOPIC, context);
     }
 
     /**
@@ -94,19 +94,19 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
         Mono.justOrEmpty(sequential).filter(s -> typeManager.contains(s.getType()))
                 .then(Mono.defer(() ->
                         // 判断是否存在指定主题，如果不存在则创建订阅关系，随后向该订阅关系发布时序数据
-                        EventBusFactory.get().contains(topic)
+                        EventBusFactory.current().contains(topic)
                                 .publishOn(Schedulers.boundedElastic())
                                 .flatMap(c -> {
                                     if (Boolean.FALSE.equals(c)) {
-                                        EventBusFactory.<SequentialContext>get()
+                                        return EventBusFactory.<SequentialContext>current()
                                                 .subscribeOnRepeatable(topic)
                                                 .flatMap(Node::onNext)
                                                 .flatMap(this::onProcess)
-                                                .subscribe();
+                                                .then(Mono.just(context));
                                     }
                                     return Mono.just(context);
                                 })))
-                .thenMany(Flux.defer(() -> EventBusFactory.get().publishOnFlux(topic, context)))
+                .thenMany(Flux.defer(() -> EventBusFactory.current().publishOnFlux(topic, context)))
                 .subscribe();
     }
 

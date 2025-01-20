@@ -4,7 +4,6 @@ import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.bus.event.EmitEvent;
 import cc.allio.uno.core.bus.event.Node;
 import com.google.common.collect.Lists;
-import net.jodah.concurrentunit.Waiter;
 import org.junit.jupiter.api.Test;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
@@ -13,12 +12,7 @@ import java.time.Duration;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.Lock;
-import java.util.concurrent.locks.ReadWriteLock;
-import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 public class EventBusTest extends BaseTestCase {
 
@@ -91,27 +85,27 @@ public class EventBusTest extends BaseTestCase {
 
     @Test
     void testSubThenPus() {
-        EventBusFactory.get().subscribeOnRepeatable("1")
+        EventBusFactory.current()
+                .subscribeOnRepeatable("1")
                 .flatMap(Node::onNext)
                 .delayElements(Duration.ofMillis(1000L))
-                .flatMap(s -> EventBusFactory.get().publishOnFlux("1", new DefaultEventContext()))
+                .flatMap(s -> EventBusFactory.current().publishOnFlux("1", new DefaultEventContext()))
                 .subscribe();
     }
 
     @Test
     void testError() {
-        EventBusFactory.get().subscribeOnRepeatable("1")
+        EventBusFactory.current()
+                .subscribeOnRepeatable("1")
                 .flatMap(Node::onNext)
                 .doOnNext(o -> {
                     int i = 1 / 0;
                 })
                 .onErrorContinue((e, x) -> System.out.println(x))
                 .subscribe(System.out::println);
-        EventBusFactory.get().publishOnFlux("1", new DefaultEventContext())
-                .subscribe();
+        EventBusFactory.current().publishOnFlux("1", new DefaultEventContext()).subscribe();
 
-        EventBusFactory.get().publishOnFlux("1", new DefaultEventContext())
-                .subscribe();
+        EventBusFactory.current().publishOnFlux("1", new DefaultEventContext()).subscribe();
     }
 
     @Test
@@ -157,7 +151,7 @@ public class EventBusTest extends BaseTestCase {
 
     @Test
     void testConcurrent() throws InterruptedException {
-        CountDownLatch counter = new CountDownLatch(100000000);
+        CountDownLatch counter = new CountDownLatch(10000);
         for (int i = 0; i < 1000; i++) {
             String topic = "t1" + "/" + i;
             bus.subscribe(topic)

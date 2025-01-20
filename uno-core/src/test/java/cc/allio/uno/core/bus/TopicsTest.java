@@ -19,7 +19,7 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testLink() {
-        topics.link(Subscription.of("test"))
+        topics.link(Subscription.of("test"), EventBusFactory.newEventBus())
                 .map(Topic::getPath)
                 .as(StepVerifier::create)
                 .expectNext("/test")
@@ -28,14 +28,14 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testNullLink() {
-        assertThrows(NullPointerException.class, () -> topics.link(null));
+        assertThrows(NullPointerException.class, () -> topics.link(null, EventBusFactory.current()));
     }
 
     @Test
     void testUnlink() {
         Subscription subscription = Subscription.of("/test");
-        topics.link(subscription)
-                .flatMapMany(Topic::findNode)
+        topics.link(subscription, EventBusFactory.current())
+                .flatMapMany(Topic::getNode)
                 .flatMap(node -> {
                     node.doLift(o -> log.info("node left subscribe id: {}", node.getSubscribeId()));
                     return topics.unlink("/test");
@@ -47,7 +47,7 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testLookup() {
-        topics.link(Subscription.of("/PP"))
+        topics.link(Subscription.of("/PP"), EventBusFactory.current())
                 .thenMany(topics.lookup("/PP"))
                 .map(Topic::getPath)
                 .as(StepVerifier::create)
@@ -61,7 +61,7 @@ class TopicsTest extends BaseTestCase {
      */
     @Test
     void testEmptyLookupTopic() {
-        topics.link(Subscription.of("/test/**"))
+        topics.link(Subscription.of("/test/**"), EventBusFactory.current())
                 .thenMany(topics.lookup(""))
                 .as(StepVerifier::create)
                 .expectNextCount(0L)
@@ -73,10 +73,10 @@ class TopicsTest extends BaseTestCase {
      */
     @Test
     void testChildLookupTopic() {
-        topics.link(Subscription.of("/p/**"))
-                .then(topics.link(Subscription.of("/p/c1")))
-                .then(topics.link(Subscription.of("/p/c2")))
-                .then(topics.link(Subscription.of("/p/c1/c11")))
+        topics.link(Subscription.of("/p/**"), EventBusFactory.current())
+                .then(topics.link(Subscription.of("/p/c1"), EventBusFactory.current()))
+                .then(topics.link(Subscription.of("/p/c2"), EventBusFactory.current()))
+                .then(topics.link(Subscription.of("/p/c1/c11"), EventBusFactory.current()))
                 .thenMany(topics.lookup("/p/c1"))
                 .count()
                 .as(StepVerifier::create)
@@ -89,9 +89,9 @@ class TopicsTest extends BaseTestCase {
      */
     @Test
     void testWildcardLookup() {
-        topics.link(Subscription.of("/p"))
-                .then(topics.link(Subscription.of("/p/c1")))
-                .then(topics.link(Subscription.of("/p/c2")))
+        topics.link(Subscription.of("/p"), EventBusFactory.current())
+                .then(topics.link(Subscription.of("/p/c1"), EventBusFactory.current()))
+                .then(topics.link(Subscription.of("/p/c2"), EventBusFactory.current()))
                 .thenMany(topics.lookup("**"))
                 .map(Topic::getPath)
                 .as(StepVerifier::create)

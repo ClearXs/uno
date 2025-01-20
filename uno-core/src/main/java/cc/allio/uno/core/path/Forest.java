@@ -88,10 +88,10 @@ public final class Forest<T> {
     }
 
     public String[] getTopics() {
-        if (forests != null) {
-            return forests;
+        if (forests == null) {
+            this.forests = ForestMatcher.split(getTopic());
         }
-        return forests = ForestMatcher.split(getTopic());
+        return forests;
     }
 
     public String getTopic() {
@@ -110,11 +110,11 @@ public final class Forest<T> {
     }
 
     public T getSubscriberOrSubscribe(Supplier<T> supplier) {
-        if (subscribers.size() > 0) {
+        if (!subscribers.isEmpty()) {
             return subscribers.keySet().iterator().next();
         }
         synchronized (this) {
-            if (subscribers.size() > 0) {
+            if (!subscribers.isEmpty()) {
                 return subscribers.keySet().iterator().next();
             }
             T sub = supplier.get();
@@ -213,7 +213,7 @@ public final class Forest<T> {
         return "topic: " + getTopic() + ", subscribers: " + subscribers.size() + ", children: " + child.size();
     }
 
-    protected boolean match(String[] pars) {
+    private boolean match(String[] pars) {
         return ForestMatcher.match(getTopics(), pars)
                 || ForestMatcher.match(pars, getTopics());
     }

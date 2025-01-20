@@ -14,7 +14,7 @@ import reactor.core.publisher.Mono;
  * @author j.x
  */
 @Slf4j
-public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
+public final class Topics<C extends EventContext> extends ConcurrentSkipListMap<String, Topic<C>> {
 
     private final Forest<Topic<C>> forest = Forest.createRoot();
 
@@ -25,19 +25,20 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
      * @return Topic实例
      * @throws NullPointerException path为空时抛出
      */
-    public Mono<Topic<C>> link(Subscription subscription) {
+    public Mono<Topic<C>> link(Subscription subscription, EventBus<C> eventBus) {
         synchronized (this) {
             Topic<C> topic = computeIfAbsent(
                     subscription.getPath(),
                     key -> {
                         log.debug("Thread: {} link topic path: {}", Thread.currentThread().getName(), subscription.getPath());
-                        return new NoticeTopic<>(subscription.getPath());
+                        return new Topic<>(subscription.getPath(), eventBus);
                     });
-            return Mono.defer(() -> {
-                forest.append(topic.getPath()).subscribe(topic);
-                Flux.push(topic::generate).flatMap(topic::exchange).subscribe();
-                return Mono.just(topic);
-            });
+            return Mono.defer(
+                    () -> {
+                        forest.append(topic.getPath()).subscribe(topic);
+                        Flux.push(topic::generate).flatMap(topic::exchange).subscribe();
+                        return Mono.just(topic);
+                    });
         }
     }
 
@@ -50,14 +51,12 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
      */
     public Mono<Boolean> unlink(String topic) {
         return lookup(topic)
-                .doOnNext(topicData -> {
-                    log.info("Thread {} unlink topic path: {}", Thread.currentThread().getName(), topic);
-                    topicData.discardAll();
-                })
-                .then(Mono.defer(() -> {
-                    forest.clean();
-                    return Mono.just(Boolean.TRUE);
-                }));
+                .flatMap(Topic::discardAll)
+                .then(
+                        Mono.defer(() -> {
+                            forest.clean();
+                            return Mono.just(Boolean.TRUE);
+                        }));
     }
 
     /**
@@ -68,7 +67,7 @@ public final class Topics<C> extends ConcurrentSkipListMap<String, Topic<C>> {
      * @throws NullPointerException topic为空时抛出
      */
     public Flux<Topic<C>> lookup(String topic) {
-        return forest.findPath(Topic.topicPathway(topic))
+        return forest.findPath(Topic.pathway(topic))
                 .flatMap(f ->
                         // 获取当前结点子树并把其平展为保存的数据
                         f.getAllSubscriber()

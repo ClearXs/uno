@@ -28,7 +28,7 @@ public interface EventContext extends OptionalContext {
      *
      * @return Topic instance or null
      */
-    Topic<?> getTopic();
+    Topic<? extends EventContext> getTopic();
 
     /**
      * 获取事件追踪器

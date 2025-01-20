@@ -1,6 +1,5 @@
 package cc.allio.uno.core.bus.event;
 
-import cc.allio.uno.core.bus.Notice;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -22,12 +21,7 @@ public class Context<C> {
     /**
      * 事件类型
      */
-    private Class<? extends BusEvent> topicEvent;
-
-    /**
-     * 事件被观察者对象
-     */
-    private Notice<C> notice;
+    private Class<? extends Event> topicEvent;
 
     /**
      * 事件观察者对象

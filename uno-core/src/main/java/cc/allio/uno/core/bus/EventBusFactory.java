@@ -14,11 +14,11 @@ public class EventBusFactory {
     }
 
     /**
-     * 获取EventBus实例。公用一个实例对象
+     * obtain current {@link EventBus}. if non-existing. then create new event bus
      *
      * @return EventBus instance
      */
-    public static <T extends EventContext> EventBus<T> get() {
+    public static <T extends EventContext> EventBus<T> current() {
         if (bus == null) {
             synchronized (EventBusFactory.class) {
                 reset(newEventBus());
@@ -32,8 +32,8 @@ public class EventBusFactory {
      *
      * @return event bus instance
      */
-    public static EventBus<EventContext> newEventBus() {
-        return new DefaultEventBus();
+    public static <C extends EventContext> EventBus<C> newEventBus() {
+        return new DefaultEventBus<>();
     }
 
     /**

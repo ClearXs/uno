@@ -53,7 +53,7 @@ public interface TopicKey {
         String topicName = clazz.getName();
         // 转小写
         String underlineTopic = StringUtils.camelToUnderline(topicName);
-        String classTopicPath = Topic.DotPathwayStrategy.INSTANCE.transform().apply(underlineTopic);
+        String classTopicPath = PathwayStrategy.DOT_PATHWAY_STRATEGY.transform().apply(underlineTopic);
         if (ObjectUtils.isEmpty(appends)) {
             return create(classTopicPath);
         }
@@ -104,9 +104,12 @@ public interface TopicKey {
         @Getter
         private final String path;
 
+        @Getter
+        private final Subscription subscription;
+
         public DefaultTopicKey(String path) {
             this.path = path;
+            this.subscription = Subscription.of(path);
         }
-
     }
 }

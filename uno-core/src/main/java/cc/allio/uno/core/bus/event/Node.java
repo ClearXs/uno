@@ -30,7 +30,7 @@ public interface Node<C> {
      *
      * @return {@link Topic}唯一字符串
      */
-    String getTopic();
+    Topic<?> getTopic();
 
     /**
      * 当上游数据发射时产生事件
@@ -63,7 +63,7 @@ public interface Node<C> {
      * @see EmitEvent
      * @see LiftEvent
      */
-    Long reply(Class<? extends BusEvent> eventType, Consumer<C> consumer);
+    Long reply(Class<? extends Event> eventType, Consumer<C> consumer);
 
     /**
      * 当监听完成后立即释放当前{@link Listener}对象
@@ -87,13 +87,16 @@ public interface Node<C> {
      */
     default Flux<C> onNext() {
         AtomicReference<FluxSink<C>> sinkRef = new AtomicReference<>();
-        reply(EmitEvent.class, context -> {
-            FluxSink<C> sink = sinkRef.get();
-            if (sink != null) {
-                sink.next(context);
-            }
-        });
+        reply(EmitEvent.class,
+                context -> {
+                    FluxSink<C> sink = sinkRef.get();
+                    if (sink != null) {
+                        sink.next(context);
+                    }
+                });
         return Flux.push(sinkRef::set)
+                // complete current subscription
+                .doOnNext(l -> getTopic().getSentinel().complete(getSubscribeId()))
                 .onErrorContinue((err, o) -> LoggerFactory.getLogger(this.getClass()).error("subscribe topic {} has error, the object is {} ", getTopic(), o, err));
     }
 
@@ -103,7 +106,7 @@ public interface Node<C> {
      * @param eventType 事件类型
      * @return 监听器数组集合
      */
-    Listener<C>[] retrieval(Class<? extends BusEvent> eventType);
+    Listener<C>[] retrieve(Class<? extends Event> eventType);
 
     /**
      * 释放监听

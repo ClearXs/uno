@@ -1,6 +1,6 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.bus.event.BusEvent;
+import cc.allio.uno.core.bus.event.Event;
 import cc.allio.uno.core.bus.event.Node;
 import reactor.core.publisher.Mono;
 import reactor.core.publisher.Flux;
@@ -13,7 +13,7 @@ import java.util.function.LongConsumer;
  * 事件总线，定义于不同组件之间进行通信，设计是基于Topic-Event，即主题事件。
  *
  * @author j.x
- * @see BusEvent
+ * @see Event
  * @see DefaultEventBus
  */
 public interface EventBus<C extends EventContext> {
@@ -81,6 +81,13 @@ public interface EventBus<C extends EventContext> {
      */
     default Flux<Node<C>> subscribe(List<Subscription> subscriptions) {
         return Flux.fromIterable(subscriptions).flatMap(this::subscribe);
+    }
+
+    /**
+     * @see #subscribe(String)
+     */
+    default Flux<Node<C>> subscribe(TopicKey topicKey) {
+        return subscribe(topicKey.getSubscription());
     }
 
     /**
@@ -169,21 +176,21 @@ public interface EventBus<C extends EventContext> {
      * 向消息指定{@link Topic}解除当前{@link Node}。<br/>
      * {@link Node#doLift(LongConsumer)}}事件
      *
-     * @param listenerId 监听id
+     * @param subscribeId 监听id
      * @param topicKey   topicKey
      */
-    default void unSubscribe(Long listenerId, TopicKey topicKey) {
-        unSubscribe(listenerId, topicKey.getPath());
+    default Flux<Void> unSubscribe(TopicKey topicKey) {
+        return unSubscribe(topicKey.getSubscription().getId(), topicKey.getPath());
     }
 
     /**
      * 向消息指定{@link Topic}解除当前{@link Node}。<br/>
      * {@link Node#doLift(LongConsumer)}}事件
      *
-     * @param listenerId 监听id
+     * @param subscribeId 监听id
      * @param topic      消息主题
      */
-    void unSubscribe(Long listenerId, String topic);
+    Flux<Void> unSubscribe(Long subscribeId, String topic);
 
     /**
      * 从事件总线释放指定的topic
@@ -245,6 +252,16 @@ public interface EventBus<C extends EventContext> {
     /**
      * 向事件总线发布数据，数据将会在当前路径Topic中所有{@link Node#doEmmit(Consumer)}被接受
      *
+     * @param topicKey    the topic key
+     * @param context     主题上下文
+     */
+    default void publish(TopicKey topicKey, C context) {
+        publishOnFlux(topicKey.getPath(), context).subscribe();
+    }
+
+    /**
+     * 向事件总线发布数据，数据将会在当前路径Topic中所有{@link Node#doEmmit(Consumer)}被接受
+     *
      * @param topicEvent topicEvent
      */
     default Flux<Topic<C>> publishOnFlux(TopicEvent topicEvent) {
@@ -280,8 +297,7 @@ public interface EventBus<C extends EventContext> {
      * @return Topic - flux
      */
     default Flux<Topic<C>> subThenPub(TopicEvent topicEvent) {
-        subscribeOnRepeatable(topicEvent).subscribe();
-        return publishOnFlux(topicEvent);
+        return subscribeOnRepeatable(topicEvent).thenMany(publishOnFlux(topicEvent));
     }
 
     /**
@@ -291,6 +307,4 @@ public interface EventBus<C extends EventContext> {
      * @return true 存在 false 不存在
      */
     Mono<Boolean> contains(String topic);
-
-    // ================= static method =================
 }

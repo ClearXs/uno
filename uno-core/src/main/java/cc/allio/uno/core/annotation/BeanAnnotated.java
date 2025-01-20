@@ -108,7 +108,7 @@ public class BeanAnnotated implements AnnotatedCreator {
         try {
             return Introspector.getBeanInfo(clazz);
         } catch (IntrospectionException e) {
-            throw new DocumentFactoryException("BeanInfo retrieval failed.", e);
+            throw new DocumentFactoryException("BeanInfo retrieve failed.", e);
         }
     }
 

@@ -28,22 +28,21 @@ public abstract class BaseEventBus<C extends EventContext> implements EventBus<C
     @Override
     public Flux<Node<C>> subscribe(Subscription subscription) {
         return topics.lookup(subscription.getPath())
-                .switchIfEmpty(Mono.defer(() -> topics.link(subscription)))
+                .switchIfEmpty(Mono.defer(() -> topics.link(subscription, this)))
                 .flatMap(t -> t.addSubscriber(subscription));
     }
 
     @Override
     public Flux<Node<C>> subscribeOnRepeatable(Subscription subscription) {
         return topics.lookup(subscription.getPath())
-                .flatMap(Topic::findNode)
-                .switchIfEmpty(Mono.defer(() -> topics.link(subscription).flatMap(t -> t.addSubscriber(subscription))));
+                .flatMap(Topic::getNode)
+                .switchIfEmpty(Mono.defer(() -> topics.link(subscription, this).flatMap(t -> t.addSubscriber(subscription))));
     }
 
     @Override
-    public void unSubscribe(Long listenerId, @NonNull String topic) {
-        topics.lookup(topic)
-                .doOnNext(busTopic -> busTopic.discard(listenerId))
-                .subscribe();
+    public Flux<Void> unSubscribe(Long subscribeId, @NonNull String topic) {
+        return topics.lookup(topic)
+                .flatMap(busTopic -> busTopic.discard(subscribeId));
     }
 
     @Override

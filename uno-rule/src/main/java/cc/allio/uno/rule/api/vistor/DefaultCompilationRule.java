@@ -1,7 +1,7 @@
 package cc.allio.uno.rule.api.vistor;
 
-import cc.allio.uno.core.datastructure.tree.Element;
-import cc.allio.uno.core.datastructure.tree.Traversal;
+import cc.allio.uno.core.util.tree.Element;
+import cc.allio.uno.core.util.tree.Traversal;
 import cc.allio.uno.rule.api.LogicPredicate;
 import cc.allio.uno.rule.api.RuleAttr;
 import com.google.common.collect.Lists;

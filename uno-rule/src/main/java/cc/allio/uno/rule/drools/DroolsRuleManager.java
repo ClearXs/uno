@@ -1,9 +1,9 @@
 package cc.allio.uno.rule.drools;
 
-import cc.allio.uno.core.datastructure.tree.Element;
+import cc.allio.uno.core.util.tree.Element;
 import cc.allio.uno.rule.api.vistor.GroupElement;
-import cc.allio.uno.core.datastructure.tree.Traversal;
-import cc.allio.uno.core.datastructure.tree.Visitor;
+import cc.allio.uno.core.util.tree.Traversal;
+import cc.allio.uno.core.util.tree.Visitor;
 import cc.allio.uno.rule.api.*;
 import cc.allio.uno.rule.api.event.RuleContext;
 import cc.allio.uno.rule.api.vistor.*;
