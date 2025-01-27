@@ -1,7 +1,7 @@
 package cc.allio.uno.core.annotation.document;
 
 /**
- * Implementing types can create {@link Document documents} from an annotated object.
+ * Implementing types can of {@link Document documents} from an annotated object.
  * <p>
  * The factory is interchangeable to enable mocking in tests and customizations.
  */

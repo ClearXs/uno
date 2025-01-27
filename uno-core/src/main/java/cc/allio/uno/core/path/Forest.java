@@ -153,7 +153,7 @@ public final class Forest<T> {
         return unsub;
     }
 
-    public final void unsubscribe(Predicate<T> predicate) {
+    public void unsubscribe(Predicate<T> predicate) {
         for (Map.Entry<T, AtomicInteger> entry : this.subscribers.entrySet()) {
             if (predicate.test(entry.getKey()) && entry.getValue().decrementAndGet() <= 0) {
                 this.subscribers.remove(entry.getKey());
@@ -161,7 +161,11 @@ public final class Forest<T> {
         }
     }
 
-    public final void unsubscribeAll() {
+    public void unsubscribeAll() {
+        for (T subscriber : subscribers.keySet()) {
+            if (subscriber instanceof Clean clean)
+                clean.clean();
+        }
         this.subscribers.clear();
     }
 

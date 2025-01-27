@@ -2,6 +2,7 @@ package cc.allio.uno.core.chain;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.annotation.AnnotationAwareOrderComparator;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -61,6 +62,29 @@ public class DefaultChain<IN, OUT> implements Chain<IN, OUT> {
                 return Mono.empty();
             }
         });
+    }
+
+    @Override
+    public Flux<OUT> processMany(ChainContext<IN> context) {
+        return Flux.fromIterable(nodes)
+                .flatMap(node -> {
+                    DefaultChain<IN, OUT> nextChain = new DefaultChain<>(this, this.index + 1);
+                    Flux<OUT> out;
+                    try {
+                        out = node.executeMany(nextChain, context);
+                    } catch (Throwable ex) {
+                        if (log.isWarnEnabled()) {
+                            log.warn("execute node error", ex);
+                        }
+                        // 避免后续结点不能执行
+                        out = nextChain.processMany(context);
+                    }
+                    return out.onErrorContinue((err, o) -> {
+                        if (log.isWarnEnabled()) {
+                            log.warn("Chain execute error", err);
+                        }
+                    });
+                });
     }
 
     @Override

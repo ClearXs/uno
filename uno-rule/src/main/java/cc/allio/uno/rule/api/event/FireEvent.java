@@ -20,6 +20,6 @@ public class FireEvent extends BaseEvent {
 
     @Override
     public TopicKey getTopicKey() {
-        return TopicKey.create(RULE_FIRE_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
+        return TopicKey.of(RULE_FIRE_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
     }
 }

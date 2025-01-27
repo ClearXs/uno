@@ -38,6 +38,15 @@ public class LockFreeArrayList<T> extends AbstractList<T> {
         this.size = new AtomicInteger(0);
     }
 
+    public LockFreeArrayList(List<T> list) {
+        this.array = new AtomicReferenceArray<>(list.size());
+        this.length = new AtomicInteger(list.size());
+        this.size = new AtomicInteger(0);
+        for (int i = 0; i < list.size(); i++) {
+            add(i, list.get(i));
+        }
+    }
+
     @Override
     public T set(int index, T element) {
         Objects.checkIndex(index, size.get());

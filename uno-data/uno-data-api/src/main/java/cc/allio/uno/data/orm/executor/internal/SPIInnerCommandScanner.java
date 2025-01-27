@@ -40,7 +40,7 @@ public final class SPIInnerCommandScanner {
     }
 
     /**
-     * base on google {@link AutoService} method, from META-INF acquire {@link InnerCommandExecutor} and create {@link InnerCommandExecutorManager}
+     * base on google {@link AutoService} method, from META-INF acquire {@link InnerCommandExecutor} and of {@link InnerCommandExecutorManager}
      *
      * @param args crate {@link InnerCommandExecutor} arguments
      * @return InnerCommandExecutorManager instance

@@ -14,7 +14,7 @@ public class EventBusFactory {
     }
 
     /**
-     * obtain current {@link EventBus}. if non-existing. then create new event bus
+     * obtain current {@link EventBus}. if non-existing. then of new event bus
      *
      * @return EventBus instance
      */

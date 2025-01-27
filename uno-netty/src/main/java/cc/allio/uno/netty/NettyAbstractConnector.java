@@ -43,7 +43,7 @@ public abstract class NettyAbstractConnector implements Connector {
     @Override
     public Channel createChannel() throws ConnectionException {
         if (channelFuture == null) {
-            throw new ConnectionException("can't create channel");
+            throw new ConnectionException("can't of channel");
         }
         if (channelGroup != null) {
             if (!channelGroup.isAvailable()) {

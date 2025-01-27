@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bus;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.id.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,7 +13,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 订阅信息
@@ -30,9 +30,9 @@ public class Subscription implements Serializable {
     private Long id;
 
     /**
-     * 订阅的主题
+     * topic key
      */
-    private String path;
+    private TopicKey topicKey;
 
 
     public static Subscription of() {
@@ -43,12 +43,24 @@ public class Subscription implements Serializable {
         return of(IdGenerator.defaultGenerator().getNextId(), topic);
     }
 
-    public static Subscription of(Long id) {
-        return of(id, "");
+    public static Subscription of(TopicKey topicKey) {
+        return of(IdGenerator.defaultGenerator().getNextId(), topicKey);
     }
 
-    public static Subscription of(Long id, String topic) {
-        return new Subscription(id, topic);
+    public static Subscription of(Long id) {
+        return of(id, StringPool.EMPTY);
+    }
+
+    public static Subscription of(Long id, String path) {
+        return of(id, TopicKey.of(path));
+    }
+
+    public static Subscription of(Long id, TopicKey topicKey) {
+        return new Subscription(id, topicKey);
+    }
+
+    public String getPath() {
+        return this.topicKey.getPath();
     }
 
     /**

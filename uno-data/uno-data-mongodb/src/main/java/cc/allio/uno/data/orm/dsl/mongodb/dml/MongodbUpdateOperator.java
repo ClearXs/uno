@@ -141,7 +141,7 @@ public class MongodbUpdateOperator extends MongodbWhereOperatorImpl<MongodbUpdat
         }
 
         /**
-         * create a Bson Update instance from cache
+         * of a Bson Update instance from cache
          *
          * @return bson instance
          */

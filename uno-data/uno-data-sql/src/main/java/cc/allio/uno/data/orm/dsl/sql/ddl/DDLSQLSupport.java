@@ -92,7 +92,7 @@ public class DDLSQLSupport extends SQLSupport {
     }
 
     /**
-     * create druid {@link SQLCommentStatement} instance
+     * of druid {@link SQLCommentStatement} instance
      *
      * @param comment the table comment
      * @param table the {@link Table} instance
@@ -111,7 +111,7 @@ public class DDLSQLSupport extends SQLSupport {
     }
 
     /**
-     * create druid {@link SQLCommentStatement} instance
+     * of druid {@link SQLCommentStatement} instance
      *
      * @param columnDef the {@link ColumnDef} instance
      * @param table     the {@link Table} instance

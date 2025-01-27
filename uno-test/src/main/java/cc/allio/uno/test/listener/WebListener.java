@@ -40,12 +40,12 @@ public class WebListener implements Listener {
         WebApplicationType webApplicationType = getWebApplicationType(testContext);
         if (webApplicationType == WebApplicationType.SERVLET
                 && (webEnvironment.isEmbedded() || webEnvironment == RunTest.WebEnvironment.MOCK)) {
-            testContext.putAttribute(WEB_SERVER, "servlet");
+            testContext.put(WEB_SERVER, "servlet");
         } else if (webApplicationType == WebApplicationType.REACTIVE
                 && (webEnvironment.isEmbedded() || webEnvironment == RunTest.WebEnvironment.MOCK)) {
-            testContext.putAttribute(WEB_SERVER, "reactive");
+            testContext.put(WEB_SERVER, "reactive");
         } else {
-            testContext.putAttribute(WEB_SERVER, "none");
+            testContext.put(WEB_SERVER, "none");
         }
     }
 

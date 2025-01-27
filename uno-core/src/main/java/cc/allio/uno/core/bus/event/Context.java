@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bus.event;
 
+import cc.allio.uno.core.bus.EventContext;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -11,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class Context<C> {
+public class Context<C extends EventContext> {
 
     /**
      * 事件传递数据源

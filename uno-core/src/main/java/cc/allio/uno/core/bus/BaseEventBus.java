@@ -2,14 +2,15 @@ package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.core.util.CollectionUtils;
-import lombok.NonNull;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
+import java.util.concurrent.Executors;
+
 /**
- * 基础EventBus，使用{@link Topic}作为消息传递。实现{@link #subscribe(Subscription)}、{@link #unSubscribe(Long, String)}
+ * 基础EventBus，使用{@link Topic}作为消息传递。实现{@link #subscribe(Subscription)}、{@link EventBus#unSubscribe(Long, TopicKey)}
  *
  * @author j.x
  * @since 1.1.2
@@ -21,47 +22,51 @@ public abstract class BaseEventBus<C extends EventContext> implements EventBus<C
     protected final Topics<C> topics = new Topics<>();
 
     @Override
-    public Flux<Topic<C>> findTopic(Subscription subscription) {
-        return topics.lookup(subscription.getPath());
+    public Flux<Topic<C>> findTopic(TopicKey topicKey) {
+        return topics.lookup(topicKey);
     }
 
     @Override
-    public Flux<Node<C>> subscribe(Subscription subscription) {
-        return topics.lookup(subscription.getPath())
-                .switchIfEmpty(Mono.defer(() -> topics.link(subscription, this)))
-                .flatMap(t -> t.addSubscriber(subscription));
+    public Flux<C> subscribe(Subscription subscription) {
+        return topics.lookup(subscription.getTopicKey())
+                .switchIfEmpty(Mono.defer(() -> topics.link(subscription.getTopicKey(), this)))
+                .flatMap(t -> t.addSubscriber(subscription))
+                .flatMap(Node::onNext);
     }
 
     @Override
-    public Flux<Node<C>> subscribeOnRepeatable(Subscription subscription) {
-        return topics.lookup(subscription.getPath())
+    public Flux<C> subscribeOnRepeatable(Subscription subscription) {
+        return topics.lookup(subscription.getTopicKey())
                 .flatMap(Topic::getNode)
-                .switchIfEmpty(Mono.defer(() -> topics.link(subscription, this).flatMap(t -> t.addSubscriber(subscription))));
+                .switchIfEmpty(
+                        Mono.defer(() ->
+                                topics.link(subscription.getTopicKey(), this).flatMap(t -> t.addSubscriber(subscription))))
+                .flatMap(Node::onNext);
     }
 
     @Override
-    public Flux<Void> unSubscribe(Long subscribeId, @NonNull String topic) {
-        return topics.lookup(topic)
+    public Flux<Void> unSubscribe(Long subscribeId, TopicKey topicKey) {
+        return topics.lookup(topicKey)
                 .flatMap(busTopic -> busTopic.discard(subscribeId));
     }
 
     @Override
-    public void releaseTopic(String topic) {
-        topics.unlink(topic).subscribe();
+    public void release(TopicKey topicKey) {
+        topics.unlink(topicKey).subscribe();
     }
 
     @Override
-    public Flux<Topic<C>> publishOnFlux(String path, C context) {
+    public Flux<Topic<C>> publishOnFlux(TopicKey topicKey, C context) {
         return Flux.defer(() ->
-                        topics.lookup(path)
-                                .publishOn(Schedulers.boundedElastic())
+                        topics.lookup(topicKey)
+                                .publishOn(Schedulers.fromExecutor(Executors.newVirtualThreadPerTaskExecutor()))
                                 .doOnNext(topic -> {
                                     if (log.isDebugEnabled()) {
-                                        log.debug("Topic path {} is finder, now publish", path);
+                                        log.debug("Topic path {} is finder, now publish", topicKey);
                                     }
                                     // 存入 上下文数据
-                                    context.putAttribute(EventContext.TOPIC_PATH_KEY, path);
-                                    context.putAttribute(EventContext.TOPIC_KEY, topic);
+                                    context.put(EventContext.TOPIC_PATH_KEY, topicKey);
+                                    context.put(EventContext.TOPIC_KEY, topic);
                                     topic.emmit(context);
                                 })
                 )
@@ -69,8 +74,8 @@ public abstract class BaseEventBus<C extends EventContext> implements EventBus<C
     }
 
     @Override
-    public Mono<Boolean> contains(String topic) {
-        return topics.lookup(topic)
+    public Mono<Boolean> contains(TopicKey topicKey) {
+        return topics.lookup(topicKey)
                 .collectList()
                 .flatMap(t -> Mono.just(CollectionUtils.isNotEmpty(t)))
                 .switchIfEmpty(Mono.defer(() -> Mono.just(Boolean.FALSE)));

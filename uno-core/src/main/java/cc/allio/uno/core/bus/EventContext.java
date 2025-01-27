@@ -1,6 +1,6 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 
 /**
  * 消息上下文
@@ -8,7 +8,7 @@ import cc.allio.uno.core.api.OptionalContext;
  * @author j.x
  * @since 1.1.2
  */
-public interface EventContext extends OptionalContext {
+public interface EventContext extends OptionalMap<String> {
 
     /**
      * 事件主题定义Key

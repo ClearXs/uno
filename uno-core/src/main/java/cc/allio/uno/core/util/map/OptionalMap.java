@@ -1,22 +1,30 @@
-package cc.allio.uno.core.api;
+package cc.allio.uno.core.util.map;
 
-import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.exception.Exceptions;
+import cc.allio.uno.core.reflect.ReflectTools;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 
 import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * 定义Uno上下文模版方法
+ * the optional map.
+ * <p>
+ * existing following features:
  *
+ * <ul>
+ *     <li>all get method return {@link Optional} object such as {@link #get(Object, Class)}</li>
+ *     <li>support class cast value operation</li>
+ * </ul>
+ *
+ * @param <Key> the map key type
  * @author j.x
  * @since 1.0.6
  */
-public interface OptionalContext {
+public interface OptionalMap<Key> {
 
     /**
      * 获取指定Key的数据
@@ -24,7 +32,7 @@ public interface OptionalContext {
      * @param key 属性key
      * @return instance or null
      */
-    default Object getForce(String key) {
+    default Object getForce(Key key) {
         return get(key).orElse(null);
     }
 
@@ -34,7 +42,7 @@ public interface OptionalContext {
      * @param key 属性key
      * @return Optional实例对象，如果属性不存在则返回空
      */
-    Optional<Object> get(String key);
+    Optional<Object> get(Key key);
 
     /**
      * 按照指定Key和类型获取指定的数据
@@ -45,7 +53,7 @@ public interface OptionalContext {
      * @return instance or null
      * @throws ClassCastException 当类型转换错误时抛出
      */
-    default <T> T getForce(String key, Class<T> clazz) {
+    default <T> T getForce(Key key, Class<T> clazz) {
         return get(key).map(clazz::cast).orElse(null);
     }
 
@@ -58,7 +66,7 @@ public interface OptionalContext {
      * @return Option
      * @throws ClassCastException 当类型转换错误时抛出
      */
-    default <T> Optional<T> get(String key, Class<T> clazz) {
+    default <T> Optional<T> get(Key key, Class<T> clazz) {
         return get(key).map(clazz::cast);
     }
 
@@ -75,7 +83,7 @@ public interface OptionalContext {
      *
      * @return key-value
      */
-    Map<String, Object> getAll();
+    Map<Key, Object> getAll();
 
     /**
      * 获取目标对象数据或者抛出异常
@@ -87,7 +95,7 @@ public interface OptionalContext {
      * @throws NullPointerException 如果目标对象不存在则抛出该异常
      * @throws ClassCastException   如果目标对象的类型不是给定的类型则抛出该异常
      */
-    default <T> T getOrThrows(String key, Class<T> type) {
+    default <T> T getOrThrows(Key key, Class<T> type) {
         Optional<Object> targetOptional = get(key);
         Object target = targetOptional.orElseThrow(() -> new NullPointerException(String.format("Can't Get %s Object dose not exist", key)));
         return type.cast(target);
@@ -143,10 +151,20 @@ public interface OptionalContext {
      * @throws NullPointerException obj为空时抛出
      */
     default void put(Object obj) {
-        String objName = obj.getClass().getName();
-        int objHashCode = obj.hashCode();
-        String objKey = objName + StringPool.UNDERSCORE + objHashCode + StringPool.UNDERSCORE + IdGenerator.defaultGenerator().getNextIdAsString();
-        putAttribute(objKey, obj);
+        Key key = randomKey();
+        put(key, obj);
+    }
+
+    /**
+     * 放入其他所有的属性数据
+     *
+     * @param otherMap the other map
+     */
+    default void putAll(OptionalMap<Key> otherMap) {
+        for (Map.Entry<Key, Object> attribute : otherMap.getAll().entrySet()) {
+            put(attribute.getKey(), attribute.getValue());
+
+        }
     }
 
     /**
@@ -154,9 +172,9 @@ public interface OptionalContext {
      *
      * @param otherAttributes 其他属性数据
      */
-    default void putAll(Map<String, Object> otherAttributes) {
-        for (Map.Entry<String, Object> attribute : otherAttributes.entrySet()) {
-            putAttribute(attribute.getKey(), attribute.getValue());
+    default void putAll(Map<Key, Object> otherAttributes) {
+        for (Map.Entry<Key, Object> attribute : otherAttributes.entrySet()) {
+            put(attribute.getKey(), attribute.getValue());
         }
     }
 
@@ -167,7 +185,15 @@ public interface OptionalContext {
      * @param obj 属性值
      * @throws NullPointerException obj为空时抛出
      */
-    void putAttribute(String key, Object obj);
+    void put(Key key, Object obj);
+
+    /**
+     * remove value from map
+     *
+     * @param key the key
+     * @return true if success.
+     */
+    boolean remove(Key key);
 
     /**
      * 判断是否包含key
@@ -175,7 +201,7 @@ public interface OptionalContext {
      * @param key 属性Key
      * @return 是否包含这个属性Key
      */
-    default boolean containsKey(String key) {
+    default boolean containsKey(Key key) {
         return get(key).isPresent();
     }
 
@@ -237,53 +263,135 @@ public interface OptionalContext {
     }
 
     /**
-     * 返回基于给定的可变餐values参数创建一个{@link ImmutableOptionalContext}
+     * return generic type {@code Key} {@link Class} instance
+     */
+    default Class<Key> getKeyType() {
+        return (Class<Key>) ReflectTools.getGenericType(this, OptionalMap.class, 0);
+    }
+
+    /**
+     * return random {@code Key} value
+     *
+     * @return the key value
+     * @throws ClassCastException
+     * @throws UnsupportedOperationException
+     */
+    default Key randomKey() {
+        Class<Key> type = getKeyType();
+        if (type == null) {
+            type = (Class<Key>) String.class;
+        }
+        if (String.class.isAssignableFrom(type)) {
+            return (Key) IdGenerator.defaultGenerator().getNextIdAsString();
+        } else if (Long.class.isAssignableFrom(type)) {
+            return (Key) IdGenerator.defaultGenerator().getNextIdAsString();
+        } else {
+            throw new UnsupportedOperationException();
+        }
+    }
+
+    /**
+     * of new {@link OptionalMap}
+     */
+    static <Key> OptionalMap<Key> of() {
+        return new OptionalHashMap<>();
+    }
+
+    /**
+     * of new {@link OptionalMap} from other map
+     */
+    static <Key> OptionalMap<Key> of(OptionalHashMap<Key> otherMap) {
+        OptionalHashMap<Key> map = new OptionalHashMap<>();
+        map.putAll(otherMap);
+        return map;
+    }
+
+    /**
+     * of new {@link OptionalMap} from other map
+     */
+    static <Key> OptionalMap<Key> of(Map<Key, Object> otherMap) {
+        OptionalHashMap<Key> map = new OptionalHashMap<>();
+        map.putAll(otherMap);
+        return map;
+    }
+
+    /**
+     * 返回基于给定的可变餐values参数创建一个{@link ImmutableOptionalMap}
      *
      * @param values values
      * @return OptionalContext
      */
-    static ImmutableOptionalContext immutable(Object... values) {
-        return new ImmutableOptionalContext(values);
+    static <Key> OptionalMap<Key> immutable(Object... values) {
+        return new ImmutableOptionalMap<>(values);
     }
 
     /**
-     * 基于{@link OptionalContext}与给定的可变餐values参数创建一个{@link ImmutableOptionalContext}
+     * 基于{@link OptionalMap}与给定的可变餐values参数创建一个{@link ImmutableOptionalMap}
      *
      * @param other  other optional context
      * @param values values
      * @return OptionalContext
      */
-    static ImmutableOptionalContext immutable(OptionalContext other, Object... values) {
-        return new ImmutableOptionalContext(other, values);
+    static <Key> OptionalMap<Key> immutable(OptionalMap<Key> other, Object... values) {
+        return new ImmutableOptionalMap<>(other, values);
     }
 
     /**
-     * 基于给定的values参数创建一个{@link ImmutableOptionalContext}
+     * 基于给定的values参数创建一个{@link ImmutableOptionalMap}
      *
      * @param values values
      * @return OptionalContext
      */
-    static ImmutableOptionalContext immutable(Map<String, Object> values) {
-        return new ImmutableOptionalContext(values);
+    static <Key> OptionalMap<Key> immutable(Map<Key, Object> values) {
+        return new ImmutableOptionalMap<>(values);
     }
 
     /**
-     * 基于{@link OptionalContext}与给定的values参数创建一个{@link ImmutableOptionalContext}
+     * 基于{@link OptionalMap}与给定的values参数创建一个{@link ImmutableOptionalMap}
      *
      * @param other  other optional context
      * @param values values
      * @return OptionalContext
      */
-    static ImmutableOptionalContext immutable(OptionalContext other, Map<String, Object> values) {
-        return new ImmutableOptionalContext(other, values);
+    static <Key> OptionalMap<Key> immutable(OptionalMap<Key> other, Map<Key, Object> values) {
+        return new ImmutableOptionalMap<>(other, values);
     }
 
-    class ImmutableOptionalContext implements OptionalContext {
+    class OptionalHashMap<Key> implements OptionalMap<Key> {
 
-        private final Map<String, Object> context;
-        private final AtomicInteger randomCounter = new AtomicInteger();
+        private final Map<Key, Object> context = Maps.newHashMap();
 
-        public ImmutableOptionalContext(Object[] values) {
+        @Override
+        public Optional<Object> get(Object key) {
+            return Optional.ofNullable(context.get(key));
+        }
+
+        @Override
+        public Optional<ApplicationContext> getApplicationContext() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public Map<Key, Object> getAll() {
+            return context;
+        }
+
+        @Override
+        public void put(Key key, Object obj) {
+            context.put(key, obj);
+        }
+
+        @Override
+        public boolean remove(Key key) {
+            return context.remove(key) != null;
+        }
+    }
+
+    class ImmutableOptionalMap<Key> implements OptionalMap<Key> {
+
+        private final Map<Key, Object> context;
+
+        public ImmutableOptionalMap(Object[] values) {
             if (values != null) {
                 this.context = HashMap.newHashMap(values.length);
                 for (Object value : values) {
@@ -294,16 +402,16 @@ public interface OptionalContext {
             }
         }
 
-        public ImmutableOptionalContext(Map<String, Object> values) {
+        public ImmutableOptionalMap(Map<Key, Object> values) {
             this.context = new HashMap<>(values);
         }
 
-        public ImmutableOptionalContext(OptionalContext other, Map<String, Object> values) {
+        public ImmutableOptionalMap(OptionalMap<Key> other, Map<Key, Object> values) {
             this.context = new HashMap<>(other.getAll());
             this.context.putAll(values);
         }
 
-        public ImmutableOptionalContext(OptionalContext other, Object[] values) {
+        public ImmutableOptionalMap(OptionalMap<Key> other, Object[] values) {
             this.context = new HashMap<>(other.getAll());
             if (values != null) {
                 for (Object value : values) {
@@ -313,7 +421,7 @@ public interface OptionalContext {
         }
 
         @Override
-        public Optional<Object> get(String key) {
+        public Optional<Object> get(Key key) {
             return Optional.ofNullable(context.get(key));
         }
 
@@ -323,19 +431,24 @@ public interface OptionalContext {
         }
 
         @Override
-        public Map<String, Object> getAll() {
+        public Map<Key, Object> getAll() {
             return Collections.unmodifiableMap(context);
         }
 
         @Override
-        public void putAttribute(String key, Object obj) {
-            throw Exceptions.unOperate("putAttribute");
+        public void put(Key key, Object obj) {
+            throw Exceptions.unOperate("put");
+        }
+
+        @Override
+        public boolean remove(Key key) {
+            throw Exceptions.unOperate("remove");
         }
 
         void putSingleValue(Object value) {
             if (value != null) {
-                String name = value.getClass().getName();
-                this.context.put(name + randomCounter.getAndIncrement(), value);
+                Key name = randomKey();
+                this.context.put(name, value);
             }
         }
     }

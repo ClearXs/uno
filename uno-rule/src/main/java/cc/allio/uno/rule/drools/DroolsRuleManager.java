@@ -41,7 +41,7 @@ public class DroolsRuleManager {
      * drools 结果集。触发给定的action实例
      */
     public static final String DROOLS_CONSEQUENCE =
-            "        context.putAttribute(\"drools\", drools);\n" +
+            "        context.put(\"drools\", drools);\n" +
                     "        action.onTrigger(context);";
 
     static {

@@ -1,29 +1,31 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.StringUtils;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.ToString;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * topic key
+ * topic key. the of all specific path will be transforms to slash topic path. whatever is dot path or underscore path.
+ * <p>
+ * examples:
+ * <ol>
+ *     <li>cc.allio.xx -> cc/allio/xx</li>
+ *     <li>cc_allio_xx -> cc/allio/xx</li>
+ * </ol>
  *
  * @author j.x
+ * @see PathwayStrategy
  * @since 1.1.4
  */
-public interface TopicKey {
-
-    /**
-     * 获取订阅实例
-     *
-     * @return Subscription
-     */
-    default Subscription getSubscription() {
-        return Subscription.of(getPath());
-    }
+public interface TopicKey extends Self<TopicKey>, Serializable {
 
     /**
      * 获取topic的路径
@@ -32,14 +34,44 @@ public interface TopicKey {
      */
     String getPath();
 
+
+    /**
+     * append path to current path
+     *
+     * @param path the other path.
+     * @return self of {@link TopicKey}
+     */
+    default TopicKey append(String path) {
+        return append(TopicKey.of(path));
+    }
+
+    /**
+     * append other topic {@link TopicKey} to current path
+     *
+     * @param otherTopic the other topic
+     * @return self of {@link TopicKey}
+     */
+    TopicKey append(TopicKey otherTopic);
+
+    /**
+     * 主题路径化
+     *
+     * @return 路径策略实例
+     */
+    static String pathway(String path) {
+        return PathwayStrategy.require(path)
+                .transformTo(PathwayStrategy.SLASH)
+                .apply(path);
+    }
+
     /**
      * 根据某一个class对象的包名创建cc/allio/xx的主题路径
      *
      * @param clazz clazz
      * @return cc/allio/xx
      */
-    static TopicKey create(Class<?> clazz) {
-        return create(clazz, new String[]{});
+    static TopicKey of(Class<?> clazz) {
+        return of(clazz, new String[]{});
     }
 
     /**
@@ -49,16 +81,16 @@ public interface TopicKey {
      * @param appends appends
      * @return cc/allio/xx appends = ['1', '2'] = cc/allio/xx/1/2
      */
-    static TopicKey create(Class<?> clazz, String[] appends) {
+    static TopicKey of(Class<?> clazz, String[] appends) {
         String topicName = clazz.getName();
         // 转小写
         String underlineTopic = StringUtils.camelToUnderline(topicName);
-        String classTopicPath = PathwayStrategy.DOT_PATHWAY_STRATEGY.transform().apply(underlineTopic);
+        String classTopicPath = PathwayStrategy.DOT.transform().apply(underlineTopic);
         if (ObjectUtils.isEmpty(appends)) {
-            return create(classTopicPath);
+            return of(classTopicPath);
         }
         String thenAppender = Arrays.stream(appends).reduce(classTopicPath, (o, n) -> o + StringPool.SLASH + n);
-        return create(thenAppender);
+        return of(thenAppender);
     }
 
     /**
@@ -68,9 +100,9 @@ public interface TopicKey {
      * @param pojo   给定pojo对象，按照其字段顺序取出值，作为追加的值
      * @return TopicKey
      */
-    static TopicKey create(String prefix, Object pojo) {
+    static TopicKey of(String prefix, Object pojo) {
         BeanWrapper wrapper = new BeanWrapper(pojo);
-        return create(prefix, wrapper.findMapValuesForce().values().stream().map(Object::toString).toArray(String[]::new));
+        return of(prefix, wrapper.findMapValuesForce().values().stream().map(Object::toString).toArray(String[]::new));
     }
 
     /**
@@ -80,13 +112,13 @@ public interface TopicKey {
      * @param appends /1/2
      * @return TopicKey
      */
-    static TopicKey create(String prefix, String[] appends) {
+    static TopicKey of(String prefix, String[] appends) {
         // 去除cc/allio/最后一个'/'符号
         if (prefix.endsWith(StringPool.SLASH)) {
             prefix = prefix.substring(0, prefix.length() - 1);
         }
-        String thenAppender = Arrays.stream(appends).reduce(prefix, (o, n) -> o + StringPool.SLASH + n);
-        return create(thenAppender);
+        String thenAppend = Arrays.stream(appends).reduce(prefix, (o, n) -> o + StringPool.SLASH + n);
+        return of(thenAppend);
     }
 
     /**
@@ -95,21 +127,26 @@ public interface TopicKey {
      * @param path 路径 可以是cc/allio/xx 也可以是 xxx-xxx-xx
      * @return TopicKey
      */
-    static TopicKey create(String path) {
+    static TopicKey of(String path) {
         return new DefaultTopicKey(path);
     }
 
+    @Getter
+    @ToString(of = "path")
+    @EqualsAndHashCode(of = "path")
     class DefaultTopicKey implements TopicKey {
 
-        @Getter
-        private final String path;
-
-        @Getter
-        private final Subscription subscription;
+        private String path;
 
         public DefaultTopicKey(String path) {
-            this.path = path;
-            this.subscription = Subscription.of(path);
+            this.path = PathwayStrategy.SLASH.transform(path);
+        }
+
+        @Override
+        public TopicKey append(TopicKey otherTopic) {
+            String newPath = this.path + otherTopic.getPath();
+            this.path = PathwayStrategy.SLASH.transform(newPath);
+            return self();
         }
     }
 }

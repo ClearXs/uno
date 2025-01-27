@@ -1,6 +1,6 @@
 package cc.allio.uno.test;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import com.google.common.collect.Maps;
 import org.springframework.context.ApplicationContext;
 
@@ -13,7 +13,7 @@ import java.util.*;
  * @author j.x
  * @since 1.1.4
  */
-public class TestContext implements OptionalContext {
+public class TestContext implements OptionalMap<String> {
 
     /**
      * Key常量
@@ -25,17 +25,17 @@ public class TestContext implements OptionalContext {
     public static final String WEB_SERVER = "cc.allio.uno.test.WebServer";
 
     // 缓存实例对象
-    public final Map<String, Optional<Object>> store;
+    public final Map<String, Object> store;
     // 记录测试阶段
     private final ThreadLocal<String> stage;
 
     public TestContext(Class<?> testClass) {
         this.store = Maps.newConcurrentMap();
-        putAttribute(TEST_CLASS, testClass);
+        put(TEST_CLASS, testClass);
         RunTestAttributes runTestAttributes = new RunTestAttributes(testClass);
-        putAttribute(RunTestAttributes.class.getName(), runTestAttributes);
+        put(RunTestAttributes.class.getName(), runTestAttributes);
         ExecutableCoreTest executableCoreTest = new ExecutableCoreTest(testClass, this, runTestAttributes);
-        putAttribute(CoreTest.class.getName(), executableCoreTest);
+        put(CoreTest.class.getName(), executableCoreTest);
         this.stage = ThreadLocal.withInitial(() -> null);
     }
 
@@ -46,24 +46,30 @@ public class TestContext implements OptionalContext {
      * @return Optional
      */
     public Object get(Class<?> type) {
-        return store.get(type.getName())
-                .orElseGet(() -> {
-                    try {
-                        return getCoreTest().getBean(type);
-                    } catch (Throwable ex) {
-                        return null;
-                    }
-                });
+        Object v = store.get(type.getName());
+        if (v == null) {
+            try {
+                return getCoreTest().getBean(type);
+            } catch (Throwable ex) {
+                return null;
+            }
+        }
+        return null;
     }
 
     @Override
     public Optional<Object> get(String key) {
-        return store.getOrDefault(key, Optional.empty());
+        return Optional.ofNullable(store.get(key));
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
-        store.put(key, Optional.ofNullable(obj));
+    public void put(String key, Object obj) {
+        store.put(key, obj);
+    }
+
+    @Override
+    public boolean remove(String key) {
+        return store.remove(key) != null;
     }
 
     @Override
@@ -77,7 +83,7 @@ public class TestContext implements OptionalContext {
     }
 
     public void setTestInstance(Object testInstance) {
-        putAttribute(TEST_INSTANCE, testInstance);
+        put(TEST_INSTANCE, testInstance);
     }
 
     public Optional<Object> getTestInstance() {
@@ -85,7 +91,7 @@ public class TestContext implements OptionalContext {
     }
 
     public void setTestMethod(Method testMethod) {
-        putAttribute(TEST_METHOD, testMethod);
+        put(TEST_METHOD, testMethod);
     }
 
     public Optional<Method> getTestMethod() {

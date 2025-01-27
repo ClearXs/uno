@@ -9,8 +9,14 @@ public class TopicKeyTest extends BaseTestCase {
 
     @Test
     void testCreateStudentTopicKey() {
-        TopicKey topicKey = TopicKey.create("/test", new Student("2", "3"));
+        TopicKey topicKey = TopicKey.of("/test", new Student("2", "3"));
         assertEquals("/test/2/3", topicKey.getPath());
+    }
+
+    @Test
+    void testAppend() {
+        String path = TopicKey.of("cc").append("allio").getPath();
+        assertEquals("/cc/allio", path);
     }
 
 

@@ -4,7 +4,6 @@ import java.util.*;
 
 import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.bus.EventBusFactory;
-import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.core.spi.Loader;
 import cc.allio.uno.core.type.DefaultType;
 import cc.allio.uno.core.type.Type;
@@ -70,7 +69,6 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
         // 订阅基础处理器，转发处理.
         EventBusFactory.<SequentialContext>current()
                 .subscribeOnRepeatable(DISPATCH_TOPIC)
-                .flatMap(Node::onNext)
                 .subscribe(this::onDispatch);
     }
 
@@ -80,7 +78,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
         if (context == null) {
             throw new IllegalArgumentException("sequential context not null");
         }
-        EventBusFactory.current().publish(DISPATCH_TOPIC, context);
+        EventBusFactory.current().publish(DISPATCH_TOPIC, context).subscribe();
     }
 
     /**
@@ -100,7 +98,6 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
                                     if (Boolean.FALSE.equals(c)) {
                                         return EventBusFactory.<SequentialContext>current()
                                                 .subscribeOnRepeatable(topic)
-                                                .flatMap(Node::onNext)
                                                 .flatMap(this::onProcess)
                                                 .then(Mono.just(context));
                                     }
@@ -129,7 +126,7 @@ public class DefaultProcessor implements Processor, InitializingBean, Disposable
                                     context,
                                     appendProcessHandlers.toArray(new AppendProcessHandler[]{}));
                     // 把当前处理时序数据处理器放入时序上下文中
-                    context.putAttribute(DefaultSequentialContext.HANDLER, tuple2.getT2());
+                    context.put(DefaultSequentialContext.HANDLER, tuple2.getT2());
                     pipeline.adds(tuple2.getT2().toArray(new ProcessHandler[]{}));
                     return pipeline;
                 })

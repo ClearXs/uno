@@ -7,11 +7,11 @@ import org.junit.jupiter.api.Test;
 public class SentinelTest extends BaseTestCase {
 
     String path = "1";
-    Topic<EventContext> topic = new Topic<>(path, EventBusFactory.current());
+    Topic<EventContext> topic = new Topic<>(TopicKey.of(path), EventBusFactory.current(), null);
+    Sentinel<EventContext> sentinel = topic.getSentinel();
 
     @Test
     void testFindNode() {
-        Sentinel<EventContext> sentinel = topic.getSentinel();
         ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
         sentinel.attach(node1);
 
@@ -20,12 +20,20 @@ public class SentinelTest extends BaseTestCase {
     }
 
     @Test
+    void testAttach() {
+        ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
+
+        assertTrue(() -> sentinel.attach(node1));
+
+        assertFalse(() -> sentinel.attach(node1));
+    }
+
+    @Test
     void testDetach() {
-        Sentinel<EventContext> sentinel = topic.getSentinel();
         ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
         sentinel.attach(node1);
 
-        sentinel.detach(1L);
+        assertTrue(() -> sentinel.detach(1L));
 
         boolean empty = sentinel.findNode(1L).isEmpty();
         assertTrue(empty);
@@ -33,7 +41,6 @@ public class SentinelTest extends BaseTestCase {
 
     @Test
     void testCompletion() {
-        Sentinel<EventContext> sentinel = topic.getSentinel();
         ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
         sentinel.attach(node1);
 
@@ -44,11 +51,11 @@ public class SentinelTest extends BaseTestCase {
         boolean complete = sentinel.complete(1L);
 
         assertTrue(complete);
+
     }
 
     @Test
     void testMultiWorkCompletion() {
-        Sentinel<EventContext> sentinel = topic.getSentinel();
         ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
         sentinel.attach(node1);
 
@@ -62,4 +69,75 @@ public class SentinelTest extends BaseTestCase {
         assertTrue(complete);
     }
 
+    @Test
+    void testMultiNodeSingleWorker() {
+        ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
+        ReactiveNode<EventContext> node2 = new ReactiveNode<>(2L, topic);
+        ReactiveNode<EventContext> node3 = new ReactiveNode<>(3L, topic);
+
+
+        sentinel.attach(node1);
+        sentinel.attach(node2);
+        sentinel.attach(node3);
+
+        sentinel.trigger(new TestMessageContext());
+
+        assertFalse(() -> sentinel.complete(1L));
+        assertFalse(() -> sentinel.complete(2L));
+        assertTrue(() -> sentinel.complete(3L));
+
+        assertFalse(() -> sentinel.complete(1L));
+
+    }
+
+    @Test
+    void testMultiNodeAndMultiWorker() {
+        ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
+        ReactiveNode<EventContext> node2 = new ReactiveNode<>(2L, topic);
+        ReactiveNode<EventContext> node3 = new ReactiveNode<>(3L, topic);
+
+        sentinel.attach(node1);
+        sentinel.attach(node2);
+        sentinel.attach(node3);
+
+
+        sentinel.trigger(new TestMessageContext());
+        sentinel.trigger(new TestMessageContext());
+        sentinel.trigger(new TestMessageContext());
+
+
+        assertFalse(() -> sentinel.complete(1L));
+        assertFalse(() -> sentinel.complete(2L));
+        assertTrue(() -> sentinel.complete(3L));
+
+        assertFalse(() -> sentinel.complete(3L));
+    }
+
+    @Test
+    void testMultiNodesDetach() {
+        ReactiveNode<EventContext> node1 = new ReactiveNode<>(1L, topic);
+        ReactiveNode<EventContext> node2 = new ReactiveNode<>(2L, topic);
+        ReactiveNode<EventContext> node3 = new ReactiveNode<>(3L, topic);
+
+        sentinel.attach(node1);
+        sentinel.attach(node2);
+        sentinel.attach(node3);
+
+        sentinel.trigger(new TestMessageContext());
+        sentinel.trigger(new TestMessageContext());
+
+        assertFalse(() -> sentinel.complete(1L));
+        assertFalse(() -> sentinel.complete(2L));
+
+        sentinel.detach(node3.getSubscribeId());
+        assertTrue(() -> sentinel.complete(2L));
+
+    }
+
+    @Test
+    void testIdlingWorker() {
+        sentinel.trigger(new TestMessageContext());
+        assertTrue(() -> sentinel.complete(null));
+
+    }
 }

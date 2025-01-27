@@ -156,7 +156,7 @@ public class TimerSegmentTask<T> extends BaseComposedComputeTask<T> {
                     wheelTimer.newTimeout(roundTask(computing, delay, timeUnit), delay, timeUnit);
                 }
             } catch (Exception e) {
-                log.error("Timer segment task failed", e);
+                log.error("Timer rule task failed", e);
             }
         };
     }

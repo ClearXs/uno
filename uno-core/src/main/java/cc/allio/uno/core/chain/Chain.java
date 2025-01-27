@@ -1,5 +1,6 @@
 package cc.allio.uno.core.chain;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
@@ -21,6 +22,14 @@ public interface Chain<IN, OUT> {
      * @return 出链数据
      */
     Mono<OUT> proceed(ChainContext<IN> context);
+
+    /**
+     * process chain and output {@link Flux}
+     *
+     * @param context the context
+     * @return
+     */
+    Flux<OUT> processMany(ChainContext<IN> context);
 
     /**
      * 获取链中结点数据

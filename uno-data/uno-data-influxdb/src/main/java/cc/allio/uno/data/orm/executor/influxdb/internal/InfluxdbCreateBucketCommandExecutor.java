@@ -21,7 +21,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.List;
 
 /**
- * influxdb create bucket command executor
+ * influxdb of bucket command executor
  *
  * @author j.x
  * @see InfluxdbCreateBucketOperator
@@ -45,7 +45,7 @@ public class InfluxdbCreateBucketCommandExecutor implements CTOInnerCommandExecu
         Table fromBucket = operator.getFromBucket();
         Requires.isNotNull(fromBucket, "fromBucket");
         BucketsApi bucketsApi = influxDBClient.getBucketsApi();
-        // create bucket
+        // of bucket
         Bucket bucket = new Bucket();
         bucket.setName(fromBucket.getName().format());
         Values.mapping(operator::getDescription, bucket::setDescription);

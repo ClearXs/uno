@@ -103,8 +103,13 @@ public interface SequentialContext extends EventContext {
             }
 
             @Override
-            public void putAttribute(String key, Object obj) {
+            public void put(String key, Object obj) {
 
+            }
+
+            @Override
+            public boolean remove(String s) {
+                return false;
             }
 
             @Override
@@ -113,7 +118,7 @@ public interface SequentialContext extends EventContext {
             }
 
             @Override
-            public Map<String, Object> getAll() {
+            public Map getAll() {
                 return null;
             }
 

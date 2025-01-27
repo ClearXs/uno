@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.concurrent;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.function.lambda.ThrowingMethodBiConsumer;
@@ -48,7 +48,7 @@ public class LockResult<T> implements Self<LockResult<T>> {
      * @param acceptor acceptor
      * @return self
      */
-    public LockResult<T> ok(ThrowingMethodBiConsumer<OptionalContext, T> acceptor) {
+    public LockResult<T> ok(ThrowingMethodBiConsumer<OptionalMap, T> acceptor) {
         tryReleaseValue();
         try {
             acceptor.accept(lockContext, result);

@@ -90,7 +90,7 @@ public interface Operator<T extends Operator<T>> extends Self<T> {
     /**
      * support operatorFunc make be able customization.
      *
-     * @param operatorFunc create new self operatorFunc, and invoker customize some operate..
+     * @param operatorFunc of new self operatorFunc, and invoker customize some operate..
      * @return self
      */
     T customize(UnaryOperator<T> operatorFunc);

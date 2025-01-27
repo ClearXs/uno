@@ -15,7 +15,7 @@ import org.bson.BsonString;
 import java.util.function.UnaryOperator;
 
 /**
- * mongodb create collection operator
+ * mongodb of collection operator
  *
  * @author j.x
  * @since 1.1.7
@@ -33,7 +33,7 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
         if (fromColl == null) {
             throw Exceptions.unNull("from coll is null");
         }
-        BsonDocument bson = new BsonDocument("create", new BsonString(fromColl.getName().format()));
+        BsonDocument bson = new BsonDocument("of", new BsonString(fromColl.getName().format()));
         return bson.toJson();
     }
 

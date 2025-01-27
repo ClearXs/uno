@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bus.event;
 
+import cc.allio.uno.core.bus.EventContext;
 import cc.allio.uno.core.bus.Topic;
 import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.core.util.ObjectUtils;
@@ -28,7 +29,7 @@ import java.util.function.LongConsumer;
  */
 @Slf4j
 @EqualsAndHashCode(of = "subscriberId")
-public class ReactiveNode<C> implements Node<C> {
+public class ReactiveNode<C extends EventContext> implements Node<C> {
 
     final ReadWriteLock lock;
 
@@ -46,9 +47,9 @@ public class ReactiveNode<C> implements Node<C> {
     /**
      * 当前Node订阅的Topic
      */
-    final Topic<?> topic;
+    final Topic<C> topic;
 
-    public ReactiveNode(Long subscribeId, Topic<?> topic) {
+    public ReactiveNode(Long subscribeId, Topic<C> topic) {
         this.lock = new ReentrantReadWriteLock();
         this.lisCache = Maps.newConcurrentMap();
         this.subscriberId = subscribeId;
@@ -61,7 +62,7 @@ public class ReactiveNode<C> implements Node<C> {
     }
 
     @Override
-    public Topic<?> getTopic() {
+    public Topic<C> getTopic() {
         return this.topic;
     }
 

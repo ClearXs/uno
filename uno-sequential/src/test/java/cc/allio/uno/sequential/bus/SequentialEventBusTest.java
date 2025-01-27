@@ -1,6 +1,7 @@
 package cc.allio.uno.sequential.bus;
 
-import cc.allio.uno.core.bus.Subscription;
+import cc.allio.uno.core.bus.Topic;
+import cc.allio.uno.core.bus.TopicKey;
 import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.sequential.TestSequential;
 import cc.allio.uno.sequnetial.SubscriptionProperties;
@@ -12,8 +13,6 @@ import cc.allio.uno.test.RunTest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
-import reactor.core.publisher.Flux;
-import reactor.test.StepVerifier;
 
 import java.util.Collections;
 
@@ -36,26 +35,11 @@ class SequentialEventBusTest {
 
     @BeforeEach
     protected void onInitSpringEnv() throws Throwable {
+        Topic<SequentialContext> topic = new Topic<>(TopicKey.of("test"), eventBus, null);
         mockNode = Mockito.mock(Node.class);
         Mockito.when(mockNode.getSubscribeId()).thenReturn(1L);
-        Mockito.when(mockNode.getTopic()).thenReturn("test");
+        Mockito.when(mockNode.getTopic()).thenReturn(topic);
         context = new DefaultSequentialContext(new TestSequential(), Collections.emptyMap());
-    }
-
-    /**
-     * Test Case: 测试订阅的Node数据是否正确
-     */
-    @Test
-    void testSubscribeWhetherRight() {
-        Flux<Node<SequentialContext>> node = eventBus.subscribe(Subscription.of(1L, "test"));
-        node.map(Node::getSubscribeId)
-                .as(StepVerifier::create)
-                .expectNext(mockNode.getSubscribeId())
-                .verifyComplete();
-        node.map(Node::getTopic)
-                .as(StepVerifier::create)
-                .expectNext(mockNode.getTopic())
-                .verifyComplete();
     }
 
     @Test

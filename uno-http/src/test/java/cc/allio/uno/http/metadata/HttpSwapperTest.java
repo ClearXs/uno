@@ -1,5 +1,6 @@
 package cc.allio.uno.http.metadata;
 
+import cc.allio.uno.http.metadata.interceptor.Interceptor;
 import cc.allio.uno.http.openapi.OpenApiSpecificationParser;
 import cc.allio.uno.core.util.JsonUtils;
 import com.google.common.collect.Maps;
@@ -321,7 +322,7 @@ class HttpSwapperTest extends HttpTestCase {
     void testInterceptor() {
         String url = "http://localhost:8080/test/timeout";
         HttpSwapper.build(url)
-                .addInterceptor((chain, context) -> null);
+                .addInterceptor();
     }
 
     /**

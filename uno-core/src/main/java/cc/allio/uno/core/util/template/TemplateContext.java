@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.template;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.core.util.*;
 import com.google.common.collect.Maps;
@@ -23,7 +23,7 @@ import java.util.Optional;
  * @author j.x
  * @since 1.1.9
  */
-public class TemplateContext implements OptionalContext {
+public class TemplateContext implements OptionalMap<String> {
 
     private final Map<String, Object> vars;
     @Getter
@@ -74,7 +74,7 @@ public class TemplateContext implements OptionalContext {
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
+    public void put(String key, Object obj) {
         if (obj != null) {
             Class<?> valueClass = obj.getClass();
             vars.put(key, obj);
@@ -82,6 +82,11 @@ public class TemplateContext implements OptionalContext {
                 inputs.put(key, valueClass);
             }
         }
+    }
+
+    @Override
+    public boolean remove(String key) {
+        return vars.remove(key) != null;
     }
 
     /**

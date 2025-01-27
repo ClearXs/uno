@@ -1,5 +1,6 @@
 package cc.allio.uno.core.bus.event;
 
+import cc.allio.uno.core.bus.EventContext;
 import cc.allio.uno.core.bus.Topic;
 import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Flux;
@@ -16,7 +17,7 @@ import java.util.function.LongConsumer;
  *
  * @author j.x
  */
-public interface Node<C> {
+public interface Node<C extends EventContext> {
 
     /**
      * 获取当前订阅id
@@ -30,7 +31,7 @@ public interface Node<C> {
      *
      * @return {@link Topic}唯一字符串
      */
-    Topic<?> getTopic();
+    Topic<C> getTopic();
 
     /**
      * 当上游数据发射时产生事件

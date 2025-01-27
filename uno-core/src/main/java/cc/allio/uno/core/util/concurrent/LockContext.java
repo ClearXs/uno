@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.concurrent;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.function.VoidConsumer;
@@ -31,7 +31,7 @@ import java.util.function.Supplier;
  * @since 1.1.7
  */
 @Slf4j
-public class LockContext implements Self<LockContext>, OptionalContext {
+public class LockContext implements Self<LockContext>, OptionalMap<String> {
 
     static final Lock PUBLICITY_LOCK = new ReentrantLock();
 
@@ -40,8 +40,8 @@ public class LockContext implements Self<LockContext>, OptionalContext {
 
     // 延迟赋值
     private Queue<ThrowingMethodVoid> anonymous;
-    private Queue<ThrowingMethodConsumer<OptionalContext>> actions;
-    private Queue<ThrowingMethodFunction<OptionalContext, Object>> functions;
+    private Queue<ThrowingMethodConsumer<OptionalMap<String>>> actions;
+    private Queue<ThrowingMethodFunction<OptionalMap<String>, Object>> functions;
     // 提供值优先级最高
     private Queue<ThrowingMethodSupplier<Object>> suppliers;
 
@@ -153,7 +153,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
      * @param acceptor acceptor
      * @return LockContext
      */
-    public LockContext then(ThrowingMethodConsumer<OptionalContext> acceptor) {
+    public LockContext then(ThrowingMethodConsumer<OptionalMap<String>> acceptor) {
         if (CollectionUtils.isEmpty(actions)) {
             this.actions = Queues.newConcurrentLinkedQueue();
         }
@@ -181,7 +181,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
      * @param func func
      * @return LockContext
      */
-    public LockContext thenApply(ThrowingMethodFunction<OptionalContext, Object> func) {
+    public LockContext thenApply(ThrowingMethodFunction<OptionalMap<String>, Object> func) {
         if (CollectionUtils.isEmpty(functions)) {
             this.functions = Queues.newConcurrentLinkedQueue();
         }
@@ -227,16 +227,9 @@ public class LockContext implements Self<LockContext>, OptionalContext {
         }
     }
 
-    /**
-     * 设置参数
-     *
-     * @param key   key
-     * @param value value
-     * @return LockContext
-     */
-    public LockContext put(String key, Object value) {
-        this.actions.add(context -> this.putAttribute(key, value));
-        return self();
+    @Override
+    public boolean remove(String key) {
+        return optionalContext.remove(key);
     }
 
     /**
@@ -444,7 +437,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
     /**
      * 捕获当Acceptor发生的异常
      */
-    void catching(ThrowingMethodConsumer<OptionalContext> throwingAcceptor) {
+    void catching(ThrowingMethodConsumer<OptionalMap<String>> throwingAcceptor) {
         try {
             throwingAcceptor.accept(optionalContext);
         } catch (Throwable ex) {
@@ -455,7 +448,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
     /**
      * 捕获当Func发生的异常
      */
-    <K> K catching(ThrowingMethodFunction<OptionalContext, K> throwingFunc) {
+    <K> K catching(ThrowingMethodFunction<OptionalMap<String>, K> throwingFunc) {
         try {
             return throwingFunc.apply(optionalContext);
         } catch (Throwable ex) {
@@ -481,8 +474,8 @@ public class LockContext implements Self<LockContext>, OptionalContext {
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
-        optionalContext.putAttribute(key, obj);
+    public void put(String key, Object obj) {
+        optionalContext.put(key, obj);
     }
 
     @Override
@@ -502,7 +495,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
         return released.get();
     }
 
-    public static class InternalParameterContext implements OptionalContext {
+    public static class InternalParameterContext implements OptionalMap<String> {
 
         private final Map<String, Object> parameter = Maps.newConcurrentMap();
         // 记录上一步执行的函数名称
@@ -514,8 +507,13 @@ public class LockContext implements Self<LockContext>, OptionalContext {
         }
 
         @Override
-        public void putAttribute(String key, Object obj) {
+        public void put(String key, Object obj) {
             parameter.put(key, obj);
+        }
+
+        @Override
+        public boolean remove(String key) {
+            return parameter.remove(key) != null;
         }
 
         @Override
@@ -524,7 +522,7 @@ public class LockContext implements Self<LockContext>, OptionalContext {
         }
 
         @Override
-        public Map<String, Object> getAll() {
+        public Map getAll() {
             return parameter;
         }
 

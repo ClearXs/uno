@@ -19,11 +19,11 @@ public class ErrorEvent extends BaseEvent {
     }
 
     public void setError(Throwable err) {
-        getEventContext().putAttribute(RuleContext.ERROR, err);
+        getEventContext().put(RuleContext.ERROR, err);
     }
 
     @Override
     public TopicKey getTopicKey() {
-        return TopicKey.create(RULE_ERROR_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
+        return TopicKey.of(RULE_ERROR_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
     }
 }

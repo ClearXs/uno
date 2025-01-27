@@ -22,35 +22,31 @@ public class EventBusTest extends BaseTestCase {
     void testSubscribe() {
         // 获取订阅的node
         bus.subscribe(Subscription.of("1"))
-                .map(node -> node.reply(EmitEvent.class, eventContext -> assertEquals("1", eventContext.getTopicPath())))
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
 
         // 转换为 event context
         bus.subscribe(Subscription.of("1"))
-                .flatMap(Node::onNext)
                 .doOnNext(System.out::println)
                 .subscribe();
 
         bus.subscribe(Subscription.of("2"))
-                .map(node -> node.reply(EmitEvent.class, eventContext -> assertEquals("2", eventContext.getTopicPath())))
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
 
-        bus.publish(Subscription.of("1"), new DefaultEventContext(Collections.emptyMap()));
-        bus.publish(Subscription.of("2"), new DefaultEventContext(Collections.emptyMap()));
+        bus.publish(Subscription.of("1"), new DefaultEventContext(Collections.emptyMap())).subscribe();
+        bus.publish(Subscription.of("2"), new DefaultEventContext(Collections.emptyMap())).subscribe();
     }
 
     @Test
     void testNewPublisher() {
         bus.subscribe(Subscription.of("1"))
-                .flatMap(Node::onNext)
                 .map(o -> "1")
                 .doOnNext(System.out::println)
                 .subscribe();
-        bus.publish("1", new DefaultEventContext());
+        bus.publish("1", new DefaultEventContext()).subscribe();
     }
 
 
@@ -62,24 +58,21 @@ public class EventBusTest extends BaseTestCase {
             topics.add(String.valueOf(i));
             if (up == null) {
                 up = bus.subscribe(Subscription.of(String.valueOf(i)))
-                        .flatMap(Node::onNext)
                         .map(o -> "1")
                         .doOnNext(System.out::println);
             } else {
                 up.thenMany(bus.subscribe(Subscription.of(String.valueOf(i)))
-                        .flatMap(Node::onNext)
                         .map(o -> "1")
                         .doOnNext(System.out::println));
             }
             bus.subscribe(Subscription.of(String.valueOf(i)))
-                    .flatMap(Node::onNext)
                     .map(o -> "1")
                     .doOnNext(System.out::println)
                     .subscribe();
         }
         up.subscribe();
         for (String topic : topics) {
-            bus.publish(topic, new DefaultEventContext());
+            bus.publish(topic, new DefaultEventContext()).subscribe();
         }
     }
 
@@ -87,7 +80,6 @@ public class EventBusTest extends BaseTestCase {
     void testSubThenPus() {
         EventBusFactory.current()
                 .subscribeOnRepeatable("1")
-                .flatMap(Node::onNext)
                 .delayElements(Duration.ofMillis(1000L))
                 .flatMap(s -> EventBusFactory.current().publishOnFlux("1", new DefaultEventContext()))
                 .subscribe();
@@ -97,7 +89,6 @@ public class EventBusTest extends BaseTestCase {
     void testError() {
         EventBusFactory.current()
                 .subscribeOnRepeatable("1")
-                .flatMap(Node::onNext)
                 .doOnNext(o -> {
                     int i = 1 / 0;
                 })
@@ -111,42 +102,22 @@ public class EventBusTest extends BaseTestCase {
     @Test
     void testWildcard() {
         bus.subscribe(Subscription.of("/t1/**"))
-                .map(node -> node.reply(EmitEvent.class, eventContext -> System.out.println(eventContext.getTopicPath())))
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
 
         bus.subscribe(Subscription.of("/t2/**"))
-                .map(node -> node.reply(EmitEvent.class, eventContext -> System.out.println(eventContext.getTopicPath())))
                 .as(StepVerifier::create)
                 .expectNextCount(1)
                 .verifyComplete();
 
-        bus.publish(Subscription.of("/t1/t2"), new DefaultEventContext(Collections.emptyMap()));
-        bus.publish(Subscription.of("/t1/t2/t3"), new DefaultEventContext(Collections.emptyMap()));
+        bus.publish(Subscription.of("/t1/t2"), new DefaultEventContext(Collections.emptyMap())).subscribe();
+        bus.publish(Subscription.of("/t1/t2/t3"), new DefaultEventContext(Collections.emptyMap())).subscribe();
 
 
-        bus.publish(Subscription.of("/t2/t1/t3"), new DefaultEventContext(Collections.emptyMap()));
+        bus.publish(Subscription.of("/t2/t1/t3"), new DefaultEventContext(Collections.emptyMap())).subscribe();
 
-        bus.publish(Subscription.of("/t2/t1/t3"), new DefaultEventContext(Collections.emptyMap()));
-    }
-
-    @Test
-    void testNewSubscribe() {
-        AtomicReference<Node<?>> atOne = new AtomicReference<>();
-        bus.subscribe("1").last().subscribe(atOne::set);
-
-        AtomicReference<Node<?>> atTwo = new AtomicReference<>();
-        bus.subscribe(Subscription.of("1")).subscribe(atTwo::set);
-    }
-
-    @Test
-    void testRepeatable() {
-        AtomicReference<Node<?>> atOne = new AtomicReference<>();
-        bus.subscribeOnRepeatable("1").last().subscribe(atOne::set);
-        AtomicReference<Node<?>> atTwo = new AtomicReference<>();
-        bus.subscribeOnRepeatable(Subscription.of("1")).subscribe(atTwo::set);
-        atOne.get().equals(atTwo.get());
+        bus.publish(Subscription.of("/t2/t1/t3"), new DefaultEventContext(Collections.emptyMap())).subscribe();
     }
 
     @Test
@@ -155,13 +126,12 @@ public class EventBusTest extends BaseTestCase {
         for (int i = 0; i < 1000; i++) {
             String topic = "t1" + "/" + i;
             bus.subscribe(topic)
-                    .flatMap(Node::onNext)
                     .doOnNext(c -> counter.countDown())
                     .subscribe();
         }
 
         for (int i = 0; i < 100000; i++) {
-            bus.publish("/t1/**", new DefaultEventContext());
+            bus.publish("/t1/**", new DefaultEventContext()).subscribe();
         }
         counter.await();
     }

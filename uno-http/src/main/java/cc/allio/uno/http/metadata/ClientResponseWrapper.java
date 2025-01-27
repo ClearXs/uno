@@ -109,7 +109,7 @@ public class ClientResponseWrapper implements HttpResponseMetadata {
                             try {
                                 return new URI(getUrl());
                             } catch (URISyntaxException ex) {
-                                log.error("create error url has err", ex);
+                                log.error("of error url has err", ex);
                             }
                             return null;
                         }

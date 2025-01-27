@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 
 /**
- * mongodb create collection command executor
+ * mongodb of collection command executor
  *
  * @author j.x
  * @see CreateCollectionOperation
@@ -46,7 +46,7 @@ public class MongodbCreateCollectionCommandExecutor implements CTOInnerCommandEx
             database.createCollection(fromColl.getName().format());
             builder.value(true);
         } catch (Throwable ex) {
-            log.error("mongodb create collection has error, the from collection is {}", fromColl.getName().format(), ex);
+            log.error("mongodb of collection has error, the from collection is {}", fromColl.getName().format(), ex);
             builder.value(false);
         }
         ResultRow resultRow = builder.build();

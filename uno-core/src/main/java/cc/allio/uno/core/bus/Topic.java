@@ -1,12 +1,14 @@
 package cc.allio.uno.core.bus;
 
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 import cc.allio.uno.core.bus.event.*;
+import cc.allio.uno.core.path.Clean;
+import cc.allio.uno.core.path.Forest;
 import com.google.common.collect.Maps;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
@@ -17,26 +19,36 @@ import reactor.core.publisher.FluxSink;
  *
  * @author j.x
  */
-public class Topic<C extends EventContext> implements Comparable<Topic<C>> {
+@EqualsAndHashCode(of = "path")
+public class Topic<C extends EventContext> implements Comparable<Topic<C>>, Clean {
 
     // 主题路径
     @Getter
     private final String path;
+    @Getter
+    private final TopicKey topicKey;
     private final Map<Subscription, Node<C>> nodes;
     @Getter
     private final Sentinel<C> sentinel;
 
+    @Getter
+    private final Forest<Topic<C>> forest;
+
     // 数据流信号
     private FluxSink<C> sink;
 
-    public Topic(String path, EventBus<C> eventBus) {
+    public Topic(TopicKey topicKey,
+                 EventBus<C> eventBus,
+                 Forest<Topic<C>> forest) {
         // 使当前主题能够构建成某一个具体的路径，
         // 如果是test -> /test
         // 如果是par_chi -> /par/chi
         // 如果是par-chi -> /par/chi ...
-        this.path = Topic.pathway(path);
+        this.topicKey = topicKey;
+        this.path = topicKey.getPath();
+        this.forest = forest;
         this.nodes = Maps.newConcurrentMap();
-        this.sentinel = new Sentinel<>(this.path, eventBus);
+        this.sentinel = new Sentinel<>(this.topicKey, eventBus);
     }
 
     /**
@@ -142,44 +154,9 @@ public class Topic<C extends EventContext> implements Comparable<Topic<C>> {
 
     /**
      * get subscriber size
-     *
-     * @return
      */
     public int size() {
         return nodes.size();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (o == null || getClass() != o.getClass()) {
-            return false;
-        }
-        Topic<C> that = (Topic<C>) o;
-        return Objects.equals(getPath(), that.getPath());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(getPath());
-    }
-
-    /**
-     * 主题路径化
-     *
-     * @return 路径策略实例
-     */
-    public static String pathway(String topic) {
-        return PathwayStrategy.DEFER
-                .get()
-                .stream()
-                .filter(pathwayStrategy -> topic.contains(pathwayStrategy.segment().get()))
-                .findFirst()
-                .orElse(PathwayStrategy.BLANK_PATHWAY_STRATEGY)
-                .transform()
-                .apply(topic);
     }
 
     @Override
@@ -187,4 +164,8 @@ public class Topic<C extends EventContext> implements Comparable<Topic<C>> {
         return Integer.compare(getPath().hashCode(), that.hashCode());
     }
 
+    @Override
+    public void clean() {
+        discardAll().subscribe();
+    }
 }

@@ -60,7 +60,7 @@ public class Table implements Meta<Table> {
     }
 
     /**
-     * create {@link Table} by table name and table alias
+     * of {@link Table} by table name and table alias
      *
      * @param name  the name
      * @param alias the alias
@@ -73,7 +73,7 @@ public class Table implements Meta<Table> {
     }
 
     /**
-     * create {@link Table} by table {@link DSLName}
+     * of {@link Table} by table {@link DSLName}
      *
      * @param name the dsl name
      * @return table instance

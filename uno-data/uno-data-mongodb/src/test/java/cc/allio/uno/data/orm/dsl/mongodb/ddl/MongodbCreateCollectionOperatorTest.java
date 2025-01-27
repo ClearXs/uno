@@ -14,7 +14,7 @@ public class MongodbCreateCollectionOperatorTest extends BaseTestCase {
         assertNotNull(createTableOperator);
 
         String dsl = createTableOperator.from(Table.of("dual")).getDSL();
-        assertEquals("{\"create\": \"dual\"}", dsl);
+        assertEquals("{\"of\": \"dual\"}", dsl);
 
     }
 }

@@ -39,9 +39,9 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
     public ExecutorOptionsImpl(@NotNull String key, @NotNull DBType dbType, @NotNull ExecutorKey executorKey, @NotNull OperatorKey operatorKey) {
         super();
         setKey(key);
-        putAttribute(DB_TYPE_MARK, dbType);
-        putAttribute(EXECUTOR_KEY_MARK, executorKey);
-        putAttribute(OPERATOR_KEY_MARK, operatorKey);
+        put(DB_TYPE_MARK, dbType);
+        put(EXECUTOR_KEY_MARK, executorKey);
+        put(OPERATOR_KEY_MARK, operatorKey);
         this.scanner = new SPIInnerCommandScanner(executorKey);
         this.acceptorSet = Maps.newConcurrentMap();
     }
@@ -77,8 +77,13 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
+    public void put(String key, Object obj) {
         this.properties.put(key, obj);
+    }
+
+    @Override
+    public boolean remove(String key) {
+        return properties.remove(key) != null;
     }
 
     @Override
@@ -87,7 +92,7 @@ public class ExecutorOptionsImpl extends SPIExecutorOptionsResultHandlerSet impl
     }
 
     @Override
-    public Map<String, Object> getAll() {
+    public Map getAll() {
         return properties;
     }
 

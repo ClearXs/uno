@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.options;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.env.Envs;
 import cc.allio.uno.data.orm.dsl.MetaAcceptorSet;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
@@ -17,7 +17,7 @@ import java.util.List;
  * @author j.x
  * @since 1.1.7
  */
-public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorSet, OptionalContext {
+public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorSet, OptionalMap<String> {
 
     String KEY_MARK = "key";
     String DB_TYPE_MARK = "dbType";
@@ -44,7 +44,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
      * @param key key
      */
     default void setKey(String key) {
-        putAttribute(KEY_MARK, key);
+        put(KEY_MARK, key);
     }
 
     /**
@@ -81,7 +81,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
      * @param username username
      */
     default void setUsername(String username) {
-        putAttribute(USERNAME_MARK, username);
+        put(USERNAME_MARK, username);
     }
 
     /**
@@ -97,7 +97,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
      * @param address address
      */
     default void setAddress(String address) {
-        putAttribute(ADDRESS_MARK, address);
+        put(ADDRESS_MARK, address);
     }
 
     /**
@@ -113,7 +113,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
      * @param password password
      */
     default void setPassword(String password) {
-        putAttribute(PASSWORD_MARK, password);
+        put(PASSWORD_MARK, password);
     }
 
     /**
@@ -129,7 +129,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
      * @param database database
      */
     default void setDatabase(String database) {
-        putAttribute(DATABASE_MARK, database);
+        put(DATABASE_MARK, database);
     }
 
     /**
@@ -158,7 +158,7 @@ public interface ExecutorOptions extends ExecutorResultHandlerSet, MetaAcceptorS
             }
         }
 
-        putAttribute(SYSTEM_DEFAULT_MARK, systemDefault);
+        put(SYSTEM_DEFAULT_MARK, systemDefault);
     }
 
     /**

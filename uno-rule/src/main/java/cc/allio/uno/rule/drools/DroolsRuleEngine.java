@@ -69,7 +69,7 @@ public class DroolsRuleEngine extends EventBusRuleEngine {
                 // 没有触发时抛出 no match event
                 if (fireCounts <= 0) {
                     NoMatchEvent noMatchEvent = context.getEventRegistry().get(NoMatchEvent.class);
-                    EventBusFactory.current().publish(noMatchEvent);
+                    EventBusFactory.current().publish(noMatchEvent).subscribe();
                 }
             } catch (Throwable ex) {
                 onError(ex, context);

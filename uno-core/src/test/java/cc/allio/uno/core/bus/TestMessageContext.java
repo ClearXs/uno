@@ -16,8 +16,13 @@ public class TestMessageContext implements EventContext {
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
+    public void put(String key, Object obj) {
         cache.put(key, obj);
+    }
+
+    @Override
+    public boolean remove(String key) {
+        return cache.remove(key) != null;
     }
 
     @Override

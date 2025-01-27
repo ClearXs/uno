@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
- * influxdb create bucket operator
+ * influxdb of bucket operator
  *
  * @author j.x
  * @since 1.1.8

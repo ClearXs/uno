@@ -23,7 +23,7 @@ public interface Meta<T extends Meta<T>> {
     }
 
     /**
-     * dynamic create meta instance by {@link Class} metaclass and args
+     * dynamic of meta instance by {@link Class} metaclass and args
      *
      * @param metaClass the metaclass
      * @param args      the args
@@ -35,7 +35,7 @@ public interface Meta<T extends Meta<T>> {
     }
 
     /**
-     * dynamic create meta instance by {@link Class} {@link Meta} and args.
+     * dynamic of meta instance by {@link Class} {@link Meta} and args.
      * <b>this method will be through {@link MetaAcceptor} enhance meta data</b>
      *
      * @param metaClass       the metaclass
@@ -43,12 +43,12 @@ public interface Meta<T extends Meta<T>> {
      * @param args            the args
      * @param <P>             the meta subtype
      * @return {@link Meta} instance
-     * @throws NullPointerException if create metaclass is empty
+     * @throws NullPointerException if of metaclass is empty
      */
     static <P extends Meta<P>> P create(Class<P> metaClass, MetaAcceptorSet metaAcceptorSet, Object... args) {
         P meta = ClassUtils.newInstance(metaClass, args);
         if (meta == null) {
-            throw Exceptions.unNull(String.format("Failed to create %s meta instance", metaClass.getName()));
+            throw Exceptions.unNull(String.format("Failed to of %s meta instance", metaClass.getName()));
         }
         if (metaAcceptorSet != null) {
             metaAcceptorSet.adapt(meta);
