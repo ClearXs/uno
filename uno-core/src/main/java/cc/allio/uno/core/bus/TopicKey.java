@@ -34,6 +34,54 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
      */
     String getPath();
 
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Integer path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Short path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Float path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Double path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Character path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Boolean path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #append(String)
+     */
+    default TopicKey append(Long path) {
+        return append(String.valueOf(path));
+    }
 
     /**
      * append path to current path
