@@ -71,6 +71,59 @@ public interface OptionalMap<Key> {
     }
 
     /**
+     * get list by key
+     *
+     * @param key          the key
+     * @param elementClass the element {@link Class}
+     * @param <T>          the element generic type
+     * @return the optional for list
+     */
+    default <T> Optional<List<T>> getList(Key key, Class<T> elementClass) {
+        return get(key)
+                .flatMap(obj -> {
+                    if (obj instanceof List<?> oldList) {
+                        List<T> list = Lists.newArrayList();
+                        for (Object o : oldList) {
+                            if (ClassUtils.isAssignable(elementClass, o.getClass())) {
+                                list.add(elementClass.cast(o));
+                            }
+                        }
+                        return Optional.of(list);
+                    }
+                    return Optional.empty();
+                });
+    }
+
+    /**
+     * get map by key
+     *
+     * @param key        the key
+     * @param keyClass   the map key {@link Class}
+     * @param valueClass the value key {@link Class}
+     * @param <K>        the key generic type
+     * @param <V>        the value generic type
+     * @return the optional for map
+     */
+    default <K, V> Optional<Map<K, V>> getMap(Key key, Class<K> keyClass, Class<V> valueClass) {
+        return get(key)
+                .flatMap(obj -> {
+                    if (obj instanceof Map<?, ?> map) {
+                        Map<K, V> newMap = Maps.newHashMap();
+                        for (Map.Entry<?, ?> entry : map.entrySet()) {
+                            Object k = entry.getKey();
+                            Object v = entry.getValue();
+                            if (ClassUtils.isAssignable(keyClass, k.getClass())
+                                    && ClassUtils.isAssignable(valueClass, v.getClass())) {
+                                newMap.put(keyClass.cast(k), valueClass.cast(v));
+                            }
+                        }
+                        return Optional.of(newMap);
+                    }
+                    return Optional.empty();
+                });
+    }
+
+    /**
      * 获取Spring应用的上下文
      *
      * @return 返回Spring上下文实例

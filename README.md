@@ -31,7 +31,7 @@ components.
 - 1.2.x version:
     1. Improve rule engine. (maybe)
     2. Add workflow engine base on flowable. (maybe)
-    3. Add prompting engineering and langchain. (maybe)
+    3. Add AI. (maybe)
 - 1.3.x version:
     1. Add IoT Gateway base on netty. realize TCP, UDP, MQTT, CoAP, HTTP...
     2. Add Plugin Modules. I guess it should be dynamically load JAR packages and execute dynamic language. like as groovy javascript...

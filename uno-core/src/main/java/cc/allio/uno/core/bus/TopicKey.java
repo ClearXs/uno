@@ -22,7 +22,7 @@ import java.util.Arrays;
  * </ol>
  *
  * @author j.x
- * @see PathwayStrategy
+ * @see Pathway
  * @since 1.1.4
  */
 public interface TopicKey extends Self<TopicKey>, Serializable {
@@ -107,8 +107,8 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
      * @return 路径策略实例
      */
     static String pathway(String path) {
-        return PathwayStrategy.require(path)
-                .transformTo(PathwayStrategy.SLASH)
+        return Pathway.require(path)
+                .transformTo(Pathway.SLASH)
                 .apply(path);
     }
 
@@ -133,7 +133,7 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
         String topicName = clazz.getName();
         // 转小写
         String underlineTopic = StringUtils.camelToUnderline(topicName);
-        String classTopicPath = PathwayStrategy.DOT.transform().apply(underlineTopic);
+        String classTopicPath = Pathway.DOT.transform().apply(underlineTopic);
         if (ObjectUtils.isEmpty(appends)) {
             return of(classTopicPath);
         }
@@ -187,13 +187,13 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
         private String path;
 
         public DefaultTopicKey(String path) {
-            this.path = PathwayStrategy.SLASH.transform(path);
+            this.path = Pathway.SLASH.transform(path);
         }
 
         @Override
         public TopicKey append(TopicKey otherTopic) {
             String newPath = this.path + otherTopic.getPath();
-            this.path = PathwayStrategy.SLASH.transform(newPath);
+            this.path = Pathway.SLASH.transform(newPath);
             return self();
         }
     }

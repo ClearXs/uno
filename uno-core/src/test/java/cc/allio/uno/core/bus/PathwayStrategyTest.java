@@ -1,54 +1,58 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.BaseTestCase;
+import cc.allio.uno.core.StringPool;
 import org.junit.jupiter.api.Test;
 
 public class PathwayStrategyTest extends BaseTestCase {
 
     @Test
     void testDeduplicate() {
-        String[] d1 = PathwayStrategy.SLASH.deduplicate(new String[]{"/", "/"});
+        String[] d1 = Pathway.SLASH.deduplicate(StringPool.SLASH, new String[]{"/", "/"});
         assertEquals(1, d1.length);
 
-        String[] d2 = PathwayStrategy.SLASH.deduplicate(new String[]{"/", "/", "cc", "/", "/"});
+        String[] d2 = Pathway.SLASH.deduplicate(StringPool.SLASH, new String[]{"/", "/", "cc", "/", "/"});
 
         assertEquals(3, d2.length);
 
-        String[] d3 = PathwayStrategy.SLASH.deduplicate(new String[]{"/", "/", "cc", "/", "/", "allio", "/", "/"});
+        String[] d3 = Pathway.SLASH.deduplicate(StringPool.SLASH, new String[]{"/", "/", "cc", "/", "/", "allio", "/", "/"});
         assertEquals(5, d3.length);
 
-        String[] d4 = PathwayStrategy.SLASH.deduplicate(new String[]{"cc", "/", "/", "allio", "/"});
+        String[] d4 = Pathway.SLASH.deduplicate(StringPool.SLASH, new String[]{"cc", "/", "/", "allio", "/"});
         assertEquals(4, d4.length);
 
 
-        String[] d5 = PathwayStrategy.SLASH.deduplicate(new String[]{});
+        String[] d5 = Pathway.SLASH.deduplicate(StringPool.SLASH, new String[]{});
         assertEquals(0, d5.length);
     }
 
     @Test
     void testClipFirst() {
-        var slashClip = PathwayStrategy.SLASH.clipFirst(new String[]{"cc", "allio"});
+        var slashClip = Pathway.SLASH.clipFirst(false, StringPool.EMPTY, new String[]{"cc", "allio"});
 
         assertEquals("", slashClip[0]);
 
-        String[] dotClip = PathwayStrategy.DOT.clipFirst(new String[]{".", "cc", "allio"});
+        String[] dotClip = Pathway.DOT.clipFirst(false, StringPool.ORIGIN_DOT, new String[]{".", "cc", "allio"});
         assertEquals("cc", dotClip[0]);
 
 
-        String[] underscoreClip = PathwayStrategy.UNDERSCORE.clipFirst(new String[]{"_", "cc", "allio"});
+        String[] underscoreClip = Pathway.UNDERSCORE.clipFirst(false, StringPool.UNDERSCORE, new String[]{"_", "cc", "allio"});
         assertEquals("cc", underscoreClip[0]);
     }
 
     @Test
     void testClipLast() {
-        var slashClip = PathwayStrategy.SLASH.clipLast(new String[]{"cc", "allio", "/"});
-        assertEquals(slashClip[slashClip.length - 1], "allio");
+        var s1 = Pathway.SLASH.clipLast(true, StringPool.SLASH, new String[]{"cc", "allio", "/"});
+        assertEquals(s1[s1.length - 1], "allio");
+
+        var s2 = Pathway.SLASH.clipLast(false, StringPool.SLASH, new String[]{"cc", "allio"});
+        assertEquals(s2[s2.length - 1], "/");
     }
 
     @Test
     void testDotTransformToSlash() {
         String t1 =
-                PathwayStrategy.DOT.transformTo(PathwayStrategy.SLASH)
+                Pathway.DOT.transformTo(Pathway.SLASH)
                         .apply("cc.allio");
 
         assertEquals("/cc/allio", t1);
@@ -56,51 +60,58 @@ public class PathwayStrategyTest extends BaseTestCase {
 
     @Test
     void testRequire() {
-        PathwayStrategy dot = PathwayStrategy.require("cc.allio");
-        assertEquals(dot, PathwayStrategy.DOT);
+        Pathway dot = Pathway.require("cc.allio");
+        assertEquals(dot, Pathway.DOT);
 
-        PathwayStrategy slash = PathwayStrategy.require("cc/allio");
-        assertEquals(slash, PathwayStrategy.SLASH);
+        Pathway slash = Pathway.require("cc/allio");
+        assertEquals(slash, Pathway.SLASH);
 
-        PathwayStrategy underscore = PathwayStrategy.require("cc_allio");
-        assertEquals(underscore, PathwayStrategy.UNDERSCORE);
+        Pathway underscore = Pathway.require("cc_allio");
+        assertEquals(underscore, Pathway.UNDERSCORE);
 
-        PathwayStrategy dash = PathwayStrategy.require("cc-allio");
-        assertEquals(dash, PathwayStrategy.DASH);
+        Pathway dash = Pathway.require("cc-allio");
+        assertEquals(dash, Pathway.DASH);
 
 
-        PathwayStrategy space = PathwayStrategy.require("cc allio");
-        assertEquals(space, PathwayStrategy.SPACE);
+        Pathway space = Pathway.require("cc allio");
+        assertEquals(space, Pathway.SPACE);
 
-        PathwayStrategy singleForEmpty = PathwayStrategy.require("cc");
-        assertEquals(singleForEmpty, PathwayStrategy.EMPTY);
+        Pathway singleForEmpty = Pathway.require("cc");
+        assertEquals(singleForEmpty, Pathway.EMPTY);
     }
 
     @Test
     void testTransformSlash() {
-        String dotSlash = PathwayStrategy.SLASH.transform("cc.allio");
+        String dotSlash = Pathway.SLASH.transform("cc.allio");
         assertEquals("/cc/allio", dotSlash);
 
-        String underscoreSlash = PathwayStrategy.SLASH.transform("cc_allio");
+        String underscoreSlash = Pathway.SLASH.transform("cc_allio");
         assertEquals("/cc/allio", underscoreSlash);
     }
 
     @Test
     void testTransformDot() {
-        String slashDot = PathwayStrategy.DOT.transform("cc/allio");
+        String slashDot = Pathway.DOT.transform("cc/allio");
         assertEquals("cc.allio", slashDot);
 
-        String underscoreDot = PathwayStrategy.DOT.transform("cc_allio");
+        String underscoreDot = Pathway.DOT.transform("cc_allio");
         assertEquals("cc.allio", underscoreDot);
     }
 
     @Test
     void testTransformUnderscore() {
-        String slashUnderscore = PathwayStrategy.UNDERSCORE.transform("cc/allio");
+        String slashUnderscore = Pathway.UNDERSCORE.transform("cc/allio");
         assertEquals("cc_allio", slashUnderscore);
 
-        String dotUnderscore = PathwayStrategy.UNDERSCORE.transform("cc.allio");
+        String dotUnderscore = Pathway.UNDERSCORE.transform("cc.allio");
         assertEquals("cc_allio", dotUnderscore);
     }
 
+    @Test
+    void testOriginDuplicate() {
+        String origin = "s//s";
+        String transform = Pathway.SLASH.transform(origin);
+        assertEquals("/s/s", transform);
+
+    }
 }

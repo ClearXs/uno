@@ -43,15 +43,13 @@
         <module>uno-test</module>
         <module>uno-starters</module>
         <module>uno-auto</module>
-        <module>uno-web</module>
         <module>uno-data</module>
         <module>uno-gis</module>
         <module>uno-rule</module>
-        <module>uno-http</module>
         <module>uno-kafka</module>
         <module>uno-netty</module>
         <module>uno-sequential</module>
-        <module>uno-websocket</module>
+        <module>uno-protocol</module>
     </modules>
 
     <properties>
@@ -120,6 +118,8 @@
         <maven-gpp-verson>3.2.4</maven-gpp-verson>
         <maven-plugin.version>3.13.0</maven-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
+
+        <vertx.version>4.5.12</vertx.version>
     </properties>
 
     <dependencies>
@@ -179,6 +179,13 @@
                 <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-bom</artifactId>
                 <version>${uno.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-dependencies</artifactId>
+                <version>${vertx.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
