@@ -1,6 +1,7 @@
 package cc.allio.uno.core.chain;
 
-import java.util.Collections;
+import cc.allio.uno.core.util.map.OptionalMap;
+
 import java.util.Map;
 
 /**
@@ -10,7 +11,7 @@ import java.util.Map;
  * @author j.x
  * @since 1.0
  */
-public interface ChainContext<IN> {
+public interface ChainContext<IN> extends OptionalMap<String> {
 
     /**
      * 获取入链的数据
@@ -25,7 +26,7 @@ public interface ChainContext<IN> {
      * @return Map实例数据
      */
     default Map<String, Object> getAttribute() {
-        return Collections.emptyMap();
+        return getAll();
     }
 }
 

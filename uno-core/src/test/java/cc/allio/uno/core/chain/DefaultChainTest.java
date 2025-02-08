@@ -60,7 +60,7 @@ class DefaultChainTest extends BaseTestCase {
         ManyNode manyNode = new ManyNode();
         DefaultChain<Integer, Integer> chain = new DefaultChain<>(Arrays.asList(manyNode));
 
-        chain.processMany(() -> 0)
+        chain.processMany(new DefaultChainContext<>(0))
                 .as(StepVerifier::create)
                 .expectNext(1)
                 .expectNext(2)

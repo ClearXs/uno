@@ -34,7 +34,8 @@ public interface Node<IN, OUT> {
      * @return 出链数据
      */
     default Mono<OUT> execute(Chain<IN, OUT> chain, ChainContext<IN> context) throws Throwable {
-        return Mono.empty();
+        // continuous next node execution
+        return chain.proceed(context);
     }
 
     /**
@@ -46,7 +47,7 @@ public interface Node<IN, OUT> {
      * @throws Throwable
      */
     default Flux<OUT> executeMany(Chain<IN, OUT> chain, ChainContext<IN> context) throws Throwable {
-        return Flux.from(execute(chain, context));
+        return chain.processMany(context);
     }
 
 }
