@@ -84,7 +84,6 @@ public class Topic<C extends EventContext> implements Comparable<Topic<C>>, Clea
                 // trigger sentinel worker working (sequential is important)
                 .doOnNext(n -> sentinel.trigger(context))
                 .flatMap(n -> n.update(new Context<>(context, EmitEvent.class, n)));
-
     }
 
     /**

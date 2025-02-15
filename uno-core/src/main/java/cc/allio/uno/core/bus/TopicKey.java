@@ -1,6 +1,7 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.StringPool;
+import cc.allio.uno.core.api.Copyable;
 import cc.allio.uno.core.api.Self;
 import cc.allio.uno.core.bean.BeanWrapper;
 import cc.allio.uno.core.util.ObjectUtils;
@@ -25,7 +26,7 @@ import java.util.Arrays;
  * @see Pathway
  * @since 1.1.4
  */
-public interface TopicKey extends Self<TopicKey>, Serializable {
+public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKey> {
 
     /**
      * 获取topic的路径
@@ -33,6 +34,70 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
      * @return /test/xx
      */
     String getPath();
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Integer path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Short path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Float path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Double path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Character path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Boolean path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(Long path) {
+        return append(String.valueOf(path));
+    }
+
+    /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(String path) {
+        return before(TopicKey.of(path));
+    }
+
+    /**
+     * add to current path  before
+     *
+     * @param path the {@link TopicKey} path
+     * @return new {@link TopicKey}
+     */
+    TopicKey before(TopicKey path);
 
     /**
      * @see #append(String)
@@ -191,10 +256,22 @@ public interface TopicKey extends Self<TopicKey>, Serializable {
         }
 
         @Override
+        public TopicKey before(TopicKey otherTopic) {
+            String newPath = otherTopic.getPath() + this.path;
+            this.path = Pathway.SLASH.transform(newPath);
+            return self();
+        }
+
+        @Override
         public TopicKey append(TopicKey otherTopic) {
             String newPath = this.path + otherTopic.getPath();
             this.path = Pathway.SLASH.transform(newPath);
             return self();
+        }
+
+        @Override
+        public TopicKey copy() {
+            return new DefaultTopicKey(path);
         }
     }
 }

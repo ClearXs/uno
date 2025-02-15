@@ -238,7 +238,7 @@ public class Sentinel<C extends EventContext> {
         private final C context;
         private final TopicKey ncKey;
         private final Map<Long, AtomicBoolean> completed;
-        public static final String SIGNAL_STRING = "signal";
+        public static final String SIGNAL_STRING = "@@signal";
 
         SignalWorker(List<WorkerNode<C>> runningSubscribers,
                      EventBus<C> eventBus,
@@ -319,10 +319,9 @@ public class Sentinel<C extends EventContext> {
                     && isFinished();
         }
 
-
-        // {path}@signal
+        // @signal{path}
         public static TopicKey createTopicKey(String path) {
-            return TopicKey.of(path + StringPool.AT + SIGNAL_STRING);
+            return TopicKey.of(path).before(SIGNAL_STRING);
         }
     }
 
