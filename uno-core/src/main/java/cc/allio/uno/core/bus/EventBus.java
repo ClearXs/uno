@@ -215,9 +215,9 @@ public interface EventBus<C extends EventContext> {
      * @param context       时序上下文
      * @see #publish(Subscription, C)
      */
-    default Flux<Topic<C>> batchPublish(List<Subscription> subscriptions, C context) {
-        return Flux.fromIterable(subscriptions)
-                .flatMap(subscription -> publish(subscription, context));
+    default Flux<Topic<C>> batchPublish(List<TopicKey> topicKeys, C context) {
+        return Flux.fromIterable(topicKeys)
+                .flatMap(topicKey -> publish(topicKey, context));
     }
 
     /**

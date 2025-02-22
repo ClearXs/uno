@@ -1,6 +1,5 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.bus.event.Context;
 import cc.allio.uno.core.bus.event.Event;
 import cc.allio.uno.core.bus.event.Listener;

@@ -250,7 +250,17 @@ public class LockContext implements Self<LockContext>, OptionalMap<String> {
      * @see #release()
      */
     public <V> LockResult<V> release() {
-        return release(null);
+        return release(() -> {
+        });
+    }
+
+    /**
+     * release
+     *
+     * @see #release(ThrowingMethodConsumer, boolean)
+     */
+    public <V> LockResult<V> release(ThrowingMethodVoid endOf) {
+        return release(context -> endOf.accept(), false);
     }
 
     /**

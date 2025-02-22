@@ -252,21 +252,23 @@ public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKe
         private String path;
 
         public DefaultTopicKey(String path) {
-            this.path = Pathway.SLASH.transform(path);
+            this(path, Pathway.SLASH);
+        }
+
+        public DefaultTopicKey(String path, Pathway pathway) {
+            this.path = pathway.transform(path);
         }
 
         @Override
         public TopicKey before(TopicKey otherTopic) {
             String newPath = otherTopic.getPath() + this.path;
-            this.path = Pathway.SLASH.transform(newPath);
-            return self();
+            return new DefaultTopicKey(Pathway.SLASH.transform(newPath));
         }
 
         @Override
         public TopicKey append(TopicKey otherTopic) {
             String newPath = this.path + otherTopic.getPath();
-            this.path = Pathway.SLASH.transform(newPath);
-            return self();
+            return new DefaultTopicKey(Pathway.SLASH.transform(newPath));
         }
 
         @Override
