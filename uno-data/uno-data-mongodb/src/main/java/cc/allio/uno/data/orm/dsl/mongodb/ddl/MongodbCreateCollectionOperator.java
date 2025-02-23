@@ -12,6 +12,8 @@ import lombok.Getter;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -26,6 +28,7 @@ import java.util.function.UnaryOperator;
 public class MongodbCreateCollectionOperator implements CreateTableOperator<MongodbCreateCollectionOperator> {
 
     private Table fromColl;
+    private List<ColumnDef> columnDefs = new ArrayList<>();
 
     // @see https://www.mongodb.com/docs/mongodb-vscode/playground-databases/
     @Override
@@ -76,6 +79,7 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
 
     @Override
     public MongodbCreateCollectionOperator column(ColumnDef columnDef) {
+        columnDefs.add(columnDef);
         // nothing to do
         return self();
     }
@@ -84,5 +88,10 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
     public MongodbCreateCollectionOperator comment(String comment) {
         // nothing to do
         return self();
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return columnDefs;
     }
 }

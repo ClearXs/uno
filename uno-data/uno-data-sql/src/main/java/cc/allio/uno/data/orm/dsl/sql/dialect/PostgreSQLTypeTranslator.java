@@ -21,9 +21,10 @@ public class PostgreSQLTypeTranslator implements TypeTranslator {
 
     @Override
     public DSLType reserve(String dslTypeName) {
+        PostgreSQLTypeDelegate.PostgreSQLLinkType[] values = PostgreSQLTypeDelegate.PostgreSQLLinkType.values();
         DSLType dslType = TypeTranslator.super.reserve(dslTypeName);
         if (dslType == null) {
-            for (PostgreSQLTypeDelegate.PostgreSQLLinkType type : PostgreSQLTypeDelegate.PostgreSQLLinkType.values()) {
+            for (PostgreSQLTypeDelegate.PostgreSQLLinkType type : values) {
                 if (type.getName().equalsIgnoreCase(dslTypeName)) {
                     return DSLType.create(type, null, null);
                 }

@@ -33,7 +33,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     private Table table;
     private SQLCreateTableStatement createTableStatement;
     private String comment;
-    private final List<ColumnDef> commentColumnDefList = Lists.newArrayList();
+    private final List<ColumnDef> columnDefs = Lists.newArrayList();
 
     public SQLCreateTableOperator() {
         this(DBType.getSystemDbType());
@@ -58,6 +58,22 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     @Override
     public SQLCreateTableOperator parse(String dsl) {
         this.createTableStatement = (SQLCreateTableStatement) SQLUtils.parseSingleStatement(dsl, druidType);
+
+        // reverse
+        SQLExprTableSource tableSource = createTableStatement.getTableSource();
+
+        this.table = DDLSQLSupport.reverseTable(tableSource);
+
+        List<SQLColumnDefinition> columnDefinitions = createTableStatement.getColumnDefinitions();
+
+        List<ColumnDef> reverseColumnDefs =
+                columnDefinitions
+                        .stream()
+                        .map(columnDefinition -> DDLSQLSupport.reverseColumnDef(columnDefinition, dbType))
+                        .toList();
+
+        columnDefs.addAll(reverseColumnDefs);
+
         return self();
     }
 
@@ -106,7 +122,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
     @Override
     public SQLCreateTableOperator column(ColumnDef columnDef) {
         if (DBType.POSTGRESQL == dbType) {
-            commentColumnDefList.add(columnDef);
+            columnDefs.add(columnDef);
         }
         SQLColumnDefinition columnDefinition = DDLSQLSupport.createColumnDefinition(columnDef, dbType);
         createTableStatement.addColumn(columnDefinition);
@@ -118,9 +134,13 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
         if (DBType.POSTGRESQL == dbType) {
             this.comment = comment;
         }
-
         createTableStatement.setComment(new SQLIdentifierExpr(comment));
         return self();
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return columnDefs;
     }
 
     @Override
@@ -132,7 +152,7 @@ public class SQLCreateTableOperator implements CreateTableOperator<SQLCreateTabl
             commentOperatorList.add(Operator.from(tableCommentSQL));
         }
 
-        for (ColumnDef columnDef : commentColumnDefList) {
+        for (ColumnDef columnDef : columnDefs) {
             String columnCommentInfo = columnDef.getComment();
             if (StringUtils.isNotBlank(columnCommentInfo)) {
                 SQLCommentStatement commentStatement = DDLSQLSupport.createCommentStatement(columnDef, table, dbType);

@@ -15,6 +15,14 @@ import java.util.List;
  */
 public class PostgreSQLTypeDelegate extends DSLTypeDelegate {
 
+    static List<DSLType> INT8_OF_LIST = List.of(DSLType.BIGINT);
+    static List<DSLType> FLOAT8_OF_LIST = List.of(DSLType.FLOAT);
+    static List<DSLType> NUMERIC_OF_LIST = List.of(DSLType.DOUBLE, DSLType.NUMBER);
+    static List<DSLType> INT4_OF_LIST = List.of(DSLType.INTEGER);
+    static List<DSLType> INT2_OF_LIST = List.of(DSLType.SMALLINT);
+    static List<DSLType> TEXT_OF_LIST = List.of(DSLType.LONGVARCHAR);
+    static List<DSLType> BOOL_OF_LIST = List.of(DSLType.BOOLEAN);
+
     public PostgreSQLTypeDelegate(DSLType sqlType) {
         super(sqlType);
     }
@@ -32,13 +40,14 @@ public class PostgreSQLTypeDelegate extends DSLTypeDelegate {
     @AllArgsConstructor
     public enum PostgreSQLLinkType implements DSLLinkType {
 
-        INT8("int8", Types.BIGINT, null, null, List.of(DSLType.BIGINT)),
-        FLOAT("float8", Types.FLOAT, 12, 2, List.of(DSLType.FLOAT)),
-        NUMERIC("numeric", Types.DOUBLE, 12, 2, List.of(DSLType.DOUBLE, DSLType.NUMBER)),
-        INT4("int4", Types.INTEGER, null, null, List.of(DSLType.INTEGER)),
-        INT2("int2", Types.INTEGER, null, null, List.of(DSLType.SMALLINT)),
-        TEXT("text", Types.LONGVARCHAR, null, null, List.of(DSLType.LONGVARCHAR)),
-        BOOL("bool", Types.BOOLEAN, null, null, List.of(DSLType.BOOLEAN));
+
+        INT8("int8", Types.BIGINT, null, null, INT8_OF_LIST),
+        FLOAT("float8", Types.FLOAT, 12, 2, FLOAT8_OF_LIST),
+        NUMERIC("numeric", Types.DOUBLE, 12, 2, NUMERIC_OF_LIST),
+        INT4("int4", Types.INTEGER, null, null, INT4_OF_LIST),
+        INT2("int2", Types.INTEGER, null, null, INT2_OF_LIST),
+        TEXT("text", Types.LONGVARCHAR, null, null, TEXT_OF_LIST),
+        BOOL("bool", Types.BOOLEAN, null, null, BOOL_OF_LIST);
 
         private final String name;
         private final int jdbcType;

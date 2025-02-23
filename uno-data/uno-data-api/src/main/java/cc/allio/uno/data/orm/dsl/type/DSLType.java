@@ -43,6 +43,7 @@ public interface DSLType extends EqualsTo<DSLType> {
     DSLType LONGNVARCHAR = DefaultDSLType.LONGNVARCHAR;
     DSLType VARBINARY = DefaultDSLType.VARBINARY;
     DSLType LONGVARBINARY = DefaultDSLType.LONGVARBINARY;
+    DSLType TEXT = DefaultDSLType.TEXT;
 
     // ====================== 其他类型 ======================
     DSLType BOOLEAN = DefaultDSLType.BOOLEAN;
@@ -193,6 +194,7 @@ public interface DSLType extends EqualsTo<DSLType> {
         LONGNVARCHAR("longnvarchar", Types.LONGNVARCHAR, 1024, null),
         VARBINARY("varbinary", Types.VARBINARY, 1024, null),
         LONGVARBINARY("longvarchar", Types.LONGVARBINARY, 2048, null),
+        TEXT("text", Types.LONGNVARCHAR, null, null),
 
         // ====================== 其他类型 ======================
         BOOLEAN("boolean", Types.BOOLEAN, 0, null),

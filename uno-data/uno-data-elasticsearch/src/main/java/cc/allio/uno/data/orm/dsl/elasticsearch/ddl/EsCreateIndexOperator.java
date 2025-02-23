@@ -11,7 +11,9 @@ import co.elastic.clients.elasticsearch.indices.IndexSettings;
 import co.elastic.clients.json.JsonpUtils;
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
+import com.google.common.collect.Lists;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
@@ -29,11 +31,11 @@ public class EsCreateIndexOperator implements CreateTableOperator<EsCreateIndexO
     private final IndexSettings.Builder settingsBuilder;
     private final TypeMapping.Builder mappingBuilder;
     private final DBType dbType;
+    private final List<ColumnDef> columnDefs;
     private CreateIndexRequest request;
     private CreateIndexRequest.Builder builder;
     private Table table;
 
-    private static final String ERROR_MSG = "elasticsearch registry operator not support that operator";
 
     public EsCreateIndexOperator() {
         this.dbType = DBType.ELASTICSEARCH;
@@ -47,6 +49,7 @@ public class EsCreateIndexOperator implements CreateTableOperator<EsCreateIndexO
         codec("best_compression");
         maxScriptFields(10000);
         this.mappingBuilder = new TypeMapping.Builder();
+        this.columnDefs = Lists.newArrayList();
     }
 
     @Override
@@ -99,6 +102,7 @@ public class EsCreateIndexOperator implements CreateTableOperator<EsCreateIndexO
     public EsCreateIndexOperator column(ColumnDef columnDef) {
         Property property = elasticSearchPropertyAdapter.adapt(columnDef.getDataType());
         mappingBuilder.properties(columnDef.getDslName().format(), property);
+        columnDefs.add(columnDef);
         return self();
     }
 
@@ -106,6 +110,11 @@ public class EsCreateIndexOperator implements CreateTableOperator<EsCreateIndexO
     public EsCreateIndexOperator comment(String comment) {
         // nothing todo
         return self();
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return columnDefs;
     }
 
     // =================== settings ===================

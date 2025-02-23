@@ -9,11 +9,14 @@ import cc.allio.uno.data.orm.dsl.type.DruidDataTypeAdapter;
 import cc.allio.uno.data.orm.dsl.type.DruidDbTypeAdapter;
 import com.alibaba.druid.DbType;
 import com.alibaba.druid.sql.ast.SQLDataType;
+import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.SQLCharExpr;
 import com.alibaba.druid.sql.ast.expr.SQLIdentifierExpr;
 import com.alibaba.druid.sql.ast.expr.SQLPropertyExpr;
 import com.alibaba.druid.sql.ast.expr.SQLValuableExpr;
 import com.alibaba.druid.sql.ast.statement.*;
+
+import java.util.List;
 
 /**
  * 与DDL SQL相关的操作
@@ -95,8 +98,8 @@ public class DDLSQLSupport extends SQLSupport {
      * of druid {@link SQLCommentStatement} instance
      *
      * @param comment the table comment
-     * @param table the {@link Table} instance
-     * @param dbType the {@link DBType}
+     * @param table   the {@link Table} instance
+     * @param dbType  the {@link DBType}
      * @return the table {@link SQLCommentStatement} instance
      */
     public static SQLCommentStatement createTableCommentStatement(String comment, Table table, DBType dbType) {
@@ -143,5 +146,50 @@ public class DDLSQLSupport extends SQLSupport {
         columnComment.setDbType(druidType);
 
         return columnComment;
+    }
+
+    /**
+     * reverse {@link Table} from {@link SQLExprTableSource}
+     *
+     * @param tableSource the {@link SQLExprTableSource}
+     * @return the {@link Table}
+     */
+    public static Table reverseTable(SQLExprTableSource tableSource) {
+        Table table = new Table(tableSource.getTableName());
+        table.setCatalog(tableSource.getCatalog());
+        table.setSchema(tableSource.getSchema());
+        return table;
+    }
+
+    /**
+     * reverse {@link ColumnDef} from {@link SQLColumnDefinition}
+     *
+     * @param columnDefinition the {@link SQLColumnDefinition}
+     * @return the {@link ColumnDef}
+     */
+    public static ColumnDef reverseColumnDef(SQLColumnDefinition columnDefinition, DBType dbType) {
+        ColumnDef.ColumnDefBuilder columnDefBuilder = ColumnDef.builder().dslName(DSLName.of(columnDefinition.getColumnName()));
+
+        // build constraint.
+        List<SQLColumnConstraint> constraints = columnDefinition.getConstraints();
+        columnDefBuilder.isPk(constraints.stream().anyMatch(SQLColumnPrimaryKey.class::isInstance))
+                .isFk(constraints.stream().anyMatch(SQLColumnReference.class::isInstance))
+                .isNull(constraints.stream().anyMatch(SQLNullConstraint.class::isInstance))
+                .isNonNull(constraints.stream().anyMatch(SQLNotNullConstraint.class::isInstance))
+                .isUnique(constraints.stream().anyMatch(SQLColumnUniqueKey.class::isInstance));
+
+        // build default value
+        SQLExpr defaultExpr = columnDefinition.getDefaultExpr();
+        if (defaultExpr instanceof SQLValuableExpr sqlValuableExpr) {
+            Object value = sqlValuableExpr.getValue();
+            columnDefBuilder.defaultValue(value);
+        }
+
+        // build data type
+        SQLDataType sqlDataType = columnDefinition.getDataType();
+        DataType dataType = DruidDataTypeAdapter.getInstance(dbType).reverse(sqlDataType);
+        columnDefBuilder.dataType(dataType);
+
+        return columnDefBuilder.build();
     }
 }

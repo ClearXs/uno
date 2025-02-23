@@ -1,11 +1,15 @@
 package cc.allio.uno.data.orm.dsl.type;
 
+import cc.allio.uno.core.util.CollectionUtils;
 import cc.allio.uno.data.orm.dsl.dialect.TypeTranslator;
 import cc.allio.uno.data.orm.dsl.dialect.TypeTranslatorHolder;
 import com.alibaba.druid.sql.ast.SQLDataType;
 import com.alibaba.druid.sql.ast.SQLDataTypeImpl;
+import com.alibaba.druid.sql.ast.SQLExpr;
 import com.alibaba.druid.sql.ast.expr.*;
+import com.alibaba.druid.sql.ast.statement.SQLCharacterDataType;
 
+import java.util.List;
 import java.util.Objects;
 
 import static cc.allio.uno.data.orm.dsl.type.DSLType.DSLTypeImpl.*;
@@ -33,7 +37,7 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
         DataType dataType = o;
         // dataType为null，赋值于VARCHAR
         if (dataType == null) {
-            dataType = DataType.createCharType(DSLType.DefaultDSLType.VARCHAR, 64);
+            dataType = DataType.createCharType(DefaultDSLType.VARCHAR, 64);
         }
         // 通用的做分组比较
         DSLType sqlType = dataType.getDslType();
@@ -89,6 +93,52 @@ public class DruidDataTypeAdapter implements DataTypeAdapter<SQLDataType> {
 
     @Override
     public DataType reverse(SQLDataType sqlDataType) {
-        return null;
+
+        String dataTypeName = sqlDataType.getName();
+        TypeTranslator typeTranslator = TypeTranslatorHolder.getTypeTranslator(dbType);
+        DSLType dslType = typeTranslator.reserve(dataTypeName);
+
+        if (sqlDataType instanceof SQLDataTypeImpl) {
+            List<SQLExpr> arguments = sqlDataType.getArguments();
+            Integer precision = null;
+            Integer scale = null;
+
+            if (CollectionUtils.isNotEmpty(arguments)) {
+                // precision
+                SQLExpr precisionExpr = arguments.getFirst();
+                if (precisionExpr instanceof SQLIntegerExpr sqlIntegerExpr) {
+                    precision = sqlIntegerExpr.getNumber().intValue();
+                }
+                // scale
+                if (arguments.size() > 1) {
+                    SQLExpr scaleExpr = arguments.get(1);
+                    if (scaleExpr instanceof SQLIntegerExpr sqlIntegerExpr) {
+                        scale = sqlIntegerExpr.getNumber().intValue();
+                    }
+                }
+            }
+
+            DataType dataType = DataType.create(dslType);
+            dataType.setPrecision(precision);
+            dataType.setScale(scale);
+            return dataType;
+        }
+
+        if (sqlDataType instanceof SQLCharacterDataType sqlCharacterDataType) {
+            // parse character type
+            Integer length = null;
+            List<SQLExpr> arguments = sqlCharacterDataType.getArguments();
+
+            if (CollectionUtils.isNotEmpty(arguments)) {
+                SQLExpr lengthExpr = arguments.get(0);
+                if (lengthExpr instanceof SQLIntegerExpr sqlIntegerExpr) {
+                    length = sqlIntegerExpr.getNumber().intValue();
+                }
+            }
+            return DataType.createCharType(dslType, length);
+        }
+
+        // no match default return varcahr
+        return DataType.create(DSLType.VARCHAR);
     }
 }
