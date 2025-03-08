@@ -84,7 +84,6 @@ class TopicsTest extends BaseTestCase {
                 .verifyComplete();
     }
 
-
     @Test
     void testConcurrentLink() {
         Flux.range(1, 1000)

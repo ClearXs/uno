@@ -4,7 +4,7 @@ import cc.allio.uno.core.BaseTestCase;
 import cc.allio.uno.core.StringPool;
 import org.junit.jupiter.api.Test;
 
-public class PathwayStrategyTest extends BaseTestCase {
+public class PathwayTest extends BaseTestCase {
 
     @Test
     void testDeduplicate() {
@@ -113,5 +113,12 @@ public class PathwayStrategyTest extends BaseTestCase {
         String transform = Pathway.SLASH.transform(origin);
         assertEquals("/s/s", transform);
 
+    }
+
+    @Test
+    void testEmpty() {
+        String r1 = Pathway.EMPTY.transform("s");
+
+        assertEquals("s", r1);
     }
 }

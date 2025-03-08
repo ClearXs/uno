@@ -316,7 +316,7 @@ public interface Pathway {
         }
 
         @Override
-        public Function<String, String> transform() {
+        public Function<String, String> transform(boolean headless, boolean tailless) {
             return s -> s;
         }
     }

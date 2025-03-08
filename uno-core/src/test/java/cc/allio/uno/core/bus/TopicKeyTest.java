@@ -19,6 +19,18 @@ public class TopicKeyTest extends BaseTestCase {
         assertEquals("/cc/allio", path);
     }
 
+    @Test
+    void testAppendEmpty() {
+        String p1 = TopicKey.of("cc").append(b -> b.text("ttt--asd").pathway(Pathway.EMPTY)).getPath();
+        assertEquals("/cc/ttt--asd", p1);
+
+        String p2 = TopicKey.of("cc")
+                .append(b -> b.text("ttt--asd").pathway(Pathway.EMPTY))
+                .append(b -> b.text("ttt--asd").pathway(Pathway.EMPTY))
+                .getPath();
+
+        assertEquals("/cc/ttt--asd/ttt--asd", p2);
+    }
 
     @AllArgsConstructor
     @Data

@@ -12,6 +12,8 @@ import lombok.ToString;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.function.Function;
+import java.util.function.UnaryOperator;
 
 /**
  * topic key. the of all specific path will be transforms to slash topic path. whatever is dot path or underscore path.
@@ -92,6 +94,13 @@ public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKe
     }
 
     /**
+     * @see #before(TopicKey)
+     */
+    default TopicKey before(UnaryOperator<TopicKeyBuilder> func) {
+        return before(func.apply(new TopicKeyBuilder()).build());
+    }
+
+    /**
      * add to current path  before
      *
      * @param path the {@link TopicKey} path
@@ -156,6 +165,13 @@ public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKe
      */
     default TopicKey append(String path) {
         return append(TopicKey.of(path));
+    }
+
+    /**
+     * @see #append(TopicKey)
+     */
+    default TopicKey append(UnaryOperator<TopicKeyBuilder> func) {
+        return append(func.apply(new TopicKeyBuilder()).build());
     }
 
     /**
@@ -237,11 +253,31 @@ public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKe
     /**
      * 根据指定的路径创建{@link TopicKey}
      *
-     * @param path 路径 可以是cc/allio/xx 也可以是 xxx-xxx-xx
+     * @param text 路径 可以是cc/allio/xx 也可以是 xxx-xxx-xx
      * @return TopicKey
      */
-    static TopicKey of(String path) {
-        return new DefaultTopicKey(path);
+    static TopicKey of(String text) {
+        return new DefaultTopicKey(text);
+    }
+
+    /**
+     * 根据指定的路径创建{@link TopicKey}
+     *
+     * @param text 路径 可以是cc/allio/xx 也可以是 xxx-xxx-xx
+     * @return TopicKey
+     */
+    static TopicKey of(String text, Pathway pathway) {
+        return new DefaultTopicKey(text, pathway);
+    }
+
+    /**
+     * create topic the pathway use {@link Pathway#EMPTY} it will maintain text.
+     *
+     * @param text the text
+     * @return {@link TopicKey}
+     */
+    static TopicKey ofEmpty(String text) {
+        return new DefaultTopicKey(text, Pathway.EMPTY);
     }
 
     @Getter
@@ -249,31 +285,67 @@ public interface TopicKey extends Self<TopicKey>, Serializable, Copyable<TopicKe
     @EqualsAndHashCode(of = "path")
     class DefaultTopicKey implements TopicKey {
 
-        private String path;
+        private final String path;
+        private final Pathway pathway;
 
         public DefaultTopicKey(String path) {
             this(path, Pathway.SLASH);
         }
 
         public DefaultTopicKey(String path, Pathway pathway) {
-            this.path = pathway.transform(path);
+            this(path, pathway, true);
+        }
+
+        public DefaultTopicKey(String path, Pathway pathway, boolean isTransform) {
+            if (isTransform) {
+                this.path = pathway.transform(path);
+            } else {
+                this.path = path;
+            }
+            this.pathway = pathway;
         }
 
         @Override
         public TopicKey before(TopicKey otherTopic) {
             String newPath = otherTopic.getPath() + this.path;
-            return new DefaultTopicKey(Pathway.SLASH.transform(newPath));
+            return new DefaultTopicKey(newPath, this.pathway, false);
         }
 
         @Override
         public TopicKey append(TopicKey otherTopic) {
-            String newPath = this.path + otherTopic.getPath();
-            return new DefaultTopicKey(Pathway.SLASH.transform(newPath));
+            String otherPath = otherTopic.getPath();
+            String newPath;
+            if (otherPath.startsWith(pathway.rule())) {
+                newPath = this.path + otherPath;
+            } else {
+                newPath = this.path + pathway.rule() + otherPath;
+            }
+            return new DefaultTopicKey(newPath, this.pathway, false);
         }
 
         @Override
         public TopicKey copy() {
             return new DefaultTopicKey(path);
+        }
+    }
+
+    class TopicKeyBuilder implements Self<TopicKeyBuilder> {
+
+        private String text;
+        private Pathway pathway;
+
+        public TopicKeyBuilder text(String text) {
+            this.text = text;
+            return self();
+        }
+
+        public TopicKeyBuilder pathway(Pathway pathway) {
+            this.pathway = pathway;
+            return self();
+        }
+
+        public TopicKey build() {
+            return new DefaultTopicKey(text, pathway);
         }
     }
 }

@@ -211,8 +211,8 @@ public interface EventBus<C extends EventContext> {
     /**
      * 同一个上下文，批量发布数据
      *
-     * @param subscriptions 订阅信息集合
-     * @param context       时序上下文
+     * @param topicKeys topic keys
+     * @param context   时序上下文
      * @see #publish(Subscription, C)
      */
     default Flux<Topic<C>> batchPublish(List<TopicKey> topicKeys, C context) {
@@ -257,7 +257,7 @@ public interface EventBus<C extends EventContext> {
      * @param context  主题上下文
      */
     default Flux<Topic<C>> publish(TopicKey topicKey, C context) {
-        return publishOnFlux(topicKey.getPath(), context);
+        return publishOnFlux(topicKey, context);
     }
 
     /**
