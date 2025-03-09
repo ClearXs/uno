@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.data.orm.executor.ResultGroup;
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 import com.google.common.collect.Lists;
 
 import java.util.List;

@@ -40,7 +40,6 @@ public class PostgreSQLTypeDelegate extends DSLTypeDelegate {
     @AllArgsConstructor
     public enum PostgreSQLLinkType implements DSLLinkType {
 
-
         INT8("int8", Types.BIGINT, null, null, INT8_OF_LIST),
         FLOAT("float8", Types.FLOAT, 12, 2, FLOAT8_OF_LIST),
         NUMERIC("numeric", Types.DOUBLE, 12, 2, NUMERIC_OF_LIST),

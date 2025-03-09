@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.db.handler;
 import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.type.DBType;
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 import cc.allio.uno.data.orm.executor.db.handler.dialect.H2ColumnDefListResultSetHandler;
 import cc.allio.uno.data.orm.executor.db.handler.dialect.MySQLColumnDefListResultHandler;
 import cc.allio.uno.data.orm.executor.db.handler.dialect.PostgreSQLColumnDefListResultSetHandler;

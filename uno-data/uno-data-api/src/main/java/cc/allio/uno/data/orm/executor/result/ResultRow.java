@@ -1,4 +1,4 @@
-package cc.allio.uno.data.orm.executor;
+package cc.allio.uno.data.orm.executor.result;
 
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.type.JavaType;

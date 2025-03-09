@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 
 /**
  * Java Bean对象处理器

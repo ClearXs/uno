@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.elasticsearch.internal;
 
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 

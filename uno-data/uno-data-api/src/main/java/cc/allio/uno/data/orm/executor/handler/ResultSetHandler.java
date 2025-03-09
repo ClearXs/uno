@@ -1,7 +1,7 @@
 package cc.allio.uno.data.orm.executor.handler;
 
 import cc.allio.uno.core.reflect.ReflectTools;
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 
 import java.util.function.Function;
 

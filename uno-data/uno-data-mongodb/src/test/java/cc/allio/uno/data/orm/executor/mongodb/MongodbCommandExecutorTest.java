@@ -4,7 +4,7 @@ import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.AlterTableOperator;
 import cc.allio.uno.data.orm.dsl.dml.InsertOperator;
 import cc.allio.uno.data.orm.dsl.dml.UpdateOperator;
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 import cc.allio.uno.data.test.executor.CommandExecutorSetter;
 import cc.allio.uno.test.BaseTestCase;
 import cc.allio.uno.test.RunTest;

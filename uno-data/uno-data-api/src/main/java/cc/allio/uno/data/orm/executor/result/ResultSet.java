@@ -1,4 +1,4 @@
-package cc.allio.uno.data.orm.executor;
+package cc.allio.uno.data.orm.executor.result;
 
 import lombok.Setter;
 

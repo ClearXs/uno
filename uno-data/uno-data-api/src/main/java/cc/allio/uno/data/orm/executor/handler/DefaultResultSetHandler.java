@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 
 /**
  * 不经任何处理

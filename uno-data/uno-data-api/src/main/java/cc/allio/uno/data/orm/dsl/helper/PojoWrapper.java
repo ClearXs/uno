@@ -11,6 +11,7 @@ import cc.allio.uno.core.util.*;
 import cc.allio.uno.core.util.template.ExpressionTemplate;
 import cc.allio.uno.core.util.template.Tokenizer;
 import cc.allio.uno.data.orm.annotation.LogicDelete;
+import cc.allio.uno.data.orm.converter.Converters;
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.Table;
@@ -23,6 +24,7 @@ import cc.allio.uno.data.orm.dsl.type.TypeRegistry;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import jakarta.persistence.Column;
+import jakarta.persistence.Convert;
 import jakarta.persistence.Id;
 import lombok.Getter;
 import org.springframework.core.annotation.AnnotationUtils;
@@ -378,8 +380,55 @@ public class PojoWrapper<T> implements ValueWrapper {
      */
     public List<Object> getColumnValues() {
         return columnDefs.stream()
-                .map(column -> getForce(column.getDslName().format(DSLName.HUMP_FEATURE)))
+                .map(this::getColumnValue)
                 .toList();
+    }
+
+    /**
+     * from pojo get column value.
+     * <p>
+     * if corresponding {@link Field} is found and {@link Field} has {@link Convert} it will be converted pojo value,
+     * <p>
+     * otherwise return the value directly.
+     *
+     * @see Converters#convertToDbData(Field, Object)
+     */
+    public Object getColumnValue(ColumnDef columnDef) {
+        DSLName columnName = columnDef.getDslName();
+        Field field = getField(columnName);
+        Object pojoValue = getForce(columnName.format(DSLName.HUMP_FEATURE));
+        if (field != null) {
+            Object newValue = Converters.convertToDbData(field, pojoValue);
+            return newValue != null ? newValue : pojoValue;
+        }
+        return pojoValue;
+    }
+
+    /**
+     * get {@link Field} by column {@link DSLName} (the column maybe lowercase)
+     *
+     * @param column the {@link DSLName}
+     * @return return {@link Field} instance if existing.
+     */
+    public Field getField(DSLName column) {
+        String camelName = DSLName.of(column, DSLName.LOWER_CASE_FEATURE, DSLName.HUMP_FEATURE).format();
+        return getField(camelName);
+    }
+
+    /**
+     * get {@link Field} by filed name
+     *
+     * @param fieldName the field name
+     * @return return {@link Field} instance if existing.
+     */
+    public Field getField(String fieldName) {
+        if (pojoFields == null) {
+            return null;
+        }
+        return pojoFields.stream()
+                .filter(f -> f.getName().equals(fieldName))
+                .findFirst()
+                .orElse(null);
     }
 
     @Override

@@ -1,4 +1,4 @@
-package cc.allio.uno.data.orm.executor;
+package cc.allio.uno.data.orm.executor.result;
 
 import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.type.Types;
@@ -7,10 +7,13 @@ import cc.allio.uno.core.util.JsonUtils;
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
+import cc.allio.uno.data.orm.converter.Converters;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import jakarta.persistence.AttributeConverter;
 import lombok.Data;
 
+import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -20,7 +23,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * 结果集。保持顺序一致性
+ * result group.
  *
  * @author j.x
  * @since 1.1.4
@@ -32,6 +35,9 @@ public class ResultGroup {
     private List<ResultRow> resultRows = Lists.newArrayList();
     // 以小写、驼峰作为key
     private Map<String, ResultRow> resultRowMap = Maps.newHashMap();
+
+    private static final Map<Class<AttributeConverter<?, ?>>, AttributeConverter<?, ?>> VALUE_CONVERTER_MAP = Maps.newConcurrentMap();
+
 
     /**
      * 添加{@link ResultRow}
@@ -102,11 +108,22 @@ public class ResultGroup {
     public <T> T toEntity(Class<T> entity) {
         T metadata = ClassUtils.newInstance(entity);
         PojoWrapper<T> wrapper = PojoWrapper.getInstance(metadata);
+
         for (ResultRow resultRow : resultRows) {
             Object value = resultRow.getValue();
             if (value != null) {
                 String column = DSLName.of(resultRow.getColumn(), DSLName.LOWER_CASE_FEATURE, DSLName.HUMP_FEATURE).format();
-                wrapper.setForce(column, value);
+                Field field = wrapper.getField(column);
+                if (field != null) {
+                    Object newValue = Converters.convertToEntity(field, value);
+                    if (newValue != null) {
+                        wrapper.setForce(column, newValue);
+                    } else {
+                        wrapper.setForce(column, value);
+                    }
+                } else {
+                    wrapper.setForce(column, value);
+                }
             }
         }
         return metadata;
@@ -404,4 +421,5 @@ public class ResultGroup {
                 .map(adjuster)
                 .orElse(null);
     }
+
 }

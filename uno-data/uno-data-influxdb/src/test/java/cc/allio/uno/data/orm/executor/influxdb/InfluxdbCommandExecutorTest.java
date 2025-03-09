@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.influxdb;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.influxdb.dml.InfluxdbDeleteOperator;
 import cc.allio.uno.data.orm.dsl.influxdb.dml.InfluxdbInsertOperator;
-import cc.allio.uno.data.orm.executor.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.test.executor.CommandExecutorSetter;
 import cc.allio.uno.test.BaseTestCase;
