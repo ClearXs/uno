@@ -36,4 +36,8 @@ public interface EventContext extends OptionalMap<String> {
      * @return EventTracer instance
      */
     EventTracer getEventTracer();
+
+    static EventContext defaultEventContext() {
+        return new DefaultEventContext();
+    }
 }
