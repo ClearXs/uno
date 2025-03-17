@@ -24,7 +24,7 @@ import java.util.function.Supplier;
  * forbid use {@code StringPool#EMPTY} as pattern.
  *
  * @author j.x
- * @since 1.2.1
+ * @since 1.2.2
  */
 public interface Pathway {
 

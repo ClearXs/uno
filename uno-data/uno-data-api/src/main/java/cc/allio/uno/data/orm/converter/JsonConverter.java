@@ -8,7 +8,7 @@ import lombok.AllArgsConstructor;
  * base on jackson convert entity to json string
  *
  * @author j.x
- * @since 1.2.1
+ * @since 1.2.2
  */
 @AllArgsConstructor
 public class JsonConverter<T> implements AttributeConverter<T, String> {

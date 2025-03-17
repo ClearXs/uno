@@ -24,7 +24,7 @@ import java.util.concurrent.locks.ReentrantLock;
  *
  * @param <C> the {@link EventContext} type
  * @author j.x
- * @since 1.2.1
+ * @since 1.2.2
  */
 public interface Watcher<C extends EventContext> {
 

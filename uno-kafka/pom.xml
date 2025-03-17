@@ -6,7 +6,7 @@
     <parent>
         <groupId>cc.allio.uno</groupId>
         <artifactId>uno-parent</artifactId>
-        <version>1.2.1</version>
+        <version>1.2.2</version>
     </parent>
 
     <artifactId>uno-kafka</artifactId>

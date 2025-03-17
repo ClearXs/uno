@@ -10,7 +10,7 @@ public class StringUtils extends org.springframework.util.StringUtils
 
 
 
-#### 1.2.1 cropUrl
+#### 1.2.2 cropUrl
 
 裁剪带有请求参数的url。
 

@@ -23,7 +23,7 @@ import java.util.function.LongConsumer;
  * and occurrence process on <b>publish</b>, sign of the subscription is completion.
  *
  * @author j.x
- * @since 1.2.1
+ * @since 1.2.2
  */
 @Slf4j
 public class Sentinel<C extends EventContext> {

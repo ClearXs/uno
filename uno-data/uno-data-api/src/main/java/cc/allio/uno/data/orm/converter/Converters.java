@@ -21,7 +21,7 @@ import java.util.Map;
  * @author j.x
  * @see jakarta.persistence.Convert
  * @see jakarta.persistence.AttributeConverter
- * @since 1.2.1
+ * @since 1.2.2
  */
 public final class Converters {
 

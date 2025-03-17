@@ -12,7 +12,7 @@
     <groupId>cc.allio.uno</groupId>
     <artifactId>uno-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.1</version>
+    <version>1.2.2</version>
     <modelVersion>4.0.0</modelVersion>
     <description>Utility for large applications (Systematic use of Spring)</description>
     <url>${official.url}</url>
@@ -69,7 +69,7 @@
         <jakarta-annotation.version>2.1.1</jakarta-annotation.version>
 
         <!-- 统一版本管理 -->
-        <uno.version>1.2.1</uno.version>
+        <uno.version>1.2.2</uno.version>
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->

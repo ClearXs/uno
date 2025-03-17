@@ -5,7 +5,7 @@ package cc.allio.uno.core.api;
  *
  * @param <Self> the self generic type
  * @author j.x
- * @since 1.2.1
+ * @since 1.2.2
  */
 public interface Copyable<Self> {
 
