@@ -27,7 +27,7 @@ import java.util.concurrent.atomic.AtomicReference;
  * <p>required</p>
  * <ol>
  *     <li>bean must visibility is public</li>
- *     <li>bean must be has setter and getter methods</li>
+ *     <li>bean must be had setter and getter methods</li>
  * </ol>
  *
  * @author j.x

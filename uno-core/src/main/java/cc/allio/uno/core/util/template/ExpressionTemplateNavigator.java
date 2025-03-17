@@ -1,6 +1,6 @@
 package cc.allio.uno.core.util.template;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.util.template.internal.PlaceholderExpressionTemplate;
 import cc.allio.uno.core.util.template.mvel.MVELExpressionTemplate;
 import lombok.Getter;
@@ -22,7 +22,7 @@ public class ExpressionTemplateNavigator implements ExpressionTemplate {
         if (Tokenizer.AT_BRACE == tokenizer) {
             this.internal = new MVELExpressionTemplate();
         } else {
-            Boolean langsym = OptionalContext.immutable(args).getTypeFirst(Boolean.class).orElse(false);
+            Boolean langsym = OptionalMap.immutable(args).getTypeFirst(Boolean.class).orElse(false);
             this.internal = new PlaceholderExpressionTemplate(tokenizer, langsym);
         }
         this.tokenizer = tokenizer;

@@ -26,7 +26,7 @@ import java.util.Map;
  *
  * @author j.x
  * @see PlaceholderExpressionTemplate
- * @see #createMVEL() create a {@link MVELExpressionTemplate}
+ * @see #createMVEL() of a {@link MVELExpressionTemplate}
  * @see #defaultTemplate() use internal {@link PlaceholderExpressionTemplate}
  * @see ExpressionTemplateNavigator
  * @since 1.0
@@ -218,7 +218,7 @@ public interface ExpressionTemplate {
     }
 
     /**
-     * create {@link MVELExpressionTemplate} instance
+     * of {@link MVELExpressionTemplate} instance
      *
      * @return {@link MVELExpressionTemplate} instance
      */

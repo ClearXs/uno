@@ -7,7 +7,7 @@ import cc.allio.uno.data.orm.dsl.dialect.TypeTranslator;
 import cc.allio.uno.data.orm.dsl.dialect.TypeTranslatorHolder;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 import cc.allio.uno.data.orm.dsl.type.DataType;
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 import cc.allio.uno.data.orm.executor.handler.ColumnDefListResultSetHandler;
 import com.google.common.collect.Lists;
 

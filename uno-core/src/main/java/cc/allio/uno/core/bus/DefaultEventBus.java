@@ -6,6 +6,6 @@ package cc.allio.uno.core.bus;
  * @author j.x
  * @since 1.1.3
  */
-public class DefaultEventBus extends BaseEventBus<EventContext> {
+public class DefaultEventBus<C extends EventContext> extends BaseEventBus<C> {
 
 }

@@ -1,8 +1,10 @@
 package cc.allio.uno.core.bus;
 
+import cc.allio.uno.core.StringPool;
 import cc.allio.uno.core.util.id.IdGenerator;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import org.springframework.util.MultiValueMap;
 import org.springframework.util.ObjectUtils;
@@ -11,7 +13,6 @@ import java.io.Serializable;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * 订阅信息
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
  * @author j.x
  */
 @Data
-@AllArgsConstructor(staticName = "of")
+@EqualsAndHashCode(of = "id")
+@AllArgsConstructor
 public class Subscription implements Serializable {
 
     /**
@@ -28,35 +30,37 @@ public class Subscription implements Serializable {
     private Long id;
 
     /**
-     * 订阅消息id
+     * topic key
      */
-    private Long subscribeId;
-
-    /**
-     * 订阅的主题
-     */
-    private String path;
+    private TopicKey topicKey;
 
 
     public static Subscription of() {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                IdGenerator.defaultGenerator().getNextId(),
-                "");
+        return of(IdGenerator.defaultGenerator().getNextId(), "");
     }
 
     public static Subscription of(String topic) {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                IdGenerator.defaultGenerator().getNextId(),
-                topic);
+        return of(IdGenerator.defaultGenerator().getNextId(), topic);
     }
 
-    public static Subscription of(Long subscribeId, String topic) {
-        return of(
-                IdGenerator.defaultGenerator().getNextId(),
-                subscribeId,
-                topic);
+    public static Subscription of(TopicKey topicKey) {
+        return of(IdGenerator.defaultGenerator().getNextId(), topicKey);
+    }
+
+    public static Subscription of(Long id) {
+        return of(id, StringPool.EMPTY);
+    }
+
+    public static Subscription of(Long id, String path) {
+        return of(id, TopicKey.of(path));
+    }
+
+    public static Subscription of(Long id, TopicKey topicKey) {
+        return new Subscription(id, topicKey);
+    }
+
+    public String getPath() {
+        return this.topicKey.getPath();
     }
 
     /**
@@ -71,7 +75,7 @@ public class Subscription implements Serializable {
         }
         return topics.stream()
                 .map(topic -> of((long) topic.hashCode(), topic))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     /**
@@ -87,6 +91,6 @@ public class Subscription implements Serializable {
                 .orElse(Collections.emptyList())
                 .stream()
                 .map(topic -> of((long) topic.concat(affix).hashCode(), topic.concat(affix)))
-                .collect(Collectors.toList());
+                .toList();
     }
 }

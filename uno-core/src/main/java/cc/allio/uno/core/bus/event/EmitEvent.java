@@ -6,5 +6,5 @@ package cc.allio.uno.core.bus.event;
  * @author j.x
  * @since 1.0
  */
-public interface EmitEvent extends BusEvent {
+public interface EmitEvent extends Event {
 }

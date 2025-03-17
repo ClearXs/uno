@@ -18,7 +18,7 @@ import java.util.*;
  * copy from jdk {@link ServiceLoader}.
  * <p>because jdk supplies class path load by default constructor, if service contains arguments, it's throws error.</p>
  *
- * <b>enhanced create instance by constructor create service instance</b>
+ * <b>enhanced of instance by constructor of service instance</b>
  *
  * @author j.x
  * @since 1.1.7
@@ -32,7 +32,7 @@ public class ClassPathServiceLoader<T> implements Iterator<ServiceLoader.Provide
     private final AccessControlContext acc;
     private final ClassLoader loader;
 
-    // use when create service instance
+    // use when of service instance
     private Object[] createdArgs;
 
     Set<String> providerNames = new HashSet<>();  // to avoid duplicates

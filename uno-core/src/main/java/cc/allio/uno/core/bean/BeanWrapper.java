@@ -208,7 +208,7 @@ public class BeanWrapper implements ValueWrapper {
     }
 
     /**
-     * create a new {@link BeanWrapper} from bean instance
+     * of a new {@link BeanWrapper} from bean instance
      *
      * @param beanInstance the bean instance
      * @return {@link BeanWrapper} instance
@@ -226,7 +226,7 @@ public class BeanWrapper implements ValueWrapper {
     }
 
     /**
-     * create a new {@link BeanWrapper} from bean class
+     * of a new {@link BeanWrapper} from bean class
      *
      * @param beanClass the bean class
      * @return {@link BeanWrapper} instance

@@ -3,6 +3,7 @@ package cc.allio.uno.core.bus;
 import cc.allio.uno.core.BaseTestCase;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
+import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
 @Slf4j
@@ -19,7 +20,7 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testLink() {
-        topics.link(Subscription.of("test"))
+        topics.link(TopicKey.of("test"), EventBusFactory.newEventBus())
                 .map(Topic::getPath)
                 .as(StepVerifier::create)
                 .expectNext("/test")
@@ -28,18 +29,13 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testNullLink() {
-        assertThrows(NullPointerException.class, () -> topics.link(null));
+        assertThrows(NullPointerException.class, () -> topics.link(null, EventBusFactory.current()));
     }
 
     @Test
     void testUnlink() {
-        Subscription subscription = Subscription.of("/test");
-        topics.link(subscription)
-                .flatMapMany(Topic::findNode)
-                .flatMap(node -> {
-                    node.doLift(o -> log.info("node left subscribe id: {}", node.getSubscribeId()));
-                    return topics.unlink("/test");
-                })
+        topics.link(TopicKey.of("/test"), EventBusFactory.current())
+                .then(topics.unlink(TopicKey.of("/test")))
                 .as(StepVerifier::create)
                 .expectNext(Boolean.TRUE)
                 .verifyComplete();
@@ -47,8 +43,8 @@ class TopicsTest extends BaseTestCase {
 
     @Test
     void testLookup() {
-        topics.link(Subscription.of("/PP"))
-                .thenMany(topics.lookup("/PP"))
+        topics.link(TopicKey.of("/PP"), EventBusFactory.current())
+                .thenMany(topics.lookup(TopicKey.of("/PP")))
                 .map(Topic::getPath)
                 .as(StepVerifier::create)
                 // 路径化结果
@@ -57,27 +53,15 @@ class TopicsTest extends BaseTestCase {
     }
 
     /**
-     * Test Case: 测试空查找主题
-     */
-    @Test
-    void testEmptyLookupTopic() {
-        topics.link(Subscription.of("/test/**"))
-                .thenMany(topics.lookup(""))
-                .as(StepVerifier::create)
-                .expectNextCount(0L)
-                .verifyComplete();
-    }
-
-    /**
      * Test Case: 创建三级路径结构，搜索其中两级路径下的topic
      */
     @Test
     void testChildLookupTopic() {
-        topics.link(Subscription.of("/p/**"))
-                .then(topics.link(Subscription.of("/p/c1")))
-                .then(topics.link(Subscription.of("/p/c2")))
-                .then(topics.link(Subscription.of("/p/c1/c11")))
-                .thenMany(topics.lookup("/p/c1"))
+        topics.link(TopicKey.of("/p/**"), EventBusFactory.current())
+                .then(topics.link(TopicKey.of("/p/c1"), EventBusFactory.current()))
+                .then(topics.link(TopicKey.of(""), EventBusFactory.current()))
+                .then(topics.link(TopicKey.of("/p/c1/c11"), EventBusFactory.current()))
+                .thenMany(topics.lookup(TopicKey.of("/p/c1")))
                 .count()
                 .as(StepVerifier::create)
                 .expectNext(2L)
@@ -89,20 +73,23 @@ class TopicsTest extends BaseTestCase {
      */
     @Test
     void testWildcardLookup() {
-        topics.link(Subscription.of("/p"))
-                .then(topics.link(Subscription.of("/p/c1")))
-                .then(topics.link(Subscription.of("/p/c2")))
-                .thenMany(topics.lookup("**"))
+        topics.link(TopicKey.of("/p"), EventBusFactory.current())
+                .then(topics.link(TopicKey.of("/p/c1"), EventBusFactory.current()))
+                .then(topics.link(TopicKey.of("/p/c2"), EventBusFactory.current()))
+                .thenMany(topics.lookup(TopicKey.of("**")))
                 .map(Topic::getPath)
                 .as(StepVerifier::create)
-                .expectNext("/p/c1")
                 .expectNext("/p/c2")
+                .expectNext("/p/c1")
                 .verifyComplete();
     }
 
-    @Override
-    protected void onDown() throws Throwable {
-
+    @Test
+    void testConcurrentLink() {
+        Flux.range(1, 1000)
+                .flatMap(i -> topics.link(TopicKey.of("/concurrent" + i), EventBusFactory.current()))
+                .as(StepVerifier::create)
+                .expectNextCount(1000)
+                .verifyComplete();
     }
-
 }

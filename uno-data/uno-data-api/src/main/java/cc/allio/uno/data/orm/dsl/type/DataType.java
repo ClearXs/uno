@@ -99,4 +99,17 @@ public class DataType implements EqualsTo<DataType> {
         dataType.setDslType(sqlType);
         return dataType;
     }
+
+    /**
+     * 创建时间型的数据类型
+     *
+     * @param sqlType SQLType
+     * @return DataType
+     */
+    public static DataType createTimeType(DSLType sqlType, Integer precision) {
+        DataType dataType = new DataType();
+        dataType.setDslType(sqlType);
+        dataType.setPrecision(precision);
+        return dataType;
+    }
 }

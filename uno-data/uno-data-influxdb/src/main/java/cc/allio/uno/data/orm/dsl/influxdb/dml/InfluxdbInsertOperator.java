@@ -18,7 +18,7 @@ import java.util.function.UnaryOperator;
 
 /**
  * influx db insert operator
- * <p>when invoke relevant {@link #columns(String...)} api, means create influxdb fields, if create tags, please use </p>
+ * <p>when invoke relevant {@link #columns(String...)} api, means of influxdb fields, if of tags, please use </p>
  *
  * @author j.x
  * @since 1.1.8

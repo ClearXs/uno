@@ -28,7 +28,7 @@ public class RuleContext extends DefaultEventContext {
 
     public RuleContext() {
         super();
-        putAttribute(MATCH_INDEX, Sets.newHashSet());
+        put(MATCH_INDEX, Sets.newHashSet());
     }
 
     /**
@@ -37,7 +37,7 @@ public class RuleContext extends DefaultEventContext {
      * @param currentRule currentRule
      */
     public void putCurrentRule(Rule currentRule) {
-        putAttribute(CURRENT_RULE, currentRule);
+        put(CURRENT_RULE, currentRule);
     }
 
     /**
@@ -55,7 +55,7 @@ public class RuleContext extends DefaultEventContext {
      * @param currentFact currentFact
      */
     public void putCurrentFact(Fact currentFact) {
-        putAttribute(CURRENT_FACT, currentFact);
+        put(CURRENT_FACT, currentFact);
     }
 
     /**
@@ -91,7 +91,7 @@ public class RuleContext extends DefaultEventContext {
      * @param ruleResult ruleResult
      */
     public void putResultRule(RuleResult ruleResult) {
-        putAttribute(RULE_RESULT, ruleResult);
+        put(RULE_RESULT, ruleResult);
     }
 
     /**
@@ -109,7 +109,7 @@ public class RuleContext extends DefaultEventContext {
      * @param err err
      */
     public void putErr(Throwable err) {
-        putAttribute(ERROR, err);
+        put(ERROR, err);
     }
 
     /**
@@ -127,7 +127,7 @@ public class RuleContext extends DefaultEventContext {
      * @param eventRegistry eventRegistry
      */
     public void putEventRegistry(EventRegistry eventRegistry) {
-        putAttribute(EVENT_REGISTRY, eventRegistry);
+        put(EVENT_REGISTRY, eventRegistry);
     }
 
     /**

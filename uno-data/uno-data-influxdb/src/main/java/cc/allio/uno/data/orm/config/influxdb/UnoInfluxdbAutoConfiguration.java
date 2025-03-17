@@ -51,7 +51,7 @@ public class UnoInfluxdbAutoConfiguration {
                                                                   CommandExecutorRegistry commandExecutorRegistry,
                                                                   ObjectProvider<List<Interceptor>> interceptorProvider) {
         List<Interceptor> interceptors = interceptorProvider.getIfAvailable(List::of);
-        // create command option
+        // of command option
         ExecutorOptions executorOptions =
                 ExecutorOptionsBuilder.create(DBType.INFLUXDB)
                         .address(influxdbProperties.getAddress())

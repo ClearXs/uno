@@ -86,4 +86,11 @@ public interface CreateTableOperator<T extends CreateTableOperator<T>> extends O
      * @return self
      */
     T comment(String comment);
+
+    /**
+     * get list of columns
+     *
+     * @return list of {@link ColumnDef}
+     */
+    List<ColumnDef> getColumns();
 }

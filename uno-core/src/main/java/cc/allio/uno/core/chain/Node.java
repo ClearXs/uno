@@ -1,5 +1,6 @@
 package cc.allio.uno.core.chain;
 
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -32,6 +33,21 @@ public interface Node<IN, OUT> {
      * @param context 链上下文实例
      * @return 出链数据
      */
-    Mono<OUT> execute(Chain<IN, OUT> chain, ChainContext<IN> context) throws Throwable;
+    default Mono<OUT> execute(Chain<IN, OUT> chain, ChainContext<IN> context) throws Throwable {
+        // continuous next node execution
+        return chain.proceed(context);
+    }
+
+    /**
+     * make as node execution in {@link Flux}.
+     *
+     * @param chain   the chain
+     * @param context the ChainContext.
+     * @return the {@link Flux}
+     * @throws Throwable
+     */
+    default Flux<OUT> executeMany(Chain<IN, OUT> chain, ChainContext<IN> context) throws Throwable {
+        return chain.processMany(context);
+    }
 
 }

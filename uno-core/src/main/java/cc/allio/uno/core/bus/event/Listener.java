@@ -1,8 +1,9 @@
 package cc.allio.uno.core.bus.event;
 
+import cc.allio.uno.core.bus.EventContext;
 import cc.allio.uno.core.util.id.IdGenerator;
-
-import java.util.Objects;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
 
 /**
  * 监听事件
@@ -10,7 +11,7 @@ import java.util.Objects;
  * @author j.x
  * @since 1.0
  */
-public interface Listener<C> {
+public interface Listener<C extends EventContext> {
 
     /**
      * 监听某个事件的回调
@@ -18,22 +19,24 @@ public interface Listener<C> {
      * @param event 监听的事件对象
      * @param obj   监听参数
      */
-    void listen(Node<C> event, C obj) ;
+    void listen(Node<C> event, C obj);
 
     /**
      * 获取事件类型
      *
-     * @return {@link BusEvent}Class对象
+     * @return {@link Event}Class对象
      */
-    Class<? extends BusEvent> getEventType();
+    Class<? extends Event> getEventType();
 
     /**
      * Listener装饰器，存放ListenerId
      *
      * @param <C>
      */
-    class IdListener<C> implements Listener<C> {
+    @EqualsAndHashCode(of = "listenerId")
+    class IdListener<C extends EventContext> implements Listener<C> {
 
+        @Getter
         private final long listenerId;
 
         private final Listener<C> listener;
@@ -49,25 +52,8 @@ public interface Listener<C> {
         }
 
         @Override
-        public Class<? extends BusEvent> getEventType() {
+        public Class<? extends Event> getEventType() {
             return listener.getEventType();
-        }
-
-        public long getListenerId() {
-            return listenerId;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-            IdListener<?> that = (IdListener<?>) o;
-            return listenerId == that.listenerId;
-        }
-
-        @Override
-        public int hashCode() {
-            return Objects.hash(listenerId);
         }
     }
 }

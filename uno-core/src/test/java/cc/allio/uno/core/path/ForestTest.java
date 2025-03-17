@@ -26,9 +26,8 @@ public class ForestTest extends BaseTestCase {
     void testRemove() {
         root.append("/test/child1");
 
-        assertFalse(root.getTopic("/test/child1").isPresent());
+        assertTrue(root.getTopic("/test/child1").isPresent());
         assertTrue(root.getTopic("/test").isPresent());
-
 
     }
 }

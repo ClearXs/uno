@@ -41,7 +41,7 @@ public abstract class BaseCommandExecutorLoader<E extends AggregateCommandExecut
     }
 
     /**
-     * sub-class implementation, base on {@link Interceptor} create {@link AggregateCommandExecutor} sub-class-instance
+     * sub-class implementation, base on {@link Interceptor} of {@link AggregateCommandExecutor} sub-class-instance
      *
      * @param interceptors the list of interceptors
      * @return {@link AggregateCommandExecutor} instance
@@ -49,7 +49,7 @@ public abstract class BaseCommandExecutorLoader<E extends AggregateCommandExecut
     protected abstract E onLoad(List<Interceptor> interceptors);
 
     /**
-     * sub-class implementation, base on {@link ExecutorOptions} create {@link AggregateCommandExecutor} sub-class-instance
+     * sub-class implementation, base on {@link ExecutorOptions} of {@link AggregateCommandExecutor} sub-class-instance
      *
      * @param executorOptions the {@link ExecutorOptions}
      * @return {@link AggregateCommandExecutor} instance

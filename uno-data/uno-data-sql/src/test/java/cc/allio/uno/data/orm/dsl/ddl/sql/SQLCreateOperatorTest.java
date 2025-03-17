@@ -2,6 +2,7 @@ package cc.allio.uno.data.orm.dsl.ddl.sql;
 
 import cc.allio.uno.data.orm.dsl.ColumnDef;
 import cc.allio.uno.data.orm.dsl.DSLName;
+import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.opeartorgroup.Operators;
 import cc.allio.uno.data.orm.dsl.OperatorKey;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
@@ -11,6 +12,8 @@ import cc.allio.uno.data.orm.dsl.type.DataType;
 import cc.allio.uno.data.test.model.User;
 import cc.allio.uno.test.BaseTestCase;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
 
 public class SQLCreateOperatorTest extends BaseTestCase {
 
@@ -93,4 +96,27 @@ public class SQLCreateOperatorTest extends BaseTestCase {
                 ")", sql);
     }
 
+    @Test
+    void testReversePgSQLCreateTable() {
+        CreateTableOperator<?> createTableOperator = Operators.getOperator(CreateTableOperator.class, OperatorKey.SQL, DBType.POSTGRESQL);
+        String sql = "CREATE TABLE t_users (\n" +
+                "\tid int8 PRIMARY KEY,\n" +
+                "\tcreate_user int8,\n" +
+                "\tcreate_dept int8,\n" +
+                "\tcreate_time timestamp,\n" +
+                "\tupdate_user int8,\n" +
+                "\tupdate_time timestamp,\n" +
+                "\tis_deleted int(64),\n" +
+                "\tname varchar(64) NULL,\n" +
+                "\trole_id int8 NULL\n" +
+                ")";
+        createTableOperator.parse(sql);
+        Table table = createTableOperator.getTable();
+        assertNotNull(table);
+
+        List<ColumnDef> columns = createTableOperator.getColumns();
+
+        assertEquals(9, columns.size());
+
+    }
 }

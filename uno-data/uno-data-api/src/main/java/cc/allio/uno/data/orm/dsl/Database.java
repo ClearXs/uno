@@ -25,7 +25,7 @@ public class Database implements Meta<Database> {
     }
 
     /**
-     * create {@link Database} instance
+     * of {@link Database} instance
      *
      * @param dslName the dsl name
      * @return {@link Database} instance

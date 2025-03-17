@@ -1,6 +1,6 @@
 package cc.allio.uno.rule.api.vistor;
 
-import cc.allio.uno.core.datastructure.tree.Element;
+import cc.allio.uno.core.util.tree.Element;
 
 /**
  * 包含规则表达式的结点

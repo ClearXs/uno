@@ -1,6 +1,6 @@
 package cc.allio.uno.rule.drools;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.rule.api.Action;
 import cc.allio.uno.rule.api.Fact;
 import cc.allio.uno.rule.api.event.RuleContext;
@@ -116,14 +116,14 @@ public class RuleIndexTest {
         ImportDescr importMapDescr = new ImportDescr(Map.class.getName());
         ImportDescr importRuleValueDescr = new ImportDescr(Fact.class.getName());
         ImportDescr importActionValueDescr = new ImportDescr(Action.class.getName());
-        ImportDescr importDroolsValueDescr = new ImportDescr(OptionalContext.class.getName());
+        ImportDescr importDroolsValueDescr = new ImportDescr(OptionalMap.class.getName());
         pkgDescr.addAllImports(Lists.newArrayList(importMapDescr, importRuleValueDescr, importActionValueDescr, importDroolsValueDescr));
         GlobalDescr globalDescr = new GlobalDescr("action", Action.class.getName());
         pkgDescr.addGlobal(globalDescr);
         final RuleDescr ruleDescr = new RuleDescr("rule a");
         ruleDescr.setConsequence(
                 "       DroolsContext context = new DroolsContext();\n" +
-                        "        context.putAttribute(\"drools\", drools);\n" +
+                        "        context.put(\"drools\", drools);\n" +
                         "        action.onTrigger(context);");
     }
 

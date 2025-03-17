@@ -20,6 +20,6 @@ public class NoMatchEvent extends BaseEvent {
 
     @Override
     public TopicKey getTopicKey() {
-        return TopicKey.create(RULE_NO_MATCH_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
+        return TopicKey.of(RULE_NO_MATCH_EVENT_TOPIC_PREFIX, new String[]{String.valueOf(ruleResult.getId())});
     }
 }

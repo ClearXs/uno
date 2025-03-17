@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.elasticsearch.internal;
 
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 import lombok.Getter;
 import lombok.Setter;
 

@@ -5,8 +5,8 @@ import cc.allio.uno.core.util.Requires;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.mongodb.ddl.MongodbCreateCollectionOperator;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
-import cc.allio.uno.data.orm.executor.ResultGroup;
-import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultRow;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.CTOInnerCommandExecutor;
@@ -18,7 +18,7 @@ import lombok.extern.slf4j.Slf4j;
 import java.util.Map;
 
 /**
- * mongodb create collection command executor
+ * mongodb of collection command executor
  *
  * @author j.x
  * @see CreateCollectionOperation
@@ -46,7 +46,7 @@ public class MongodbCreateCollectionCommandExecutor implements CTOInnerCommandEx
             database.createCollection(fromColl.getName().format());
             builder.value(true);
         } catch (Throwable ex) {
-            log.error("mongodb create collection has error, the from collection is {}", fromColl.getName().format(), ex);
+            log.error("mongodb of collection has error, the from collection is {}", fromColl.getName().format(), ex);
             builder.value(false);
         }
         ResultRow resultRow = builder.build();

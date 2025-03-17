@@ -33,7 +33,7 @@ public class SequentialEventBus extends BaseEventBus<SequentialContext> implemen
     public void afterPropertiesSet() {
         SubscriptionProperties properties = applicationContext.getBean(SubscriptionProperties.class);
         Flux.fromIterable(Subscription.ofList(properties.getSequential()))
-                .flatMap(topics::link)
+                .flatMap(subscription -> topics.link(subscription.getTopicKey(), this))
                 .onErrorResume(error -> {
                     log.error("topic link on error return empty", error);
                     return Mono.empty();

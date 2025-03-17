@@ -1,7 +1,7 @@
 package cc.allio.uno.core.bus;
 
 import cc.allio.uno.core.StringPool;
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import com.google.common.collect.Maps;
 import lombok.NonNull;
 import org.springframework.context.ApplicationContext;
@@ -27,7 +27,7 @@ public class DefaultEventContext implements EventContext {
         this(Maps.newConcurrentMap());
     }
 
-    public DefaultEventContext(OptionalContext optionalContext) {
+    public DefaultEventContext(OptionalMap<String> optionalContext) {
         this(optionalContext.getAll());
     }
 
@@ -54,8 +54,13 @@ public class DefaultEventContext implements EventContext {
     }
 
     @Override
-    public void putAttribute(String key, Object obj) {
+    public void put(String key, Object obj) {
         attributes.put(key, obj);
+    }
+
+    @Override
+    public boolean remove(String s) {
+        return attributes.remove(s) != null;
     }
 
     @Override

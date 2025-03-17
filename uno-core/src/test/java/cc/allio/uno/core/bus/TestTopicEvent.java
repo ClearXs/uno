@@ -1,6 +1,6 @@
 package cc.allio.uno.core.bus;
 
-import cc.allio.uno.core.bus.event.BusEvent;
+import cc.allio.uno.core.bus.event.Event;
 
-public interface TestTopicEvent extends BusEvent {
+public interface TestTopicEvent extends Event {
 }

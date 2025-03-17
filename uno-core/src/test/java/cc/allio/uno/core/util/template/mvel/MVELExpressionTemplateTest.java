@@ -19,7 +19,7 @@ public class MVELExpressionTemplateTest extends BaseTestCase {
         person.setName("1");
         email.setName("2");
         person.setEmail(email);
-        templateContext.putAttribute("person", person);
+        templateContext.put("person", person);
         String resolved = mvelExpressionTemplate.parseTemplate(template, templateContext);
 
         assertEquals("Hello, my name is 1 email 2", resolved);
@@ -30,7 +30,7 @@ public class MVELExpressionTemplateTest extends BaseTestCase {
         String template = "Hello, @{name}";
         MVELExpressionTemplate mvelExpressionTemplate = ExpressionTemplate.createMVEL();
         TemplateContext templateContext = new TemplateContext();
-        templateContext.putAttribute("name", "测试");
+        templateContext.put("name", "测试");
         String out = mvelExpressionTemplate.parseTemplate(template, templateContext);
         assertEquals("Hello, 测试", out);
     }
@@ -47,7 +47,7 @@ public class MVELExpressionTemplateTest extends BaseTestCase {
         Person person = new Person();
         person.setName("ClickOver");
         templateContext.addImport(Person.class);
-        templateContext.putAttribute("person", person);
+        templateContext.put("person", person);
         String r2 = mvelExpressionTemplate.parseTemplate(template2, templateContext);
         System.out.println(r2);
     }

@@ -5,8 +5,8 @@ import cc.allio.uno.core.util.Requires;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.mongodb.dml.MongodbInsertOperator;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
-import cc.allio.uno.data.orm.executor.ResultGroup;
-import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultRow;
 import cc.allio.uno.data.orm.executor.handler.BoolResultHandler;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.IOInnerCommandExecutor;
@@ -15,7 +15,6 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.result.InsertManyResult;
 import lombok.extern.slf4j.Slf4j;
-import org.bson.BsonArray;
 import org.bson.Document;
 
 import java.util.List;

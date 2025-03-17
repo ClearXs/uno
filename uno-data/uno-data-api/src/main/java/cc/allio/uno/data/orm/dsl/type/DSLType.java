@@ -19,6 +19,8 @@ import java.util.Optional;
  */
 public interface DSLType extends EqualsTo<DSLType> {
 
+    // ====================== number ======================
+
     DSLType BIGINT = DefaultDSLType.BIGINT;
     DSLType SMALLINT = DefaultDSLType.SMALLINT;
     DSLType INT = DefaultDSLType.INT;
@@ -29,13 +31,15 @@ public interface DSLType extends EqualsTo<DSLType> {
     DSLType DOUBLE = DefaultDSLType.DOUBLE;
     DSLType FLOAT = DefaultDSLType.FLOAT;
 
-    // ====================== 时间型 ======================
+    // ====================== time ======================
+
     DSLType TIME = DefaultDSLType.TIME;
     DSLType TIMESTAMP = DefaultDSLType.TIMESTAMP;
     DSLType DATE = DefaultDSLType.DATE;
     DSLType DECIMAL = DefaultDSLType.DECIMAL;
 
-    // ====================== 字符型 ======================
+    // ====================== character ======================
+
     DSLType CHAR = DefaultDSLType.CHAR;
     DSLType VARCHAR = DefaultDSLType.VARCHAR;
     DSLType NVARCHAR = DefaultDSLType.NVARCHAR;
@@ -43,13 +47,20 @@ public interface DSLType extends EqualsTo<DSLType> {
     DSLType LONGNVARCHAR = DefaultDSLType.LONGNVARCHAR;
     DSLType VARBINARY = DefaultDSLType.VARBINARY;
     DSLType LONGVARBINARY = DefaultDSLType.LONGVARBINARY;
+    DSLType TEXT = DefaultDSLType.TEXT;
 
-    // ====================== 其他类型 ======================
+    // ====================== boolean ======================
+
     DSLType BOOLEAN = DefaultDSLType.BOOLEAN;
 
     // ====================== 高级类型 ======================
+
     DSLType OBJECT = DefaultDSLType.OBJECT;
     DSLType ARRAY = DefaultDSLType.ARRAY;
+
+    DSLType JSON = DefaultDSLType.JSON;
+    DSLType JSONB = DefaultDSLType.JSONB;
+
 
     /**
      * 获取sql type name
@@ -193,13 +204,18 @@ public interface DSLType extends EqualsTo<DSLType> {
         LONGNVARCHAR("longnvarchar", Types.LONGNVARCHAR, 1024, null),
         VARBINARY("varbinary", Types.VARBINARY, 1024, null),
         LONGVARBINARY("longvarchar", Types.LONGVARBINARY, 2048, null),
+        TEXT("text", Types.LONGNVARCHAR, null, null),
 
         // ====================== 其他类型 ======================
         BOOLEAN("boolean", Types.BOOLEAN, 0, null),
 
         // ====================== 高级类型 ======================
         OBJECT("object", Types.JAVA_OBJECT, null, null),
-        ARRAY("array", Types.ARRAY, null, null);
+        ARRAY("array", Types.ARRAY, null, null),
+
+        // json
+        JSON("json", Types.OTHER, null, null),
+        JSONB("jsonb", Types.OTHER, null, null);
 
         private final String name;
         private final int jdbcType;

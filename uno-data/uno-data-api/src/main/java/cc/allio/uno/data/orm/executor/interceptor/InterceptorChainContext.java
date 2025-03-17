@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.interceptor;
 
-import cc.allio.uno.core.chain.ChainContext;
+import cc.allio.uno.core.chain.DefaultChainContext;
 
 /**
  * 拦截器链上下文
@@ -8,17 +8,9 @@ import cc.allio.uno.core.chain.ChainContext;
  * @author j.x
  * @since 1.1.7
  */
-public class InterceptorChainContext implements ChainContext<InterceptorAttributes> {
-
-    private final InterceptorAttributes attributes;
+public class InterceptorChainContext extends DefaultChainContext<InterceptorAttributes> {
 
     public InterceptorChainContext(InterceptorAttributes attributes) {
-        this.attributes = attributes;
+        super(attributes);
     }
-
-    @Override
-    public InterceptorAttributes getIN() {
-        return attributes;
-    }
-
 }

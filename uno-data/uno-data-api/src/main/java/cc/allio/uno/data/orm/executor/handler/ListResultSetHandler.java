@@ -1,6 +1,6 @@
 package cc.allio.uno.data.orm.executor.handler;
 
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 
 import java.util.List;
 import java.util.function.Function;

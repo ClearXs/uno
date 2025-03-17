@@ -88,10 +88,10 @@ public final class Forest<T> {
     }
 
     public String[] getTopics() {
-        if (forests != null) {
-            return forests;
+        if (forests == null) {
+            this.forests = ForestMatcher.split(getTopic());
         }
-        return forests = ForestMatcher.split(getTopic());
+        return forests;
     }
 
     public String getTopic() {
@@ -110,11 +110,11 @@ public final class Forest<T> {
     }
 
     public T getSubscriberOrSubscribe(Supplier<T> supplier) {
-        if (subscribers.size() > 0) {
+        if (!subscribers.isEmpty()) {
             return subscribers.keySet().iterator().next();
         }
         synchronized (this) {
-            if (subscribers.size() > 0) {
+            if (!subscribers.isEmpty()) {
                 return subscribers.keySet().iterator().next();
             }
             T sub = supplier.get();
@@ -153,7 +153,7 @@ public final class Forest<T> {
         return unsub;
     }
 
-    public final void unsubscribe(Predicate<T> predicate) {
+    public void unsubscribe(Predicate<T> predicate) {
         for (Map.Entry<T, AtomicInteger> entry : this.subscribers.entrySet()) {
             if (predicate.test(entry.getKey()) && entry.getValue().decrementAndGet() <= 0) {
                 this.subscribers.remove(entry.getKey());
@@ -161,7 +161,11 @@ public final class Forest<T> {
         }
     }
 
-    public final void unsubscribeAll() {
+    public void unsubscribeAll() {
+        for (T subscriber : subscribers.keySet()) {
+            if (subscriber instanceof Clean clean)
+                clean.clean();
+        }
         this.subscribers.clear();
     }
 
@@ -213,7 +217,7 @@ public final class Forest<T> {
         return "topic: " + getTopic() + ", subscribers: " + subscribers.size() + ", children: " + child.size();
     }
 
-    protected boolean match(String[] pars) {
+    private boolean match(String[] pars) {
         return ForestMatcher.match(getTopics(), pars)
                 || ForestMatcher.match(pars, getTopics());
     }

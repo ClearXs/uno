@@ -2,8 +2,8 @@ package cc.allio.uno.data.orm.executor.handler;
 
 import cc.allio.uno.core.type.Types;
 import cc.allio.uno.data.orm.dsl.DSLName;
-import cc.allio.uno.data.orm.executor.ResultGroup;
-import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultRow;
 import com.google.common.collect.Lists;
 
 import java.util.List;

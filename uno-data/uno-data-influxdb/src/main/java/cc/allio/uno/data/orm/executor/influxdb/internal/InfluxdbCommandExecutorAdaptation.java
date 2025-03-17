@@ -42,7 +42,7 @@ public class InfluxdbCommandExecutorAdaptation {
 
 
     /**
-     * get {@link Organization}, if empty according {@link InfluxDBClientOptions#getOrg()} create new {@link Organization}
+     * get {@link Organization}, if empty according {@link InfluxDBClientOptions#getOrg()} of new {@link Organization}
      *
      * @return organization
      */

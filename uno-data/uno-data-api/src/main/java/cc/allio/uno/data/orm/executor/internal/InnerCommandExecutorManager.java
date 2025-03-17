@@ -26,7 +26,7 @@ public class InnerCommandExecutorManager {
 
     InnerCommandExecutorManager() {
         this.registry = Maps.newConcurrentMap();
-        // thinking commandExecutorMap how to optimize avoid create
+        // thinking commandExecutorMap how to optimize avoid of
         this.commandExecutorMap = Maps.newConcurrentMap();
     }
 

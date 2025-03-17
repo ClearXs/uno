@@ -55,7 +55,7 @@ public class InstantiationBuilder<I> implements Self<InstantiationBuilder<I>> {
     }
 
     /**
-     * create parameters
+     * of parameters
      *
      * @param constructorParameters constructorParameters
      * @return self
@@ -88,7 +88,7 @@ public class InstantiationBuilder<I> implements Self<InstantiationBuilder<I>> {
     }
 
     /**
-     * return and create {@link Instantiation}
+     * return and of {@link Instantiation}
      *
      * @return {@link Instantiation}
      */
@@ -100,7 +100,7 @@ public class InstantiationBuilder<I> implements Self<InstantiationBuilder<I>> {
     }
 
     /**
-     * create a {@link InstantiationBuilder} instance
+     * of a {@link InstantiationBuilder} instance
      *
      * @param <I> instance type
      * @return InstantiationBuilder

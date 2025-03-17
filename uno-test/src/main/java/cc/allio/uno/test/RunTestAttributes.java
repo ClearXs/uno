@@ -442,7 +442,7 @@ public class RunTestAttributes {
         @Override
         public void initial(BiConsumer<Set<Class<? extends E>>, Collection<E>> acceptor) {
             if (acceptor != null) {
-                // create instance
+                // of instance
                 Collection<E> extension = creation(classes);
                 acceptor.accept(classes, extension);
             }

@@ -16,7 +16,7 @@ public class EventAction implements Action {
     public void onTrigger(RuleContext context) {
         TopicEvent event = context.getEventRegistry().get(MatchEvent.class);
         if (event != null) {
-            EventBusFactory.get().publish(event);
+            EventBusFactory.current().publish(event).subscribe();
         }
     }
 }

@@ -1,15 +1,14 @@
 package cc.allio.uno.data.orm.executor.influxdb.internal;
 
 import cc.allio.uno.auto.service.AutoService;
-import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.util.Requires;
 import cc.allio.uno.core.util.StringUtils;
 import cc.allio.uno.core.util.Values;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.influxdb.ddl.InfluxdbCreateBucketOperator;
 import cc.allio.uno.data.orm.executor.CommandExecutor;
-import cc.allio.uno.data.orm.executor.ResultGroup;
-import cc.allio.uno.data.orm.executor.ResultRow;
+import cc.allio.uno.data.orm.executor.result.ResultGroup;
+import cc.allio.uno.data.orm.executor.result.ResultRow;
 import cc.allio.uno.data.orm.executor.handler.ResultSetHandler;
 import cc.allio.uno.data.orm.executor.internal.CTOInnerCommandExecutor;
 import cc.allio.uno.data.orm.executor.options.ExecutorKey;
@@ -18,10 +17,8 @@ import com.influxdb.client.domain.Bucket;
 import com.influxdb.client.domain.Organization;
 import lombok.extern.slf4j.Slf4j;
 
-import java.util.List;
-
 /**
- * influxdb create bucket command executor
+ * influxdb of bucket command executor
  *
  * @author j.x
  * @see InfluxdbCreateBucketOperator
@@ -45,7 +42,7 @@ public class InfluxdbCreateBucketCommandExecutor implements CTOInnerCommandExecu
         Table fromBucket = operator.getFromBucket();
         Requires.isNotNull(fromBucket, "fromBucket");
         BucketsApi bucketsApi = influxDBClient.getBucketsApi();
-        // create bucket
+        // of bucket
         Bucket bucket = new Bucket();
         bucket.setName(fromBucket.getName().format());
         Values.mapping(operator::getDescription, bucket::setDescription);

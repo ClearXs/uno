@@ -1,6 +1,7 @@
 package cc.allio.uno.data.orm.dsl.dml;
 
 import cc.allio.uno.core.function.lambda.MethodReferenceColumn;
+import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.id.IdGenerator;
 import cc.allio.uno.data.orm.dsl.*;
 import cc.allio.uno.data.orm.dsl.helper.PojoWrapper;
@@ -117,8 +118,11 @@ public interface InsertOperator<T extends InsertOperator<T>> extends PrepareOper
         PojoWrapper<P> pojoWrapper = PojoWrapper.getInstance(pojo);
         String pkName = pojoWrapper.getPkColumn().getDslName().format(DSLName.HUMP_FEATURE);
         ColumnDef pkColumn = pojoWrapper.getPkColumn();
-        Object pkValue = pkColumn.castValue(IdGenerator.defaultGenerator().getNextId());
-        pojoWrapper.setForceCoverage(pkName, false, pkValue);
+        Object pkValue = pojoWrapper.getValueByColumn(pkColumn);
+        if (ObjectUtils.isEmpty(pkValue)) {
+            pkValue = pkColumn.castValue(IdGenerator.defaultGenerator().getNextId());
+            pojoWrapper.setForceCoverage(pkName, false, pkValue);
+        }
         Collection<DSLName> columns = pojoWrapper.getColumnDSLName();
         List<Object> values = pojoWrapper.getColumnValues();
         return columns(columns).values(values);

@@ -12,7 +12,7 @@
     <groupId>cc.allio.uno</groupId>
     <artifactId>uno-parent</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <modelVersion>4.0.0</modelVersion>
     <description>Utility for large applications (Systematic use of Spring)</description>
     <url>${official.url}</url>
@@ -43,15 +43,13 @@
         <module>uno-test</module>
         <module>uno-starters</module>
         <module>uno-auto</module>
-        <module>uno-web</module>
         <module>uno-data</module>
         <module>uno-gis</module>
         <module>uno-rule</module>
-        <module>uno-http</module>
         <module>uno-kafka</module>
         <module>uno-netty</module>
         <module>uno-sequential</module>
-        <module>uno-websocket</module>
+        <module>uno-protocol</module>
     </modules>
 
     <properties>
@@ -71,17 +69,17 @@
         <jakarta-annotation.version>2.1.1</jakarta-annotation.version>
 
         <!-- 统一版本管理 -->
-        <uno.version>1.2.0</uno.version>
+        <uno.version>1.2.1</uno.version>
         <!-- 序列化框架 -->
         <protostuff.version>1.5.9</protostuff.version>
         <!-- google SPI -->
         <auto-service.version>1.1.0</auto-service.version>
         <!-- 代理相关 -->
-        <byte-buddy.version>1.12.2</byte-buddy.version>
+        <byte-buddy.version>1.17.0</byte-buddy.version>
         <cglib.version>3.3.0</cglib.version>
         <!-- 单元测试框架 -->
         <junit-jupiter.version>5.11.0</junit-jupiter.version>
-        <mockito.version>5.12.0</mockito.version>
+        <mockito.version>5.15.2</mockito.version>
         <!-- 多线程单元测试 -->
         <concurrentunit.version>0.4.6</concurrentunit.version>
         <guava.version>33.0.0-jre</guava.version>
@@ -120,6 +118,8 @@
         <maven-gpp-verson>3.2.4</maven-gpp-verson>
         <maven-plugin.version>3.13.0</maven-plugin.version>
         <maven-jar-plugin.version>3.1.0</maven-jar-plugin.version>
+
+        <vertx.version>4.5.12</vertx.version>
     </properties>
 
     <dependencies>
@@ -179,6 +179,13 @@
                 <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-bom</artifactId>
                 <version>${uno.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>io.vertx</groupId>
+                <artifactId>vertx-dependencies</artifactId>
+                <version>${vertx.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>

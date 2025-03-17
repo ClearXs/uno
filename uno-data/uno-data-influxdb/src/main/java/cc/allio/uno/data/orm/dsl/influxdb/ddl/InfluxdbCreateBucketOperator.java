@@ -14,12 +14,13 @@ import com.influxdb.client.domain.Label;
 import com.influxdb.client.domain.SchemaType;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.UnaryOperator;
 
 /**
- * influxdb create bucket operator
+ * influxdb of bucket operator
  *
  * @author j.x
  * @since 1.1.8
@@ -39,8 +40,11 @@ public class InfluxdbCreateBucketOperator implements CreateTableOperator<Influxd
     @Getter
     private String description;
 
+    private List<ColumnDef> columnDefs = new ArrayList<>();
+
     @Override
     public InfluxdbCreateBucketOperator column(ColumnDef columnDef) {
+        columnDefs.add(columnDef);
         // nothing to do
         return self();
     }
@@ -49,6 +53,11 @@ public class InfluxdbCreateBucketOperator implements CreateTableOperator<Influxd
     public InfluxdbCreateBucketOperator comment(String comment) {
         this.description = comment;
         return self();
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return columnDefs;
     }
 
     @Override

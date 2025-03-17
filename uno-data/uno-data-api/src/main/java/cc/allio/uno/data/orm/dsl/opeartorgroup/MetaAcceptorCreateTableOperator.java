@@ -39,6 +39,11 @@ public class MetaAcceptorCreateTableOperator implements CreateTableOperator<Meta
     }
 
     @Override
+    public List<ColumnDef> getColumns() {
+        return actual.getColumns();
+    }
+
+    @Override
     public MetaAcceptorCreateTableOperator from(Table table) {
         metaAcceptorSet.adapt(table);
         actual.from(table);

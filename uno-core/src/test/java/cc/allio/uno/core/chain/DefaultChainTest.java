@@ -55,4 +55,16 @@ class DefaultChainTest extends BaseTestCase {
         assertEquals("default", context.getAttribute().get("test"));
     }
 
+    @Test
+    void testProcessMany() {
+        ManyNode manyNode = new ManyNode();
+        DefaultChain<Integer, Integer> chain = new DefaultChain<>(Arrays.asList(manyNode));
+
+        chain.processMany(new DefaultChainContext<>(0))
+                .as(StepVerifier::create)
+                .expectNext(1)
+                .expectNext(2)
+                .expectNext(3)
+                .verifyComplete();
+    }
 }

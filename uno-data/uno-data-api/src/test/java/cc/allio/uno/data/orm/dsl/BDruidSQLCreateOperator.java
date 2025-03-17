@@ -4,6 +4,7 @@ import cc.allio.uno.auto.service.AutoService;
 import cc.allio.uno.data.orm.dsl.ddl.CreateTableOperator;
 import cc.allio.uno.data.orm.dsl.type.DBType;
 
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 @AutoService(CreateTableOperator.class)
@@ -57,5 +58,10 @@ public class BDruidSQLCreateOperator implements CreateTableOperator<BDruidSQLCre
     @Override
     public BDruidSQLCreateOperator comment(String comment) {
         return null;
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return List.of();
     }
 }

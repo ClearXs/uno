@@ -1,6 +1,6 @@
 package cc.allio.uno.starter.websocket;
 
-import cc.allio.uno.websocket.WebSocketProperties;
+import cc.allio.uno.websocket.WsProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +14,7 @@ import org.springframework.web.socket.server.standard.ServerEndpointExporter;
  * @since 1.0
  */
 @EnableWebSocket
-@EnableConfigurationProperties(WebSocketProperties.class)
+@EnableConfigurationProperties(WsProperties.class)
 @Configuration
 public class WebSocketAutoConfiguration {
 

@@ -319,6 +319,29 @@ public class JsonUtils {
     }
 
     /**
+     * 读取集合
+     *
+     * @param <K>        泛型
+     * @param <V>        泛型
+     * @param content    bytes
+     * @param keyClass   key类型
+     * @param valueClass 值类型
+     * @return 集合 map
+     */
+    public static <K, V> List<Map<K, V>> reaListMap(@Nullable String content, Class<?> keyClass, Class<?> valueClass) {
+        if (ObjectUtils.isEmpty(content)) {
+            return Collections.emptyList();
+        }
+        try {
+            MapType mapType = getJsonMapper().getTypeFactory().constructMapType(Map.class, keyClass, valueClass);
+            CollectionLikeType collectionLikeType = getJsonMapper().getTypeFactory().constructCollectionLikeType(List.class, mapType);
+            return getJsonMapper().readValue(content, collectionLikeType);
+        } catch (IOException e) {
+            throw Exceptions.unchecked(e);
+        }
+    }
+
+    /**
      * To map map.
      *
      * @param content the content

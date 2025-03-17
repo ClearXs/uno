@@ -1,6 +1,6 @@
 package cc.allio.uno.core.reflect;
 
-import cc.allio.uno.core.api.OptionalContext;
+import cc.allio.uno.core.util.map.OptionalMap;
 import cc.allio.uno.core.util.ClassUtils;
 import cc.allio.uno.core.util.ObjectUtils;
 import cc.allio.uno.core.util.Values;
@@ -38,7 +38,7 @@ public class Instantiation<I> {
     @Getter
     private Class<? extends I>[] waitForInstanceClasses;
     // 构造器参数集合
-    private final OptionalContext constructorParameters;
+    private final OptionalMap<String> constructorParameters;
     // 发生错误时实例化异常值
     private final Supplier<? extends I> ifErrorDefaultValue;
     // 实例化后是否排序异常值
@@ -53,7 +53,7 @@ public class Instantiation<I> {
                   Supplier<? extends I> ifErrorDefaultValue,
                   boolean excludeNull) {
         this.waitForInstanceClasses = waitForInstanceClasses;
-        this.constructorParameters = OptionalContext.immutable(Values.expand(constructorParameters));
+        this.constructorParameters = OptionalMap.immutable(Values.expand(constructorParameters));
         this.ifErrorDefaultValue = ifErrorDefaultValue;
         this.excludeNull = excludeNull;
         this.features = Lists.newArrayList();
@@ -141,7 +141,7 @@ public class Instantiation<I> {
                     ClassUtils.setAccessible(constructor);
                     return (I) constructor.newInstance(args);
                 } catch (Throwable ex) {
-                    log.error("New instance be problem by constructor. now try to empty parameter create instance, " +
+                    log.error("New instance be problem by constructor. now try to empty parameter of instance, " +
                             "the class {} parameters {}", clazz.getName(), args, ex);
                     // 尝试以空参数进行创建
                     return newEmptyParametersInstance(clazz);

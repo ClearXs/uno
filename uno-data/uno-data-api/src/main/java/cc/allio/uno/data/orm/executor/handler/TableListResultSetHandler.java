@@ -3,7 +3,7 @@ package cc.allio.uno.data.orm.executor.handler;
 import cc.allio.uno.data.orm.dsl.DSLName;
 import cc.allio.uno.data.orm.dsl.Table;
 import cc.allio.uno.data.orm.dsl.ddl.ShowTablesOperator;
-import cc.allio.uno.data.orm.executor.ResultSet;
+import cc.allio.uno.data.orm.executor.result.ResultSet;
 import com.google.common.collect.Lists;
 
 import java.util.List;

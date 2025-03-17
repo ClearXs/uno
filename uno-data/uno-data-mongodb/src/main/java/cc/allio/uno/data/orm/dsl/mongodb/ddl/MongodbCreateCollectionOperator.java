@@ -12,10 +12,12 @@ import lombok.Getter;
 import org.bson.BsonDocument;
 import org.bson.BsonString;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.function.UnaryOperator;
 
 /**
- * mongodb create collection operator
+ * mongodb of collection operator
  *
  * @author j.x
  * @since 1.1.7
@@ -26,6 +28,7 @@ import java.util.function.UnaryOperator;
 public class MongodbCreateCollectionOperator implements CreateTableOperator<MongodbCreateCollectionOperator> {
 
     private Table fromColl;
+    private List<ColumnDef> columnDefs = new ArrayList<>();
 
     // @see https://www.mongodb.com/docs/mongodb-vscode/playground-databases/
     @Override
@@ -33,7 +36,7 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
         if (fromColl == null) {
             throw Exceptions.unNull("from coll is null");
         }
-        BsonDocument bson = new BsonDocument("create", new BsonString(fromColl.getName().format()));
+        BsonDocument bson = new BsonDocument("of", new BsonString(fromColl.getName().format()));
         return bson.toJson();
     }
 
@@ -76,6 +79,7 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
 
     @Override
     public MongodbCreateCollectionOperator column(ColumnDef columnDef) {
+        columnDefs.add(columnDef);
         // nothing to do
         return self();
     }
@@ -84,5 +88,10 @@ public class MongodbCreateCollectionOperator implements CreateTableOperator<Mong
     public MongodbCreateCollectionOperator comment(String comment) {
         // nothing to do
         return self();
+    }
+
+    @Override
+    public List<ColumnDef> getColumns() {
+        return columnDefs;
     }
 }

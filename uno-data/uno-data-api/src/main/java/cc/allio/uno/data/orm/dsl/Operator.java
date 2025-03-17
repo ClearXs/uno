@@ -22,11 +22,11 @@ import java.util.function.UnaryOperator;
  * DSL Operator
  *
  * <p>
- *     DSL means Domain Specific Language. description Data Operation.
+ * DSL means Domain Specific Language. description Data Operation.
  * </p>
  *
  * <p>
- *     it fulfil before-current-catch-post model.
+ * it fulfills before-current-catch-post model.
  *     <ol>
  *         <li>the before {@link #getBeforeOperatorList()}</li>
  *         <li>the current</li>
@@ -39,7 +39,6 @@ import java.util.function.UnaryOperator;
  * </p>
  *
  * @author j.x
- * @since 1.1.4
  * @see DeleteOperator
  * @see InsertOperator
  * @see QueryOperator
@@ -52,6 +51,7 @@ import java.util.function.UnaryOperator;
  * @see ShowTablesOperator
  * @see UnrecognizedOperator
  * @see Operators
+ * @since 1.1.4
  */
 public interface Operator<T extends Operator<T>> extends Self<T> {
 
@@ -90,7 +90,7 @@ public interface Operator<T extends Operator<T>> extends Self<T> {
     /**
      * support operatorFunc make be able customization.
      *
-     * @param operatorFunc create new self operatorFunc, and invoker customize some operate..
+     * @param operatorFunc of new self operatorFunc, and invoker customize some operate..
      * @return self
      */
     T customize(UnaryOperator<T> operatorFunc);

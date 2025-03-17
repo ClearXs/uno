@@ -21,7 +21,7 @@ public interface InstantiationFeature<I> {
     void execute(Instantiation<I> instantiation);
 
     /**
-     * create a sort feature
+     * of a sort feature
      *
      * @param <I> instance type
      * @return sort instantiation feature
@@ -31,7 +31,7 @@ public interface InstantiationFeature<I> {
     }
 
     /**
-     * create a callback feature
+     * of a callback feature
      *
      * @param <I> instance type
      * @return callback instantiation feature
@@ -41,7 +41,7 @@ public interface InstantiationFeature<I> {
     }
 
     /**
-     * create a deduplicate feature
+     * of a deduplicate feature
      *
      * @param <I> instance type
      * @return deduplicate instantiation feature

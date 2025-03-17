@@ -6,7 +6,7 @@
     <groupId>cc.allio.uno</groupId>
     <artifactId>uno-bom</artifactId>
     <packaging>pom</packaging>
-    <version>1.2.0</version>
+    <version>1.2.1</version>
     <description>Bill of material of uno</description>
     <modelVersion>4.0.0</modelVersion>
     <url>${official.url}</url>
@@ -39,7 +39,7 @@
         <scm.tag>HEAD</scm.tag>
         <official.url>https://github.com/ClearXs/uno</official.url>
 
-        <uno.version>1.2.0</uno.version>
+        <uno.version>1.2.1</uno.version>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -167,11 +167,6 @@
             <dependency>
                 <groupId>cc.allio.uno</groupId>
                 <artifactId>uno-data-sql</artifactId>
-                <version>${uno.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>cc.allio.uno</groupId>
-                <artifactId>uno-web</artifactId>
                 <version>${uno.version}</version>
             </dependency>
             <dependency>

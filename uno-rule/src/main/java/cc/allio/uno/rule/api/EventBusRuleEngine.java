@@ -51,9 +51,7 @@ public abstract class EventBusRuleEngine implements RuleEngine {
             throw new RuleResultRuntimeException("fire event must not null");
         }
         // 订阅规则释放事件
-        EventBusFactory.get().subscribeOnRepeatable(event)
-                .subscribe(node ->
-                        node.reply(EmitEvent.class, eventContext -> this.onFire((RuleContext) eventContext)));
+        EventBusFactory.current().subscribeOnRepeatable(event).subscribe();
         return ruleResult;
     }
 
@@ -87,7 +85,7 @@ public abstract class EventBusRuleEngine implements RuleEngine {
     protected void onError(Throwable ex, RuleContext context) {
         ErrorEvent event = context.getEventRegistry().get(ErrorEvent.class);
         event.setError(ex);
-        EventBusFactory.get().publish(event);
+        EventBusFactory.current().publish(event).subscribe();
     }
 
     @Override

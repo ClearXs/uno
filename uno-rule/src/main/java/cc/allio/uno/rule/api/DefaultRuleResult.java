@@ -2,7 +2,6 @@ package cc.allio.uno.rule.api;
 
 import cc.allio.uno.core.bus.EventBusFactory;
 import cc.allio.uno.core.bus.EventContext;
-import cc.allio.uno.core.bus.event.Node;
 import cc.allio.uno.core.exception.Exceptions;
 import cc.allio.uno.core.reactive.Reactives;
 import cc.allio.uno.core.util.CollectionUtils;
@@ -12,6 +11,7 @@ import cc.allio.uno.rule.exception.RuleResultRuntimeException;
 import cc.allio.uno.rule.exception.RuleResultTimeoutException;
 import com.google.common.collect.Lists;
 import lombok.Getter;
+import lombok.ToString;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
@@ -39,6 +39,7 @@ import java.util.function.Consumer;
  * @since 1.1.4
  */
 @Slf4j
+@ToString(of = {"rule", "id", "fact"})
 public class DefaultRuleResult implements RuleResult {
 
     @Getter
@@ -252,7 +253,7 @@ public class DefaultRuleResult implements RuleResult {
      * publish on rule fire
      */
     void publishFire() {
-        EventBusFactory.get().publish(fireContext.getEventRegistry().get(FireEvent.class));
+        EventBusFactory.current().publish(fireContext.getEventRegistry().get(FireEvent.class)).subscribe();
     }
 
     /**
@@ -262,8 +263,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return EventContext for flux
      */
     Flux<EventContext> subscribeNoMatch(Consumer<EventContext> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(NoMatchEvent.class))
-                .flatMap(Node::onNext)
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(NoMatchEvent.class))
                 .doOnNext(eventContext -> {
                     resultLock.lock();
                     try {
@@ -288,8 +288,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return MatchIndex for mono list
      */
     Flux<EventContext> subscribeMatch(Consumer<Set<MatchIndex>> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(MatchEvent.class))
-                .flatMap(Node::onNext)
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(MatchEvent.class))
                 .doOnNext(eventContext ->
                         eventContext.get(RuleContext.MATCH_INDEX, Set.class)
                                 .ifPresent(m -> {
@@ -321,8 +320,7 @@ public class DefaultRuleResult implements RuleResult {
      * @return Throwable for flux
      */
     Flux<EventContext> subscribeErr(Consumer<Throwable> c) {
-        return EventBusFactory.get().subscribeOnRepeatable(fireContext.getEventRegistry().get(ErrorEvent.class))
-                .flatMap(Node::onNext)
+        return EventBusFactory.current().subscribeOnRepeatable(fireContext.getEventRegistry().get(ErrorEvent.class))
                 .doOnNext(eventContext ->
                         eventContext.get(RuleContext.ERROR, Throwable.class)
                                 .ifPresent(err -> {
@@ -341,15 +339,6 @@ public class DefaultRuleResult implements RuleResult {
                                         resultLock.unlock();
                                     }
                                 }));
-    }
-
-    @Override
-    public String toString() {
-        return "DefaultRuleResult{" +
-                "rule=" + rule +
-                ", id=" + id +
-                ", fact=" + fact +
-                '}';
     }
 
     void onSignal() {
