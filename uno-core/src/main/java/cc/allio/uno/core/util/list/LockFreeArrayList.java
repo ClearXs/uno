@@ -16,7 +16,7 @@ import java.util.concurrent.atomic.AtomicReferenceArray;
  * </ul>
  *
  * @author j.x
- * @since 1.2.0
+ * @since 1.2.1
  */
 public class LockFreeArrayList<T> extends AbstractList<T> {
 

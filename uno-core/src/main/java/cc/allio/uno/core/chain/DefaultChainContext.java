@@ -11,7 +11,7 @@ import java.util.Optional;
  * the {@link ChainContext} default implementation.
  *
  * @author j.x
- * @since 1.2.0
+ * @since 1.2.1
  */
 public class DefaultChainContext<IN> implements ChainContext<IN> {
 
